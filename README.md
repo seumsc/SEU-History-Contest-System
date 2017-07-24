@@ -8,9 +8,9 @@
 | /wiki    | Wiki文档入口。                         |
 | /swagger | 后端API文档入口。                        |
 
-网站地址：https://history-contest.azurewebsite.net
+网站地址：http://history-contest.azurewebsite.net
 
-数据库地址：https://history-contest.database.windows.net
+数据库地址：http://history-contest.database.windows.net
 
 ### 配置 & 开发流程
 
