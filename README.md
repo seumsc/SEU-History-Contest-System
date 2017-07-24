@@ -7,8 +7,8 @@
 | /        | 主页面，由前端组负责所有内容。可以尝试使用SPA（单页应用）技术。 |
 | /wiki    | Wiki文档入口。                         |
 | /swagger | 后端API文档入口。                        |
-
-​
+网站地址：https://history-contest.azurewebsite.net
+数据库地址：https://history-contest.database.windows.net
 
 ### 配置 & 开发流程
 
@@ -23,10 +23,6 @@
 6. 网站服务器使用Azure。服务器使用了**自动部署功能**，与此Github仓库相关联。每当此仓库有新版本时，服务器都会自动将更新抓取过来，重新部署，反馈在网页上。
    因此，我们在本地开发、测试好后，直接将更新push到Github即可，无需考虑其他东西。
 
-
-
-
-
 ### 使用组件
 
 **Note**:请将后续的所有新增组件添加在这里，并附上一个易于学习的网址=v=
@@ -36,8 +32,7 @@
   1. [ASP.NET Core MVC](https://docs.microsoft.com/en-us/aspnet/core/tutorials/)
      * [Web API](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api)
      * [StaticFiles Middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files)
-     * [Routing Middleware](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing)
-     * ​
+     * [Routing Middleware](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing)​
   2. [.NET Core SPA Services](https://blogs.msdn.microsoft.com/webdev/2017/02/14/building-single-page-applications-on-asp-net-core-with-javascriptservices/)
      * [Server-side Prerendering](https://github.com/aspnet/JavaScriptServices/tree/dev/src/Microsoft.AspNetCore.SpaServices#server-side-prerendering)
      * [Webpack Middleware](https://github.com/aspnet/JavaScriptServices/tree/dev/src/Microsoft.AspNetCore.SpaServices#webpack-dev-middleware)
