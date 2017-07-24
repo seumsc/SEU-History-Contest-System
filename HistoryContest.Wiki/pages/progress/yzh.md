@@ -28,7 +28,7 @@
 
   如：
 
-  ```c#
+  ```
   public delegate void printString(string s);
   ...
   printString ps1 = new printString(WriteToScreen);
