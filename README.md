@@ -7,6 +7,7 @@
 | /        | 主页面，由前端组负责所有内容。可以尝试使用SPA（单页应用）技术。 |
 | /wiki    | Wiki文档入口。                         |
 | /swagger | 后端API文档入口。                        |
+
 网站地址：https://history-contest.azurewebsite.net
 数据库地址：https://history-contest.database.windows.net
 
