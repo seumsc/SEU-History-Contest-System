@@ -9,8 +9,11 @@
 | /swagger | 后端API文档入口。                        |
 
 网站地址：https://history-contest.azurewebsites.net
+
 控制台地址：https://history-contest.scm.azurewebsites.net
+
 数据库地址：https://history-contest.database.windows.net
+
 Azure管理中心:https://portal.azure.com
 
 ### 配置 & 开发流程
