@@ -1,4 +1,4 @@
-<h4 id="711-720"><i class="icon-file"></i> 7/11-7/20</h4>
+<h2 id="711-720"><i class="icon-file"></i> 7/11-7/20</h2>
 
 <p>构建登陆页login.html，答题页面index.html</p>
 
@@ -31,7 +31,7 @@
   </ul>
 </blockquote>
 
-<h4 id="723"><i class="icon-file"></i> 7/23</h4>
+<h2 id="723"><i class="icon-file"></i> 7/23</h2>
 
 <p>转webpack</p>
 
@@ -57,7 +57,7 @@
   </ul>
 </blockquote>
 
-<h4 id="724"><i class="icon-file"></i> 7/24</h4>
+<h2 id="724"><i class="icon-file"></i> 7/24</h2>
 
 <p>BUG – 打包字体出现问题</p>
 
@@ -74,7 +74,7 @@
 
 
 
-<h4 id="725"><i class="icon-file"></i> 7/25</h4>
+<h2 id="725"><i class="icon-file"></i> 7/25</h2>
 
 <p>BUG – 除了正常运行模式，ECMAscript 5添加了第二种运行模式：”严格模式”（strict mode）。顾名思义，这种模式使得Javascript在更严格的条件下运行</p>
 
@@ -89,7 +89,7 @@
 
 
 
-<h4 id="728"><i class="icon-file"></i> 7/28</h4>
+<h2 id="728"><i class="icon-file"></i> 7/28</h2>
 
 <p>将传统html+css+js形式网页改为vue框架 <br>
 网站script初步设计结构如下</p>
