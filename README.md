@@ -10,7 +10,11 @@
 
 网站地址：https://history-contest.azurewebsites.net
 
+控制台地址：https://history-contest.scm.azurewebsites.net
+
 数据库地址：https://history-contest.database.windows.net
+
+Azure管理中心:https://portal.azure.com
 
 ### 配置 & 开发流程
 
@@ -18,7 +22,7 @@
 2. 对于后端：在Server文件夹中工作。打开`HistoryContest.sln`，用Visual Studio开发。
 3. 对于前端：在Client文件夹中工作。运行`run_server.bat`自动配置、运行服务端程序于本地。
    Development环境下，前端文件的更改会被自动更新，无需运行`webpack_build.bat`重新打包。
-   推荐使用[Visual Studio Code开发](https://code.visualstudio.com/)。
+   推荐使用[Visual Studio Code](https://code.visualstudio.com/)开发。
 4. 对于wiki：所有页面都通过Wiki文件夹里的Markdown文件生成。在本地写好md后提交到github远程库上，便可在网站上看到实时更新。
    因此，这是一个共享工作状态与文档的地方，请尽量将自己的进度、项目新增/改动的结构，自己的文档与心得放在Wiki上。
 5. 使用Github：每次开发前最好都检查一下自己与远程库是否有版本差距，但也不是一定要pull下来。可以善用github的issue。
