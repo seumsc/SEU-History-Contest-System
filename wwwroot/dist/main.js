@@ -70,10 +70,16 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(6);
+module.exports = (__webpack_require__(1))(6);
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+module.exports = vendor_4c7899ff6f47ad9763f9;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 // this module is a runtime utility for cleaner component module output and will
@@ -130,122 +136,30 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = vendor_4c7899ff6f47ad9763f9;
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/** vue-property-decorator verson 5.0.1 MIT LICENSE copyright 2017 kaorun343 */
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var vue_class_component_1 = __webpack_require__(18);
-exports.Component = vue_class_component_1.default;
-__webpack_require__(17);
-/**
- * decorator of an inject
- * @param key key
- * @return PropertyDecorator
- */
-function Inject(key) {
-    return vue_class_component_1.createDecorator(function (componentOptions, k) {
-        if (typeof componentOptions.inject === 'undefined') {
-            componentOptions.inject = {};
-        }
-        if (!Array.isArray(componentOptions.inject)) {
-            componentOptions.inject[k] = key || k;
-        }
-    });
-}
-exports.Inject = Inject;
-/**
- * decorator of a provide
- * @param key key
- * @return PropertyDecorator | void
- */
-function Provide(key) {
-    return vue_class_component_1.createDecorator(function (componentOptions, k) {
-        var provide = componentOptions.provide;
-        if (typeof provide !== 'function' || !provide.managed) {
-            var original_1 = componentOptions.provide;
-            provide = componentOptions.provide = function () {
-                var rv = Object.create((typeof original_1 === 'function' ? original_1.call(this) : original_1) || null);
-                for (var i in provide.managed)
-                    rv[provide.managed[i]] = this[i];
-                return rv;
-            };
-            provide.managed = {};
-        }
-        provide.managed[k] = key || k;
-    });
-}
-exports.Provide = Provide;
-/**
- * decorator of model
- * @param  event event name
- * @return PropertyDecorator
- */
-function Model(event) {
-    return vue_class_component_1.createDecorator(function (componentOptions, prop) {
-        componentOptions.model = { prop: prop, event: event || prop };
-    });
-}
-exports.Model = Model;
-/**
- * decorator of a prop
- * @param  options the options for the prop
- * @return PropertyDecorator | void
- */
-function Prop(options) {
-    if (options === void 0) { options = {}; }
-    return function (target, key) {
-        if (!Array.isArray(options) && typeof options.type === 'undefined') {
-            options.type = Reflect.getMetadata('design:type', target, key);
-        }
-        vue_class_component_1.createDecorator(function (componentOptions, k) {
-            (componentOptions.props || (componentOptions.props = {}))[k] = options;
-        })(target, key);
-    };
-}
-exports.Prop = Prop;
-/**
- * decorator of a watch function
- * @param  path the path or the expression to observe
- * @param  WatchOption
- * @return MethodDecorator
- */
-function Watch(path, options) {
-    if (options === void 0) { options = {}; }
-    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
-    return vue_class_component_1.createDecorator(function (componentOptions, handler) {
-        if (typeof componentOptions.watch !== 'object') {
-            componentOptions.watch = Object.create(null);
-        }
-        componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
-    });
-}
-exports.Watch = Watch;
-
+module.exports = (__webpack_require__(1))(0);
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(1)(
+
+/* styles */
+__webpack_require__(33)
+
+var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(11),
   /* template */
-  __webpack_require__(21),
+  __webpack_require__(20),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\projects\\javascriptservices\\templates\\VueSpa\\ClientApp\\components\\app\\app.vue.html"
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\PROJECT\\SEU-Hisotry-Contest-System\\HistoryContest.Client\\Scripts\\components\\app\\app.vue.html"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] app.vue.html: functional components are not supported with templates, they should use render functions.")}
 
@@ -256,9 +170,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-48f59ef3", Component.options)
+    hotAPI.createRecord("data-v-e8bff018", Component.options)
   } else {
-    hotAPI.reload("data-v-48f59ef3", Component.options)
+    hotAPI.reload("data-v-e8bff018", Component.options)
   }
 })()}
 
@@ -269,17 +183,17 @@ module.exports = Component.exports
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(12),
   /* template */
-  __webpack_require__(20),
+  __webpack_require__(18),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\projects\\javascriptservices\\templates\\VueSpa\\ClientApp\\components\\counter\\counter.vue.html"
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\PROJECT\\SEU-Hisotry-Contest-System\\HistoryContest.Client\\Scripts\\components\\counter\\counter.vue.html"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] counter.vue.html: functional components are not supported with templates, they should use render functions.")}
 
@@ -290,9 +204,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3d8442fd", Component.options)
+    hotAPI.createRecord("data-v-480bca04", Component.options)
   } else {
-    hotAPI.reload("data-v-3d8442fd", Component.options)
+    hotAPI.reload("data-v-480bca04", Component.options)
   }
 })()}
 
@@ -303,17 +217,17 @@ module.exports = Component.exports
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(13),
   /* template */
-  __webpack_require__(23),
+  __webpack_require__(17),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\projects\\javascriptservices\\templates\\VueSpa\\ClientApp\\components\\fetchdata\\fetchdata.vue.html"
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\PROJECT\\SEU-Hisotry-Contest-System\\HistoryContest.Client\\Scripts\\components\\fetchdata\\fetchdata.vue.html"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] fetchdata.vue.html: functional components are not supported with templates, they should use render functions.")}
 
@@ -324,9 +238,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-66e70626", Component.options)
+    hotAPI.createRecord("data-v-0c646c6e", Component.options)
   } else {
-    hotAPI.reload("data-v-66e70626", Component.options)
+    hotAPI.reload("data-v-0c646c6e", Component.options)
   }
 })()}
 
@@ -337,17 +251,17 @@ module.exports = Component.exports
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
   null,
   /* template */
-  __webpack_require__(24),
+  __webpack_require__(19),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\projects\\javascriptservices\\templates\\VueSpa\\ClientApp\\components\\home\\home.vue.html"
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\PROJECT\\SEU-Hisotry-Contest-System\\HistoryContest.Client\\Scripts\\components\\home\\home.vue.html"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] home.vue.html: functional components are not supported with templates, they should use render functions.")}
 
@@ -358,9 +272,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7d149e57", Component.options)
+    hotAPI.createRecord("data-v-826e69d0", Component.options)
   } else {
-    hotAPI.reload("data-v-7d149e57", Component.options)
+    hotAPI.reload("data-v-826e69d0", Component.options)
   }
 })()}
 
@@ -371,13 +285,13 @@ module.exports = Component.exports
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(1);
+module.exports = (__webpack_require__(1))(1);
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(5);
+module.exports = (__webpack_require__(1))(5);
 
 /***/ }),
 /* 10 */
@@ -394,6 +308,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["default"]);
 var routes = [
+    //   { path: '/image1', component: require('../Images/background1.jpg') },
     { path: '/', component: __webpack_require__(7) },
     { path: '/counter', component: __webpack_require__(5) },
     { path: '/fetchdata', component: __webpack_require__(6) }
@@ -412,8 +327,10 @@ new __WEBPACK_IMPORTED_MODULE_1_vue__["default"]({
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -432,20 +349,43 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
+
+__WEBPACK_IMPORTED_MODULE_2_jquery___default()(function () {
+    //  $("#app-root").css({"background":"url(./Images/background1.jpg)","height":"100"});
+    //  $("#app-root").css("height","100");
+    //   $("body").css({"background-image":"url(./Images/background1.jpg)","background-repeat":"no-repeat"});
+    /*	$("button").click(function(){
+        window.open('index.html');
+        });
+        $.backstretch([
+            '../../Images/background1.jpg',
+            '../../Images/background2.jpg',
+            '../../Images/background3.jpg',
+        '../../Images/background4.jpg',
+        '../../Images/background5.jpg',
+        '../../Images/background6.jpg',
+        '../../Images/background7.jpg',
+    
+        ], {
+            fade : 1000, // 动画时长
+            duration : 2000 // 切换延时
+        });
+    */
+});
 var AppComponent = (function (_super) {
     __extends(AppComponent, _super);
     function AppComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    AppComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"])({
+            components: {
+                MenuComponent: __webpack_require__(25)
+            }
+        })
+    ], AppComponent);
     return AppComponent;
 }(__WEBPACK_IMPORTED_MODULE_0_vue__["default"]));
-AppComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"])({
-        components: {
-            MenuComponent: __webpack_require__(19)
-        }
-    })
-], AppComponent);
 /* harmony default export */ __webpack_exports__["default"] = (AppComponent);
 
 
@@ -456,8 +396,8 @@ AppComponent = __decorate([
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -468,29 +408,32 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 
 
+__WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
+    //  $(this).css("background-color","#aaa");
+    __WEBPACK_IMPORTED_MODULE_1_jquery___default()("#list2").click(function () {
+        alert("确认开始答题吗？（答题过程中不能关闭窗口）");
+        window.open('../href/index.html');
+    });
+});
+/*
+@Component
+export default class CounterComponent extends Vue {
+    currentcount: number = 0;
+
+    incrementCounter() {
+        this.currentcount++;
+    }
+}
+*/
 var CounterComponent = (function (_super) {
     __extends(CounterComponent, _super);
     function CounterComponent() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.currentcount = 0;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    CounterComponent.prototype.incrementCounter = function () {
-        this.currentcount++;
-    };
     return CounterComponent;
 }(__WEBPACK_IMPORTED_MODULE_0_vue__["default"]));
-CounterComponent = __decorate([
-    __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"]
-], CounterComponent);
 /* harmony default export */ __webpack_exports__["default"] = (CounterComponent);
 
 
@@ -501,7 +444,7 @@ CounterComponent = __decorate([
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -536,86 +479,16 @@ var FetchDataComponent = (function (_super) {
             _this.forecasts = data;
         });
     };
+    FetchDataComponent = __decorate([
+        __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"]
+    ], FetchDataComponent);
     return FetchDataComponent;
 }(__WEBPACK_IMPORTED_MODULE_0_vue__["default"]));
-FetchDataComponent = __decorate([
-    __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"]
-], FetchDataComponent);
 /* harmony default export */ __webpack_exports__["default"] = (FetchDataComponent);
 
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(15)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.main-nav li .glyphicon {\r\n    margin-right: 10px;\n}\r\n\r\n/* Highlighting rules for nav menu items */\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: #4189C7;\r\n    color: white;\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\n}\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\n.main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\n}\n.main-nav .navbar {\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\n.main-nav .navbar-header {\r\n        float: none;\n}\n.main-nav .navbar-collapse {\r\n        border-top: 1px solid #444;\r\n        padding: 0px;\n}\n.main-nav .navbar ul {\r\n        float: none;\n}\n.main-nav .navbar li {\r\n        float: none;\r\n        font-size: 15px;\r\n        margin: 6px;\n}\n.main-nav .navbar li a {\r\n        padding: 10px 16px;\r\n        border-radius: 4px;\n}\n.main-nav .navbar a {\r\n        /* If a menu item's text is too long, truncate it */\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\n}\n}\r\n", "", {"version":3,"sources":["/./ClientApp/components/navmenu/navmenu.css"],"names":[],"mappings":";AAAA;IACI,mBAAmB;CACtB;;AAED,2CAA2C;AAC3C;;;IAGI,0BAA0B;IAC1B,aAAa;CAChB;;AAED,0EAA0E;AAC1E;IACI,gBAAgB;IAChB,OAAO;IACP,QAAQ;IACR,SAAS;IACT,WAAW;CACd;AAED;IACI,8FAA8F;AAC9F;QACI,kBAAkB;CACrB;CACJ;AAED;IACI,kEAAkE;AAClE;QACI,aAAa;QACb,wBAAwB;CAC3B;AACD;QACI,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;AACD;QACI,YAAY;CACf;AACD;QACI,2BAA2B;QAC3B,aAAa;CAChB;AACD;QACI,YAAY;CACf;AACD;QACI,YAAY;QACZ,gBAAgB;QAChB,YAAY;CACf;AACD;QACI,mBAAmB;QACnB,mBAAmB;CACtB;AACD;QACI,oDAAoD;QACpD,YAAY;QACZ,oBAAoB;QACpB,iBAAiB;QACjB,wBAAwB;CAC3B;CACJ","file":"navmenu.css","sourcesContent":[".main-nav li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* Highlighting rules for nav menu items */\r\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: #4189C7;\r\n    color: white;\r\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\r\n    body {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n\r\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n    .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #444;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 15px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 10px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        /* If a menu item's text is too long, truncate it */\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n}\r\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 16 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -805,7 +678,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {/*! *****************************************************************************
@@ -1933,15 +1806,15 @@ var Reflect;
             Function("return this;")());
 })(Reflect || (Reflect = {}));
 //# sourceMappingURL=Reflect.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(28)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(22)))
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /**
-  * vue-class-component v5.0.1
+  * vue-class-component v5.0.2
   * (c) 2015-2017 Evan You
   * @license MIT
   */
@@ -1954,11 +1827,15 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var Vue = _interopDefault(__webpack_require__(0));
 
 function createDecorator(factory) {
-    return function (_, key, index) {
+    return function (target, key, index) {
+        var Ctor = target.constructor;
+        if (!Ctor.__decorators__) {
+            Ctor.__decorators__ = [];
+        }
         if (typeof index !== 'number') {
             index = undefined;
         }
-        $decoratorQueue.push(function (options) { return factory(options, key, index); });
+        Ctor.__decorators__.push(function (options) { return factory(options, key, index); });
     };
 }
 function warn(message) {
@@ -2017,7 +1894,6 @@ var $internalHooks = [
     'deactivated',
     'render'
 ];
-var $decoratorQueue = [];
 function componentFactory(Component, options) {
     if (options === void 0) { options = {}; }
     options.name = options.name || Component._componentTag || Component.name;
@@ -2046,8 +1922,10 @@ function componentFactory(Component, options) {
             return collectDataFromConstructor(this, Component);
         }
     });
-    $decoratorQueue.forEach(function (fn) { return fn(options); });
-    $decoratorQueue = [];
+    var decorators = Component.__decorators__;
+    if (decorators) {
+        decorators.forEach(function (fn) { return fn(options); });
+    }
     var superProto = Object.getPrototypeOf(Component.prototype);
     var Super = superProto instanceof Vue
         ? superProto.constructor
@@ -2076,24 +1954,288 @@ exports.createDecorator = createDecorator;
 
 
 /***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c("div")
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-0c646c6e", module.exports)
+  }
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c("div")
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-480bca04", module.exports)
+  }
+}
+
+/***/ }),
 /* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _vm._m(0)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('h4', {
+    staticStyle: {
+      "text-align": "right"
+    }
+  }, [_vm._v("欢迎，"), _c('span', [_vm._v("***")]), _vm._v("同学！")]), _vm._v(" "), _c('h3', [_vm._v("提示信息：")]), _vm._v(" "), _c('p', [_vm._v("点击页面左侧导航栏“开始测试”进入校史校情竞赛答题页面。")]), _vm._v(" "), _c('p', [_vm._v("推荐使用Firefox,Safari,Chrome或IE9及以上版本浏览器进行答题。如在答题过程中出现问题，请联系东南大学计算机科学与工程学院科协赛事部。")]), _vm._v(" "), _c('p', [_vm._v("（完美甩锅）o(*￣▽￣*)ブ")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-826e69d0", module.exports)
+  }
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "background"
+  }, [_c('div', {
+    staticClass: "inside container-fluid",
+    staticStyle: {
+      "height": "100%"
+    },
+    attrs: {
+      "id": "app-root"
+    }
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-sm-3"
+  }, [_c('menu-component')], 1), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-9"
+  }, [_c('router-view')], 1)])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-e8bff018", module.exports)
+  }
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? factory(exports, __webpack_require__(0), __webpack_require__(16), __webpack_require__(15)) :
+	typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vue-class-component', 'reflect-metadata'], factory) :
+	(factory((global.VuePropertyDecorator = {}),global.Vue,global.VueClassComponent));
+}(this, (function (exports,vue,vueClassComponent) { 'use strict';
+
+vue = vue && vue.hasOwnProperty('default') ? vue['default'] : vue;
+var vueClassComponent__default = 'default' in vueClassComponent ? vueClassComponent['default'] : vueClassComponent;
+
+/** vue-property-decorator verson 5.2.1 MIT LICENSE copyright 2017 kaorun343 */
+/**
+ * decorator of an inject
+ * @param key key
+ * @return PropertyDecorator
+ */
+function Inject(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            componentOptions.inject[k] = key || k;
+        }
+    });
+}
+/**
+ * decorator of a provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function Provide(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        if (typeof provide !== 'function' || !provide.managed) {
+            var original_1 = componentOptions.provide;
+            provide = componentOptions.provide = function () {
+                var rv = Object.create((typeof original_1 === 'function' ? original_1.call(this) : original_1) || null);
+                for (var i in provide.managed)
+                    rv[provide.managed[i]] = this[i];
+                return rv;
+            };
+            provide.managed = {};
+        }
+        provide.managed[k] = key || k;
+    });
+}
+/**
+ * decorator of model
+ * @param  event event name
+ * @return PropertyDecorator
+ */
+function Model(event) {
+    return vueClassComponent.createDecorator(function (componentOptions, prop) {
+        componentOptions.model = { prop: prop, event: event || prop };
+    });
+}
+/**
+ * decorator of a prop
+ * @param  options the options for the prop
+ * @return PropertyDecorator | void
+ */
+function Prop(options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        if (!Array.isArray(options) && typeof options.type === 'undefined') {
+            options.type = Reflect.getMetadata('design:type', target, key);
+        }
+        vueClassComponent.createDecorator(function (componentOptions, k) {
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+        })(target, key);
+    };
+}
+/**
+ * decorator of a watch function
+ * @param  path the path or the expression to observe
+ * @param  WatchOption
+ * @return MethodDecorator
+ */
+function Watch(path, options) {
+    if (options === void 0) { options = {}; }
+    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
+    return vueClassComponent.createDecorator(function (componentOptions, handler) {
+        if (typeof componentOptions.watch !== 'object') {
+            componentOptions.watch = Object.create(null);
+        }
+        componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
+    });
+}
+
+exports.Inject = Inject;
+exports.Provide = Provide;
+exports.Model = Model;
+exports.Prop = Prop;
+exports.Watch = Watch;
+exports.Component = vueClassComponent__default;
+exports.Vue = vue;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(19);
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(24)();
+// imports
+
+
+// module
+exports.push([module.i, "\n.main-nav li .glyphicon {\r\n    margin-right: 10px;\n}\r\n\r\n/* Highlighting rules for nav menu items */\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\n}\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\n.main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\n}\n.main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\n.main-nav .navbar-header {\r\n        float: none;\n}\n.main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\n}\n.main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\n}\n.main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\n}\n.main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\n}\n.main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\n}\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/navmenu/navmenu.css"],"names":[],"mappings":";AAAA;IACI,mBAAmB;CACtB;;AAED,2CAA2C;AAC3C;;;IAGI,wCAAwC;IACxC,aAAa;CAChB;;AAED,0EAA0E;AAC1E;IACI,gBAAgB;IAChB,OAAO;IACP,QAAQ;IACR,SAAS;IACT,WAAW;CACd;AAED;IACI,8FAA8F;AAC9F;QACI,kBAAkB;CACrB;CACJ;AAED;IACI,kEAAkE;AAClE;QACI,aAAa;QACb,wBAAwB;CAC3B;AACD;QACI,qCAAqC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;AACD;QACI,YAAY;CACf;AACD;QACI,2BAA2B;QAC3B,aAAa;CAChB;AACD;QACI,YAAY;gBACJ,gBAAgB;CAE3B;AACD;QACI,YAAY;QACZ,gBAAgB;QAChB,YAAY;CACf;AACD;QACI,mBAAmB;QACnB,mBAAmB;CACtB;AACD;QACI,YAAY;QACZ,oBAAoB;QACpB,iBAAiB;QACjB,wBAAwB;CAC3B;CACJ","file":"navmenu.css","sourcesContent":[".main-nav li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* Highlighting rules for nav menu items */\r\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\r\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\r\n    body {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n\r\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n    .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(25)
+__webpack_require__(27)
 
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
   null,
   /* template */
-  __webpack_require__(22),
+  __webpack_require__(26),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\projects\\javascriptservices\\templates\\VueSpa\\ClientApp\\components\\navmenu\\navmenu.vue.html"
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\PROJECT\\SEU-Hisotry-Contest-System\\HistoryContest.Client\\Scripts\\components\\navmenu\\navmenu.vue.html"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] navmenu.vue.html: functional components are not supported with templates, they should use render functions.")}
 
@@ -2104,9 +2246,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-59be8f1e", Component.options)
+    hotAPI.createRecord("data-v-71969072", Component.options)
   } else {
-    hotAPI.reload("data-v-59be8f1e", Component.options)
+    hotAPI.reload("data-v-71969072", Component.options)
   }
 })()}
 
@@ -2114,52 +2256,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h1', [_vm._v("Counter")]), _vm._v(" "), _c('p', [_vm._v("This is a simple example of a Vue.js component.")]), _vm._v(" "), _c('p', [_vm._v("Current count: "), _c('strong', [_vm._v(_vm._s(_vm.currentcount))])]), _vm._v(" "), _c('button', {
-    on: {
-      "click": _vm.incrementCounter
-    }
-  }, [_vm._v("Increment")])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-3d8442fd", module.exports)
-  }
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container-fluid",
-    attrs: {
-      "id": "app-root"
-    }
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-sm-3"
-  }, [_c('menu-component')], 1), _vm._v(" "), _c('div', {
-    staticClass: "col-sm-9"
-  }, [_c('router-view')], 1)])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-48f59ef3", module.exports)
-  }
-}
-
-/***/ }),
-/* 22 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -2173,26 +2270,38 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "navbar-collapse collapse"
   }, [_c('ul', {
     staticClass: "nav navbar-nav"
-  }, [_c('li', [_c('router-link', {
+  }, [_c('li', {
+    attrs: {
+      "id": "list1"
+    }
+  }, [_c('router-link', {
     attrs: {
       "to": "/",
       "exact": true
     }
   }, [_c('span', {
     staticClass: "glyphicon glyphicon-home"
-  }), _vm._v(" Home\n                    ")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
+  }), _vm._v(" 主页\n                    ")])], 1), _vm._v(" "), _c('li', {
+    attrs: {
+      "id": "list2"
+    }
+  }, [_c('router-link', {
     attrs: {
       "to": "/counter"
     }
   }, [_c('span', {
-    staticClass: "glyphicon glyphicon-education"
-  }), _vm._v(" Counter\n                    ")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
+    staticClass: "glyphicon glyphicon-th-list"
+  }), _vm._v(" 开始测试\n                    ")])], 1), _vm._v(" "), _c('li', {
+    attrs: {
+      "id": "list3"
+    }
+  }, [_c('router-link', {
     attrs: {
       "to": "/fetchdata"
     }
   }, [_c('span', {
-    staticClass: "glyphicon glyphicon-th-list"
-  }), _vm._v(" Fetch data\n                    ")])], 1)])])])])
+    staticClass: "glyphicon glyphicon-education"
+  }), _vm._v(" 成绩\n                    ")])], 1)])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "navbar-header"
@@ -2214,98 +2323,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })]), _vm._v(" "), _c('a', {
     staticClass: "navbar-brand",
     attrs: {
-      "href": "/"
+      "href": "#"
     }
-  }, [_vm._v("HistoryContest_Server")])])
+  }, [_vm._v("校史校情竞赛系统")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-59be8f1e", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-71969072", module.exports)
   }
 }
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h1', [_vm._v("Weather forecast")]), _vm._v(" "), _c('p', [_vm._v("This component demonstrates fetching data from the server.")]), _vm._v(" "), (_vm.forecasts.length) ? _c('table', {
-    staticClass: "table"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.forecasts), function(item) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(item.dateFormatted))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.temperatureC))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.temperatureF))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.summary))])])
-  }))]) : _c('p', [_c('em', [_vm._v("Loading...")])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Date")]), _vm._v(" "), _c('th', [_vm._v("Temp. (C)")]), _vm._v(" "), _c('th', [_vm._v("Temp. (F)")]), _vm._v(" "), _c('th', [_vm._v("Summary")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-66e70626", module.exports)
-  }
-}
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h1', [_vm._v("Hello, world!")]), _vm._v(" "), _c('p', [_vm._v("Welcome to your new single-page application, built with:")]), _vm._v(" "), _c('ul', [_c('li', [_c('a', {
-    attrs: {
-      "href": "https://get.asp.net/"
-    }
-  }, [_vm._v("ASP.NET Core")]), _vm._v(" and "), _c('a', {
-    attrs: {
-      "href": "https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx"
-    }
-  }, [_vm._v("C#")]), _vm._v(" for cross-platform server-side code")]), _vm._v(" "), _c('li', [_c('a', {
-    attrs: {
-      "href": "https://vuejs.org/"
-    }
-  }, [_vm._v("Vue.js")]), _vm._v(" and "), _c('a', {
-    attrs: {
-      "href": "http://www.typescriptlang.org/"
-    }
-  }, [_vm._v("TypeScript")]), _vm._v(" for client-side code")]), _vm._v(" "), _c('li', [_c('a', {
-    attrs: {
-      "href": "https://webpack.github.io/"
-    }
-  }, [_vm._v("Webpack")]), _vm._v(" for building and bundling client-side resources")]), _vm._v(" "), _c('li', [_c('a', {
-    attrs: {
-      "href": "http://getbootstrap.com/"
-    }
-  }, [_vm._v("Bootstrap")]), _vm._v(" for layout and styling")])]), _vm._v(" "), _c('p', [_vm._v("To help you get started, we've also set up:")]), _vm._v(" "), _c('ul', [_c('li', [_c('strong', [_vm._v("Client-side navigation")]), _vm._v(". For example, click "), _c('em', [_vm._v("Counter")]), _vm._v(" then "), _c('em', [_vm._v("Back")]), _vm._v(" to return here.")]), _vm._v(" "), _c('li', [_c('strong', [_vm._v("Webpack dev middleware")]), _vm._v(". In development mode, there's no need to run the "), _c('code', [_vm._v("webpack")]), _vm._v(" build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.")]), _vm._v(" "), _c('li', [_c('strong', [_vm._v("Hot module replacement")]), _vm._v(". In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Vue app will be rebuilt and a new instance injected is into the page.")]), _vm._v(" "), _c('li', [_c('strong', [_vm._v("Efficient production builds")]), _vm._v(". In production mode, development-time features are disabled, and the "), _c('code', [_vm._v("webpack")]), _vm._v(" build tool produces minified static CSS and JavaScript files.")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-7d149e57", module.exports)
-  }
-}
-
-/***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(23);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(26)("5ebab8cd", content, false);
+var update = __webpack_require__(28)("7f6ca90d", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-59be8f1e\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-59be8f1e\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -2315,7 +2362,7 @@ if(false) {
 }
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2334,7 +2381,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(27)
+var listToStyles = __webpack_require__(29)
 
 /*
 type StyleObject = {
@@ -2536,7 +2583,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /**
@@ -2569,10 +2616,52 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */,
+/* 31 */,
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(19);
+exports = module.exports = __webpack_require__(24)();
+// imports
+
+
+// module
+exports.push([module.i, "\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.background {\r\n    background:url(" + __webpack_require__(34) + ");\r\n    position: fixed;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\n}\n@media (max-width: 767px) {\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\n.background{\r\n        height:100%;\n}\n.background .inside{\r\n        background:rgba(255,255,255,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/app/app.css"],"names":[],"mappings":";AACA,0EAA0E;AAC1E;IACI,yCAAgD;IAChD,gBAAgB;IAChB,OAAO;IACP,QAAQ;IACR,SAAS;CACZ;AAED;AACI;QACI,kBAAkB;CACrB;CACJ;AAED;AACI;QACI,YAAY;CACf;AACD;QACI,iCAAiC;QACjC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;IACD,kEAAkE;GACnE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAoCI;CACN","file":"app.css","sourcesContent":["\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.background {\r\n    background:url(../../../Images/background1.jpg);\r\n    position: fixed;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    body {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n\r\n@media (min-width: 768px) {\r\n    .background{\r\n        height:100%;\r\n    }\r\n    .background .inside{\r\n        background:rgba(255,255,255,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;        \r\n    }\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(32);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(28)("49d2c6a2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Images/background1.jpg";
 
 /***/ })
 /******/ ]);

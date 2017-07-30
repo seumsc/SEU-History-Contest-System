@@ -73,9 +73,23 @@ namespace HistoryContest.Server
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+				{
+					HotModuleReplacement = true,
+					ProjectPath = env.ContentRootPath + "/HistoryContest.Client"
+				});
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+			}
 
 			/* ------------static file routes------------*/
 			// use wwwroot static files
+			app.UseDefaultFiles();
 			app.UseStaticFiles();
 
 			// enable default url rewrite for wiki
@@ -104,20 +118,6 @@ namespace HistoryContest.Server
 				c.SwaggerEndpoint("/swagger/seu-history-contest/swagger.json", "SEU History Contest API v1");
 			});
 			/* ------------api document routes------------*/
-
-
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
-					HotModuleReplacement = true,
-					ProjectPath = env.ContentRootPath + "/HistoryContest.Client"
-				});
-			}
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-			}
 
 
 			/* ------------javascript spa routes------------*/

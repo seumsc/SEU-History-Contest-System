@@ -18,7 +18,8 @@ module.exports = (env) => {
                 { test: /\.vue\.html$/, include: /Scripts/, loader: 'vue-loader', options: { loaders: { js: 'awesome-typescript-loader?silent=true' } } },
                 { test: /\.ts$/, include: /Scripts/, use: 'awesome-typescript-loader?silent=true' },
                 { test: /\.css$/, use: isDevBuild ? [ 'style-loader', 'css-loader' ] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'url-loader?limit=8192&name=Images/[name].[ext]'},
+                {test: /\.(woff|woff2|svg|eot|ttf)$/, loader: 'file-loader?name=./Fonts/[name].[ext]' }
             ]
         },
         output: {
