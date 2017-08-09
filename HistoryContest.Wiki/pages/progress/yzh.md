@@ -209,3 +209,92 @@
 * Swagger 开启xml文档格式
 * 为了能让run_server.bat运行后，应用启动成功时加载浏览器，在主程序Main函数里加了参数，如果开发环境为Debug且加了参数，则会自动打开默认浏览器
 
+
+## 8.7-8.8
+
+* 由于ContentRoot改变，所需要改变的地方还有一个：appsettings.json的位置。
+
+  在Startup函数里更改：
+
+  ```
+          public Startup(IHostingEnvironment env)
+          {
+              var builder = new ConfigurationBuilder()
+                  .SetBasePath(env.ContentRootPath)
+                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                  .AddEnvironmentVariables();
+              Configuration = builder.Build();
+          }
+  ```
+
+  由于Startup里应该都是后端任务，因此直接更改BasePath要更为妥当。
+
+  **但是，还需要区分DEBUG与RELEASE时行为：**
+
+  ```
+  #if DEBUG
+  				.SetBasePath(Path.Combine(env.ContentRootPath, "HistoryContest.Server"))
+  #else
+                  .SetBasePath(env.ContentRootPath)
+  #endif
+  ```
+
+* 数据库结构设计：
+
+  | 表    | 字段                                       | get属性设计  |
+  | :--- | ---------------------------------------- | -------- |
+  | 学生   | 学号（主键）、名字、一卡通号、对应辅导员ID（外键）、[剩余时间?]、题目随机池ID、状态二进制串 | 获取题号数组   |
+  | 辅导员  | ID、名字、院系                                 | 获取一条概况记录 |
+  | 题目   | ID、题目、选项、答案、[分值?]                        | 规范格式     |
+
+* 建立MVC框架的Model层：
+
+  * Entities：代表与**数据库**进行交互的Model
+  * ViewModel：代表与**前端**进行交互的Model
+
+* 建立数据库层：
+
+  数据库抽象工具：`Entity Framework`，它充当了数据库与MVC程序的中间层。
+
+  在本地开发时，将使用一个本地数据库文件，它被设置在用户文件夹%USERPROFILE%里（即C:\Users\UserName\ )
+
+* 使用Migrations：
+
+  ​待补充
+
+* 查看数据库：
+
+  1. 离线：Visual Studio->视图->Sql Server对象资源管理器
+  2. 在线：在后面将加入的自动生成的页面进行直接操作。
+
+
+
+* **取题方案设计**：使用从随机池抽题的*伪随机模式*。
+
+  1. 在数据库中专门建立一个`题目池`的表，里面每条记录保存*20道选择题+10道填空题*的题号，作为“随机”生成给答题者的试卷的种子。
+
+  2. 服务端程序启动时，会调用一个函数，从数据库`题目表`中随机roll出20道选择题，10道填空题作为一条记录，并生成一定规模（比如500份，保证一个机房内的学生的试卷重复率足够小）的这种记录保存在`题目池`表中。
+
+     由于这一步是部署服务器时做的，所以不会影响考试时性能。
+
+  3. 学生登录答题后，会随机Roll出一个题目池的ID，按照该ID寻找到30道题的题号，从而取出卷子，并在数据库学生表中添加一个保存该ID的字段，用于持久化保存结果。
+
+     <u>这种做法的好处与注意点</u>：
+
+     1. 将随机出30题的过程前移，提高取卷效率。我们甚至可以对每个随机种子，按顺序将对应题目加载到内存，提高读取速度；
+     2. 每一位用户与其所做题目绑定，加上每题正确错误情况记录，使得未来任意时刻重新查询分数变得很方便；
+     3. 为了达到`每次重做获得的题目都不一样`的目的，每个学生随机出来的题目种子应该先放在内存中，重做时新随机一个。出分后，再随得分情况一起持久记录在数据库中，方便将来重新查询。
+
+* API设计构思：
+
+  1. 提供一个Students/DetailByDepartment/departmentID的API，用来获取指定院系编号的所有新生（可以根据辅导员的年级，选取该年级的学生）
+  2. 学生列表json：学生（需要过滤）、排布顺序？搜索、排序是否需要给前端做，以实时返回搜索结果、无需刷新而排序？
+  3. 提供一个获取按院系简单统计分数段的API，这样列出东西：平均分、最高分、>=90、>=75...
+
+* 辅导员页面设计构思：
+
+  * 查看本院系情况：顶部列出辅导员信息，下面按照API设计构思第1条提供内容。（注意指明未交卷的人），最后按照API设计构思第2条列出简单概况。
+  * 查看各院系概况：按照API设计构思2，遍历各院系，列出数据表格。
+  * ……
+

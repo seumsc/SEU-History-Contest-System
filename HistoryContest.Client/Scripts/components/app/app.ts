@@ -2,36 +2,34 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
 
-
-
+//import boolstrap from 'boolstrap';
 $(function(){
-  //  $("#app-root").css({"background":"url(./Images/background1.jpg)","height":"100"});
-//  $("#app-root").css("height","100");
-//   $("body").css({"background-image":"url(./Images/background1.jpg)","background-repeat":"no-repeat"});
 
-/*	$("button").click(function(){
-	window.open('index.html');
-	});
-	$.backstretch([
-		'../../Images/background1.jpg',
-		'../../Images/background2.jpg',
-		'../../Images/background3.jpg',
-    '../../Images/background4.jpg',
-    '../../Images/background5.jpg',
-    '../../Images/background6.jpg',
-    '../../Images/background7.jpg',
-
-	], {
-		fade : 1000, // 动画时长
-		duration : 2000 // 切换延时
-	});
-*/
-	
+var bgCounter = 0;
+var backgrounds = [
+      "/dist/Images/background1.jpg",
+      "/dist/Images/background2.jpg",
+      "/dist/Images/background3.jpg",
+      "/dist/Images/background4.jpg",
+      "/dist/Images/background5.jpg",
+      "/dist/Images/background6.jpg",
+      "/dist/Images/background7.jpg"
+    ];
+  function changeBackground()
+  {
+    bgCounter = (bgCounter+1) % backgrounds.length;
+    $('.backgrounds').css('background-image','url('+backgrounds[bgCounter]+')');
+    setTimeout(changeBackground, 4050);
+  }
+  changeBackground();
 });
+
+
 
 @Component({
     components: {
-        MenuComponent: require('../navmenu/navmenu.vue.html')
+        MenuComponent: require('../navmenu/navmenu.vue.html'),
+        LoginComponent: require('../login/login.vue.html')
     }
 })
 

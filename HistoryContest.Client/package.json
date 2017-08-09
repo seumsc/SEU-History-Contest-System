@@ -17,14 +17,19 @@
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.1.1",
     "style-loader": "^0.13.1",
+    "ts-loader": "^2.3.2",
     "typescript": "^2.2.1",
     "url-loader": "^0.5.7",
+    "validate": "^3.0.1",
+    "validator": "^8.0.0",
     "vue": "^2.2.2",
     "vue-loader": "^11.1.4",
     "vue-property-decorator": "^5.0.1",
     "vue-router": "^2.3.0",
     "vue-template-compiler": "^2.2.2",
+    "vue-validator": "^3.0.0-alpha.2",
     "webpack": "^2.2.0",
     "webpack-hot-middleware": "^2.12.2"
-  }
+  },
+  "dependencies": {}
 }

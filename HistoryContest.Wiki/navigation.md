@@ -26,6 +26,7 @@
 * [VS 解决方案结构](pages/docs/vs-intro.md)
 * [Git](pages/docs/git.md)
 * [一次Bug的解决记录](pages/docs/一次Bug的解决记录.md)
+* [答辩ppt设计](pages/docs/答辩ppt设计.md)
 
 [开发进度]()
 
