@@ -132,3 +132,13 @@
   <a href="http://blog.csdn.net/woyidingshijingcheng/article/details/72903800">http://blog.csdn.net/woyidingshijingcheng/article/details/72903800</a></li>
   </ul>
 </blockquote>
+
+<h2 id="725"><i class="icon-file"></i> 8/9</h2>
+<blockquote>
+  <ul>
+    <li>添加背景轮换特效<br>
+        参考：利用jquery实现背景图的轮换<br>
+      <a href = "http://blog.csdn.net/a1217158716/article/details/71159763">http://blog.csdn.net/a1217158716/article/details/71159763</a></li>
+    <li>特别需要注意背景图的相对地址引用。如果在css中引用相对于css文件的图片地址是可行的，在ts文件中引用相对于ts文件的图片地址则报错；因此在ts文件中引用相对于main.js的地址则可以解决该问题。</li>
+  </ul>
+ </blockquote>
