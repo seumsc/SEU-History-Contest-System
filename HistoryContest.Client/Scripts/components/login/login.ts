@@ -1,11 +1,12 @@
 import Vue from 'vue';
-//import { Component } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
-
+import Validator from 'vue-validator';
+Vue.use(Validator);
 /*
 @Component({
     components: {
-        MenuComponent: require('../navmenu/navmenu.vue.html')
+        validator: require('./validator.js')
     }
 })*/
 

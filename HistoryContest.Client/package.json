@@ -20,6 +20,8 @@
     "ts-loader": "^2.3.2",
     "typescript": "^2.2.1",
     "url-loader": "^0.5.7",
+    "validate": "^3.0.1",
+    "validator": "^8.0.0",
     "vue": "^2.2.2",
     "vue-loader": "^11.1.4",
     "vue-property-decorator": "^5.0.1",

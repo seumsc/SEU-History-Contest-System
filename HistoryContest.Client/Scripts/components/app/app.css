@@ -1,12 +1,13 @@
 
 /* Keep the nav menu independent of scrolling and on top of other items */
-.background {
-    background-image:url(../Images/background1.jpg);
+.backgrounds {
+    background-image:url(../../../Images/background2.jpg);
     position: fixed;
     background-position: center;
     top: 0; 
     left: 0;
-    right: 0;
+	right:0;
+	bottom:0;
 }
 
 h1{

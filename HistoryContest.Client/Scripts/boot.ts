@@ -2,8 +2,12 @@ import 'bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Validator from 'vue-validator';
+//import './components/login/validator.js';
+
 Vue.use(VueRouter);
 Vue.use(Validator);
+//require('./components/login/validator.js')
+
 
 const routes = [
  //   { path: '/image1', component: require('../Images/background1.jpg') },

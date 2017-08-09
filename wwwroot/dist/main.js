@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -211,7 +211,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(37)
+var listToStyles = __webpack_require__(38)
 
 /*
 type StyleObject = {
@@ -418,13 +418,13 @@ function applyToTag (styleElement, obj) {
 
 
 /* styles */
-__webpack_require__(34)
+__webpack_require__(35)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(19),
+  __webpack_require__(20),
   /* template */
-  __webpack_require__(30),
+  __webpack_require__(31),
   /* scopeId */
   null,
   /* cssModules */
@@ -452,258 +452,6 @@ module.exports = Component.exports
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "Images/background1.jpg";
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function (global, factory) {
-	 true ? factory(exports, __webpack_require__(0), __webpack_require__(26), __webpack_require__(24)) :
-	typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vue-class-component', 'reflect-metadata'], factory) :
-	(factory((global.VuePropertyDecorator = {}),global.Vue,global.VueClassComponent));
-}(this, (function (exports,vue,vueClassComponent) { 'use strict';
-
-vue = vue && vue.hasOwnProperty('default') ? vue['default'] : vue;
-var vueClassComponent__default = 'default' in vueClassComponent ? vueClassComponent['default'] : vueClassComponent;
-
-/** vue-property-decorator verson 5.2.1 MIT LICENSE copyright 2017 kaorun343 */
-/**
- * decorator of an inject
- * @param key key
- * @return PropertyDecorator
- */
-function Inject(key) {
-    return vueClassComponent.createDecorator(function (componentOptions, k) {
-        if (typeof componentOptions.inject === 'undefined') {
-            componentOptions.inject = {};
-        }
-        if (!Array.isArray(componentOptions.inject)) {
-            componentOptions.inject[k] = key || k;
-        }
-    });
-}
-/**
- * decorator of a provide
- * @param key key
- * @return PropertyDecorator | void
- */
-function Provide(key) {
-    return vueClassComponent.createDecorator(function (componentOptions, k) {
-        var provide = componentOptions.provide;
-        if (typeof provide !== 'function' || !provide.managed) {
-            var original_1 = componentOptions.provide;
-            provide = componentOptions.provide = function () {
-                var rv = Object.create((typeof original_1 === 'function' ? original_1.call(this) : original_1) || null);
-                for (var i in provide.managed)
-                    rv[provide.managed[i]] = this[i];
-                return rv;
-            };
-            provide.managed = {};
-        }
-        provide.managed[k] = key || k;
-    });
-}
-/**
- * decorator of model
- * @param  event event name
- * @return PropertyDecorator
- */
-function Model(event) {
-    return vueClassComponent.createDecorator(function (componentOptions, prop) {
-        componentOptions.model = { prop: prop, event: event || prop };
-    });
-}
-/**
- * decorator of a prop
- * @param  options the options for the prop
- * @return PropertyDecorator | void
- */
-function Prop(options) {
-    if (options === void 0) { options = {}; }
-    return function (target, key) {
-        if (!Array.isArray(options) && typeof options.type === 'undefined') {
-            options.type = Reflect.getMetadata('design:type', target, key);
-        }
-        vueClassComponent.createDecorator(function (componentOptions, k) {
-            (componentOptions.props || (componentOptions.props = {}))[k] = options;
-        })(target, key);
-    };
-}
-/**
- * decorator of a watch function
- * @param  path the path or the expression to observe
- * @param  WatchOption
- * @return MethodDecorator
- */
-function Watch(path, options) {
-    if (options === void 0) { options = {}; }
-    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
-    return vueClassComponent.createDecorator(function (componentOptions, handler) {
-        if (typeof componentOptions.watch !== 'object') {
-            componentOptions.watch = Object.create(null);
-        }
-        componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
-    });
-}
-
-exports.Inject = Inject;
-exports.Provide = Provide;
-exports.Model = Model;
-exports.Prop = Prop;
-exports.Watch = Watch;
-exports.Component = vueClassComponent__default;
-exports.Vue = vue;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(36)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(16),
-  /* template */
-  __webpack_require__(33),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\app\\app.vue.html"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] app.vue.html: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-e8bff018", Component.options)
-  } else {
-    hotAPI.reload("data-v-e8bff018", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(17),
-  /* template */
-  __webpack_require__(29),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\counter\\counter.vue.html"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] counter.vue.html: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-480bca04", Component.options)
-  } else {
-    hotAPI.reload("data-v-480bca04", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(18),
-  /* template */
-  __webpack_require__(28),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\fetchdata\\fetchdata.vue.html"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] fetchdata.vue.html: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0c646c6e", Component.options)
-  } else {
-    hotAPI.reload("data-v-0c646c6e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(1)(
-  /* script */
-  null,
-  /* template */
-  __webpack_require__(32),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\home\\home.vue.html"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] home.vue.html: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-826e69d0", Component.options)
-  } else {
-    hotAPI.reload("data-v-826e69d0", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2758,48 +2506,269 @@ module.exports = index;
 
 
 /***/ }),
+/* 7 */,
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? factory(exports, __webpack_require__(0), __webpack_require__(27), __webpack_require__(25)) :
+	typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vue-class-component', 'reflect-metadata'], factory) :
+	(factory((global.VuePropertyDecorator = {}),global.Vue,global.VueClassComponent));
+}(this, (function (exports,vue,vueClassComponent) { 'use strict';
+
+vue = vue && vue.hasOwnProperty('default') ? vue['default'] : vue;
+var vueClassComponent__default = 'default' in vueClassComponent ? vueClassComponent['default'] : vueClassComponent;
+
+/** vue-property-decorator verson 5.2.1 MIT LICENSE copyright 2017 kaorun343 */
+/**
+ * decorator of an inject
+ * @param key key
+ * @return PropertyDecorator
+ */
+function Inject(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            componentOptions.inject[k] = key || k;
+        }
+    });
+}
+/**
+ * decorator of a provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function Provide(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        if (typeof provide !== 'function' || !provide.managed) {
+            var original_1 = componentOptions.provide;
+            provide = componentOptions.provide = function () {
+                var rv = Object.create((typeof original_1 === 'function' ? original_1.call(this) : original_1) || null);
+                for (var i in provide.managed)
+                    rv[provide.managed[i]] = this[i];
+                return rv;
+            };
+            provide.managed = {};
+        }
+        provide.managed[k] = key || k;
+    });
+}
+/**
+ * decorator of model
+ * @param  event event name
+ * @return PropertyDecorator
+ */
+function Model(event) {
+    return vueClassComponent.createDecorator(function (componentOptions, prop) {
+        componentOptions.model = { prop: prop, event: event || prop };
+    });
+}
+/**
+ * decorator of a prop
+ * @param  options the options for the prop
+ * @return PropertyDecorator | void
+ */
+function Prop(options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        if (!Array.isArray(options) && typeof options.type === 'undefined') {
+            options.type = Reflect.getMetadata('design:type', target, key);
+        }
+        vueClassComponent.createDecorator(function (componentOptions, k) {
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+        })(target, key);
+    };
+}
+/**
+ * decorator of a watch function
+ * @param  path the path or the expression to observe
+ * @param  WatchOption
+ * @return MethodDecorator
+ */
+function Watch(path, options) {
+    if (options === void 0) { options = {}; }
+    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
+    return vueClassComponent.createDecorator(function (componentOptions, handler) {
+        if (typeof componentOptions.watch !== 'object') {
+            componentOptions.watch = Object.create(null);
+        }
+        componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
+    });
+}
+
+exports.Inject = Inject;
+exports.Provide = Provide;
+exports.Model = Model;
+exports.Prop = Prop;
+exports.Watch = Watch;
+exports.Component = vueClassComponent__default;
+exports.Vue = vue;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(2))(0);
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(37)
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(17),
+  /* template */
+  __webpack_require__(34),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\app\\app.vue.html"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] app.vue.html: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e8bff018", Component.options)
+  } else {
+    hotAPI.reload("data-v-e8bff018", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(18),
+  /* template */
+  __webpack_require__(30),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\counter\\counter.vue.html"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] counter.vue.html: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-480bca04", Component.options)
+  } else {
+    hotAPI.reload("data-v-480bca04", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(19),
+  /* template */
+  __webpack_require__(29),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\fetchdata\\fetchdata.vue.html"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] fetchdata.vue.html: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0c646c6e", Component.options)
+  } else {
+    hotAPI.reload("data-v-0c646c6e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(1);
+var Component = __webpack_require__(1)(
+  /* script */
+  null,
+  /* template */
+  __webpack_require__(33),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\学习\\03 其他事务\\校史竞赛系统\\POJECT\\SEU-History-Contest-System\\HistoryContest.Client\\Scripts\\components\\home\\home.vue.html"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] home.vue.html: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-826e69d0", Component.options)
+  } else {
+    hotAPI.reload("data-v-826e69d0", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(2))(5);
+module.exports = (__webpack_require__(2))(1);
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_router__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_validator__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_validator__);
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["default"]);
-__WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_3_vue_validator___default.a);
-var routes = [
-    //   { path: '/image1', component: require('../Images/background1.jpg') },
-    { path: '/', component: __webpack_require__(11) },
-    { path: '/counter', component: __webpack_require__(9) },
-    { path: '/fetchdata', component: __webpack_require__(10) },
-    { path: '/login', component: __webpack_require__(5) }
-];
-new __WEBPACK_IMPORTED_MODULE_1_vue__["default"]({
-    el: '#app-root',
-    router: new __WEBPACK_IMPORTED_MODULE_2_vue_router__["default"]({ mode: 'history', routes: routes }),
-    render: function (h) { return h(__webpack_require__(8)); }
-});
-
+module.exports = (__webpack_require__(2))(5);
 
 /***/ }),
 /* 16 */
@@ -2807,9 +2776,45 @@ new __WEBPACK_IMPORTED_MODULE_1_vue__["default"]({
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_bootstrap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_router__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_validator__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_validator__);
+
+
+
+
+//import './components/login/validator.js';
+__WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["default"]);
+__WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_3_vue_validator___default.a);
+//require('./components/login/validator.js')
+var routes = [
+    //   { path: '/image1', component: require('../Images/background1.jpg') },
+    { path: '/', component: __webpack_require__(13) },
+    { path: '/counter', component: __webpack_require__(11) },
+    { path: '/fetchdata', component: __webpack_require__(12) },
+    { path: '/login', component: __webpack_require__(5) }
+];
+new __WEBPACK_IMPORTED_MODULE_1_vue__["default"]({
+    el: '#app-root',
+    router: new __WEBPACK_IMPORTED_MODULE_2_vue_router__["default"]({ mode: 'history', routes: routes }),
+    render: function (h) { return h(__webpack_require__(10)); }
+});
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2828,7 +2833,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
+
 //import boolstrap from 'boolstrap';
+__WEBPACK_IMPORTED_MODULE_2_jquery___default()(function () {
+    var bgCounter = 0;
+    var backgrounds = [
+        "/dist/Images/background1.jpg",
+        "/dist/Images/background2.jpg",
+        "/dist/Images/background3.jpg",
+        "/dist/Images/background4.jpg",
+        "/dist/Images/background5.jpg",
+        "/dist/Images/background6.jpg",
+        "/dist/Images/background7.jpg"
+    ];
+    function changeBackground() {
+        bgCounter = (bgCounter + 1) % backgrounds.length;
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()('.backgrounds').css('background-image', 'url(' + backgrounds[bgCounter] + ')');
+        setTimeout(changeBackground, 4050);
+    }
+    changeBackground();
+});
 var AppComponent = (function (_super) {
     __extends(AppComponent, _super);
     function AppComponent() {
@@ -2837,7 +2861,7 @@ var AppComponent = (function (_super) {
     AppComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__["Component"])({
             components: {
-                MenuComponent: __webpack_require__(27),
+                MenuComponent: __webpack_require__(28),
                 LoginComponent: __webpack_require__(5)
             }
         })
@@ -2848,13 +2872,13 @@ var AppComponent = (function (_super) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -2896,13 +2920,13 @@ var CounterComponent = (function (_super) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_property_decorator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_property_decorator__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -2946,12 +2970,14 @@ var FetchDataComponent = (function (_super) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_validator__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_validator__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2963,10 +2989,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
+
+__WEBPACK_IMPORTED_MODULE_0_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_1_vue_validator___default.a);
 /*
 @Component({
     components: {
-        MenuComponent: require('../navmenu/navmenu.vue.html')
+        validator: require('./validator.js')
     }
 })*/
 var AppComponent = (function (_super) {
@@ -2980,20 +3008,6 @@ var AppComponent = (function (_super) {
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)();
-// imports
-
-
-// module
-exports.push([module.i, "\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.background {\r\n    background-image:url(" + __webpack_require__(6) + ");\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\n}\nh1{\r\n\tcolor:red;\n}\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\n}\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\n}\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\n}\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\n}\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\n}\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\n}\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\n}\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\n}\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\n}\n@media only screen and (max-width: 479px){\n.header{\r\n\t\ttext-align: center;\n}\n.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\n}\n.form-horizontal .form-group i{\r\n\t\tleft: 45px;\n}\n.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\n}\n}\n@keyframes loaded{\nfrom{\r\n\t\tleft:0px;\n}\nto{\r\n\t\tleft:45px;\n}\n}\n@media (max-width: 767px) {\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\n.background{\r\n        height:100%;\n}\n.background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\n}\r\n", "", {"version":3,"sources":["/./css/app.css"],"names":[],"mappings":";AACA,0EAA0E;AAC1E;IACI,+CAAgD;IAChD,gBAAgB;IAChB,4BAA4B;IAC5B,OAAO;IACP,QAAQ;IACR,SAAS;CACZ;AAED;CACC,UAAU;CACV;AACD;CACC,aAAa;CACb,WAAW;CACX,WAAW;CACX;AACD;CACC,gBAAgB;CAChB,oBAAoB;CACpB;AACD;CACC,iCAAiC;CACjC,iBAAiB;CACjB,YAAY;CACZ,qBAAqB;CACrB,oBAAoB;CACpB,mBAAmB;CACnB;AACD;CACC,eAAe;CACf,oBAAoB;CACpB,iCAAiC;CACjC,8BAA8B;CAC9B,gBAAgB;CAChB,iBAAiB;CACjB,gBAAgB;;CAEhB,oBAAoB;CACpB;AACD;CACC,WAAW;CACX,6BAA6B;CAC7B,kBAAkB;CAClB,kBAAkB;CAClB;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,aAAa;CACb,oBAAoB;CACpB,iBAAiB;CACjB,uBAAuB;CACvB,aAAa;CACb,6BAA6B;CAC7B;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,iBAAiB;CACjB,gBAAgB;CAChB;AACD;CACC,mBAAmB;CACnB,UAAU;;CAEV,WAAW;CACX,gBAAgB;CAChB,eAAe;CACf,wCAAwC;CACxC,6BAA6B;CAC7B;AACD;CACC,eAAe;CACf;AAGD;CACC,aAAa;CACb,gBAAgB;CAChB,YAAY;CACZ,oBAAoB;CACpB,oBAAoB;CACpB,mBAAmB;CACnB,aAAa;CACb,6BAA6B;CAC7B;AAED;CACC,cAAc;CACd,WAAW;CACX,eAAe;CACf,mBAAmB;CACnB;AACD;AACC;EACC,mBAAmB;CACnB;AACD;EACC,kBAAkB;CAClB;AACD;EACC,WAAW;CACX;AACD;EACC,mBAAmB;CACnB;CAED;AAED;AACC;EACC,SAAS;CACT;AACD;EACC,UAAU;CACV;CACD;AAED;AACI;QACI,kBAAkB;CACrB;CACJ;AAED;AACI;QACI,YAAY;CACf;AACD;OACG,sCAAsC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;IACD,kEAAkE;GACnE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAoCI;CACN","file":"app.css","sourcesContent":["\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.background {\r\n    background-image:url(../Images/background1.jpg);\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\r\n}\r\n\r\nh1{\r\n\tcolor:red;\r\n}\r\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\r\n}\r\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\r\n}\r\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\r\n}\r\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\r\n}\r\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\r\n}\r\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\r\n}\r\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\r\n}\r\n\r\n\r\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n\r\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\r\n}\r\n@media only screen and (max-width: 479px){\r\n\t.header{\r\n\t\ttext-align: center;\r\n\t}\r\n\t.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\r\n\t}\r\n\t.form-horizontal .form-group i{\r\n\t\tleft: 45px;\r\n\t}\r\n\t.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\r\n\t}\r\n\r\n}\r\n\r\n@keyframes loaded{\r\n\tfrom{\r\n\t\tleft:0px;\r\n\t}\r\n\tto{\r\n\t\tleft:45px;\r\n\t}\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    body {\r\n        padding-top: 50px;\r\n    }   \r\n}\r\n\r\n@media (min-width: 768px) {\r\n    .background{\r\n        height:100%;\r\n    }\r\n    .background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;        \r\n    }\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\r\n}\r\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3002,7 +3016,7 @@ exports = module.exports = __webpack_require__(3)();
 
 
 // module
-exports.push([module.i, "\n.main-nav li .glyphicon {\r\n    margin-right: 10px;\n}\r\n\r\n/* Highlighting rules for nav menu items */\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\n}\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\n.main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\n}\n.main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\n.main-nav .navbar-header {\r\n        float: none;\n}\n.main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\n}\n.main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\n}\n.main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\n}\n.main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\n}\n.main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\n}\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/navmenu/navmenu.css"],"names":[],"mappings":";AAAA;IACI,mBAAmB;CACtB;;AAED,2CAA2C;AAC3C;;;IAGI,wCAAwC;IACxC,aAAa;CAChB;;AAED,0EAA0E;AAC1E;IACI,gBAAgB;IAChB,OAAO;IACP,QAAQ;IACR,SAAS;IACT,WAAW;CACd;AAED;IACI,8FAA8F;AAC9F;QACI,kBAAkB;CACrB;CACJ;AAED;IACI,kEAAkE;AAClE;QACI,aAAa;QACb,wBAAwB;CAC3B;AACD;QACI,qCAAqC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;AACD;QACI,YAAY;CACf;AACD;QACI,2BAA2B;QAC3B,aAAa;CAChB;AACD;QACI,YAAY;gBACJ,gBAAgB;CAE3B;AACD;QACI,YAAY;QACZ,gBAAgB;QAChB,YAAY;CACf;AACD;QACI,mBAAmB;QACnB,mBAAmB;CACtB;AACD;QACI,YAAY;QACZ,oBAAoB;QACpB,iBAAiB;QACjB,wBAAwB;CAC3B;CACJ","file":"navmenu.css","sourcesContent":[".main-nav li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* Highlighting rules for nav menu items */\r\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\r\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\r\n    body {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n\r\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n    .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+exports.push([module.i, "\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.backgrounds {\r\n    background-image:url(" + __webpack_require__(40) + ");\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n\tright:0;\r\n\tbottom:0;\n}\nh1{\r\n\tcolor:red;\n}\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\n}\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\n}\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\n}\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\n}\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\n}\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\n}\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\n}\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\n}\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\n}\n@media only screen and (max-width: 479px){\n.header{\r\n\t\ttext-align: center;\n}\n.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\n}\n.form-horizontal .form-group i{\r\n\t\tleft: 45px;\n}\n.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\n}\n}\n@keyframes loaded{\nfrom{\r\n\t\tleft:0px;\n}\nto{\r\n\t\tleft:45px;\n}\n}\n@media (max-width: 767px) {\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\n.background{\r\n        height:100%;\n}\n.background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/app/app.css"],"names":[],"mappings":";AACA,0EAA0E;AAC1E;IACI,+CAAsD;IACtD,gBAAgB;IAChB,4BAA4B;IAC5B,OAAO;IACP,QAAQ;CACX,QAAQ;CACR,SAAS;CACT;AAED;CACC,UAAU;CACV;AACD;CACC,aAAa;CACb,WAAW;CACX,WAAW;CACX;AACD;CACC,gBAAgB;CAChB,oBAAoB;CACpB;AACD;CACC,iCAAiC;CACjC,iBAAiB;CACjB,YAAY;CACZ,qBAAqB;CACrB,oBAAoB;CACpB,mBAAmB;CACnB;AACD;CACC,eAAe;CACf,oBAAoB;CACpB,iCAAiC;CACjC,8BAA8B;CAC9B,gBAAgB;CAChB,iBAAiB;CACjB,gBAAgB;;CAEhB,oBAAoB;CACpB;AACD;CACC,WAAW;CACX,6BAA6B;CAC7B,kBAAkB;CAClB,kBAAkB;CAClB;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,aAAa;CACb,oBAAoB;CACpB,iBAAiB;CACjB,uBAAuB;CACvB,aAAa;CACb,6BAA6B;CAC7B;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,iBAAiB;CACjB,gBAAgB;CAChB;AACD;CACC,mBAAmB;CACnB,UAAU;;CAEV,WAAW;CACX,gBAAgB;CAChB,eAAe;CACf,wCAAwC;CACxC,6BAA6B;CAC7B;AACD;CACC,eAAe;CACf;AAGD;CACC,aAAa;CACb,gBAAgB;CAChB,YAAY;CACZ,oBAAoB;CACpB,oBAAoB;CACpB,mBAAmB;CACnB,aAAa;CACb,6BAA6B;CAC7B;AAED;CACC,cAAc;CACd,WAAW;CACX,eAAe;CACf,mBAAmB;CACnB;AACD;AACC;EACC,mBAAmB;CACnB;AACD;EACC,kBAAkB;CAClB;AACD;EACC,WAAW;CACX;AACD;EACC,mBAAmB;CACnB;CAED;AAED;AACC;EACC,SAAS;CACT;AACD;EACC,UAAU;CACV;CACD;AAED;AACI;QACI,kBAAkB;CACrB;CACJ;AAED;AACI;QACI,YAAY;CACf;AACD;OACG,sCAAsC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;IACD,kEAAkE;GACnE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAoCI;CACN","file":"app.css","sourcesContent":["\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.backgrounds {\r\n    background-image:url(../../../Images/background2.jpg);\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n\tright:0;\r\n\tbottom:0;\r\n}\r\n\r\nh1{\r\n\tcolor:red;\r\n}\r\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\r\n}\r\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\r\n}\r\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\r\n}\r\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\r\n}\r\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\r\n}\r\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\r\n}\r\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\r\n}\r\n\r\n\r\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n\r\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\r\n}\r\n@media only screen and (max-width: 479px){\r\n\t.header{\r\n\t\ttext-align: center;\r\n\t}\r\n\t.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\r\n\t}\r\n\t.form-horizontal .form-group i{\r\n\t\tleft: 45px;\r\n\t}\r\n\t.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\r\n\t}\r\n\r\n}\r\n\r\n@keyframes loaded{\r\n\tfrom{\r\n\t\tleft:0px;\r\n\t}\r\n\tto{\r\n\t\tleft:45px;\r\n\t}\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    body {\r\n        padding-top: 50px;\r\n    }   \r\n}\r\n\r\n@media (min-width: 768px) {\r\n    .background{\r\n        height:100%;\r\n    }\r\n    .background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;        \r\n    }\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 
 // exports
 
@@ -3016,13 +3030,27 @@ exports = module.exports = __webpack_require__(3)();
 
 
 // module
-exports.push([module.i, "\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.background {\r\n    background-image:url(" + __webpack_require__(6) + ");\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\n}\nh1{\r\n\tcolor:red;\n}\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\n}\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\n}\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\n}\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\n}\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\n}\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\n}\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\n}\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\n}\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\n}\n@media only screen and (max-width: 479px){\n.header{\r\n\t\ttext-align: center;\n}\n.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\n}\n.form-horizontal .form-group i{\r\n\t\tleft: 45px;\n}\n.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\n}\n}\n@keyframes loaded{\nfrom{\r\n\t\tleft:0px;\n}\nto{\r\n\t\tleft:45px;\n}\n}\n@media (max-width: 767px) {\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\n.background{\r\n        height:100%;\n}\n.background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\n}\r\n", "", {"version":3,"sources":["/./css/app.css"],"names":[],"mappings":";AACA,0EAA0E;AAC1E;IACI,+CAAgD;IAChD,gBAAgB;IAChB,4BAA4B;IAC5B,OAAO;IACP,QAAQ;IACR,SAAS;CACZ;AAED;CACC,UAAU;CACV;AACD;CACC,aAAa;CACb,WAAW;CACX,WAAW;CACX;AACD;CACC,gBAAgB;CAChB,oBAAoB;CACpB;AACD;CACC,iCAAiC;CACjC,iBAAiB;CACjB,YAAY;CACZ,qBAAqB;CACrB,oBAAoB;CACpB,mBAAmB;CACnB;AACD;CACC,eAAe;CACf,oBAAoB;CACpB,iCAAiC;CACjC,8BAA8B;CAC9B,gBAAgB;CAChB,iBAAiB;CACjB,gBAAgB;;CAEhB,oBAAoB;CACpB;AACD;CACC,WAAW;CACX,6BAA6B;CAC7B,kBAAkB;CAClB,kBAAkB;CAClB;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,aAAa;CACb,oBAAoB;CACpB,iBAAiB;CACjB,uBAAuB;CACvB,aAAa;CACb,6BAA6B;CAC7B;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,iBAAiB;CACjB,gBAAgB;CAChB;AACD;CACC,mBAAmB;CACnB,UAAU;;CAEV,WAAW;CACX,gBAAgB;CAChB,eAAe;CACf,wCAAwC;CACxC,6BAA6B;CAC7B;AACD;CACC,eAAe;CACf;AAGD;CACC,aAAa;CACb,gBAAgB;CAChB,YAAY;CACZ,oBAAoB;CACpB,oBAAoB;CACpB,mBAAmB;CACnB,aAAa;CACb,6BAA6B;CAC7B;AAED;CACC,cAAc;CACd,WAAW;CACX,eAAe;CACf,mBAAmB;CACnB;AACD;AACC;EACC,mBAAmB;CACnB;AACD;EACC,kBAAkB;CAClB;AACD;EACC,WAAW;CACX;AACD;EACC,mBAAmB;CACnB;CAED;AAED;AACC;EACC,SAAS;CACT;AACD;EACC,UAAU;CACV;CACD;AAED;AACI;QACI,kBAAkB;CACrB;CACJ;AAED;AACI;QACI,YAAY;CACf;AACD;OACG,sCAAsC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;IACD,kEAAkE;GACnE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAoCI;CACN","file":"app.css","sourcesContent":["\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.background {\r\n    background-image:url(../Images/background1.jpg);\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n    right: 0;\r\n}\r\n\r\nh1{\r\n\tcolor:red;\r\n}\r\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\r\n}\r\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\r\n}\r\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\r\n}\r\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\r\n}\r\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\r\n}\r\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\r\n}\r\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\r\n}\r\n\r\n\r\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n\r\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\r\n}\r\n@media only screen and (max-width: 479px){\r\n\t.header{\r\n\t\ttext-align: center;\r\n\t}\r\n\t.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\r\n\t}\r\n\t.form-horizontal .form-group i{\r\n\t\tleft: 45px;\r\n\t}\r\n\t.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\r\n\t}\r\n\r\n}\r\n\r\n@keyframes loaded{\r\n\tfrom{\r\n\t\tleft:0px;\r\n\t}\r\n\tto{\r\n\t\tleft:45px;\r\n\t}\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    body {\r\n        padding-top: 50px;\r\n    }   \r\n}\r\n\r\n@media (min-width: 768px) {\r\n    .background{\r\n        height:100%;\r\n    }\r\n    .background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;        \r\n    }\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+exports.push([module.i, "\n.main-nav li .glyphicon {\r\n    margin-right: 10px;\n}\r\n\r\n/* Highlighting rules for nav menu items */\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\n}\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\n.main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\n}\n.main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\n.main-nav .navbar-header {\r\n        float: none;\n}\n.main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\n}\n.main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\n}\n.main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\n}\n.main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\n}\n.main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\n}\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/navmenu/navmenu.css"],"names":[],"mappings":";AAAA;IACI,mBAAmB;CACtB;;AAED,2CAA2C;AAC3C;;;IAGI,wCAAwC;IACxC,aAAa;CAChB;;AAED,0EAA0E;AAC1E;IACI,gBAAgB;IAChB,OAAO;IACP,QAAQ;IACR,SAAS;IACT,WAAW;CACd;AAED;IACI,8FAA8F;AAC9F;QACI,kBAAkB;CACrB;CACJ;AAED;IACI,kEAAkE;AAClE;QACI,aAAa;QACb,wBAAwB;CAC3B;AACD;QACI,qCAAqC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;AACD;QACI,YAAY;CACf;AACD;QACI,2BAA2B;QAC3B,aAAa;CAChB;AACD;QACI,YAAY;gBACJ,gBAAgB;CAE3B;AACD;QACI,YAAY;QACZ,gBAAgB;QAChB,YAAY;CACf;AACD;QACI,mBAAmB;QACnB,mBAAmB;CACtB;AACD;QACI,YAAY;QACZ,oBAAoB;QACpB,iBAAiB;QACjB,wBAAwB;CAC3B;CACJ","file":"navmenu.css","sourcesContent":[".main-nav li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* Highlighting rules for nav menu items */\r\n.main-nav li a.router-link-active,\r\n.main-nav li a.router-link-active:hover,\r\n.main-nav li a.router-link-active:focus {\r\n    background-color: rgba(255,255,255,0.6);\r\n    color: white;\r\n}\r\n\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.main-nav {\r\n    position: fixed;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 1;\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\r\n    body {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n\r\n@media (min-width: 768px) {\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n    .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 
 // exports
 
 
 /***/ }),
 /* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)();
+// imports
+
+
+// module
+exports.push([module.i, "\r\n/* Keep the nav menu independent of scrolling and on top of other items */\n.backgrounds {\r\n    background-image:url(" + __webpack_require__(40) + ");\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n\tright:0;\r\n\tbottom:0;\n}\nh1{\r\n\tcolor:red;\n}\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\n}\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\n}\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\n}\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\n}\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\n}\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\n}\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\n}\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\n}\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\n}\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\n}\n@media only screen and (max-width: 479px){\n.header{\r\n\t\ttext-align: center;\n}\n.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\n}\n.form-horizontal .form-group i{\r\n\t\tleft: 45px;\n}\n.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\n}\n}\n@keyframes loaded{\nfrom{\r\n\t\tleft:0px;\n}\nto{\r\n\t\tleft:45px;\n}\n}\n@media (max-width: 767px) {\nbody {\r\n        padding-top: 50px;\n}\n}\n@media (min-width: 768px) {\n.background{\r\n        height:100%;\n}\n.background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\n}\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\n}\r\n", "", {"version":3,"sources":["/./Scripts/components/app/app.css"],"names":[],"mappings":";AACA,0EAA0E;AAC1E;IACI,+CAAsD;IACtD,gBAAgB;IAChB,4BAA4B;IAC5B,OAAO;IACP,QAAQ;CACX,QAAQ;CACR,SAAS;CACT;AAED;CACC,UAAU;CACV;AACD;CACC,aAAa;CACb,WAAW;CACX,WAAW;CACX;AACD;CACC,gBAAgB;CAChB,oBAAoB;CACpB;AACD;CACC,iCAAiC;CACjC,iBAAiB;CACjB,YAAY;CACZ,qBAAqB;CACrB,oBAAoB;CACpB,mBAAmB;CACnB;AACD;CACC,eAAe;CACf,oBAAoB;CACpB,iCAAiC;CACjC,8BAA8B;CAC9B,gBAAgB;CAChB,iBAAiB;CACjB,gBAAgB;;CAEhB,oBAAoB;CACpB;AACD;CACC,WAAW;CACX,6BAA6B;CAC7B,kBAAkB;CAClB,kBAAkB;CAClB;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,aAAa;CACb,oBAAoB;CACpB,iBAAiB;CACjB,uBAAuB;CACvB,aAAa;CACb,6BAA6B;CAC7B;AACD;CACC,oBAAoB;CACpB,aAAa;CACb,iBAAiB;CACjB,gBAAgB;CAChB;AACD;CACC,mBAAmB;CACnB,UAAU;;CAEV,WAAW;CACX,gBAAgB;CAChB,eAAe;CACf,wCAAwC;CACxC,6BAA6B;CAC7B;AACD;CACC,eAAe;CACf;AAGD;CACC,aAAa;CACb,gBAAgB;CAChB,YAAY;CACZ,oBAAoB;CACpB,oBAAoB;CACpB,mBAAmB;CACnB,aAAa;CACb,6BAA6B;CAC7B;AAED;CACC,cAAc;CACd,WAAW;CACX,eAAe;CACf,mBAAmB;CACnB;AACD;AACC;EACC,mBAAmB;CACnB;AACD;EACC,kBAAkB;CAClB;AACD;EACC,WAAW;CACX;AACD;EACC,mBAAmB;CACnB;CAED;AAED;AACC;EACC,SAAS;CACT;AACD;EACC,UAAU;CACV;CACD;AAED;AACI;QACI,kBAAkB;CACrB;CACJ;AAED;AACI;QACI,YAAY;CACf;AACD;OACG,sCAAsC;QACrC,mBAAmB;QACnB,kBAAkB;QAClB,aAAa;CAChB;IACD,kEAAkE;GACnE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAoCI;CACN","file":"app.css","sourcesContent":["\r\n/* Keep the nav menu independent of scrolling and on top of other items */\r\n.backgrounds {\r\n    background-image:url(../../../Images/background2.jpg);\r\n    position: fixed;\r\n    background-position: center;\r\n    top: 0; \r\n    left: 0;\r\n\tright:0;\r\n\tbottom:0;\r\n}\r\n\r\nh1{\r\n\tcolor:red;\r\n}\r\n.header{\r\n\tpadding:30px;\r\n\twidth:100%;\r\n\theight:25%;\r\n}\r\n.container{\r\n\tmargin-top:60px;\r\n\tmargin-bottom: 60px;\r\n}\r\n.form-horizontal{\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tmax-width: 540px;\r\n\tmargin:auto;\r\n\tpadding-bottom: 25px;\r\n\tborder-radius: 15px;\r\n\ttext-align: center;\r\n}\r\n.form-horizontal .heading{\r\n\tdisplay: block;\r\n\tfont-family:FZYaoti;\r\n\tbackground:rgba(255,255,255,0.6);\r\n\tborder-radius:15px 15px 0 0px;\r\n\tfont-size: 35px;\r\n\tfont-weight: 700;\r\n\tpadding: 35px 0;\r\n\t\r\n\tmargin-bottom: 30px;\r\n}\r\n.form-horizontal .form-group{\r\n\tpadding: 0;\r\n\tfont-family: Microsoft Yahei;\r\n\tmargin: 15px 60px;\r\n\tposition:relative;\r\n}\r\n.form-horizontal .form-control{\r\n\tbackground: #f0f0f0;\r\n\topacity: 0.8;\r\n\tborder: none;\r\n\tborder-radius: 20px;\r\n\tbox-shadow: none;\r\n\tpadding: 0 50px 0 80px;\r\n\theight: 40px;\r\n\ttransition: all 0.3s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus{\r\n\tbackground: #e0e0e0;\r\n\topacity: 0.8;\r\n\tbox-shadow: none;\r\n\toutline: 0 none;\r\n}\r\n.form-horizontal .form-group span{\r\n\tposition: absolute;\r\n\ttop: 12px;\r\n\r\n\tleft: 45px;\r\n\tfont-size: 16px;\r\n\tcolor: #c8c8c8;\r\n\tanimation: loaded 0.8s ease 0s 1 normal;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n.form-horizontal .form-control:focus + span{\r\n\tcolor: #00b4ef;\r\n}\r\n\r\n\r\n.form-horizontal .btn{\r\n\tfloat: right;\r\n\tfont-size: 14px;\r\n\tcolor: #fff;\r\n\tbackground: #00b4ef;\r\n\tborder-radius: 30px;\r\n\tpadding: 10px 25px;\r\n\tborder: none;\r\n\ttransition: all 0.5s ease 0s;\r\n}\r\n\r\n.form-horizontal a{\r\n\tdisplay:block;\r\n\tfloat:left;\r\n\tfont-size:14px;\r\n\tpadding: 10px 25px;\r\n}\r\n@media only screen and (max-width: 479px){\r\n\t.header{\r\n\t\ttext-align: center;\r\n\t}\r\n\t.form-horizontal .form-group{\r\n\t\tmargin: 15px 25px;\r\n\t}\r\n\t.form-horizontal .form-group i{\r\n\t\tleft: 45px;\r\n\t}\r\n\t.form-horizontal .btn{\r\n\t\tpadding: 10px 20px;\r\n\t}\r\n\r\n}\r\n\r\n@keyframes loaded{\r\n\tfrom{\r\n\t\tleft:0px;\r\n\t}\r\n\tto{\r\n\t\tleft:45px;\r\n\t}\r\n}\r\n\r\n@media (max-width: 767px) {\r\n    body {\r\n        padding-top: 50px;\r\n    }   \r\n}\r\n\r\n@media (min-width: 768px) {\r\n    .background{\r\n        height:100%;\r\n    }\r\n    .background .inside{\r\n       /* background:rgba(255,255,255,0.8);*/   \r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;        \r\n    }\r\n    /* On small screens, convert the nav menu to a vertical sidebar */\r\n   /* .main-nav {\r\n        height: 100%;\r\n        width: calc(25% - 20px);\r\n    }\r\n    .main-nav .navbar {\r\n        background-color:rgba(0,162,232,0.8);\r\n        border-radius: 0px;\r\n        border-width: 0px;\r\n        height: 100%;\r\n    }\r\n    .main-nav .navbar-header {\r\n        float: none;\r\n    }\r\n    .main-nav .navbar-collapse {\r\n        border-top: 1px solid #fff;\r\n        padding: 0px;\r\n    }\r\n    .main-nav .navbar ul {\r\n        float: none;\r\n                font-size: 20px;\r\n\r\n    }\r\n    .main-nav .navbar li {\r\n        float: none;\r\n        font-size: 18px;\r\n        margin: 6px;\r\n    }\r\n    .main-nav .navbar li a {\r\n        padding: 18px 16px;\r\n        border-radius: 4px;\r\n    }\r\n    .main-nav .navbar a {\r\n        width: 100%;\r\n        white-space: nowrap;\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }*/\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3212,7 +3240,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {/*! *****************************************************************************
@@ -4340,16 +4368,16 @@ var Reflect;
             Function("return this;")());
 })(Reflect || (Reflect = {}));
 //# sourceMappingURL=Reflect.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23), __webpack_require__(39)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24), __webpack_require__(39)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "Images/logo.png";
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4494,18 +4522,18 @@ exports.createDecorator = createDecorator;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(35)
+__webpack_require__(36)
 
 var Component = __webpack_require__(1)(
   /* script */
   null,
   /* template */
-  __webpack_require__(31),
+  __webpack_require__(32),
   /* scopeId */
   null,
   /* cssModules */
@@ -4532,7 +4560,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -4547,7 +4575,7 @@ if (false) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -4562,29 +4590,24 @@ if (false) {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticStyle: {
       "width": "100%"
     }
-  }, [_c('div', {
-    staticClass: "header"
-  }, [_c('img', {
-    attrs: {
-      "src": __webpack_require__(25),
-      "alt": "东大校徽"
-    }
-  })]), _vm._v(" "), _c('div', {
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "container"
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6 col-md-offset-3"
+  }, [_c('validator', {
+    attrs: {
+      "name": "validation"
+    }
   }, [_c('form', {
     staticClass: "form-horizontal",
     attrs: {
@@ -4595,11 +4618,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('span', {
     staticClass: "heading"
   }, [_vm._v("校史校情知识竞赛")]), _vm._v(" "), _c('div', {
-    staticClass: "form-group"
+    staticClass: "form-group username-field"
   }, [_c('input', {
+    directives: [{
+      name: "validate",
+      rawName: "v-validate:username",
+      value: ({
+        minlength: 6,
+        maxlength: 12
+      }),
+      expression: "{minlength:6,maxlength:12}",
+      arg: "username"
+    }],
     staticClass: "form-control",
     attrs: {
       "type": "text",
+      "id": "username",
       "pattern": "^[0-9]{8}$",
       "required": "",
       "autofocus": "",
@@ -4607,10 +4641,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "user",
       "data-toggle": "validator"
     }
-  }), _vm._v(" "), _c('span', {
+  }), _vm._v(" "), _c('div', [_vm._v("\r\n                                            " + _vm._s(_vm._f("json")(_vm.$myForm)) + "\r\n                                        ")]), _vm._v(" "), _c('span', {
     staticClass: "glyphicon glyphicon-user"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "help-block with-errors"
   })]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('input', {
@@ -4627,14 +4659,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "maxlength": "9",
       "data-error": "密码为九位一卡通号！"
     }
-  }), _vm._v(" "), _c('script', {
-    attrs: {
-      "type": "javascript"
-    }
-  }, [_vm._v("\n                                var pwd=document.getElementById(\"password\");  \n                                 user.setCustomValidity(\"密码必须填！！！\");\n                            ")]), _vm._v(" "), _c('span', {
+  }), _vm._v(" "), _c('span', {
     staticClass: "glyphicon glyphicon-lock"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "help-block with-errors"
   })]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('a', {
@@ -4646,7 +4672,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v("登录")])])])])])])])
+  }, [_vm._v("登录")])])])])], 1)])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "header"
+  }, [_c('img', {
+    attrs: {
+      "src": __webpack_require__(26),
+      "alt": "东大校徽"
+    }
+  })])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -4657,7 +4692,7 @@ if (false) {
 }
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -4737,7 +4772,7 @@ if (false) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -4758,12 +4793,12 @@ if (false) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "background"
+    staticClass: "backgrounds"
   }, [_c('div', {
     staticClass: "inside container-fluid",
     staticStyle: {
@@ -4783,32 +4818,6 @@ if (false) {
 }
 
 /***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(20);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("d7e0663e", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-55a30ee4\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css", function() {
-     var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-55a30ee4\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4819,13 +4828,13 @@ var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("7f6ca90d", content, false);
+var update = __webpack_require__(4)("6b3fca21", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-55a30ee4\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-55a30ee4\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -4845,13 +4854,13 @@ var content = __webpack_require__(22);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("03e69f6f", content, false);
+var update = __webpack_require__(4)("7f6ca90d", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css", function() {
-     var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-71969072\",\"scoped\":false,\"hasInlineConfig\":false}!./navmenu.css");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -4862,6 +4871,32 @@ if(false) {
 
 /***/ }),
 /* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(23);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("49d2c6a2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-e8bff018\",\"scoped\":false,\"hasInlineConfig\":false}!./app.css");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 38 */
 /***/ (function(module, exports) {
 
 /**
@@ -4894,16 +4929,16 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = (__webpack_require__(2))(0);
-
-/***/ }),
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(2))(19);
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Images/background2.jpg";
 
 /***/ })
 /******/ ]);
