@@ -24,7 +24,8 @@ namespace HistoryContest.Server.Data
             var students = new Student[]
             {
                 new Student { ID = 09016319, Name = "叶志浩", CardID = username, CounselorID = 1 },
-                new Student { ID = 09016407, Name = "胡黛琳", CardID = username, CounselorID = 1 }
+                new Student { ID = 09016407, Name = "胡黛琳", CardID = username, CounselorID = 1 },
+                new Student { ID = 09016435, Name = "杨航源", CardID = 213161269, CounselorID = 1 }
             };
             foreach (Student s in students)
             {
