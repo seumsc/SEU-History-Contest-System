@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using HistoryContest.Server.Data;
+using HistoryContest.Server.Services;
 
 namespace HistoryContest.Server
 {
@@ -23,11 +27,17 @@ namespace HistoryContest.Server
     {
         public Startup(IHostingEnvironment env)
         {
-            if(!Program.FromMain && env.IsDevelopment())
+#if DEBUG && !NETCOREAPP2_0
+            env.EnvironmentName = "Development";
+#endif
+
+#if !NETCOREAPP2_0
+            if (!Program.FromMain && env.IsDevelopment())
             {
                 env.ContentRootPath = Path.Combine(env.ContentRootPath, "..");
                 env.WebRootPath = Path.Combine(env.ContentRootPath, "wwwroot");
             }
+#endif
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(env.ContentRootPath, env.IsDevelopment() ? "HistoryContest.Server" : ""))
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -56,8 +66,54 @@ namespace HistoryContest.Server
             services.AddMvc();
 #endif
 
-            // Add Unit of work Services
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+
+
+
+#if NETCOREAPP2_0
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Account/Login/");
+                options.LogoutPath = new PathString("/Account/Logout");
+                options.AccessDeniedPath = new PathString("/");
+                options.Cookie.Name = "HistoryContest.Cookie.Auth";
+                // options.Cookie.Domain = "";
+                options.Cookie.Path = "/";
+                options.Cookie.HttpOnly = true;
+                // options.Cookie.SameSite = SameSiteMode.Lax;
+                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+#else
+            services.AddAuthentication(options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+#endif
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+#if NETCOREAPP2_0
+                options.Cookie.Name = "HistoryContest.Cookie.Session";
+                // options.Cookie.Domain = "";
+                options.Cookie.Path = "/";
+                options.Cookie.HttpOnly = true;
+                // options.Cookie.SameSite = SameSiteMode.Lax;
+                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+#else
+                options.CookieName = "HistoryContest.Cookie.Session";
+                // options.CookieDomain = "";
+                options.CookiePath = "/";
+                options.CookieHttpOnly = true;
+                // options.CookieSameSite = SameSiteMode.Lax;
+                // options.CookieSecure = CookieSecurePolicy.Always;
+#endif
+            });
+
+            // Add Unit of work service
             services.AddScoped<UnitOfWork>();
+
+            // Add Account service
+            services.AddScoped<AccountService>();
 
             // Add logging services to application
             services.AddLogging();
@@ -101,7 +157,7 @@ namespace HistoryContest.Server
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            /* ------------static file routes------------*/
+            #region Static file routes
             // use wwwroot static files
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -119,10 +175,10 @@ namespace HistoryContest.Server
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, @"HistoryContest.Wiki")),
                 RequestPath = new PathString("/wiki")
             });
-            /* ------------static file routes------------*/
+            #endregion
 
 
-            /* ------------api document routes------------*/
+            #region Api document routes
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -131,10 +187,30 @@ namespace HistoryContest.Server
             {
                 c.SwaggerEndpoint("/swagger/seu-history-contest/swagger.json", "SEU History Contest API v1");
             });
-            /* ------------api document routes------------*/
+            #endregion
 
 
-            /* ------------javascript spa routes------------*/
+            #region Authentication settings
+            // Use Cookie Authentication
+#if NETCOREAPP2_0
+            app.UseAuthentication();
+#else
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
+                LoginPath = new PathString("/Account/Login/"),
+                AccessDeniedPath = new PathString("/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });
+#endif
+
+            // use sessions
+            app.UseSession();
+            #endregion
+
+
+            #region Javascript spa routes
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -145,7 +221,7 @@ namespace HistoryContest.Server
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            /* ------------javascript spa routes------------*/
+            #endregion
 
             DbInitializer.Initialize(context);
         }

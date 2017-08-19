@@ -8,14 +8,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HistoryContest.Server.Models.Entities
 {
     // Entity Framework interprets a property as a foreign key property if it's named <navigation property name><primary key property name>
-    public class Student : IEntityBase
+    public class Student : IUserBase
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)] // ID为学生学号，而不是由数据库自动生成
         public int ID { get; set; }
         public string Name { get; set; }
         public int CardID { get; set; }
         public Int64? State { get; set; }
-        //public TimeSpan TimeLeft { get; set; }
+        public int? Score { get; set; }
+        public DateTime? DateTimeFinished { get; set; }
+        public TimeSpan? TimeConsumed { get; set; }
 
         // Foreign Keys
         public int CounselorID { get; set; } 
@@ -27,7 +29,7 @@ namespace HistoryContest.Server.Models.Entities
 
         public bool IsTested
         {
-            get { return State != null;  }
+            get { return Score != null;  }
         }
 
         [NotMapped]
@@ -45,7 +47,7 @@ namespace HistoryContest.Server.Models.Entities
                 }
                 for(int i = 0; i < 10; ++i)
                 {
-                    choices[i] = (byte)((State >> 40 + i) & 0b1);
+                    choices[20 + i] = (byte)((State >> 40 + i) & 0b1);
                 }
                 return choices;
             }
@@ -63,6 +65,11 @@ namespace HistoryContest.Server.Models.Entities
                     State |= (Int64)value[i] << i + 40;
                 }
             }
+        }
+
+        public bool CheckPassword(string password)
+        {
+            return CardID == int.Parse(password);
         }
     }
 }

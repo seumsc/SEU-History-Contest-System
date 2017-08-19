@@ -395,6 +395,48 @@
 
   12. `FIX BUG:`修正后端工作路径的若干BUG。
 
-      ​
 
-      ​
+
+
+# 8.15
+
+* Controller.HttpContext属性：
+
+  Encapsulates all HTTP-specific information about an individual HTTP request.
+
+  即针对一个单独的Http请求而模拟出的环境，可以从中获取到这次请求对应的Session等内容。
+
+* 添加Session:
+
+  Session保存在一个字典（哈希表）中，由session id检索。session id将会保存在每个用户本地的cookie上。
+
+* 初步添加Authentication功能：
+
+  采用Cookie验证模式
+
+  添加了登录/注销功能
+
+  注销功能只返回状态码（成功200）。最好在前端判断一下状态码再跳转页面
+
+* 添加Authorization功能，采取Role-based模式：每个登录的人会被分配一个身份，每个控制器只允许指定身份的人访问。
+
+* 添加时间相关API
+
+* 待添加管理员页面：查看log、wiki、api文档、直接查看并修改原始数据库、解析doc
+
+## 8.17
+
+* 后端从.Net Core 1.1 迁移至 2.0：
+
+  安装好SDK与Runtime后，需要将global.json的sdk版本修改至2.0：
+
+  `"sdk": {"version": "2.0.0-preview3-006912"}`
+
+  这是解决方案依赖的东西。
+
+* 修改包依赖：
+
+  2.0版本，可以使用一个MetaPackage解决问题：
+
+  `<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />`
+
