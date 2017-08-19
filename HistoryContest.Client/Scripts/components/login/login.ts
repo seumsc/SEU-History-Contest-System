@@ -22,8 +22,14 @@ require('../../../Images/background7.jpg');
 require('../../../Images/background8.jpg');
 
 //import boolstrap from 'boolstrap';
+var username= "";
+var password = "";
 $(function(){
 
+$("#submit").click(function(){
+  username = $("#username").val();
+  password = $("#password").val() 
+})  
 var bgCounter = 0;
 var backgrounds = [
       "/dist/Images/background0.jpg",
@@ -48,5 +54,18 @@ var backgrounds = [
 });
 
 
-export default class AppComponent extends Vue {
+// export default class AppComponent extends Vue {
+export default{
+data(){
+    return{
+      username:username,
+      password:password
+    } 
+  },
+  methods:{
+    isLogin:function(){
+      this.$router.push({path:'/main'})
+
+    }
+  }
 }
