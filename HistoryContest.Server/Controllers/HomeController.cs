@@ -11,7 +11,6 @@ namespace HistoryContest.Server.Controllers
     {
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("id", "username");
             return View();
         }
 
