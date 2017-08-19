@@ -26,6 +26,20 @@ new Vue({
                         component: require('./components/ans/result/ans_result.vue.html')
                     }
                 ]
+            },
+            {
+                path:'/dashboard',
+                component: require('./components/dashboard/dashboard.vue.html'),
+                children:[
+                    {
+                        path: 'statistics',
+                        component:require('./components/dashboard/statistics/statistics.vue.html')
+                    },
+                    {
+                        path: 'general',
+                        component:require('./components/dashboard/general/general.vue.html')
+                    }
+                ]
             }
         ]
     }),
