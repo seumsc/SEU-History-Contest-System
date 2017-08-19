@@ -8,13 +8,13 @@
 | /wiki    | Wiki文档入口。                         |
 | /swagger | 后端API文档入口。                        |
 
-网站地址：https://history-contest.azurewebsites.net
+网站地址：http://history-contest.chinacloudsites.cn
 
-控制台地址：https://history-contest.scm.azurewebsites.net
+控制台地址：http://history-contest.scm.chinacloudsites.cn
 
 数据库地址：https://history-contest.database.windows.net
 
-Azure管理中心:https://portal.azure.com
+Azure管理中心:https://portal.azure.cn
 
 ### 配置 & 开发流程
 

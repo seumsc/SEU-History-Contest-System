@@ -36,6 +36,7 @@ namespace HistoryContest.Server
                 .UseContentRoot(Directory.GetCurrentDirectory())
 #endif
                 .UseIISIntegration()
+                .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .Build();
     }
