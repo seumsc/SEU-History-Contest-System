@@ -127,7 +127,7 @@ namespace HistoryContest.Server
                     Version = "v1",
                     Description = "Backend Web API for History Contest System front end.",
                     TermsOfService = "None",
-                    Contact = new Contact { Name = "Vigilans", Email = "vigilans@foxmail.com", Url = "http://vigi.me/" }
+                    Contact = new Contact { Name = "Vigilans", Email = "vigilans@foxmail.com", Url = "http://history-contest.chinacloudsites.cn/wiki" }
                 });
 
                 //Set the comments path for the swagger json and ui.
