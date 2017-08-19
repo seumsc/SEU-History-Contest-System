@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>校史校情知识竞赛系统--登录</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css" href="assets/css/login.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="icon" href="/favicon.ico">
+   <!-- 以下两个插件用于在IE8以及以下版本浏览器支持HTML5元素和媒体查询，如果不需要用可以移除 -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+<script src="assets/js/jquery.backstretch.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+      <div class="loginHTML-container">
+          <div class="header">
+			        <img src="images/logo.png" alt="东大校徽">
+          </div>
+
+          <div class="container">          		
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                        <!--使用post方法提交表单数据-->
+                  <form class="form-horizontal" data-toggle="validator" method="POST" action="xxxx.asp">
+                    <span class="heading">校史校情知识竞赛</span>
+                                                    <!--输入账号，提交名为user,限制输入0-9，自动聚焦-->  
+                      <div class="form-group">
+                              <input type="text" class="form-control" pattern="^[0-9]{1,}$" required autofocus 
+                              placeholder="账号为学号" name="user"title="账号为学号"  data-toggle="validator" data-minlength="8"
+                              maxlength="8" data-error="账号为八位学号！">
+                              <span class="glyphicon glyphicon-user"></span>
+                                                <div class="help-block with-errors"></div>           
+                      </div>
+                                                    <!--输入密码，提交名为password，限制输入0-9-->	
+                      <div class="form-group">
+                              <input type="password" class="form-control" pattern="^[0-9]{1,}$" required 
+                              placeholder="密码为一卡通号" data-toggle="validator" 
+                              name="password" name="password"title="密码为一卡通号" data-minlength="9"
+                              maxlength="9" data-error="密码为九位一卡通号！">
+                              <span class="glyphicon glyphicon-lock"></span>		
+                                                            <div class="help-block with-errors"></div>                               
+                      </div>
+                      <div class="form-group">
+                          
+                          <a href="#">还未注册？</a>
+                          <button type="submit" class="btn btn-default">登录</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+		   
+		    
+      </div>
+       
+<script type="text/javascript">
+$.backstretch([
+		'images/background1.jpg',
+		'images/background2.jpg',
+		'images/background3.jpg',
+    'images/background4.jpg',
+    'images/background5.jpg',
+    'images/background6.jpg',
+    'images/background7.jpg',
+
+	], {
+		fade : 1000, // 动画时长
+		duration : 2000 // 切换延时
+});
+</script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="assets/js/jquery-3.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <script src="assets/js/validator.min.js"></script>
+  </body>
+</html>
