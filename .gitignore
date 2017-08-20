@@ -4,6 +4,7 @@
 # History Contest
 HistoryContest.Server/Properties/launchSettings.json
 HistoryContest.Wiki/index.html
+HistoryContest.Site/
 wwwroot/dist/
 package-lock.json
 
