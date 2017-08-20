@@ -19,12 +19,12 @@ cd ../
 
 echo. 
 echo (%i%/%n%)Restoring Server-side Nuget Packages...
-cd ./HistoryContest.Server
-call dotnet restore
+call dotnet restore "./HistoryContest.sln"
 set /a i=i+1
 
 echo.
 echo (%i%/%n%)Building Server and Database...
+cd ./HistoryContest.Server
 call dotnet ef database update
 set /a i=i+1
 
