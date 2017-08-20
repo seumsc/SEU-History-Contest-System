@@ -25,19 +25,19 @@ namespace HistoryContest.Server
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+        public static IHostingEnvironment Environment { get; set; }
+
         public Startup(IHostingEnvironment env)
         {
-#if DEBUG && !NETCOREAPP2_0
-            env.EnvironmentName = "Development";
-#endif
-
-#if !NETCOREAPP2_0
-            if (!Program.FromMain && env.IsDevelopment())
+            if (!Program.FromMain)
             {
-                env.ContentRootPath = Path.Combine(env.ContentRootPath, "..");
+                env.EnvironmentName = Program.EnvironmentName;
+                env.ContentRootPath = Program.ContentRootPath;
                 env.WebRootPath = Path.Combine(env.ContentRootPath, "wwwroot");
             }
-#endif
+
+            Environment = env;
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(env.ContentRootPath, env.IsDevelopment() ? "HistoryContest.Server" : ""))
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -46,30 +46,33 @@ namespace HistoryContest.Server
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add mvc framework services.
+            var mvcBuilder = services.AddMvc();
+            string connectionEndPoint;
+
+            if (Environment.IsDevelopment())
+            {
+                mvcBuilder.AddRazorOptions(options =>
+                {
+                    options.ViewLocationExpanders.Clear();
+                    options.ViewLocationExpanders.Add(new LocalViewEngine());
+                });
+                connectionEndPoint = "LocalConnection";
+            }
+            else
+            {
+                connectionEndPoint = "AzureConnection";
+            }
+
             // Add Database Services
             services.AddDbContext<ContestContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            // Add mvc framework services.
-#if DEBUG
-            services.AddMvc().AddRazorOptions(options =>
-            {
-                options.ViewLocationExpanders.Clear();
-                options.ViewLocationExpanders.Add(new MyViewEngine());
-            });
-#else
-            services.AddMvc();
-#endif
+                options.UseSqlServer(Configuration.GetConnectionString(connectionEndPoint)));
 
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddDistributedMemoryCache();
-
-
 
 #if NETCOREAPP2_0
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
@@ -85,35 +88,31 @@ namespace HistoryContest.Server
                 // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-#else
-            services.AddAuthentication(options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-#endif
-
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
-#if NETCOREAPP2_0
                 options.Cookie.Name = "HistoryContest.Cookie.Session";
                 // options.Cookie.Domain = "";
                 options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
                 // options.Cookie.SameSite = SameSiteMode.Lax;
                 // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
 #else
+            services.AddAuthentication(options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.CookieName = "HistoryContest.Cookie.Session";
                 // options.CookieDomain = "";
                 options.CookiePath = "/";
                 options.CookieHttpOnly = true;
                 // options.CookieSameSite = SameSiteMode.Lax;
                 // options.CookieSecure = CookieSecurePolicy.Always;
-#endif
             });
-
-            // Add Unit of work service
-            services.AddScoped<UnitOfWork>();
-
-            // Add Account service
-            services.AddScoped<AccountService>();
+#endif
 
             // Add logging services to application
             services.AddLogging();
@@ -135,21 +134,27 @@ namespace HistoryContest.Server
                 var xmlPath = Path.Combine(basePath, "HistoryContest.Server.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+
+            // Add Unit of work service
+            services.AddScoped<UnitOfWork>();
+
+            // Add Account service
+            services.AddScoped<AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ContestContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ContestContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     HotModuleReplacement = true,
-                    ProjectPath = env.ContentRootPath + "/HistoryContest.Client"
+                    ProjectPath = Environment.ContentRootPath + "/HistoryContest.Client"
                 });
             }
             else
@@ -165,14 +170,14 @@ namespace HistoryContest.Server
             // enable default url rewrite for wiki
             app.UseDefaultFiles(new DefaultFilesOptions()
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, @"HistoryContest.Wiki")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(Environment.ContentRootPath, @"HistoryContest.Wiki")),
                 RequestPath = new PathString("/wiki")
             });
 
             // use wiki static files
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, @"HistoryContest.Wiki")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(Environment.ContentRootPath, @"HistoryContest.Wiki")),
                 RequestPath = new PathString("/wiki")
             });
             #endregion
@@ -180,12 +185,16 @@ namespace HistoryContest.Server
 
             #region Api document routes
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/{documentname}/swagger.json";
+            });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/seu-history-contest/swagger.json", "SEU History Contest API v1");
+                c.RoutePrefix = "api";
+                c.SwaggerEndpoint("/api/seu-history-contest/swagger.json", "SEU History Contest API v1");
             });
             #endregion
 
@@ -227,12 +236,11 @@ namespace HistoryContest.Server
         }
     }
 
-#if DEBUG
-    public class MyViewEngine : IViewLocationExpander
+    internal class LocalViewEngine : IViewLocationExpander
     {
         public void PopulateValues(ViewLocationExpanderContext context)
         {
-            context.Values["customviewlocation"] = nameof(MyViewEngine);
+            context.Values["customviewlocation"] = nameof(LocalViewEngine);
         }
 
         public IEnumerable<string> ExpandViewLocations(
@@ -245,5 +253,4 @@ namespace HistoryContest.Server
             };
         }
     }
-#endif
 }

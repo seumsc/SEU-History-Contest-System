@@ -2,17 +2,17 @@
 
 ### 网站目录结构
 
-| Route    | Description                       |
-| -------- | --------------------------------- |
-| /        | 主页面，由前端组负责所有内容。可以尝试使用SPA（单页应用）技术。 |
-| /wiki    | Wiki文档入口。                         |
-| /swagger | 后端API文档入口。                        |
+| Route | Description   |
+| ----- | ------------- |
+| /     | 主页面，由前端组负责内容。 |
+| /wiki | Wiki文档入口。     |
+| /api  | 后端API文档入口。    |
 
 网站地址：http://history-contest.chinacloudsites.cn
 
 控制台地址：http://history-contest.scm.chinacloudsites.cn
 
-数据库地址：https://history-contest.database.windows.net
+数据库地址：http://history-contest.database.chinacloudapi.cn/
 
 Azure管理中心:https://portal.azure.cn
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using HistoryContest.Server.Models.Entities;
 
 namespace HistoryContest.Server.Models.ViewModels
@@ -14,8 +15,11 @@ namespace HistoryContest.Server.Models.ViewModels
 
     public class QuestionViewModel
     {
+        [Required]
         public int ID { get; set; }
+        [Required]
         public QuestionType Type { get; set; }
+        [Required]
         public string Question { get; set; }
         public string[] Choices { get; set; } // string本身为nullable类型，故不用加上"?"
 

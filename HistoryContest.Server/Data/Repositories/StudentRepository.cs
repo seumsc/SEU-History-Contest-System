@@ -29,39 +29,26 @@ namespace HistoryContest.Server.Data.Repositories
             return a.Students;
         }
 
-        public async Task<int> SizeByDepartment(Department departmentID)
-        {
-            return (await GetByDepartment(departmentID)).Count;
-        }
+        public async Task<int> SizeByDepartment(Department departmentID) =>
+            (await GetByDepartment(departmentID)).Count;
 
-        public async Task<double> AverageScore()
-        {
-            return await dbSet.Select(s => (int)s.Score).AverageAsync();
-        }
+        public async Task<double> AverageScore() =>
+            await dbSet.Select(s => (int)s.Score).AverageAsync();
 
-        public async Task<int> HighestScore()
-        {
-            return await dbSet.Select(s => (int)s.Score).MaxAsync();
-        }
+        public async Task<int> HighestScore() =>
+            await dbSet.Select(s => (int)s.Score).MaxAsync();
 
-        public async Task<int> ScoreHigherThan(double bandScore)
-        {
-            return await dbSet.CountAsync(s => s.IsTested && s.Score >= bandScore);
-        }
-
-        public async Task<double> AverageScoreByDepartment(Department departmentID)
-        {
-            return await (await GetByDepartment(departmentID)).AsQueryable().Select(s => (int)s.Score).AverageAsync();
-        }
-
-        public async Task<int> HighestScoreByDepartment(Department departmentID)
-        {
-            return await (await GetByDepartment(departmentID)).AsQueryable().Select(s => (int)s.Score).MaxAsync();
-        }
-
-        public async Task<int> ScoreHigherThanByDepartment(double bandScore, Department departmentID)
-        {
-            return await(await GetByDepartment(departmentID)).AsQueryable().CountAsync(s => s.IsTested && s.Score >= bandScore);
-        }
+        public async Task<int> ScoreHigherThan(double bandScore) =>            
+            await dbSet.CountAsync(s => s.IsTested && s.Score >= bandScore);
+            
+        public async Task<double> AverageScoreByDepartment(Department departmentID) =>            
+            await (await GetByDepartment(departmentID)).AsQueryable().Select(s => (int)s.Score).AverageAsync();
+            
+        public async Task<int> HighestScoreByDepartment(Department departmentID) =>           
+            await (await GetByDepartment(departmentID)).AsQueryable().Select(s => (int)s.Score).MaxAsync();
+                   
+        public async Task<int> ScoreHigherThanByDepartment(double bandScore, Department departmentID) =>           
+            await (await GetByDepartment(departmentID)).AsQueryable().CountAsync(s => s.IsTested && s.Score >= bandScore);
+            
     }
 }

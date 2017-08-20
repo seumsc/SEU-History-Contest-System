@@ -54,7 +54,7 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         [HttpPost]
-        public async Task<IActionResult> CountScore([FromBody]List<AnswerViewModel> answers)
+        public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> answers)
         {
             if(!ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 throw new Exception("Improper seed created, ID: " + seed);
             }
 
-            return Json(source.Select(q => new AnswerViewModel { ID = q.ID, Answer = q.Answer, Points = q.Points }));
+            return Json(source.Select(q => new CorrectAnswerViewModel { ID = q.ID, Answer = q.Answer, Points = q.Points }));
         }
 
         [HttpGet("answer/{id}")]
@@ -119,7 +119,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return NotFound();
             }
 
-            return Json(new AnswerViewModel { ID = item.ID, Answer = item.Answer, Points = item.Points });
+            return Json(new CorrectAnswerViewModel { ID = item.ID, Answer = item.Answer, Points = item.Points });
         }
     }
 }

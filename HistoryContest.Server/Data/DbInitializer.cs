@@ -36,7 +36,7 @@ namespace HistoryContest.Server.Data
 
             var counselors = new Counselor[]
             {
-                new Counselor { ID = 1, Name = "郭佳", Department = Department.CS, PhoneNumber = 123456789 }
+                new Counselor { ID = 1, Name = "郭佳", Department = Department.计算机, PhoneNumber = 123456789 }
             };
             foreach (var c in counselors)
             {

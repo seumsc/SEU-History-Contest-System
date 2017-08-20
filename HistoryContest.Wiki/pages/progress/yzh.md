@@ -440,3 +440,17 @@
 
   `<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />`
 
+
+## 8.19-8.20
+改动太多了……只列出几个重要的：
+
+* Web API发布：
+```
+1. 发布Web APIs；
+2. 针对API重新设计了数据库与DAL层，并完善了相关Model的设计；
+3. 项目迁移到.Net Core 2.0，留下了一些预处理命令来兼容1.1版；
+4. 在Server/Data/Migrations文件夹下添加了一个bat，用以及时更新数据库。请使用cmd传入一个字符串作为新Migration的名字。
+```
+* 区分DEBUG/RELEASE与Development/Production环境：
+
+  主要思路为：D/P用来区分网站运行与本地运行，D/R用来区分性能模式
