@@ -16,10 +16,9 @@ module.exports = (env) => {
                 'event-source-polyfill',
                 'isomorphic-fetch',
                 'jquery',
-                'font-awesome',//20170820insert
-                'chartist',//20170820insert
                 'vue',
-                'vue-router'
+                'vue-router',
+                // 'chartist'
             ],
         },
         module: {
