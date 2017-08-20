@@ -88,7 +88,10 @@
             },
             error: function() {
                 //请求出错处理
-                
+                $("#common-error").text("登录失败,请检查网络是否通畅")
+                  .fadeIn(setTimeout(function(){
+                    $("#common-error").fadeOut();
+                  },2000));
             }
         });
         })
