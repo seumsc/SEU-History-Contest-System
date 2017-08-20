@@ -1,15 +1,14 @@
 import Vue from 'vue';
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
 import { Component } from 'vue-property-decorator';//不能被注释掉！
 import $ from 'jquery';
 import Chartist from 'chartist';
+// var Chartist = require('chartist').Chartist;
 require('../../../Images/sidebar.png');
 require('../../../Images/logo-including-name.png');
 
 $(function () {
-$("#statistic").click(function(){
-    window.location.reload();
-})
-
     var schoolInfo = {
         "DepartmentID": 711,
         "CounselorName": "郭佳",
@@ -204,16 +203,16 @@ $("#statistic").click(function(){
             var $key = $('#search-done-text').val();
             $('#table-done table tbody tr').hide().filter(":contains('" + $key + "')").show();
         });
-        $.notify({
-            icon: 'glyphicon glyphicon-heart-empty',
-            message: "您好，" + schoolInfo.CounselorName + "，欢迎来到校史校情知识竞赛管理系统"
+        // $.notify({
+        //     icon: 'glyphicon glyphicon-heart-empty',
+        //     message: "您好，" + schoolInfo.CounselorName + "，欢迎来到校史校情知识竞赛管理系统"
 
-        }, {
-                type: 'info',
-                timer: 3000
-            });
+        // }, {
+        //         type: 'info',
+        //         timer: 3000
+        //     });
     });
-    
+
 })
 
 $(function () {
@@ -716,3 +715,20 @@ $(function () {
     };
 })
 
+export default {
+    data() {
+        return {
+        }
+    },
+    methods: {
+        goToStatis: function () {
+            this.$router.push({ path: '/dashboard/statistics' }),
+            alert('reload'),
+            this.$router.replace({ path: '/dashboard/statistics' })
+            
+        },
+        goToGeneral: function () {
+            this.$router.push({ path: '/dashboard/general' })
+        }
+    }
+}

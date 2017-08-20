@@ -13,8 +13,38 @@ Vue.use(VueRouter);
 //         }
 // })
 
-// export default class AppComponent extends Vue {
-// }
+//  $(function(){
+//     $("#dash").click(function(){
+//         this.$router.push('/ans');
+//     })
+//  });
 
-export default{
+
+//  export default class AppComponent extends Vue {
+//      data(){
+//          return{
+
+//          }
+//      },
+//     methods:{
+//         goDash: function(){
+//             this.$router.push('/dashboard');    
+//         },
+//         goans: function(){
+//             this.$router.push('/ans');    
+//         }
+//     }
+//  }
+
+// export default{
+//     methods:{
+//         godash:function(){
+//             this.$router.push('/dashboard');    
+//         },
+//         goans:function(){
+//             this.$router.push('/ans');    
+//         }
+//     }
+// }
+export default{   
 }
