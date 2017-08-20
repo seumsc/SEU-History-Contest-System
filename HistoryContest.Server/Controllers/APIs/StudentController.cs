@@ -27,12 +27,29 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         #region State APIs
+
+        /// <summary>
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code=""></response>
+        /// <response code=""></response>
         [HttpGet("state")]
         public IActionResult State()
         { // TODO: 写student的state
             return Json(true);
         }
 
+        /// <summary>
+        /// 初始化student状态
+        /// </summary>
+        /// <remarks>
+        ///   已经初始化则重定向到State
+        ///   否则先后 SetSeed  SetStartTime
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code=""></response>
         [HttpGet("state/[action]")]
         public async Task<IActionResult> Initialize()
         {
@@ -45,6 +62,16 @@ namespace HistoryContest.Server.Controllers.APIs
             return SetStartTime();
         }
 
+        /// <summary>
+        /// 重新初始化student状态
+        /// </summary>
+        /// <remarks>
+        ///    未初始化则重定向到State方法
+        ///    已初始化则先 ClearSeed ClearStartTime
+        ///             后 SetSeed SetStartTime
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code=""></response>
         [HttpPost("state/[action]")]
         public async Task<IActionResult> Reset()
         {
@@ -61,7 +88,17 @@ namespace HistoryContest.Server.Controllers.APIs
         #endregion
 
         #region Seed APIs
+
+        /// <summary>
+        /// 生成Seesion中seed
+        /// </summary>
+        /// <remarks>
+        ///    Session中未生成seed时生成seed
+        /// </remarks>
+        /// <returns>种子ID</returns>
+        /// <response code="200">返回种子ID</response>
         [HttpPost("seed")]
+        [ProducesResponseType(typeof(int), 200)]
         public async Task<JsonResult> SetSeed()
         {
             if (HttpContext.Session.GetInt32("seed") == null)
@@ -73,6 +110,14 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json(await unitOfWork.QuestionSeedRepository.GetByIDAsync(HttpContext.Session.GetInt32("seed")));
         }
 
+        /// <summary>
+        /// 清除Session当前seed
+        /// </summary>
+        /// <remarks>
+        ///    清除Session当前seed
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="204">No Content</response>
         [HttpDelete("seed")]
         public IActionResult ClearSeed()
         {
@@ -82,7 +127,17 @@ namespace HistoryContest.Server.Controllers.APIs
         #endregion
 
         #region Time APIs
+
+        /// <summary>
+        /// 返回剩余时间
+        /// </summary>
+        /// <remarks>
+        ///     返回剩余时间
+        /// </remarks>
+        /// <returns>剩余时间</returns>
+        /// <response code="200">返回剩余时间</response>
         [HttpGet("time")]
+        [ProducesResponseType(typeof(TimeSpan), 200)]
         public IActionResult GetLeftTime()
         {
             if(HttpContext.Session.Get<DateTime>("begintime") == default(DateTime))
@@ -93,7 +148,16 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json(timeLeft);
         }
 
+        /// <summary>
+        /// 设置初始时间
+        /// </summary>
+        /// <remarks>
+        ///     设置初始时间begintime
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
         [HttpPost("time")]
+        [ProducesResponseType(typeof(DateTime), 200)]
         public IActionResult SetStartTime()
         {
             if(HttpContext.Session.Get<DateTime>("begintime") == default(DateTime))
@@ -105,6 +169,14 @@ namespace HistoryContest.Server.Controllers.APIs
             return RedirectToAction(nameof(SetStartTime));
         }
 
+        /// <summary>
+        /// 清空初始时间
+        /// </summary>
+        /// <remarks>
+        ///     清空初始时间begintime
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="204">No Content</response>
         [HttpDelete("time")]
         public IActionResult ClearStartTime()
         {
