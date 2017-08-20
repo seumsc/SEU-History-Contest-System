@@ -7,15 +7,18 @@
 var answerQues=[];//name,answer(id)
 var config={
 	totalAmount:0,
-	timeState:false
+	timeState:false,
+	questionArray:[],
+	resultHTML:'<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
+	resultJSON:{}
 }
 var content = '',
 contentFooter='',
 questionsIteratorIndex,
 answersIteratorIndex;
 
-//生成网页
-function set(QUESTIONS){
+//生成题目
+function setINDEX(QUESTIONS){
 	for (questionsIteratorIndex = 0; questionsIteratorIndex < QUESTIONS.length; questionsIteratorIndex++) {
 		content += '<section class="panel"><div class="inner columns" id="q'+(questionsIteratorIndex + 1)+'">'//题目id，实现按钮跳转到下一题
 		+'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
@@ -60,10 +63,31 @@ function set(QUESTIONS){
 
 
 }
+//生成结果
+var tableContent="";
+function setRESULT(RESULT){
+    for(var resultsIteratorIndex=0;resultsIteratorIndex<config.totalAmount;resultsIteratorIndex++){
+        if(resultsIteratorIndex%5==0)
+            tableContent+="<tr>";
+        tableContent+='<td><span class="num">'+(resultsIteratorIndex+1)+' </span>'
+        if(RESULT.details[resultsIteratorIndex].rightAnswer==RESULT.details[resultsIteratorIndex].submittedAnswer){
+            tableContent+=' <span class="fa fa-check" style="color:#3caa00"></span></td>'
+        }
+        else{
+            tableContent+='  <span class="fa fa-close" style="color:rgb(240,130,0)"></span></td>'
+        }
+                        
+        if(resultsIteratorIndex%5==4)
+            tableContent+="</tr>";
+    }
+    $('#table-content').html(tableContent);
+    $("#score").text(RESULT.score);
+}
+
 function saveAns(clickID){
 	var ans = clickID.value;
 	var ID=clickID.name;
-	var questionNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
+	var activeNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
 	var testing;
     for(var i=0;i<answerQues.length;i++){//这个循环用来覆盖保存答案
     	if( answerQues[i].ID==ID&&answerQues[i].answer!=ans){
@@ -81,9 +105,9 @@ function saveAns(clickID){
 		answerQues.push(check);//用push方法传入数组		
 		testing=JSON.stringify(answerQues);
 		console.log(testing);
-		$("#question"+questionNum).addClass("answered");
+		$("#question"+activeNum).addClass("answered");
 		setTimeout(function(){			
-			$("#question"+(questionNum+1)).click();		
+			$("#question"+(activeNum+1)).click();		
 		},300);
 
 }
@@ -104,13 +128,80 @@ function submit(){
 			  //请求前的处理
   
 			},
-			success: function () {
-			  //请求成功时处理
-			  
+			success: function (res) {
+			  //RESET WEBPAGE
+			  $("#welcome-container").remove();
+			  $("#quiz-container").remove();
+			  $("#submit-container").remove();
+			  $('.header_2').remove();
+			  $("#footer").remove();
+			  //SHOW RESULTS
+			  $("#result-container").html(config.resultHTML);
+			  config.resultJSON=res;
+			  setRESULT(config.resultJSON);
+			  //ADD FUNCTIONS
+			  $("td").hover(function(event) {
+				var reviewContent="";	
+				var $tgt=$(event.target);
+				var questionNum=$tgt.find(".num").text();
+				var rightAns=config.resultJSON.details[questionNum-1].rightAnswer;
+				var submittedAns=config.resultJSON.details[questionNum-1].submittedAnswer;
+				var isCorrect=(rightAns==submittedAns?1:0);
+				if (questionNum<=20){//选择题
+					reviewContent+='<h3 class="major">' +questionNum+'. '+config.questionArray[questionNum-1].question+'</h3>';
+					for(answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++ ){
+						if(answersIteratorIndex==rightAns){
+							reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
+							
+							+config.questionArray[questionNum-1].choices[answersIteratorIndex] +'</div><br>';//选项内容
+						}
+						else if(answersIteratorIndex==submittedAns && !isCorrect){
+							reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
+							
+							+config.questionArray[questionNum-1].choices[answersIteratorIndex] +' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
+						}else{
+						reviewContent += '<div class="field quarter">'
+						
+						+config.questionArray[questionNum-1].choices[answersIteratorIndex] +'</div><br>';//选项内容
+						}
+					}
+		
+				}
+				else{//判断题
+					reviewContent+='<h3 class="major">' +questionNum+'. '+config.questionArray[questionNum-1].question+'</h3>';
+					for(answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++ ){
+						if(answersIteratorIndex==rightAns){
+							reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
+							
+							+(answersIteratorIndex==0?'正确':'错误')  +'</div><br>';//选项内容
+						}
+						else if(answersIteratorIndex==submittedAns && !isCorrect){
+							reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
+							
+							+(answersIteratorIndex==0?'正确':'错误')  +' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
+						}else{
+						reviewContent += '<div class="field quarter">'
+						
+						+(answersIteratorIndex==0?'正确':'错误')  +'</div><br>';//选项内容
+						}
+		
+					  
+					
+					}
+		
+				}
+				$("#review-container").html(reviewContent);
+			   	
+				$("#review-container").show();//hover后显示题目
+			},function() {
+				$("#review-container").hide();//hover后显示题目
+			});
+
 			},
 			complete: function () {
 			  //请求完成的处理
-			  window.location.href="result.html";
+			 
+
 			},
 			error: function () {
 			  //请求出错处理
@@ -157,7 +248,6 @@ function submit(){
 		}
 	}, 1000);
 
-		var answerQues=[];//name,answer(id)
 
 
 
@@ -181,6 +271,45 @@ $(function(){
 	]
 	
 	})
+	Mock.mock("http://mockjs","post",{
+	  
+			"score":80,
+			"timeFinished":0,
+			"timeConsumed":0,
+			"details":[
+				{"ID":0,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":1,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":2,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":3,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":4,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":5,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":6,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":7,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":8,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":9,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":10,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":11,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":12,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":13,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":14,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":15,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":16,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":17,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":18,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":19,"rightAnswer":1,"submittedAnswer":2},
+				{"ID":20,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":21,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":22,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":23,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":24,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":25,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":26,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":27,"rightAnswer":1,"submittedAnswer":0},
+				{"ID":28,"rightAnswer":1,"submittedAnswer":1},
+				{"ID":29,"rightAnswer":1,"submittedAnswer":0}
+			]
+		
+	})
 	//GET Questions
 	$.ajax({
 		url: "http://mockjs", //请求的url地址
@@ -194,8 +323,9 @@ $(function(){
 		},
 		success: function (req) {
 			//请求成功时处理
-			config.totalAmount=req.array1.length+req.array2.length;
-			set(req.array1.concat(req.array2));
+			config.questionArray=req.array1.concat(req.array2);
+			config.totalAmount=config.questionArray.length;
+			setINDEX(config.questionArray);
 			
 			console.log(config.totalAmount);
 		},

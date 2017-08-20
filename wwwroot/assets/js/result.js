@@ -34,47 +34,47 @@ var result={
     "score":80,
     "timeFinished":0,
     "timeConsumed":0,
-    "Details":[
-        {"ID":0,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":1,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":2,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":3,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":4,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":5,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":6,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":7,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":8,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":9,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":10,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":11,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":12,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":13,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":14,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":15,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":16,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":17,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":18,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":19,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
-        {"ID":20,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":21,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":22,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":23,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":24,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":25,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":26,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":27,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
-        {"ID":28,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
-        {"ID":29,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false}
+    "details":[
+        {"ID":0,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":1,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":2,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":3,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":4,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":5,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":6,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":7,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":8,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":9,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":10,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":11,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":12,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":13,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":14,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":15,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":16,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":17,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":18,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":19,"rightAnswer":1,"submittedAnswer":2},
+        {"ID":20,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":21,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":22,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":23,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":24,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":25,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":26,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":27,"rightAnswer":1,"submittedAnswer":0},
+        {"ID":28,"rightAnswer":1,"submittedAnswer":1},
+        {"ID":29,"rightAnswer":1,"submittedAnswer":0}
     ]
 }
-
+//var config={totalAmount:30}
 var tableContent="";
-function set(){
-    for(var resultsIteratorIndex=0;resultsIteratorIndex<result.details.length;resultsIteratorIndex++){
+function setRESULT(RESULT){
+    for(var resultsIteratorIndex=0;resultsIteratorIndex<config.totalAmount;resultsIteratorIndex++){
         if(resultsIteratorIndex%5==0)
             tableContent+="<tr>";
         tableContent+='<td><span class="num">'+(resultsIteratorIndex+1)+' </span>'
-        if(result.details[resultsIteratorIndex].isCorrect){
+        if(RESULT.details[resultsIteratorIndex].rightAnswer==RESULT.details[resultsIteratorIndex].submittedAnswer){
             tableContent+=' <span class="fa fa-check" style="color:#3caa00"></span></td>'
         }
         else{
@@ -85,11 +85,11 @@ function set(){
             tableContent+="</tr>";
     }
     $('#table-content').html(tableContent);
-    $("#score").text(result.score);
+    $("#score").text(RESULT.score);
 }
 $(function(){
 
-    set();
+    setRESULT(result);
     $("td").hover(function(event) {
         var reviewContent="";
     
