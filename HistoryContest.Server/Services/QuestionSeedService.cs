@@ -76,7 +76,7 @@ namespace HistoryContest.Server.Services
 
         public async Task<QuestionSeed> RollSeed()
         {
-            return await unitOfWork.QuestionSeedRepository.GetByIDAsync(rdGenerator.Next(0, unitOfWork.QuestionSeedRepository.Size()));
+            return await unitOfWork.QuestionSeedRepository.GetByIDAsync(rdGenerator.Next(1, unitOfWork.QuestionSeedRepository.Size()));
         }
 
         public void Save()
