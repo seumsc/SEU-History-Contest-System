@@ -1,4 +1,7 @@
 /*      light colors         */
+p{
+  color:#fff;
+}
 @keyframes spin {
   from {
     transform: rotate(0deg);
