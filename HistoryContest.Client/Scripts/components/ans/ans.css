@@ -1,5 +1,5 @@
-@import '../../../node_modules/font-awesome/css/font-awesome.min.css';
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300i,400i");
+ @import '../../../node_modules/font-awesome/css/font-awesome.min.css'; 
+/* @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300i,400i"); */
 /*
 Ethereal by HTML5 UP
 html5up.net | @ajlkn
@@ -29,10 +29,6 @@ blockquote, q {
 blockquote:before, blockquote:after, q:before, q:after {
 	content: '';
 	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
 }
 body {
 	-webkit-text-size-adjust: none;
@@ -3034,7 +3030,6 @@ z-index: 10;
 }
 .header_1{
 font-size:2rem;
-
 float:left;
 }
 .header_2{

@@ -1,52 +1,42 @@
 <template>
-<div style = 'width: 100%'>
-        <img src = "/dist/Images/background8.jpg" class = "bg">
-<div style="height:100%"  class = "inside container-fluid">
+    <div style='width: 100%'>
+        <img src="/dist/Images/background8.jpg" class="bg">
+        <div style="height:100%" class="inside container-fluid">
 
-        <div class="header">
-            <img src="../../../Images/logo.png" alt="东大校徽">
-        </div>
-        <div class="container">   
-            <div class = "row">
-                <div class="col-md-6 col-md-offset-3">
-                    <form class="form-horizontal" data-toggle="validator" method="POST" action="xxxx.asp">
-                        <span class="heading">校史校情知识竞赛</span>
-                        <div class="form-group username-field">
-                                <input type="text"
-                                       id = "username"
-                                       class="form-control" 
-                                       pattern="^[0-9]{8}$" 
-                                       required 
-                                       autofocus 
-                                       placeholder="账号为学号" 
-                                       name="user"
-                                       data-toggle="validator" 
-                                       />
-                                <span class="glyphicon glyphicon-user"></span>
-                                
-                        </div>
-                         <div class="form-group">
-                                <input type="password" class="form-control" pattern="^[0-9]{9}$" required 
-                                placeholder="密码为一卡通号" data-toggle="validator" 
-                                name="password" title="密码为一卡通号" data-minlength="9"
-                                maxlength="9" data-error="密码为九位一卡通号！"/>
-                                <span class="glyphicon glyphicon-lock"></span>		
-                        </div>
-                       
-                        <div class="form-group">
-                            <a href="#">还未注册？</a>
-                            
-                            <button type="submit" class="btn btn-default">登录</button>
-                        </div>
-                    </form>
-                    
-                </div>
-                
+            <div class="header">
+                <img src="../../../Images/logo.png" alt="东大校徽">
             </div>
-        </div> 
-    </div>  
-</div>  	
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <form class="form-horizontal" data-toggle="validator">
+                            <!-- method="POST" action="xxxx.asp"-->
+                            <span class="heading">校史校情知识竞赛</span>
+                            <div class="form-group username-field">
+                                <input type="text" id="username" class="form-control" pattern="^[0-9]{8}$" required autofocus placeholder="账号为学号" name="user"
+                                    data-toggle="validator" />
+                                <span class="glyphicon glyphicon-user"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" class="form-control" pattern="^[0-9]{9}$" required placeholder="密码为一卡通号" data-toggle="validator"
+                                    name="password" title="密码为一卡通号" data-minlength="9" maxlength="9" data-error="密码为九位一卡通号！"
+                                />
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <a href="#">还未注册？</a>
+                                <button id="submit" type="submit" class="btn btn-default">登录</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
-<style src = "./login.css"></style>
+<style src="./login.css"></style>
 <script src="./login.ts"></script>
-<!--<script src ="./validator.js"></script>-->

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
+require('./ans.css');
 require('../../../node_modules/font-awesome/css/font-awesome.min.css');
 var set = require('./questions.js').set;
 var answerCard = require('./questions.js').answerCard;
