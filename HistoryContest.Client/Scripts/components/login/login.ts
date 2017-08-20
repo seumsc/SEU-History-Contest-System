@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
-import Validator from 'vue-validator';
-Vue.use(Validator);
+// import Validator from 'vue-validator';
+// Vue.use(Validator);
 //require('./validator.js');
 /*
 @Component({
@@ -63,9 +63,11 @@ data(){
     } 
   },
   methods:{
-    isLogin:function(){
-      this.$router.push({path:'/main'})
-
+    isStu:function(){
+      this.$router.push({path:'/ans/sheet'})
+    },
+    isAdmin:function(){
+      this.$router.push({path:'/dashboard/statistics'})
     }
   }
 }
