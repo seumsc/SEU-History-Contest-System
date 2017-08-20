@@ -62,6 +62,7 @@ namespace HistoryContest.Server
                         {
                             Console.WriteLine(message);
                         }
+                        Environment.Exit(0);
                         break;
                 }
             }
