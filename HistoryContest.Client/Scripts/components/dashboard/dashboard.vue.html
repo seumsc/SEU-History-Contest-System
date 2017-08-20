@@ -1,16 +1,53 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3">
-               <router-link to ="/dashboard/general">general</router-link>
-               <router-link to ="/dashboard/statistics">statistics</router-link>
-            </div>
-            <div class="col-sm-9">
-                <router-view></router-view>
+    <div class="wrapper">
+        <!-- <div class="row"> -->
+        <div class="sidebar" data-color="blue" data-image="/dist/Images/sidebar.png">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <img src="/dist/Images/logo.png">
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a data-toggle="tab">
+                            <i class="glyphicon glyphicon-tasks"></i>
+                            <router-link to="/dashboard/general"><p>成绩统计</p></router-link>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab">
+                            <i class="glyphicon glyphicon-equalizer"></i>
+                            <router-link to="/dashboard/statistics"><p>院系概览</p></router-link>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+        <div class="main-panel">
+            <router-view></router-view>
+        </div>
     </div>
+
+    <!-- </div> -->
+    <!-- </div> -->
 </template>
-<!-- <template>
-    <div>Dashboard!</div>
-</template> -->
+<style src="../../../node_modules/animate.css/animate.min.css"></style>
+<!-- <style src = "../../../node_modules/font-awesome/css/font-awesome.min.css"></style> -->
+<style src="./dashboard.css"></style>
+<style>
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .restricted {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .table>thead>tr>th.score:hover {
+
+        color: #1DC7EA;
+        cursor: pointer;
+    }
+</style>
+<script src='./dashboard.ts'></script>
