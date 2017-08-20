@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';//不能被注释掉！
 import $ from 'jquery';
+// import '../../../node_modules/font-awesome/css/font-awesome.css';
 var set = require('./questions.js').set;
 var answerCard = require('./questions.js').answerCard;
 var saveAns = require('./ans.js').saveAns;

@@ -1,5 +1,132 @@
 <template>
     <div>
-        statistics!
+        <div class="content tab-content">
+            <div class="tab-pane fade in active" id="score">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">学院学生答题情况</h4>
+                            </div>
+                            <div class="content">
+                                <div id="completion-chart" class="ct-chart ct-perfect-fourth"></div>
+
+                                <div class="footer">
+                                    <div class="legend">
+                                        <p> <span class="glyphicon glyphicon-record text-info"></span> 已完成</p>
+                                        <p> <span class="glyphicon glyphicon-record text-danger"></span> 未完成</p>
+
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <p>
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            <span id="done-info"></span>
+                                            <span id="undo-info"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">成绩分布情况</h4>
+
+                            </div>
+                            <div class="content">
+                                <div id="overall-chart" class="ct-chart ct-perfect-fourth"></div>
+
+                                <div class="footer">
+                                    <div class="legend">
+                                        <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+
+                                        <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                        <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                        <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <p>
+                                            <span class="glyphicon glyphicon-stats"></span> 平均分：
+                                            <span id="average-score"></span>分
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <h4 class="title">学院未答题学生名单</h4>
+                                        <p class="category" id="empty-comment" style="display: none">
+                                            表格空空如也，为学院点赞！
+                                        </p>
+                                    </div>
+
+                                    <div class="col-md-5">
+
+                                        <input type="text" class="form-control" id="search-undo-text" placeholder="在此输入学号、一卡通号或姓名...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content table-responsive table-full-width restricted" id="table-undo">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>一卡通</th>
+                                    </thead>
+                                    <tbody>
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <h4 class="title">学院已答题学生成绩单</h4>
+                                        <p class="category">提示：点击“成绩”，可以将表格按成绩排序哦！</p>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control" id="search-done-text" placeholder="在此输入学号、一卡通号或姓名...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content table-responsive table-full-width restricted" id="table-done">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th class="score">
+                                            <span>成绩</span>
+                                            <span class="glyphicon glyphicon-sort" id="sort"></span>
+                                            <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span>
+                                            <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
+                                        </th>
+                                        <th>一卡通</th>
+
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
