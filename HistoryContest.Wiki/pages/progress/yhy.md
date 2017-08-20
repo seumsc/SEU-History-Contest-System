@@ -361,3 +361,8 @@ API实现
   }
 
 * api/Counselor/GetName 获取当前辅导员姓名
+
+## 8.20
+
+* ..远程分支上未pull的commit再被push -f后会消失
+* 解决随机数重复问题  random.Next(1,100)产生1-100之间的随机数

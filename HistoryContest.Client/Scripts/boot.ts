@@ -1,5 +1,4 @@
 import 'bootstrap';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
@@ -16,7 +15,7 @@ new Vue({
             {
                 path: '/ans',
                 component: require('./components/ans/ans.vue.html'),
-                children:[
+                children: [
                     {
                         path: 'sheet',
                         component: require('./components/ans/sheet/ans_sheet.vue.html')
@@ -28,16 +27,16 @@ new Vue({
                 ]
             },
             {
-                path:'/dashboard',
+                path: '/dashboard',
                 component: require('./components/dashboard/dashboard.vue.html'),
-                children:[
+                children: [
                     {
                         path: 'statistics',
-                        component:require('./components/dashboard/statistics/statistics.vue.html')
+                        component: require('./components/dashboard/statistics/statistics.vue.html')
                     },
                     {
                         path: 'general',
-                        component:require('./components/dashboard/general/general.vue.html')
+                        component: require('./components/dashboard/general/general.vue.html')
                     }
                 ]
             }
