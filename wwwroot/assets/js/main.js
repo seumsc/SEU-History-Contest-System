@@ -5,70 +5,132 @@
 */
 
 var answerQues=[];//name,answer(id)
+var config={
+	totalAmount:0,
+	timeState:false
+}
+var content = '',
+contentFooter='',
+questionsIteratorIndex,
+answersIteratorIndex;
+
+//生成网页
+function set(QUESTIONS){
+	for (questionsIteratorIndex = 0; questionsIteratorIndex < QUESTIONS.length; questionsIteratorIndex++) {
+		content += '<section class="panel"><div class="inner columns" id="q'+(questionsIteratorIndex + 1)+'">'//题目id，实现按钮跳转到下一题
+		+'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
+		+'<div class="span-3-25"><h3 class="major">'+ QUESTIONS[questionsIteratorIndex].question+'</h3>';//问题内容
+		if(QUESTIONS[questionsIteratorIndex].type==0){//选择题
+			for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {//四个选项
+				content += '<div class="field quarter"><input type="radio"'
+				+' id="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)//选项id，在HTML中唯一
+				+'" value="'+answersIteratorIndex //提交的答案值
+				+'" onclick="saveAns(this)"'
+				+'" name="'+QUESTIONS[questionsIteratorIndex].ID+'" class="color2" />'//hash code，同样要提交
+				+'<label for="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)+'">'
+				+QUESTIONS[questionsIteratorIndex].choices[answersIteratorIndex] +'</label></div><br>';
+			}//选项内容
+			content += '</div>';           
+		}
+		else{//判断题			
+			for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {//两个选项
+				content += '<div class="field quarter"><input type="radio" id="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)
+				+'" value="'+answersIteratorIndex
+				+'" onclick="saveAns(this)"'
+				+'" name="'+QUESTIONS[questionsIteratorIndex].ID+'" class="color2" />'
+				+'<label for="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)+'">'
+				+(answersIteratorIndex==0?'正确':'错误') +'</label></div><br>';
+			}//选项为正确或错误
+			content += '</div>';
+		}
+		if(questionsIteratorIndex+1!= QUESTIONS.length){//下一页按钮及图片
+			content += '<div class="intro  joined"><ul class="actions"><li><a href="#q'+(questionsIteratorIndex + 2)+'" class="button  color1 circle icon fa-angle-right">Next</a></li></ul></div></div></section>';        
+			content+='<section class="panel spotlight large right" ><div class="image  tinted" data-position="top left"><img src="images/background'+(questionsIteratorIndex%9)+'.jpg" alt="" /></div></section>'
+		}
+		else{//如果是最后一题,链接指向提交页
+			content += '<div class="intro  joined"><ul class="actions"><li><a href="#submission" class="button  color1 circle icon fa-angle-right">Next</a></li></ul></div></div></section>'; 
+		}
+		
+	}//end of for
+	for(var i=0;i<QUESTIONS.length;i++){
+		contentFooter +='<a href="#q'+(i+1)+'" id="question'+(i+1)+'" class="questionId">'+(i+1)+"</a>";
+	}
+	$("#answerCard").html(contentFooter);//生成分页
+	$('#quiz-container').append(content);//生成问题
 
 
+}
 function saveAns(clickID){
-	var ans = clickID.value;//获取this的id，即事件拥有者的id，即选项的id（item0，1，2，3...）
-	var id=clickID.id;
-	var name=$("#"+id).prop('name');
+	var ans = clickID.value;
+	var ID=clickID.name;
+	var questionNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
 	var testing;
-	
-
     for(var i=0;i<answerQues.length;i++){//这个循环用来覆盖保存答案
-       if( answerQues[i].name==name&&answerQues[i].answer!=ans){
-                   
+    	if( answerQues[i].ID==ID&&answerQues[i].answer!=ans){
 		   answerQues[i].answer =ans;
-			  testing=JSON.stringify(answerQues);
-			console.log(testing);
-		   return;
-      
-	   }
-		else if(answerQues[i].name==name&&answerQues[i].answer==ans)
-	   		return;
-         
-    }
-
+		   testing=JSON.stringify(answerQues);
+		   console.log(testing);
+		   return;     
+	    }
+		else if(answerQues[i].ID==ID&&answerQues[i].answer==ans)
+	   		return;         
+    	}
 		var check ={};
-		
-		
-       	check.name=name;
+       	check.ID=ID;
 		check.answer=ans;
-		answerQues.push(check);//用push方法传入数组
-		
+		answerQues.push(check);//用push方法传入数组		
 		testing=JSON.stringify(answerQues);
 		console.log(testing);
-		$("#"+name).addClass("answered");
-	
-		console.log(parseInt(name[name.length-1]));
-		console.log(name[name.length-1]);
-		console.log(name.length);
-		console.log(name);
-		setTimeout(function(){
-			var next=parseInt(name.substr(8))+1;
-			name='question'+next;
-			$("#"+name).click();
-		
+		$("#question"+questionNum).addClass("answered");
+		setTimeout(function(){			
+			$("#question"+(questionNum+1)).click();		
 		},300);
 
 }
 
 function submit(){
 	console.log(answerQues.length);
-	if(answerQues.length!=30)
+	if(answerQues.length<config.totalAmount)
 		alert("您还有未作答题目哦！");
+	else{
+		$.ajax({
+			url: "http://mockjs", //请求的url地址
+			dataType: "json", //返回格式为json
+			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+			//data
+			data: answerQues,
+			type: "POST", //请求方式
+			beforeSend: function () {
+			  //请求前的处理
+  
+			},
+			success: function () {
+			  //请求成功时处理
+			  
+			},
+			complete: function () {
+			  //请求完成的处理
+			  window.location.href="result.html";
+			},
+			error: function () {
+			  //请求出错处理
+			  alert("提交失败，请检查网络");
+			}
+		  });
+	}
 }
 
 (function($) {
 
 	var mm = 30;//分
 	var ss = 0;//秒
-	var timeState = false;//时间状态 默认为true 开启时间
+	//var timeState = false;//时间状态 默认为true 开启时间
 
 
 	/*实现计时器*/
 	
 	var time= setInterval(function () {
-		if (timeState) {
+		if (config.timeState) {
 			if(mm==0&&ss==1){
 				ss--;
 				alert("时间到！");
@@ -99,17 +161,63 @@ function submit(){
 
 
 
-$(document).ready(function(){
+$(function(){
+	//Mockserver for dev purpose
+	Mock.mock("http://mockjs","get",{"array1|20":[
+		{
+			"ID":"@guid()",
+			"type":0,
+			"question":'@csentence(10,30)',
+			"choices|4":[
+				'@cword(3,10)',
+			]
+		}],
+		"array2|10":[
+		{
+			"ID":"@guid()",
+			"type":1,
+			"question":'@csentence(10,30)',
+		}
+	]
+	
+	})
+	//GET Questions
+	$.ajax({
+		url: "http://mockjs", //请求的url地址
+		dataType: "json", //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+
+		type: "GET", //请求方式
+		beforeSend: function () {
+			//请求前的处理
+
+		},
+		success: function (req) {
+			//请求成功时处理
+			config.totalAmount=req.array1.length+req.array2.length;
+			set(req.array1.concat(req.array2));
+			
+			console.log(config.totalAmount);
+		},
+		complete: function () {
+			//请求完成的处理
+		},
+		error: function () {
+			//请求出错处理
+			alert("请检查网络");
+			
+		}
+		});
 
     $("#start").click(function () {
 		 $("#footer").show();
-        timeState = true;
+        config.timeState = true;
 
 		 
 	});
 	$(document).mousemove(function(e){ //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
 		if(e.pageX>window.innerWidth){
-			timeState=true; 
+			config.timeState=true; 
 			 $("#footer").show();
 		}
   });

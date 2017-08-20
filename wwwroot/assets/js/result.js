@@ -32,7 +32,9 @@ var init={'questions':[{'question':'南京高等师范学校继三所师范学�
 
 var result={   
     "score":80,
-    "details":[
+    "timeFinished":0,
+    "timeConsumed":0,
+    "Details":[
         {"ID":0,"rightAnswer":1,"submittedAnswer":1,"isCorrect":true},
         {"ID":1,"rightAnswer":1,"submittedAnswer":0,"isCorrect":false},
         {"ID":2,"rightAnswer":1,"submittedAnswer":2,"isCorrect":false},
