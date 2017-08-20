@@ -118,7 +118,7 @@ function submit(){
 		alert("您还有未作答题目哦！");
 	else{
 		$.ajax({
-			url: "http://mockjs", //请求的url地址
+			url: "http://hostname/api/Result", //请求的url地址
 			dataType: "json", //返回格式为json
 			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 			//data
@@ -253,7 +253,7 @@ function submit(){
 
 $(function(){
 	//Mockserver for dev purpose
-	Mock.mock("http://mockjs","get",{"array1|20":[
+	Mock.mock("http://hostname/api/Question","get",{"array1|20":[
 		{
 			"ID":"@guid()",
 			"type":0,
@@ -271,7 +271,7 @@ $(function(){
 	]
 	
 	})
-	Mock.mock("http://mockjs","post",{
+	Mock.mock("http://hostname/api/Result","post",{
 	  
 			"score":80,
 			"timeFinished":0,
@@ -312,7 +312,7 @@ $(function(){
 	})
 	//GET Questions
 	$.ajax({
-		url: "http://mockjs", //请求的url地址
+		url: "http://hostname/api/Question", //请求的url地址
 		dataType: "json", //返回格式为json
 		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 
