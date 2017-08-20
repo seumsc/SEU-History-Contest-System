@@ -37,7 +37,7 @@ namespace HistoryContest.Server.Services
         }
 
         public async Task<QuestionSeed> CreateNewSeed()
-        { // TODO:<yhy> 解决随机数重复问题 DONE 
+        { // TODO:<yhy> 解决随机数重复问题 DONE
             var choiceQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<ChoiceQuestion>();
             var trueFalseQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<TrueFalseQuestion>();
             bool[] hashTableChoiceQuestions = new bool[choiceQuestionsSize];
