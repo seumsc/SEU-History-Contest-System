@@ -15,7 +15,8 @@ namespace HistoryContest.Server.Services
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            rdGenerator = new Random();
+            var seed = Guid.NewGuid().GetHashCode();
+            rdGenerator = new System.Random(seed);
         }
 
         public async Task<IEnumerable<AQuestionBase>> GetQuestionsBySeedID(int id)
@@ -36,17 +37,36 @@ namespace HistoryContest.Server.Services
         }
 
         public async Task<QuestionSeed> CreateNewSeed()
-        { // TODO: 解决随机数重复问题
+        { // TODO:<yhy> 解决随机数重复问题 DONE 
             var choiceQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<ChoiceQuestion>();
             var trueFalseQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<TrueFalseQuestion>();
+            bool[] hashTableChoiceQuestions = new bool[choiceQuestionsSize];
+            bool[] hashTabletrueFalseQuestions = new bool[trueFalseQuestionsSize];
             var questionIDs = new int[30];
+            int randomnumber = 0;
+            for (int i = 0; i < choiceQuestionsSize; i++)
+            {
+                hashTableChoiceQuestions[i] = false;
+            }
+            for (int i = 0; i < trueFalseQuestionsSize; i++)
+            {
+                hashTabletrueFalseQuestions[i] = false;
+            }
             for (int i = 0; i < 20; i++)
             {
-                questionIDs[i] = rdGenerator.Next(0, choiceQuestionsSize);
+                randomnumber= rdGenerator.Next(0, choiceQuestionsSize - 1);
+                while (hashTableChoiceQuestions[randomnumber % choiceQuestionsSize])
+                    randomnumber++;
+                questionIDs[i] = (randomnumber % choiceQuestionsSize) + 1;
+                hashTableChoiceQuestions[randomnumber % choiceQuestionsSize] = true;
             }
             for (int i = 20; i < 30; i++)
             {
-                questionIDs[i] = rdGenerator.Next(choiceQuestionsSize, choiceQuestionsSize + trueFalseQuestionsSize);
+                randomnumber= rdGenerator.Next(0, trueFalseQuestionsSize - 1);
+                while (hashTabletrueFalseQuestions[randomnumber % trueFalseQuestionsSize])
+                    randomnumber++;
+                questionIDs[i] = choiceQuestionsSize + (randomnumber % trueFalseQuestionsSize) + 1;
+                hashTabletrueFalseQuestions[randomnumber % trueFalseQuestionsSize] = true;
             }
             QuestionSeed newSeed = new QuestionSeed { QuestionIDs = questionIDs };
             newSeed.Save();
