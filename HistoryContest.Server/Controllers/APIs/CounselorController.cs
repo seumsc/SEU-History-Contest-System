@@ -24,13 +24,21 @@ namespace HistoryContest.Server.Controllers.APIs
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
-        // 按院系代码获取所有学生分数
+        /// <summary>
+        /// 按院系代码获取所有学生分数
+        /// </summary>
+        /// <remarks>
+        ///    拒绝查询其他院系得分详情，在辅导员查询本院系学生得分详情时使用
+        /// </remarks>
+        /// <returns>院系学生得分</returns>
+        /// <response code="200">返回本院系得分详情</response>
+        /// <response code="403">不允许辅导员查询不同系学生的数据</response>
         [HttpGet("scores/all/{id}")]
+        [ProducesResponseType(typeof(IEnumerable<StudentViewModel>), 200)]
         public async Task<IActionResult> AllScoresByDepartment(Department id)
         {
             if (!HttpContext.User.IsInRole("Administrator") 
-                && 
-                id != unitOfWork.CounselorRepository.GetByID(int.Parse(HttpContext.Session.GetString("id"))).Department)
+                && id != unitOfWork.CounselorRepository.GetByID(int.Parse(HttpContext.Session.GetString("id"))).Department)
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
@@ -38,8 +46,27 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json((await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s));
         }
 
-        // 按学号获取单个学生分数
+        /// <summary>
+        /// 按学号获取单个学生分数
+        /// </summary>
+        /// <remarks>
+        ///    学生得分详情JSON格式如下：
+        ///    
+        ///         {
+        ///             "studentID"： int,
+        ///             "cardID": int,
+        ///             "Name": string,
+        ///             "isCompleted": bool,
+        ///             "score": int?
+        ///         }
+        ///     
+        /// </remarks>
+        /// <returns>学生得分</returns>
+        /// <response code="200">返回学生得分</response>
+        /// <response code="404">id对应学生不存在</response>
+        /// <response code="403">不允许辅导员查询不同系学生的数据</response>
         [HttpGet("scores/single/{id}")]
+        [ProducesResponseType(typeof(StudentViewModel), 200)]
         public async Task<IActionResult> StudentScoreById(int id)
         {
             var student = await unitOfWork.StudentRepository.GetByIDAsync(id);
@@ -56,8 +83,32 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json((StudentViewModel)student);
         }
 
-        // 获取全校分数概况
+        /// <summary>
+        /// 获取全校分数概况
+        /// </summary>
+        /// <remarks>
+        ///    全校分数概况JSON格式如下：
+        ///    
+        ///     {
+        ///         "departmentID": int,
+        ///         "CounselorName": string,
+        ///         "MaxScore": int,
+        ///         "AverageScore": int,
+        ///         "ScoreBandCount":
+        ///         {
+        ///             "HigherThan90": int,
+        ///             "HigherThan75": int,
+        ///             "HigherThan60": int,
+        ///             "Failed": int
+        ///         }
+        ///     }
+        ///     
+        /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
+        /// </remarks>
+        /// <returns>全校分数概况</returns>
+        /// <response code="200">返回全校分数概况</response>
         [HttpGet("scores/summary")]
+        [ProducesResponseType(typeof(ScoreSummaryViewModel), 200)]
         public async Task<IActionResult> ScoreSummaryOfSchool()
         {
             // TODO: Score Summary放入缓存
@@ -76,8 +127,33 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json(model);
         }
 
-        // 按照院系ID获取概况
+        /// <summary>
+        /// 按照院系ID获取概况
+        /// </summary>
+        /// <remarks>
+        ///    全校分数概况JSON格式如下：
+        ///    
+        ///     {
+        ///         "departmentID": int,
+        ///         "CounselorName": string,
+        ///         "MaxScore": int,
+        ///         "AverageScore": int,
+        ///         "ScoreBandCount":
+        ///         {
+        ///             "HigherThan90": int,
+        ///             "HigherThan75": int,
+        ///             "HigherThan60": int,
+        ///             "Failed": int
+        ///         }
+        ///     }
+        ///     
+        /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
+        /// </remarks>
+        /// <returns>id对应院系分数概况</returns>
+        /// <response code="200">返回id对应院系分数概况</response>
+        /// <response code="404">id对应院系不存在</response>
         [HttpGet("scores/summary/{id}")]
+        [ProducesResponseType(typeof(ScoreSummaryViewModel), 200)]
         public async Task<IActionResult> ScoreSummaryByDepartment(Department id)
         {
             var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == id);
