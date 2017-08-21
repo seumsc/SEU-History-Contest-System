@@ -11,6 +11,8 @@ if %ERRORLEVEL% NEQ 0 exit
 call dotnet publish --output "../HistoryContest.Site" --configuration Release
 if %ERRORLEVEL% NEQ 0 exit
 
+pause
+
 cd ../HistoryContest.Site
 echo @echo off > run_app.bat
 echo call dotnet HistoryContest.Server.dll -rb -env Production >> run_app.bat
