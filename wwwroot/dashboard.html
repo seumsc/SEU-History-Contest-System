@@ -265,140 +265,127 @@
 
                 <div class="tab-pane fade" id="general">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="card">
                                 <div class="header">
-                                    <h4 class="title">Striped Table with Hover</h4>
-                                    <p class="category">Here is a subtitle for this table</p>
+                                    <h4 class="title">全校学生答题情况</h4>
                                 </div>
-                                <div class="content table-responsive table-full-width">
+                                <div class="content">
+                                    <div id="completion-chart-general" class="ct-chart ct-perfect-fourth"></div>
+
+                                    <div class="footer">
+                                        <div class="legend">
+                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 已完成</p>
+                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 未完成</p>
+
+                                        </div>
+                                        <hr>
+                                        <div class="stats">
+                                            <p> 
+                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                                <span id="done-info-general"></span>
+                                                <span id="undo-info-general"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title">全校学生成绩分布情况</h4>
+
+                                </div>
+                                <div class="content">
+                                    <div id="overall-chart-generall" class="ct-chart ct-perfect-fourth"></div>
+
+                                    <div class="footer">
+                                        <div class="legend">
+                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+
+                                            <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                            <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
+                                        </div>
+                                        <hr>
+                                        <div class="stats">
+                                            <p> 
+                                                <span class="glyphicon glyphicon-stats"></span> 
+                                                平均分：<span id="average-score-general"></span>分
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            
+                            <div class="card">
+                                <div class="header">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <h4 class="title">全校各院系概览</h4>
+                                            <p class="category">提示：点击相应表头，可以进行排序哦！</p>
+                                        </div>
+                                        <div class="col-md-5">       
+                                                <input type="text" class="form-control" id="search-general" placeholder="在此输入院系名...">                                               
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="content table-responsive table-full-width restricted" id="table-general">
                                     <table class="table table-hover table-striped">
                                         <thead>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Salary</th>
-                                            <th>Country</th>
-                                            <th>City</th>
+                                            <th>
+                                                院系
+                                            </th>
+                                            <th class="score">
+                                                <span>平均分</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+                                            <th class="score">
+                                                <span>完成率</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+                                            <th class="score">
+                                                <span>90分以上 (%)</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+                                            <th class="score">
+                                                <span>75分至90分 (%)</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+                                            <th class="score">
+                                                <span>60分至75分 (%)</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+                                            <th class="score">
+                                                <span>不及格 (%)</span>
+                                                <span class="glyphicon glyphicon-sort sort-general"></span>
+                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
+                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            </th>
+
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Dakota Rice</td>
-                                                <td>$36,738</td>
-                                                <td>Niger</td>
-                                                <td>Oud-Turnhout</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Minerva Hooper</td>
-                                                <td>$23,789</td>
-                                                <td>Curaçao</td>
-                                                <td>Sinaai-Waas</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Sage Rodriguez</td>
-                                                <td>$56,142</td>
-                                                <td>Netherlands</td>
-                                                <td>Baileux</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Philip Chaney</td>
-                                                <td>$38,735</td>
-                                                <td>Korea, South</td>
-                                                <td>Overland Park</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Doris Greene</td>
-                                                <td>$63,542</td>
-                                                <td>Malawi</td>
-                                                <td>Feldkirchen in Kärnten</td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Mason Porter</td>
-                                                <td>$78,615</td>
-                                                <td>Chile</td>
-                                                <td>Gloucester</td>
-                                            </tr>
+                                          
                                         </tbody>
                                     </table>
 
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col-md-12">
-                            <div class="card card-plain">
-                                <div class="header">
-                                    <h4 class="title">Table on Plain Background</h4>
-                                    <p class="category">Here is a subtitle for this table</p>
-                                </div>
-                                <div class="content table-responsive table-full-width">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Salary</th>
-                                            <th>Country</th>
-                                            <th>City</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Dakota Rice</td>
-                                                <td>$36,738</td>
-                                                <td>Niger</td>
-                                                <td>Oud-Turnhout</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Minerva Hooper</td>
-                                                <td>$23,789</td>
-                                                <td>Curaçao</td>
-                                                <td>Sinaai-Waas</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Sage Rodriguez</td>
-                                                <td>$56,142</td>
-                                                <td>Netherlands</td>
-                                                <td>Baileux</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Philip Chaney</td>
-                                                <td>$38,735</td>
-                                                <td>Korea, South</td>
-                                                <td>Overland Park</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Doris Greene</td>
-                                                <td>$63,542</td>
-                                                <td>Malawi</td>
-                                                <td>Feldkirchen in Kärnten</td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Mason Porter</td>
-                                                <td>$78,615</td>
-                                                <td>Chile</td>
-                                                <td>Gloucester</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
-
-
                     </div>
-                </div>
 
             </div>
 

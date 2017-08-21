@@ -208,6 +208,7 @@ function commonSet(){
 }
 var temp=new Array();
 var cnt=0;
+
 $(function () {
     //Mock server for score list
     Mock.mock(
@@ -315,9 +316,66 @@ $(function () {
     setDone(config.doneList);
     initChartist();
     commonSet();*/
+    $("#refresh-button").click(function(){
+        $.ajax({
+            url:  'http://hostname/api/Counselor/scores/summary{id}', //请求的url地址
+            dataType: "json", //返回格式为json
+            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+            
+            
+            type: "GET", //请求方式
+            beforeSend: function () {
+              //请求前的处理
     
+            },
+            success: function (req) {
+              //请求成功时处理
+              console.log(req);
+              config.generalInfo=req.object;
+              console.log(config.generalInfo);
+              config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
+              console.log(config.generalInfo.DepartmentID);
+            },
+            complete: function () {
     
-    $("#table-done").find("th.score").click((function(){
+              //请求完成的处理
+              
+              $.ajax({
+                url:  'http://hostname/api/Counselor/scores/all/{id}', //请求的url地址
+                dataType: "json", //返回格式为json
+                async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                
+                
+                type: "GET", //请求方式
+                beforeSend: function () {
+                  //请求前的处理
+      
+                },
+                success: function (req) {
+                  //请求成功时处理
+                  setUndoNDo(req.array);
+                  setUndo(config.undoList);
+                  setDone(config.doneList);
+                  initChartist();
+                  commonSet();
+                },
+                complete: function () {
+                  //请求完成的处理
+                },
+                error: function () {
+                  //请求出错处理
+                  alert("数据获取失败，请检查网络！");
+                }
+              });
+            },
+            error: function () {
+              //请求出错处理
+              alert("数据获取失败，请检查网络！");
+            }
+          });
+    })
+    
+    $("#table-done").find("th.score").click(function(){
        if(cnt%3==0){
         $("#sort").hide();
         $("#triangle-bottom").show();
@@ -354,7 +412,7 @@ $(function () {
        
        
       
-    }))
+    })
     //先隐藏再筛选
      $("#search-undo-text").keyup(function () {
          var $key=$('#search-undo-text').val();
