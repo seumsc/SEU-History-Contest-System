@@ -24,6 +24,8 @@ namespace HistoryContest.Server.Controllers.APIs
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
+
+
         /// <summary>
         /// 按院系代码获取所有学生分数
         /// </summary>
@@ -89,19 +91,21 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <remarks>
         ///    全校分数概况JSON格式如下：
         ///    
-        ///     {
-        ///         "departmentID": int,
-        ///         "CounselorName": string,
-        ///         "MaxScore": int,
-        ///         "AverageScore": int,
-        ///         "ScoreBandCount":
+        ///     [
         ///         {
-        ///             "HigherThan90": int,
-        ///             "HigherThan75": int,
-        ///             "HigherThan60": int,
-        ///             "Failed": int
+        ///             "departmentID": int,
+        ///             "CounselorName": string,
+        ///             "MaxScore": int,
+        ///             "AverageScore": int,
+        ///             "ScoreBandCount":
+        ///             {
+        ///                 "HigherThan90": int,
+        ///                 "HigherThan75": int,
+        ///                 "HigherThan60": int,
+        ///                 "Failed": int
+        ///             }
         ///         }
-        ///     }
+        ///     ]
         ///     
         /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
         /// </remarks>
@@ -131,7 +135,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 按照院系ID获取概况
         /// </summary>
         /// <remarks>
-        ///    全校分数概况JSON格式如下：
+        ///    院系分数概况JSON格式如下：
         ///    
         ///     {
         ///         "departmentID": int,
@@ -146,6 +150,8 @@ namespace HistoryContest.Server.Controllers.APIs
         ///             "Failed": int
         ///         }
         ///     }
+        ///     
+        ///     
         ///     
         /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
         /// </remarks>
