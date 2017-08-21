@@ -12,13 +12,14 @@ var config={
 	resultHTML:'<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
 	resultJSON:{}
 }
-var content = '',
-contentFooter='',
-questionsIteratorIndex,
-answersIteratorIndex;
+
+var questionsIteratorIndex;
+var	answersIteratorIndex;
 
 //生成题目
 function setINDEX(QUESTIONS){
+	var content = '';
+	var	contentFooter='';
 	for (questionsIteratorIndex = 0; questionsIteratorIndex < QUESTIONS.length; questionsIteratorIndex++) {
 		content += '<section class="panel"><div class="inner columns" id="q'+(questionsIteratorIndex + 1)+'">'//题目id，实现按钮跳转到下一题
 		+'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
@@ -64,8 +65,9 @@ function setINDEX(QUESTIONS){
 
 }
 //生成结果
-var tableContent="";
+
 function setRESULT(RESULT){
+	var tableContent="";
     for(var resultsIteratorIndex=0;resultsIteratorIndex<config.totalAmount;resultsIteratorIndex++){
         if(resultsIteratorIndex%5==0)
             tableContent+="<tr>";
