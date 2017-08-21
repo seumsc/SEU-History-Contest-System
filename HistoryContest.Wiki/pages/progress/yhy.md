@@ -367,3 +367,17 @@ API实现
 * ..远程分支上未pull的commit再被push -f后会消失
 * 解决随机数重复问题  random.Next(1,100)产生1-100之间的随机数
 * 补充api文档
+
+## 8.21
+
+* 改动若干文档格式错误
+
+* 捣鼓半天导出EXCEL
+
+  尝试使用 NPOI Core和EPPlus.Core 最后选用后者
+
+* 新建了一个控制器没法返回值emmm?
+
+  在Counselor控制器下新建 api/Counselor/xlsx 提供EXCEL下载(尚未测试)
+
+  具体见api文档
