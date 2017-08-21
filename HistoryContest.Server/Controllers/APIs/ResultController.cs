@@ -135,7 +135,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 获取问题集的所有正确答案
         /// </summary>
         /// <remarks>
-        ///    当前用户对应的问题seed的返回答案的JSON格式为：
+        ///    当前用户对应的问题seed的返回正确答案的JSON格式为：
         ///    
         ///     [
         ///         {
