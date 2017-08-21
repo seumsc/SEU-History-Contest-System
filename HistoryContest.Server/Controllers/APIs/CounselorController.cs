@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Data;
+using System.IO;
+using OfficeOpenXml;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -17,14 +20,62 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private IHostingEnvironment hostingEnvironment;
 
-        public CounselorController(UnitOfWork unitOfWork)
+        public CounselorController(UnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment)
         {
             this.unitOfWork = unitOfWork;
+            this.hostingEnvironment = hostingEnvironment;
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
+        
+        /// <summary>
+        /// 下载当前辅导员所在院系所有学生分数情况的EXCEL表
+        /// </summary>
+        /// <remarks>
+        ///     无参数
+        ///     尚未测试
+        /// </remarks>
+        /// <returns>院系学生EXCEL</returns>
+        /// <response code="200">返回本院系得分EXCEL</response>
+        [HttpGet("xlsx")]
+        public async Task<IActionResult> Export()
+        {
+            string sWebRootFolder = hostingEnvironment.WebRootPath;
+            string sFileName = "123321.xlsx";
 
+            // TODO : 改成从session中获取DepartmentID
+            var counselorid = int.Parse(HttpContext.Session.GetString("id"));
+            var id = (unitOfWork.CounselorRepository.GetByID(counselorid)).Department;
 
+            var datatable=(await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                // 添加worksheet
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("aspnetcore");
+                //添加头
+                worksheet.Cells[1, 1].Value = "学号";
+                worksheet.Cells[1, 2].Value = "一卡通号";
+                worksheet.Cells[1, 3].Value = "姓名";
+                worksheet.Cells[1, 4].Value = "是否完成";
+                worksheet.Cells[1, 5].Value = "得分";
+                //添加值
+                int number = 2;
+                foreach(var student in datatable)
+                {
+                    worksheet.Cells[number, 1].Value = student.StudentID;
+                    worksheet.Cells[number, 2].Value = student.CardID;
+                    worksheet.Cells[number, 3].Value = student.Name;
+                    worksheet.Cells[number, 4].Value = student.IsCompleted?"是":"否";
+                    worksheet.Cells[number, 5].Value = student.Score;
+                    number++;
+                }
+                
+                package.Save();
+            }
+            return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
 
         /// <summary>
         /// 按院系代码获取所有学生分数
