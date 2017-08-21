@@ -1,2 +1,4 @@
-import Vue from 'vue'
-export default new Vue;
+import $ from 'jquery'
+window.$ = $
+window.jQuery=$
+export default $
