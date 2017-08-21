@@ -1,6 +1,7 @@
 import 'bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import '../node_modules/font-awesome/css/font-awesome.css';
 import 'chartist';
 
 Vue.use(VueRouter);
