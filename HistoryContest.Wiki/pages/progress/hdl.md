@@ -20,7 +20,7 @@
   </ul>
 </blockquote>
 
-<p>bug(I) jquery中文显示乱码</p>
+<p>bug(I) jquery中文显示乱码</p>                    
 
 <blockquote>
   <ul>
@@ -180,4 +180,27 @@
         原模板文件使用的是skel框架，其换页特效在vue中无法实现。对元素进行重新整理后，用jquery模拟了类似的换页特效。</br>
         仍然需要注意换页中的引用问题，例如引用图片时，需在vue.html中按相对于html的路径引入；在ts文件中需按相对路径require，再从dist/Images中引入；在css文件中从dist/Images引入即可</br>
     </li>
+  </ul>
+
+
+<h2 id="821"><i class="icon-file"></i> 8/15-8/21</h2>
+
+  <ul>
+    <li>解决了引用validator失败的问题:</br>
+        bootstrap-validator本身需要第三方库的引用，过程比较繁琐，且最终使用到的特性较少，故抛弃</br>
+        vue-validator与vue匹配性非常好，但不支持vue.js 2.2以后的版本，故抛弃</br>
+        最终选择使用较为简洁的html5自带validation功能</br>
+        </li>
+    <li>异步加载css:</br>
+        由于webpack对所有的css文件同时打包到一个文件中，因此旧版提供的css产生冲突，无法直接使用。</br>
+        解决方案：</br>
+        <ul>
+          <li>删除旧版css文件中的大量冗余</li>
+          <li>对重复的样式进行id定位筛选</li>
+          <li>对需要异步加载的样式利用jquery在mounted之后添加（如body中的background-image)</li>
+  <li>IE11对jquery的兼容性极差。采用jQuery.noConflict之后有所好转，但在footer翻页上仍然有可能出现bug，待后期调试。</li>
+        </ul>
+    </li>
+    <li>Chartist引用刷新：</br>
+        引用的Chartist库利用document.ready无法自动加载，原因在于生成顺序(报错: container is null)。利用钩子函数，在DOM渲染之后再调用initChartist，可解决该问题，且在数据更新时实时刷新。</br>
   </ul>
