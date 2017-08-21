@@ -1,5 +1,5 @@
-var $ = require("../../../node_modules/jquery/dist/jquery.min.js");
-
+var jQuery = require("../../../node_modules/jquery/dist/jquery.min.js");
+var $ = jQuery.noConflict();
 var init={'questions':[{'question':'南京高等师范学校继三所师范学校成为我国成立的最早的第四所国立高等师范学校，其中不是这三所学校之一的是：','answers':['武昌高师','北京高师','长沙高师','广州高师'],'correctAnswer':3},
 {'question':'江谦认为国家的富强有赖于科学、实业的发达，先后增设了三个专修科，其中哪一个不属于这三科之一？','answers':['农业','工业','商业','教育业'],'correctAnswer':4},
 {'question':'下面哪一项不属于郭秉文的“自动主义”？','answers':['学习上的自学和自力研究','思想上的自律和自强','生活上的自立和自理','学术、文化、体育活动的自行组织和主办'],'correctAnswer':2},
@@ -40,7 +40,7 @@ exports.set = function(){
     //生成多选题html
     for (questionsIteratorIndex = 0; questionsIteratorIndex < init.questions.length; questionsIteratorIndex++) {
         content += '<section class="panel"><div class="inner columns" id="q'+(questionsIteratorIndex + 1)+'">'//题目id，为网页内链接表示（实现按钮跳转到下一题）
-        +'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
+        +'<div class="intro joined"><h1 class = "major">'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
         +'<div class="span-3-25"><h3 class="major">'+ init.questions[questionsIteratorIndex].question+'</h3>';//问题内容
         for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {//四个选项
             content += '<div class="field quarter"><input type="radio"'
@@ -61,7 +61,7 @@ exports.set = function(){
     //生成判断题html
      for (; questionsIteratorIndex < init.questions.length+init.TFs.length; questionsIteratorIndex++) {//延续之前的索引
         content += '<section class="panel"><div class="inner columns" id="q'+(questionsIteratorIndex + 1)+'">'
-        +'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'
+        +'<div class="intro joined"><h1 class = "major">'+(questionsIteratorIndex + 1)+'</h1></div>'
         +'<div class="span-3-25"><h3 class="major">'+ init.questions[questionsIteratorIndex-init.TFs.length].question+'</h3>';
         for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {//两个选项
             content += '<div class="field quarter"><input type="radio" id="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)
