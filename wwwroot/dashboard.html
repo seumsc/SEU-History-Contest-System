@@ -51,8 +51,12 @@
         max-height: 100%;
     }
 
-    .restricted {
+    #table-undo.restricted,#table-done.restricted {
         max-height: 500px;
+        overflow-y: auto;
+    }
+    .restricted{
+        max-height: 1000px;
         overflow-y: auto;
     }
     .table > thead > tr > th.score:hover {
