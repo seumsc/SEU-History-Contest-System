@@ -120,6 +120,8 @@ export default {
 		},
 		loadcss: function () {
 			$("body").css("display","flex");
+			$("body").css("background-image","url(/dist/Images/overlay.png), url(/dist/Images/bg.jpg)");
+
 		}
 	}
 }
