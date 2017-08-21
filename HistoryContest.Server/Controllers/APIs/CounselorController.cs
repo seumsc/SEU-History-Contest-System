@@ -91,7 +91,6 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <remarks>
         ///    全校分数概况JSON格式如下：
         ///    
-        ///     [
         ///         {
         ///             "departmentID": int,
         ///             "CounselorName": string,
@@ -105,7 +104,6 @@ namespace HistoryContest.Server.Controllers.APIs
         ///                 "Failed": int
         ///             }
         ///         }
-        ///     ]
         ///     
         /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
         /// </remarks>
@@ -138,8 +136,6 @@ namespace HistoryContest.Server.Controllers.APIs
         ///    院系分数概况JSON格式如下：
         ///    
         ///     {
-        ///         "departmentID": int,
-        ///         "CounselorName": string,
         ///         "MaxScore": int,
         ///         "AverageScore": int,
         ///         "ScoreBandCount":
