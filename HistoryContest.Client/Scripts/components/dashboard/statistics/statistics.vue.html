@@ -6,11 +6,12 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">学院学生答题情况</h4>
+                                <h4 class="title" @click="refresh">学院学生答题情况(单击加载)(tmp)</h4>
+                                <!-- <h4 class="title" >学院学生答题情况</h4> -->
                             </div>
                             <div class="content">
-                                <div id="completion-chart" class="ct-chart ct-perfect-fourth"></div>
-
+                                <div id="completion-chart" class="ct-chart ct-perfect-fourth">
+                                </div>
                                 <div class="footer">
                                     <div class="legend">
                                         <p> <span class="glyphicon glyphicon-record text-info"></span> 已完成</p>
@@ -73,15 +74,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="content table-responsive table-full-width restricted" id="table-undo">
-                                <table class="table table-hover table-striped">
+                            <div class="content table-responsive table-full-width restricted"id="table-undo">
+                                <table class="table table-hover table-striped" id="tableundo">
                                     <thead>
                                         <th>学号</th>
                                         <th>姓名</th>
                                         <th>一卡通</th>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <!-- <tbody id = "table-undo">
+                                    </tbody> -->
                                 </table>
                             </div>
                         </div>
@@ -99,7 +100,7 @@
                             </div>
 
                             <div class="content table-responsive table-full-width restricted" id="table-done">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped" id="tabledone">
                                     <thead>
                                         <th>学号</th>
                                         <th>姓名</th>
@@ -110,19 +111,16 @@
                                             <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
                                         </th>
                                         <th>一卡通</th>
-
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
+<script src="./statistics.ts"></script>
