@@ -18,7 +18,9 @@ module.exports = (env) => {
                 'jquery',
                 'vue',
                 'vue-router',
-                // 'chartist'
+                'chartist',
+                'bootstrap-validator'
+                // 'font-awesome'
             ],
         },
         module: {

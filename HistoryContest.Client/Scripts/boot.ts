@@ -1,8 +1,10 @@
+// import $ from './event.js'
 import 'bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import '../node_modules/font-awesome/css/font-awesome.css';
 import 'chartist';
-
+// import 'bootstrap-validator';
 Vue.use(VueRouter);
 
 const router = new VueRouter({

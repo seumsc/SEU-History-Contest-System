@@ -1,15 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
-// import Validator from 'vue-validator';
-// Vue.use(Validator);
-//require('./validator.js');
-/*
-@Component({
-    components: {
-        validator: require('./validator.js')
-    }
-})*/
+// import validator from 'bootstrap-validator';
+
+// $("#loginForm").validator();
+
 //validator malfunctioning at present.
 require('../../../Images/background0.jpg');
 require('../../../Images/background1.jpg');
