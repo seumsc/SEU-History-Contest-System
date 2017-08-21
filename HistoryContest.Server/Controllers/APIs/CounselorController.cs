@@ -92,8 +92,6 @@ namespace HistoryContest.Server.Controllers.APIs
         ///    全校分数概况JSON格式如下：
         ///    
         ///         {
-        ///             "departmentID": int,
-        ///             "CounselorName": string,
         ///             "MaxScore": int,
         ///             "AverageScore": int,
         ///             "ScoreBandCount":
@@ -136,6 +134,8 @@ namespace HistoryContest.Server.Controllers.APIs
         ///    院系分数概况JSON格式如下：
         ///    
         ///     {
+        ///         "departmentID": int,
+        ///         "CounselorName": string,
         ///         "MaxScore": int,
         ///         "AverageScore": int,
         ///         "ScoreBandCount":
