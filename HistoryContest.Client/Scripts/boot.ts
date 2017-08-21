@@ -44,6 +44,8 @@ const router = new VueRouter({
 })
 router.push('/login');
 
+// import dashboard from './dashboard/dashboard.ts'
+
 new Vue({
     el: '#app-root',
     router,

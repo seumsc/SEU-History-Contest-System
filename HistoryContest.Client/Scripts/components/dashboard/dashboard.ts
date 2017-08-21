@@ -508,11 +508,16 @@ $(function () {
             $.error('Method ' + method + ' does not exist!');
     };
 })
-
+var clickrefresh = true;
 export default {
     data() {
         return {
+            // click:click
         }
+    },
+    components:{
+        statistics:require('./statistics/statistics.vue.html'),
+        general:require('./statistics/statistics.vue.html')
     },
     methods: {
         goToStatis: function () {
