@@ -135,6 +135,14 @@ namespace HistoryContest.Server
                 c.IncludeXmlComments(xmlPath);
             });
 
+            // Add Cross-Origin Requests service
+            services.AddCors(o => o.AddPolicy("OpenPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             // Add Unit of work service
             services.AddScoped<UnitOfWork>();
         }
@@ -158,6 +166,8 @@ namespace HistoryContest.Server
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseCors("OpenPolicy");
 
             #region Static file routes
             // use wwwroot static files

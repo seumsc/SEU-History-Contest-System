@@ -78,48 +78,129 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 按院系代码获取所有学生分数
+        /// 获取辅导员所在院系
         /// </summary>
         /// <remarks>
-        ///    拒绝查询其他院系得分详情，在辅导员查询本院系学生得分详情时使用
+        /// 返回Session中存储的院系代号。
         /// </remarks>
-        /// <returns>院系学生得分</returns>
-        /// <response code="200">返回本院系得分详情</response>
-        /// <response code="403">不允许辅导员查询不同系学生的数据</response>
-        [HttpGet("scores/all/{id}")]
-        [ProducesResponseType(typeof(IEnumerable<StudentViewModel>), 200)]
-        public async Task<IActionResult> AllScoresByDepartment(Department id)
+        /// <returns>辅导员对应院系代号</returns>
+        /// <response code="200">返回辅导员所在的院系代号</response>
+        /// <response code="404">Session中未设置院系代号</response>
+        [HttpGet("Department")]
+        [ProducesResponseType(typeof(Department), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetDepartment()
         {
-            if (!HttpContext.User.IsInRole("Administrator") 
-                && id != unitOfWork.CounselorRepository.GetByID(int.Parse(HttpContext.Session.GetString("id"))).Department)
+            var id = HttpContext.Session.GetInt32("department");
+            if (id == null)
+            {
+                return NotFound();
+            }
+            return Json((Department)id);
+        }
+
+        /// <summary>
+        /// 获取一个院系所有学生的学号
+        /// </summary>
+        /// <remarks>
+        /// 这个API将辅导员对应的所有学生的学号返回，让前端根据学号一个个地检索学生信息。可能在异步加载上有所帮助。
+        /// 
+        /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
+        /// </remarks>
+        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <returns>院系所有学生学号</returns>
+        /// <response code="200">返回辅导员对应的所有学生学号构成的数组</response>
+        /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
+        /// <response code="403">辅导员查询非本系数据</response>
+        /// <response code="404">ID不属于任何一个院系代号</response>
+        [HttpGet("AllStudents/{id?}")]
+        [ProducesResponseType(typeof(IEnumerable<int>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AllStudentIDs(Department? id)
+        {
+            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
+                id = (Department)HttpContext.Session.GetInt32("department");
+            }
+            else
+            {
+                return BadRequest("Empty argument request invalid");
+            }
+
+            if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
 
-            return Json((await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s));
+            var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
+            if (students == null)
+            {
+                return NotFound();
+            }
+
+            return Json(students.AsQueryable().Select(s => s.ID));
+        }
+
+        #region Scores APIs
+        /// <summary>
+        /// 获取一个院系所有学生的简要得分信息
+        /// </summary>
+        /// <remarks>
+        /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
+        /// </remarks>
+        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <returns>院系所有学生得分</returns>
+        /// <response code="200">返回本院系所有学生简要得分信息</response>
+        /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
+        /// <response code="403">辅导员查询非本系数据</response>
+        /// <response code="404">ID不属于任何一个院系代号</response>
+        [HttpGet("Scores/All/{id?}")]
+        [ProducesResponseType(typeof(IEnumerable<StudentViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AllScoresByDepartment(Department? id)
+        {
+            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
+                id = (Department)HttpContext.Session.GetInt32("department");
+            }
+            else
+            {
+                return BadRequest("Empty argument request invalid");
+            }
+
+            if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
+            { // 不允许辅导员查询不同系学生的数据
+                return Forbid();
+            }
+
+            var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
+            if (students == null)
+            {
+                return NotFound();
+            }
+
+            return Json(students.AsQueryable().Select(s => (StudentViewModel)s));
         }
 
         /// <summary>
-        /// 按学号获取单个学生分数
+        /// 获取一个学生的简要得分信息
         /// </summary>
         /// <remarks>
-        ///    学生得分详情JSON格式如下：
-        ///    
-        ///         {
-        ///             "studentID"： int,
-        ///             "cardID": int,
-        ///             "Name": string,
-        ///             "isCompleted": bool,
-        ///             "score": int?
-        ///         }
-        ///     
+        /// 这个API主要是配合 `POST api/Counselor/AllStudents/{id}` 使用，使前端能够先获得学号，然后根据学号分批分次地加载学生信息。
         /// </remarks>
-        /// <returns>学生得分</returns>
-        /// <response code="200">返回学生得分</response>
-        /// <response code="404">id对应学生不存在</response>
-        /// <response code="403">不允许辅导员查询不同系学生的数据</response>
+        /// <returns>学生简要得分信息</returns>
+        /// <param name="id">学生的学号</param>
+        /// <response code="200">返回学号对应学生的得分信息</response>
+        /// <response code="403">辅导员查询非本系学生的数据</response>
+        /// <response code="404">ID没有对应的学生</response>
         [HttpGet("Scores/Single/{id}")]
-        [ProducesResponseType(typeof(StudentViewModel), 200)]
+        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> StudentScoreById(int id)
         {
             var student = await unitOfWork.StudentRepository.GetByIDAsync(id);
@@ -135,35 +216,27 @@ namespace HistoryContest.Server.Controllers.APIs
 
             return Json((StudentViewModel)student);
         }
+        #endregion
 
+        #region Score Summary APIs
         /// <summary>
         /// 获取全校分数概况
         /// </summary>
         /// <remarks>
-        ///    全校分数概况JSON格式如下：
-        ///    
-        ///         {
-        ///             "MaxScore": int,
-        ///             "AverageScore": int,
-        ///             "ScoreBandCount":
-        ///             {
-        ///                 "HigherThan90": int,
-        ///                 "HigherThan75": int,
-        ///                 "HigherThan60": int,
-        ///                 "Failed": int
-        ///             }
-        ///         }
-        ///     
-        /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
+        /// **NOTE:这个功能目前尚未被正确实现，仅用于参考JSON返回值**
         /// </remarks>
         /// <returns>全校分数概况</returns>
-        /// <response code="200">返回全校分数概况</response>
-        [HttpGet("scores/summary")]
-        [ProducesResponseType(typeof(ScoreSummaryViewModel), 200)]
+        /// <response code="200">
+        /// 返回全校的分数概况及学生完成情况
+        /// * 这个内容并不是每次请求时新计算而得的，而是每隔一段时间（如10分钟）自动更新一次
+        /// * 因此，JSON文件里面有一个“更新时间”的记录。
+        /// </response>
+        [HttpGet("Scores/Summary")]
+        [ProducesResponseType(typeof(ScoreSummaryOfSchoolViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ScoreSummaryOfSchool()
         {
-            // TODO: Score Summary放入缓存
-            var model = new ScoreSummaryViewModel
+            // TODO: 全校的Score Summary来自/放入缓存, 及正确实现获取全校概况
+            var model = new ScoreSummaryOfSchoolViewModel
             {
                 MaxScore = await unitOfWork.StudentRepository.HighestScore(),
                 AverageScore = await unitOfWork.StudentRepository.AverageScore(),
@@ -172,43 +245,49 @@ namespace HistoryContest.Server.Controllers.APIs
                     HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
                     HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
                     HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60)
-                }
+                },
+                UpdateTime = DateTime.Now
             };
             model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeAsync() - model.ScoreBandCount.HigherThan60;
             return Json(model);
         }
 
         /// <summary>
-        /// 按照院系ID获取概况
+        /// 获取一个院系的分数概况
         /// </summary>
         /// <remarks>
-        ///    院系分数概况JSON格式如下：
-        ///    
+        /// 院系代号在后端为一个枚举，目前内容如下：
+        ///     
+        ///     enum Department
         ///     {
-        ///         "departmentID": int,
-        ///         "CounselorName": string,
-        ///         "MaxScore": int,
-        ///         "AverageScore": int,
-        ///         "ScoreBandCount":
-        ///         {
-        ///             "HigherThan90": int,
-        ///             "HigherThan75": int,
-        ///             "HigherThan60": int,
-        ///             "Failed": int
-        ///         }
+        ///         建筑 = 0x010,
+        ///         计算机 = 0x090
         ///     }
-        ///     
-        ///     
-        ///     
-        /// 其中departmentID在后端为枚举类型 enum Department{  建筑 = 010, 计算机 = 090}  内容后续会补充
+        /// 
+        /// 前端也可建立一个相同的枚举表，这样便可不用在意每个枚举值中所存数据。
+        /// 
+        /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
         /// </remarks>
-        /// <returns>id对应院系分数概况</returns>
-        /// <response code="200">返回id对应院系分数概况</response>
-        /// <response code="404">id对应院系不存在</response>
-        [HttpGet("scores/summary/{id}")]
-        [ProducesResponseType(typeof(ScoreSummaryViewModel), 200)]
-        public async Task<IActionResult> ScoreSummaryByDepartment(Department id)
+        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <returns>ID对应院系的分数概况</returns>
+        /// <response code="200">返回院系代码对应院系的分数概况</response>
+        /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
+        /// <response code="404">ID没有对应的院系</response>
+        [HttpGet("Scores/Summary/{id?}")]
+        [ProducesResponseType(typeof(ScoreSummaryByDepartmentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ScoreSummaryByDepartment(Department? id)
         {
+            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
+                id = (Department)HttpContext.Session.GetInt32("department");
+            }
+            else
+            {
+                return BadRequest("Empty argument request invalid");
+            }
+
             var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == id);
             if (counselor == null)
             {
@@ -216,7 +295,7 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             // TODO: Score Summary放入缓存
-            var model = new ScoreSummaryViewModel
+            var model = new ScoreSummaryByDepartmentViewModel
             {
                 DepartmentID = counselor.Department,
                 CounselorName = counselor.Name,
@@ -232,5 +311,6 @@ namespace HistoryContest.Server.Controllers.APIs
             model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department) - model.ScoreBandCount.HigherThan60;
             return Json(model);
         }
+        #endregion
     }
 }

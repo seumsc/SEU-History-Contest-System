@@ -35,7 +35,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 目前用来检查学生考试状态，以及问题种子是否已正确设置。**注意这个API暂不检查学生ID是否存在于Session中。**
         /// 
         /// 学生的考试状态有三种，用一个枚举表示，即：
-        /// `enum TestState = { NotTested = 0, Testing = 1, Tested = 2 }`
+        /// `enum TestState { NotTested = 0, Testing = 1, Tested = 2 }`
         /// 
         /// 可以根据不同的状态将网页重定向到不同的位置。
         /// </remarks>

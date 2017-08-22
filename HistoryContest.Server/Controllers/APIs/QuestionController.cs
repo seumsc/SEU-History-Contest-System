@@ -77,7 +77,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 获取一道题
         /// </summary>
         /// <remarks>
-        /// 这个API主要是配合 POST api/Question 使用，使前端能够先只获得题号，然后根据题号分批分次地抽出问题。
+        /// 这个API主要是配合 `POST api/Question` 使用，使前端能够先只获得题号，然后根据题号分批分次地抽出问题。
         /// </remarks>
         /// <param name="id">问题对应的唯一ID</param>
         /// <returns>ID对应的问题</returns>
