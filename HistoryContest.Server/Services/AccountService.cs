@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
@@ -12,7 +13,8 @@ namespace HistoryContest.Server.Services
 {
     public class AccountContext
     {
-        public UserViewModel User { get; set; }
+        public IUserBase UserEntity { get; set; }
+        public UserViewModel UserViewModel { get; set; }
         public IEnumerable<Claim> Claims { get; set; }
     }
 
@@ -30,35 +32,19 @@ namespace HistoryContest.Server.Services
             UserViewModel userViewModel = null;
             var userClaims = new List<Claim>();
 
-            /*下面的方法重复写是为了看得清楚，若种类变多的话，可改为泛型*/
-
-            IUserBase user;
-            if((user = await GetUser<Administrator>(userName))!= null && user.CheckPassword(password))
-            { // Check Administrators
-                userViewModel = new UserViewModel { UserName = userName, RealName = user.Name, Role = "Administrator" };
-                userClaims.Add(new Claim(ClaimTypes.Role, userViewModel.Role));
-            }
-            else if ((user = await GetUser<Counselor>(userName)) != null && user.CheckPassword(password))
-            { // Check Counselors
-                userViewModel = new UserViewModel { UserName = userName, RealName = user.Name, Role = "Counselor" };
-                userClaims.Add(new Claim(ClaimTypes.Role, userViewModel.Role));
-            }
-            else if ((user = await GetUser<Student>(userName)) != null && user.CheckPassword(password))
-            { // Check Students
-                userViewModel = new UserViewModel { UserName = userName, RealName = user.Name, Role = "Student" };
-                userClaims.Add(new Claim(ClaimTypes.Role, userViewModel.Role));
-            }
-
-            if (userViewModel != null) 
+            IUserBase user = await GetUser(userName);
+            if(user != null && user.CheckPassword(password))
             {
+                userViewModel = new UserViewModel { UserName = userName, RealName = user.Name, Role = user.GetType().Name };
                 userClaims.AddRange(new List<Claim>
                 {
+                    new Claim(ClaimTypes.Role, userViewModel.Role),
                     new Claim("displayName", userViewModel.RealName),
                     new Claim("username", userViewModel.UserName)
                 });
             }
 
-            return new AccountContext { User = userViewModel, Claims = userClaims };
+            return new AccountContext { UserEntity = user, UserViewModel = userViewModel, Claims = userClaims };
         }
 
         public UserViewModel CreateUser(string username, string password, string role)
@@ -67,17 +53,29 @@ namespace HistoryContest.Server.Services
             return new UserViewModel();
         }
 
-        public async Task<IUserBase> GetUser<TUser>(string userName) where TUser : class, IUserBase
+        public async Task<IUserBase> GetUser(string userName)
         {
-            if(typeof(TUser) == typeof(Administrator))
-            {
-                return await unitOfWork.AdminRepository.FirstOrDefaultAsync(user => user.UserName == userName);
+            IUserBase user = null;
+
+            user = await unitOfWork.AdminRepository.FirstOrDefaultAsync(u => u.UserName == userName);
+            if (user != null)
+            { // Check Administrators
+                return user;
             }
-            else if (typeof(TUser) == typeof(Student) || typeof(TUser) == typeof(Counselor))
-            {
-                return await unitOfWork.context.Set<TUser>().FindAsync(int.Parse(userName));
+
+            user = await unitOfWork.CounselorRepository.GetByIDAsync(int.Parse(userName));
+            if(user != null)
+            { // Check Counselors
+                return user;
             }
-            throw new ArgumentException();
+
+            user = await unitOfWork.StudentRepository.GetByIDAsync(int.Parse(userName));
+            if(user != null)
+            { // Check Students
+                return user;
+            }
+
+            return null;
         }
     }
 }

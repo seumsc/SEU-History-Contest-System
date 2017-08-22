@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
+using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Services;
 
@@ -27,33 +28,61 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         #region State APIs
-
         /// <summary>
+        /// 获取学生状态
         /// </summary>
         /// <remarks>
+        /// 目前用来检查学生考试状态，以及问题种子是否已正确设置。**注意这个API暂不检查学生ID是否存在于Session中。**
+        /// 
+        /// 学生的考试状态有三种，用一个枚举表示，即：
+        /// `enum TestState = { NotTested = 0, Testing = 1, Tested = 2 }`
+        /// 
+        /// 可以根据不同的状态将网页重定向到不同的位置。
         /// </remarks>
-        /// <returns></returns>
+        /// <returns>学生状态</returns>
+        /// <response code="200">返回学生的考试状态，以及问题种子是否设置</response>
         /// <response code=""></response>
-        /// <response code=""></response>
-        [HttpGet("state")]
+        [HttpGet("State")]
+        [ProducesResponseType(typeof(StudentStateViewModel), StatusCodes.Status200OK)]
         public IActionResult State()
-        { // TODO: 写student的state
-            return Json(true);
+        {
+            var state = new StudentStateViewModel();
+            if (HttpContext.Session.Get<DateTime>("beginTime") != default(DateTime))
+            {
+                state.TestState = TestState.Testing;
+                state.IsSeedSet = HttpContext.Session.GetInt32("seed") != null;
+            }
+            else if (HttpContext.Session.GetInt32("isTested") == 1)
+            {
+                state.TestState = TestState.Tested;
+                state.IsSeedSet = true;
+            }
+            else
+            {
+                state.TestState = TestState.NotTested;
+                state.IsSeedSet = HttpContext.Session.GetInt32("seed") != null;
+            }
+
+            return Json(state);
         }
 
         /// <summary>
-        /// 初始化student状态
+        /// 初始化考试状态
         /// </summary>
         /// <remarks>
-        ///   已经初始化则重定向到State
-        ///   否则先后 SetSeed  SetStartTime
+        /// 学生开始考试前，设置相关考试状态，即：
+        /// * 设置问题种子
+        /// * 设置考试开始时间
         /// </remarks>
-        /// <returns></returns>
-        /// <response code=""></response>
-        [HttpGet("state/[action]")]
+        /// <returns>当前学生考试开始时间</returns>
+        /// <response code="201">返回设置的当前学生考试开始时间</response>
+        /// <response code="302">已经初始化则重定向到`GET State`方法</response>
+        [HttpGet("State/[action]")]
+        [ProducesResponseType(typeof(DateTime), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> Initialize()
         {
-            if (HttpContext.Session.Get("begintime") != null)
+            if (HttpContext.Session.Get("beginTime") != null)
             { // 已经初始化则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -63,19 +92,17 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 重新初始化student状态
+        /// 重设学生考试状态
         /// </summary>
         /// <remarks>
-        ///    未初始化则重定向到State方法
-        ///    已初始化则先 ClearSeed ClearStartTime
-        ///             后 SetSeed SetStartTime
+        /// 当学生因特殊情况重进网页，需要重新考试时，重新设置学生的考试状态。
         /// </remarks>
         /// <returns></returns>
         /// <response code=""></response>
-        [HttpPost("state/[action]")]
+        [HttpPost("State/[action]")]
         public async Task<IActionResult> Reset()
         {
-            if (HttpContext.Session.Get("begintime") == null)
+            if (HttpContext.Session.Get("beginTime") == null)
             { // 未初始化则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -88,37 +115,38 @@ namespace HistoryContest.Server.Controllers.APIs
         #endregion
 
         #region Seed APIs
-
         /// <summary>
-        /// 生成Seesion中seed
+        /// 设置一个问题种子
         /// </summary>
         /// <remarks>
-        ///    Session中未生成seed时生成seed
+        /// 在问题种子池中随机出一个种子ID，将其保存在当前用户的Session中。
         /// </remarks>
-        /// <returns>种子ID</returns>
-        /// <response code="200">返回种子ID</response>
-        [HttpPost("seed")]
-        [ProducesResponseType(typeof(int), 200)]
-        public async Task<JsonResult> SetSeed()
+        /// <returns>问题种子ID</returns>
+        /// <response code="201">返回问题种子的ID</response>
+        /// <response code="204">问题种子已经设置</response>
+        [HttpPost("Seed")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> SetSeed()
         {
             if (HttpContext.Session.GetInt32("seed") == null)
             {
                 var seed = await questionSeedService.RollSeed();
                 HttpContext.Session.SetInt32("seed", seed.ID);
-                return Json(seed);
+                return CreatedAtAction(nameof(QuestionController.GetQuestionIDSet), nameof(QuestionController), null, seed.ID);
             }
-            return Json(await unitOfWork.QuestionSeedRepository.GetByIDAsync(HttpContext.Session.GetInt32("seed")));
+            return NoContent();
         }
 
         /// <summary>
-        /// 清除Session当前seed
+        /// 清除当前问题种子
         /// </summary>
         /// <remarks>
-        ///    清除Session当前seed
+        /// 清除Session当前seed
         /// </remarks>
-        /// <returns></returns>
-        /// <response code="204">No Content</response>
-        [HttpDelete("seed")]
+        /// <response code="204"></response>
+        [HttpDelete("Seed")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult ClearSeed()
         {
             HttpContext.Session.Remove("seed");
@@ -127,60 +155,73 @@ namespace HistoryContest.Server.Controllers.APIs
         #endregion
 
         #region Time APIs
-
         /// <summary>
-        /// 返回剩余时间
+        /// 返回剩余考试时间
         /// </summary>
         /// <remarks>
-        ///     返回剩余时间
+        /// 以30分钟为基准，通过当前时间与Session中考试开始时间之差计算出当前学生剩余考试时间。
+        /// 
+        /// 返回的字符串格式样例：
+        /// 
+        ///     "00:29:34.2049107"
+        /// 
         /// </remarks>
-        /// <returns>剩余时间</returns>
-        /// <response code="200">返回剩余时间</response>
-        [HttpGet("time")]
-        [ProducesResponseType(typeof(TimeSpan), 200)]
+        /// <returns>剩余考试时间</returns>
+        /// <response code="200">返回剩余的考试时间</response>
+        /// <response code="204">当前学生尚未开始考试</response>
+        [HttpGet("Time")]
+        [ProducesResponseType(typeof(TimeSpan), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetLeftTime()
         {
-            if(HttpContext.Session.Get<DateTime>("begintime") == default(DateTime))
+            if (HttpContext.Session.Get<DateTime>("beginTime") == default(DateTime))
             {
                 return NoContent();
-            }    
-            TimeSpan timeLeft = TimeSpan.FromMinutes(30) - (DateTime.Now - HttpContext.Session.Get<DateTime>("begintime"));
+            }
+            TimeSpan timeLeft = TimeSpan.FromMinutes(30) - (DateTime.Now - HttpContext.Session.Get<DateTime>("beginTime"));
             return Json(timeLeft);
         }
 
         /// <summary>
-        /// 设置初始时间
+        /// 设置考试开始时间
         /// </summary>
         /// <remarks>
-        ///     设置初始时间begintime
+        /// 将当前日期时间存储在Session中，作为考试开始时间。
+        /// 
+        /// 返回的字符串格式样例：
+        /// 
+        ///     "2017-08-15T23:42:02.2776927+08:00"
+        /// 
         /// </remarks>
-        /// <returns></returns>
-        /// <response code="200"></response>
-        [HttpPost("time")]
-        [ProducesResponseType(typeof(DateTime), 200)]
+        /// <returns>当前学生考试开始时间</returns>
+        /// <response code="201">返回设置的当前学生考试开始时间</response>
+        /// <response code="302">学生已开始考试，重定向到同一地址的`GET`</response>
+        [HttpPost("Time")]
+        [ProducesResponseType(typeof(DateTime), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status302Found)]
         public IActionResult SetStartTime()
         {
-            if(HttpContext.Session.Get<DateTime>("begintime") == default(DateTime))
+            if (HttpContext.Session.Get<DateTime>("beginTime") == default(DateTime))
             {
                 DateTime now = DateTime.Now;
-                HttpContext.Session.Set<DateTime>("begintime", now);
-                return Ok(now);
+                HttpContext.Session.Set<DateTime>("beginTime", now);
+                return CreatedAtAction(nameof(GetLeftTime), now);
             }
-            return RedirectToAction(nameof(SetStartTime));
+            return RedirectToAction(nameof(GetLeftTime));
         }
 
         /// <summary>
-        /// 清空初始时间
+        /// 清除考试开始时间
         /// </summary>
         /// <remarks>
-        ///     清空初始时间begintime
+        /// 清空当前学生Session中考试开始时间的记录。
         /// </remarks>
-        /// <returns></returns>
-        /// <response code="204">No Content</response>
-        [HttpDelete("time")]
+        /// <response code="204"></response>
+        [HttpDelete("Time")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult ClearStartTime()
         {
-            HttpContext.Session.Remove("begintime");
+            HttpContext.Session.Remove("beginTime");
             return NoContent();
         }
         #endregion Time APIs

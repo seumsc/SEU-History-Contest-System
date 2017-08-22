@@ -118,7 +118,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <response code="200">返回学生得分</response>
         /// <response code="404">id对应学生不存在</response>
         /// <response code="403">不允许辅导员查询不同系学生的数据</response>
-        [HttpGet("scores/single/{id}")]
+        [HttpGet("Scores/Single/{id}")]
         [ProducesResponseType(typeof(StudentViewModel), 200)]
         public async Task<IActionResult> StudentScoreById(int id)
         {
