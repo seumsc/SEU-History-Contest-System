@@ -15,8 +15,6 @@ require('../../../Images/background7.jpg');
 require('../../../Images/background8.jpg');
 
 //import boolstrap from 'boolstrap';
-var username = "";
-var password = "";
 $(function () {
 
   var bgCounter = 0;
@@ -42,60 +40,10 @@ $(function () {
 
 
   ///////////////////
-  $("#submit").click(function () {
-    // if (verify() == true) {
-      // username = $("#username").val();
-      // password = $("#password").val();
-      // var info = {
-      //   "userName": username,
-      //   "password": password
-      // }
-      // alert(JSON.stringify(info));
-      // alert(info);
-      // alert(verify());
-      $.ajax({
-        url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
-        dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        //data
-        data: JSON.stringify({"userName":"09016407","password":"username"}), //参数值
-        type: "POST", //请求方式
-        // contentType:"application/json-patch+json;charset=utf-8",
-        contentType: "application/json-patch+json",
-        beforeSend: function () {
-          alert(this.data);//请求前的处理
-        },
-        success: function (req) {
-          alert(req);
-          //请求成功时处理
-          // if (req.isSuccessful) {
-          //   if (req.user.role == "Student") {
-          //     // window.location.href = "index.html";
-          //     this.$router.push({ path: '/ans/sheet' })
-          //   } else {
-          //     // window.location.href = "dashboard.html";
-          //     this.$router.push({ path: '/dashboard/statistics' })              
-          //   }
-          // } else alert("登录失败,请检查用户名或密码是否正确")
-        },
-        complete: function () {
-          alert("complete");
-          //请求完成的处理
-        },
-        error: function () {
-          alert("error");
-          //请求出错处理
-          alert("登录失败,请检查网络是否通畅");
-        }
-      });
-
-    // }
-
-  });
 
 });
-
-
+var username = "";
+var password = "";
 export default {
   data() {
     return {
@@ -108,6 +56,62 @@ export default {
     },
     isAdmin: function () {
       this.$router.push({ path: '/dashboard/statistics' })
+    },
+    submit:function(){
+        if (verify() == true) {
+          username = $("#username").val();
+          password = $("#password").val();
+          var info = {
+            "userName": username,
+            "password": password
+          }
+          // alert(JSON.stringify(info));
+          // alert(info);
+          // alert(verify());
+          var _this = this;
+          $.ajax({
+            url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+            dataType: "json", //返回格式为json
+            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+            //data
+            data: JSON.stringify({"userName":username,"password":password}), //参数值
+            type: "POST", //请求方式
+            // contentType:"application/json-patch+json;charset=utf-8",
+            contentType: "application/json-patch+json",
+            beforeSend: function () {
+              alert(this.data);//请求前的处理
+            },
+            success: function (req) {
+              // 请求成功时处理
+              alert(JSON.stringify(req));
+              if (req.isSuccessful) {
+                alert("success");
+                if (req.userViewModel.role == "Student") {
+                  // window.location.href = "index.html";
+                  _this.isStu();
+                  // this.$router.push({ path: '/ans/sheet' })
+                } else {
+                  _this.isAdmin();
+                  // window.location.href = "dashboard.html";
+                  // this.$router.push({ path: '/dashboard/statistics' })              
+                }
+              } else alert("登录失败,请检查用户名或密码是否正确")
+            },
+            complete: function () {
+              alert("complete");
+              //请求完成的处理
+            },
+            error: function () {
+              alert("error");
+              //请求出错处理
+              alert("登录失败,请检查网络是否通畅");
+            }
+          });
+    
+        // }
+    
+        }
+    
     }
 
   }

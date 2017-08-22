@@ -8,6 +8,7 @@ if exist HistoryContest.Site (
 cd ./HistoryContest.Server
 call dotnet restore
 if %ERRORLEVEL% NEQ 0 exit
+pause
 call dotnet publish --output "../HistoryContest.Site" --configuration Release
 if %ERRORLEVEL% NEQ 0 exit
 
