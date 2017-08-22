@@ -30,11 +30,11 @@
 
   <script src="assets/js/validator.min.js"></script>
   <script src="assets/js/jquery.backstretch.min.js" type="text/javascript"></script>
-  <!--mockserver for dev purpose--><script src="http://mockjs.com/dist/mock.js"></script>
+  <!--mockserver for dev purpose<script src="http://mockjs.com/dist/mock.js"></script>-->
   <script type="text/javascript">
     $(function () {
       //调用mock方法模拟返回的数据
-      Mock.mock(
+   /*   Mock.mock(
         'http://hostname/api/Account/Login', 'post',{
           "isSuccessful": true,
           "user": {
@@ -44,35 +44,48 @@
 
           }
         }
-      );
+      );*/
       //提交帐号密码
 
       $("#login-form").submit(function (event) {
         event.preventDefault();
-
+        var usn= $(this.userName).val();
+        var pwd= $(this.password).val();
+        var dt={
+            "userName": usn,
+            "password": pwd
+          };
+        console.log(dt);
         $.ajax({
-          url:  'http://hostname/api/Account/Login', //请求的url地址
-          dataType: "json", //返回格式为json
-          async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-          //data
-          data: {
-            "userName": $(this.userName).val(),
-            "password": $(this.password).val()
-          }, //参数值
+          
+          
+          url:  'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
           type: "POST", //请求方式
+          async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+          crossDomain: true,
+          contentType:"application/json-patch+json",
+          //data
+          data:JSON.stringify(dt) , //参数值
+          dataType: "json", //返回格式为json
           beforeSend: function () {
             //请求前的处理
-
+            
           },
           success: function (req) {
             //请求成功时处理
+            console.log(req);
             if (req.isSuccessful) {
-              if (req.user.role == "Student") {
+              if (req.userViewModel.role == "Student") {
                 window.location.href = "index.html";
-              } else {
+              } 
+              else if(req.userViewModel.role =="Administrator")  {
                 window.location.href = "dashboard.html";
               }
-            } else {
+              else{
+                console.log(req.role);
+              }
+            } 
+            else {
               $("#common-error").text("登录失败,请检查用户名或密码是否正确")
                 .fadeIn(setTimeout(function () {
                   $("#common-error").fadeOut();
