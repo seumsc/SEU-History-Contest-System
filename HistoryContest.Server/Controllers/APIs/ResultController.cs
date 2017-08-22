@@ -38,7 +38,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 1. 学生考试完毕后重新登录时，将页面重定向到调用这个api；
         /// 2. 辅导员在看本院得分情况时，想要查看某位学生的考试详细细节。
         /// </remarks>
-        /// <param name="id">学生的学号</param>
+        /// <param name="id">学生的学号（可选）</param>
         /// <returns>学号对应的考试结果</returns>
         /// <response code="200">
         /// 返回欲查询的学生的考试结果，由以下几部分组成：
