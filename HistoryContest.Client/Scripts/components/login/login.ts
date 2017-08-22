@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
+var verify = require("./verify.js").verify;
 
 //validator malfunctioning at present.
 require('../../../Images/background0.jpg');
@@ -38,15 +39,66 @@ $(function () {
     setTimeout(changeBackground, 10000);
   }
   changeBackground();
+
+
+  ///////////////////
+  $("#submit").click(function () {
+    // if (verify() == true) {
+      // username = $("#username").val();
+      // password = $("#password").val();
+      // var info = {
+      //   "userName": username,
+      //   "password": password
+      // }
+      // alert(JSON.stringify(info));
+      // alert(info);
+      // alert(verify());
+      $.ajax({
+        url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+        dataType: "json", //返回格式为json
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+        //data
+        data: JSON.stringify({"userName":"09016407","password":"username"}), //参数值
+        type: "POST", //请求方式
+        // contentType:"application/json-patch+json;charset=utf-8",
+        contentType: "application/json-patch+json",
+        beforeSend: function () {
+          alert(this.data);//请求前的处理
+        },
+        success: function (req) {
+          alert(req);
+          //请求成功时处理
+          // if (req.isSuccessful) {
+          //   if (req.user.role == "Student") {
+          //     // window.location.href = "index.html";
+          //     this.$router.push({ path: '/ans/sheet' })
+          //   } else {
+          //     // window.location.href = "dashboard.html";
+          //     this.$router.push({ path: '/dashboard/statistics' })              
+          //   }
+          // } else alert("登录失败,请检查用户名或密码是否正确")
+        },
+        complete: function () {
+          alert("complete");
+          //请求完成的处理
+        },
+        error: function () {
+          alert("error");
+          //请求出错处理
+          alert("登录失败,请检查网络是否通畅");
+        }
+      });
+
+    // }
+
+  });
+
 });
 
 
-// export default class AppComponent extends Vue {
 export default {
   data() {
     return {
-      username: username,
-      password: password
     }
   },
 
@@ -56,14 +108,6 @@ export default {
     },
     isAdmin: function () {
       this.$router.push({ path: '/dashboard/statistics' })
-    },
-    submit:function(usr,pwd){
-      if(usr && pwd ){
-        username = $("#username").val();
-        password = $("#password").val();
-        alert(username + " " + password);  
-      }
-
     }
 
   }
