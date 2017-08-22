@@ -36,7 +36,7 @@ cd ../
 echo.
 echo (%i%/%n%)Restoring MDWiki renderer html...
 cd ./HistoryContest.Wiki
-call powershell -command "(new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')"
+if not exist ./index.html call powershell -command "(new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')"
 echo Successfully downloaded index.html from http://dynalon.github.io/mdwiki/index.html.
 set /a i=i+1
 
