@@ -67,7 +67,7 @@
     </ItemGroup>
   </Target>
   <Target Name="PublishingWiki" AfterTargets="RunWebpack">
-    <Exec Command="powershell (new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')" WorkingDirectory="../HistoryContest.Wiki/" />
+    <Exec Command="if not exist ./index.html call powershell -command (new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')" WorkingDirectory="../HistoryContest.Wiki/" />
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />

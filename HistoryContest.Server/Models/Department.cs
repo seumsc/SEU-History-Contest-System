@@ -7,7 +7,7 @@ namespace HistoryContest.Server.Models
 {
     public enum Department
     {
-        建筑 = 010,
-        计算机 = 090
+        建筑 = 0x010,
+        计算机 = 0x090
     }
 }
