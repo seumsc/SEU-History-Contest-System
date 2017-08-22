@@ -15,8 +15,7 @@ namespace HistoryContest.Server.Services
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            var seed = Guid.NewGuid().GetHashCode();
-            rdGenerator = new System.Random(seed);
+            rdGenerator = new Random();
         }
 
         public async Task<IEnumerable<AQuestionBase>> GetQuestionsBySeedID(int id)
@@ -71,6 +70,7 @@ namespace HistoryContest.Server.Services
             QuestionSeed newSeed = new QuestionSeed { QuestionIDs = questionIDs };
             newSeed.Save();
             await unitOfWork.QuestionSeedRepository.InsertAsync(newSeed);
+            await unitOfWork.SaveAsync();
             return newSeed;
         }
 

@@ -34,7 +34,7 @@ namespace HistoryContest.Server.Controllers.APIs
         ///  
         ///     选择题：
         ///     {
-        ///        "ID": "21",
+        ///        "ID": "16",
         ///        "type": 0,
         ///        "question": "在高等师范学校的基础上东南大学在哪年成立？",
         ///        "choices": ["1919", "1920", "1921", "1922"]
@@ -45,12 +45,13 @@ namespace HistoryContest.Server.Controllers.APIs
         ///        "ID": "189",
         ///        "type": 1,
         ///        "question": "齐康被尊为与梁思成齐名的南派建筑学宗师。",
+        ///        "choices": null
         ///     }
         ///     
-        /// 问题的"type"成员在后端用一个枚举类型表示，即 enum QuestionType { Choice = 0, TrueFalse = 1 } 。如有必要，前端也可建一个相同的枚举。
+        /// 问题的"type"成员在后端用一个枚举类型表示，即 `enum QuestionType { Choice = 0, TrueFalse = 1 }` 。如有必要，前端也可建一个相同的枚举。
         /// </remarks>
-        /// <returns>当前用户Session中存储的种子对应的所有问题构成的数组</returns>
-        /// <response code="200">返回种子对应的所有问题</response>
+        /// <returns>种子对应的所有问题</returns>
+        /// <response code="200">返回当前用户Session中存储的种子对应的所有问题构成的数组</response>
         /// <response code="400">当前用户没有对应的问题种子</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<QuestionViewModel>), 200)]
@@ -79,8 +80,8 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 这个API主要是配合 POST api/Question 使用，使前端能够先只获得题号，然后根据题号分批分次地抽出问题。
         /// </remarks>
         /// <param name="id">问题对应的唯一ID</param>
-        /// <returns>由ID所唯一标识的问题</returns>
-        /// <response code="200">返回ID对应的问题</response>
+        /// <returns>ID对应的问题</returns>
+        /// <response code="200">返回由ID所唯一标识的问题</response>
         /// <response code="404">ID没有对应的问题</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(QuestionViewModel), 200)]
@@ -102,8 +103,8 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <remarks>
         /// 这个API将问题种子中存的题号数组返回，让前端根据题号一道道地检索问题。可能在异步加载试卷上有所帮助。
         /// </remarks>
-        /// <returns>当前用户Session中存储的种子中的所有题号构成的数组</returns>
-        /// <response code="200">返回种子存储的所有问题题号</response>
+        /// <returns>种子存储的所有问题题号</returns>
+        /// <response code="200">返回当前用户Session中存储的种子中的所有题号构成的数组</response>
         /// <response code="400">当前用户没有对应的问题种子</response>
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<int>), 200)]
