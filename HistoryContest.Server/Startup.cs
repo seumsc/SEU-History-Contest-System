@@ -137,9 +137,6 @@ namespace HistoryContest.Server
 
             // Add Unit of work service
             services.AddScoped<UnitOfWork>();
-
-            // Add Account service
-            services.AddScoped<AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using System.Security.Claims;
 
@@ -17,33 +19,65 @@ namespace HistoryContest.Server.Controllers.APIs
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
+        private readonly UnitOfWork unitOfWork;
         private readonly AccountService accountService;
 
-        public AccountController(AccountService accountService)
+        public AccountController(UnitOfWork unitOfWork)
         {
-            this.accountService = accountService;
+            this.unitOfWork = unitOfWork;
+            accountService = new AccountService(unitOfWork);
         }
 
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <remarks>
+        /// 登录成功后，将会根据用户名为用户设置身份，并根据身份为用户初始化各自的Session。
+        /// 
+        /// 用一个布尔值标记登录是否成功
+        /// </remarks>
+        /// <param name="model">用户名与密码</param>
+        /// <returns>学号对应的考试结果</returns>
+        /// <response code="200">
+        /// 返回登录结果。返回JSON格式举例：
+        /// 
+        ///     失败时：
+        ///     {
+        ///         "isSuccessful": false    
+        ///     }
+        /// 
+        ///     成功时：
+        ///     {
+        ///         "isSuccessful": true,
+        ///         "userViewModel": {
+        ///             "userName": "09016319",
+        ///             "realName": "叶志浩",
+        ///             "role": "Student"
+        ///         }
+        ///     }
+        /// </response>
         [AllowAnonymous]
         [HttpPost("[action]")]
+        [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest("Body JSON content invalid");
             }
+            
 
             var userContext = await accountService.ValidateUser(model.UserName, model.Password);
-            if (userContext.User != null)
+            if (userContext.UserViewModel != null)
             {
+                InitializeSession(userContext);
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(userContext.Claims, accountService.GetType().Name));
 #if NETCOREAPP2_0
                 await HttpContext.SignInAsync(principal);
 #else
                 await HttpContext.Authentication.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal);
 #endif
-                HttpContext.Session.SetString("id", userContext.User.UserName);
-                return Json(new { isSuccessful = true, userContext.User });
+                return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
             {
@@ -71,11 +105,41 @@ namespace HistoryContest.Server.Controllers.APIs
         //    }
         //}
 
+        /// <summary>
+        /// 注销
+        /// </summary>
+        /// <remarks>
+        /// 登出当前用户，并清除当前用户Session中的所有内容。
+        /// </remarks>
+        /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return SignOut();
+        }
+
+        [NonAction]
+        private void InitializeSession(AccountContext context)
+        {
+            HttpContext.Session.SetString("id", context.UserViewModel.UserName);
+            switch (context.UserViewModel.Role)
+            {
+                case nameof(Administrator):
+                    break;
+                case nameof(Counselor):
+                    var counselor = (Counselor)context.UserEntity;
+                    HttpContext.Session.SetInt32("department", (int)counselor.Department);
+                    break;
+                case nameof(Student):
+                    var student = (Student)context.UserEntity;
+                    HttpContext.Session.SetInt32("isTested", student.IsTested ? 1 : 0);
+                    break;
+                default:
+                    throw new TypeLoadException("User role invalid");
+
+            }
         }
     }
 }
