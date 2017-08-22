@@ -27,19 +27,35 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 获取答题细节
+        /// 获取一位学生的考试结果
         /// </summary>
         /// <remarks>
-        ///    返回总分，完成的结束时间，完成用时和得分的细节
-        ///    参数为学生id
-        ///    提供给前端在学生查分或者刚交卷查分时使用
+        /// 根据学生的学号(ID)返回该学生的考试结果。
+        ///    
+        /// ID参数是可选的。如果不输入ID，且当前用户认证为学生，则取Session中的学号作为ID。
+        ///    
+        /// 使用情景：
+        /// 1. 学生考试完毕后重新登录时，将页面重定向到调用这个api；
+        /// 2. 辅导员在看本院得分情况时，想要查看某位学生的考试详细细节。
         /// </remarks>
-        /// <returns>当前登录id（没有id身份认证为学生或自动获取id）的答题细节</returns>
-        /// <response code="200">返回当前id(用户)对应的答题细节</response>
-        /// <response code="400">当前id(用户)不存在或尚未完成答题</response>
+        /// <param name="id">学生的学号</param>
+        /// <returns>学号对应的考试结果</returns>
+        /// <response code="200">
+        /// 返回欲查询的学生的考试结果，由以下几部分组成：
+        /// * 分数
+        /// * 完成时间、考试用时
+        /// * 答题细节
+        ///     - 答题细节为被查询的学生所做的30道题的情况构成的数组，
+        ///       每个元素由问题ID、正确答案、学生提交的答案构成。
+        /// </response>
+        /// <response code="400">当前用户不是学生或对应Session中没有ID</response>
+        /// <response code="403">被查询的学生没有完成考试</response>
+        /// <response code="404">传入ID没有对应的学生</response>
         [HttpGet("{id?}")]
-        [ProducesResponseType(typeof(ResultViewModel), 200)]
-        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetResult(int? id)
         {
             if (id == null && HttpContext.User.IsInRole("Student") && HttpContext.Session.Get("id") != null)
@@ -54,11 +70,11 @@ namespace HistoryContest.Server.Controllers.APIs
             var student = await unitOfWork.StudentRepository.GetByIDAsync(id);
             if(student == null)
             {
-                return BadRequest("Student not found");
+                return NotFound("Student not found");
             }
             if (!student.IsTested)
             {
-                return BadRequest("Contest hasn't been completed");
+                return Forbid("Contest has not been completed");
             }
 
             var model = new ResultViewModel();
@@ -78,33 +94,33 @@ namespace HistoryContest.Server.Controllers.APIs
 
 
         /// <summary>
-        /// 接收答案生成答题细节
+        /// 计算学生考试分数
         /// </summary>
         /// <remarks>
-        ///     传入答案的格式：
-        ///     
-        ///     [
-        ///         {"id": int, "answer": int}
-        ///     ]
-        ///         
+        /// **注意**：目前后端的实现暂时仍在采用*遍历前端传过来的answers数组*来计算分数（也就是说学生没选答案的题目如果没有传给后端，会造成遗漏）
         /// </remarks>
-        /// <returns>当前答案对应的答题细节</returns>
-        /// <response code="200">返回答案参数对应的答题细节</response>
-        /// <response code="400">参数JSON格式不合法</response>
+        /// <param name="answers">问题ID与考生选择所构数组</param>
+        /// <returns>考生的考试结果</returns>
+        /// <response code="200">返回考生的考试结果。该结果JSON的模型与`GET api/Result/{id}`相同，可以在将来重新查询到</response>
+        /// <response code="400">
+        /// * 传进的数组格式不合法
+        /// * 答案数组里有一个ID没有对应的问题
+        /// </response>
         [HttpPost]
-        [ProducesResponseType(typeof(ResultViewModel), 200)]
-        [ProducesResponseType(typeof(string), 400)]
+        [Authorize(Roles = "Student, Administrator")]
+        [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> answers)
         {
             if(!ModelState.IsValid)
-            {
+            { // TODO:<yzh> 可能需要检查数组的size是否正确
                 return BadRequest("Body JSON content invalid");
             }
 
             var student = await unitOfWork.StudentRepository.GetByIDAsync(int.Parse(HttpContext.Session.GetString("id")));
             student.Score = 0;
             student.DateTimeFinished = DateTime.Now;
-            student.TimeConsumed = student.DateTimeFinished - HttpContext.Session.Get<DateTime>("begintime");
+            student.TimeConsumed = student.DateTimeFinished - HttpContext.Session.Get<DateTime>("beginTime");
             student.Choices = answers.Select(a => (byte)a.Answer).ToArray();
 
             var model = new ResultViewModel
@@ -132,26 +148,18 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 获取问题集的所有正确答案
+        /// 获取一套试卷的所有答案
         /// </summary>
         /// <remarks>
-        ///    当前用户对应的问题seed的返回答案的JSON格式为：
-        ///    
-        ///     [
-        ///         {
-        ///             "id": int,
-        ///             "answer": int,
-        ///             "points": int
-        ///         }
-        ///     ]
-        ///     
+        /// 这个API将问题种子对应的所有问题的答案及分值返回，让前端在本地计算分数。可能在分担服务器计算负担上有所帮助。  
         /// </remarks>
-        /// <returns>当前问题种子的答案序列</returns>
-        /// <response code="200">返回seed对应的答案序列</response>
-        /// <response code="400">seed尚未创建</response>
-        [HttpGet("answer")]
-        [ProducesResponseType(typeof(List<CorrectAnswerViewModel>), 200)]
-        [ProducesResponseType(typeof(string), 400)]
+        /// <returns>当前问题种子对应的所有问题的答案</returns>
+        /// <response code="200">返回当前用户Session中存储的种子中的所有问题的答案、分值</response>
+        /// <response code="400">当前用户没有对应的问题种子</response>
+        [HttpGet("Answer")]
+        [Authorize(Roles = "Student, Administrator")]
+        [ProducesResponseType(typeof(List<CorrectAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllAnswers()
         {
             var seed = HttpContext.Session.GetInt32("seed");
@@ -171,23 +179,19 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 获取id对应问题的正确答案
+        /// 获取一道题的答案
         /// </summary>
         /// <remarks>
-        ///    当前id对应问题答案的JSON格式为：
-        ///    
-        ///     {
-        ///         "id": int,
-        ///         "answer": int,
-        ///         "points": int
-        ///     }
-        ///    
+        /// 这个API主要是配合 `POST api/question` 使用，使前端能够通过题号分批分次地检索答案，在本地计算分数。
         /// </remarks>
-        /// <returns>当前id对应问题的答案</returns>
-        /// <response code="200">返id对应的答案</response>
-        /// <response code="404">id对应的问题不存在</response>
-        [HttpGet("answer/{id}")]
-        [ProducesResponseType(typeof(CorrectAnswerViewModel), 200)]
+        /// /// <param name="id">问题对应的唯一ID</param>
+        /// <returns>ID对应问题的答案</returns>
+        /// <response code="200">返回ID对应问题的答案、分值</response>
+        /// <response code="404">ID没有对应的问题</response>
+        [HttpGet("Answer/{id}")]
+        [Authorize(Roles = "Student, Administrator")]
+        [ProducesResponseType(typeof(CorrectAnswerViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAnswerByID(int id)
         {
             var item = await unitOfWork.QuestionRepository.GetByIDAsync(id);
