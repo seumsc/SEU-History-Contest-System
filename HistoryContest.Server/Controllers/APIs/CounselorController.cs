@@ -20,59 +20,70 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
-        private IHostingEnvironment hostingEnvironment;
 
-        public CounselorController(UnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment)
+        public CounselorController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            this.hostingEnvironment = hostingEnvironment;
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
-        
+
         /// <summary>
         /// 下载当前辅导员所在院系所有学生分数情况的EXCEL表
         /// </summary>
         /// <remarks>
-        ///     无参数
-        ///     尚未测试
+        /// * 第一次下载excel统计表将在wwwroot/excel/ 目录下创建以院系id为名的xlsx文件并下载
+        /// * 之后**excel文件将保存在对应目录下**，再次下载时即可直接获取
+        /// 
+        /// excel中的统计信息包括:
+        /// 1. 学号
+        /// 2. 一卡通号
+        /// 3. 姓名
+        /// 4. 是否完成
+        /// 5. 得分
         /// </remarks>
-        /// <returns>院系学生EXCEL</returns>
-        /// <response code="200">返回本院系得分EXCEL</response>
-        [HttpGet("xlsx")]
-        public async Task<IActionResult> Export()
+        /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表</returns>
+        /// <response code="200">返回本院系得分EXCEL统计表</response>
+        /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
+        [HttpGet("ExportExcel")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ExportExcel()
         {
-            string sWebRootFolder = hostingEnvironment.WebRootPath;
-            string sFileName = "123321.xlsx";
-
-            // TODO : 改成从session中获取DepartmentID
-            var counselorid = int.Parse(HttpContext.Session.GetString("id"));
-            var id = (unitOfWork.CounselorRepository.GetByID(counselorid)).Department;
-
+            if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
+            { // 当前用户认证为辅导员，则取Session中的department为院系id
+                return BadRequest("Empty argument request invalid");
+            }
+            var id = (Department)HttpContext.Session.GetInt32("department");
+            string sWebRootFolder = Startup.Environment.WebRootPath;
+            string sFileName = @"excel/"+id.ToString()+".xlsx";
+            
             var datatable=(await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s);
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            using (ExcelPackage package = new ExcelPackage(file))
+            if (!file.Exists)
             {
-                // 添加worksheet
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("aspnetcore");
-                //添加头
-                worksheet.Cells[1, 1].Value = "学号";
-                worksheet.Cells[1, 2].Value = "一卡通号";
-                worksheet.Cells[1, 3].Value = "姓名";
-                worksheet.Cells[1, 4].Value = "是否完成";
-                worksheet.Cells[1, 5].Value = "得分";
-                //添加值
-                int number = 2;
-                foreach(var student in datatable)
+                using (ExcelPackage package = new ExcelPackage(file))
                 {
-                    worksheet.Cells[number, 1].Value = student.StudentID;
-                    worksheet.Cells[number, 2].Value = student.CardID;
-                    worksheet.Cells[number, 3].Value = student.Name;
-                    worksheet.Cells[number, 4].Value = student.IsCompleted?"是":"否";
-                    worksheet.Cells[number, 5].Value = student.Score;
-                    number++;
-                }
+                    // 添加worksheet
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("aspnetcore");
+                    //添加头
+                    worksheet.Cells[1, 1].Value = "学号";
+                    worksheet.Cells[1, 2].Value = "一卡通号";
+                    worksheet.Cells[1, 3].Value = "姓名";
+                    worksheet.Cells[1, 4].Value = "是否完成";
+                    worksheet.Cells[1, 5].Value = "得分";
+                    //添加值
+                    int number = 2;
+                    foreach(var student in datatable)
+                    {
+                        worksheet.Cells[number, 1].Value = student.StudentID;
+                        worksheet.Cells[number, 2].Value = student.CardID;
+                        worksheet.Cells[number, 3].Value = student.Name;
+                        worksheet.Cells[number, 4].Value = student.IsCompleted?"是":"否";
+                        worksheet.Cells[number, 5].Value = student.Score;
+                        number++;
+                    }
                 
-                package.Save();
+                    package.Save();
+                }
             }
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
