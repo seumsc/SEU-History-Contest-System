@@ -387,3 +387,4 @@ API实现
 * 成功解决了excel导出的问题
 * 第一次下载时对应院系得分情况将保存在新建的excel文件中，目录为wwwroot/excel/-----.xlsx    再次下载时会直接提供，不必再新建
 * 具体见api文档
+* Counselor中api接口功能由Counselorservice实现
