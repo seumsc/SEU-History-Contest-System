@@ -49,8 +49,10 @@
     <None Remove="yarn.lock" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\APIs\" />
     <Folder Include="Controllers\Databases\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.2" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

@@ -1,15 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
-// import Validator from 'vue-validator';
-// Vue.use(Validator);
-//require('./validator.js');
-/*
-@Component({
-    components: {
-        validator: require('./validator.js')
-    }
-})*/
+
 //validator malfunctioning at present.
 require('../../../Images/background0.jpg');
 require('../../../Images/background1.jpg');
@@ -22,32 +14,27 @@ require('../../../Images/background7.jpg');
 require('../../../Images/background8.jpg');
 
 //import boolstrap from 'boolstrap';
-var username= "";
+var username = "";
 var password = "";
-$(function(){
+$(function () {
 
-$("#submit").click(function(){
-  username = $("#username").val();
-  password = $("#password").val() 
-})  
-var bgCounter = 0;
-var backgrounds = [
-      "/dist/Images/background0.jpg",
-      "/dist/Images/background1.jpg",
-      "/dist/Images/background2.jpg",
-      "/dist/Images/background3.jpg",
-      "/dist/Images/background4.jpg",
-      "/dist/Images/background5.jpg",
-      "/dist/Images/background6.jpg",
-      "/dist/Images/background7.jpg",
-      "/dist/Images/background8.jpg"
+  var bgCounter = 0;
+  var backgrounds = [
+    "/dist/Images/background0.jpg",
+    "/dist/Images/background1.jpg",
+    "/dist/Images/background2.jpg",
+    "/dist/Images/background3.jpg",
+    "/dist/Images/background4.jpg",
+    "/dist/Images/background5.jpg",
+    "/dist/Images/background6.jpg",
+    "/dist/Images/background7.jpg",
+    "/dist/Images/background8.jpg"
 
-    ];
-  function changeBackground()
-  {
-    bgCounter = (bgCounter+1) % backgrounds.length;
+  ];
+  function changeBackground() {
+    bgCounter = (bgCounter + 1) % backgrounds.length;
 
-    $('.bg').fadeOut(1000,function(){$(this).attr('src',backgrounds[bgCounter])}).fadeIn(1000);
+    $('.bg').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
     setTimeout(changeBackground, 10000);
   }
   changeBackground();
@@ -55,19 +42,29 @@ var backgrounds = [
 
 
 // export default class AppComponent extends Vue {
-export default{
-data(){
-    return{
-      username:username,
-      password:password
-    } 
-  },
-  methods:{
-    isStu:function(){
-      this.$router.push({path:'/ans/sheet'})
-    },
-    isAdmin:function(){
-      this.$router.push({path:'/dashboard/statistics'})
+export default {
+  data() {
+    return {
+      username: username,
+      password: password
     }
+  },
+
+  methods: {
+    isStu: function () {
+      this.$router.push({ path: '/ans/sheet' })
+    },
+    isAdmin: function () {
+      this.$router.push({ path: '/dashboard/statistics' })
+    },
+    submit:function(usr,pwd){
+      if(usr && pwd ){
+        username = $("#username").val();
+        password = $("#password").val();
+        alert(username + " " + password);  
+      }
+
+    }
+
   }
 }
