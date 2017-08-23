@@ -38,12 +38,20 @@ $(function () {
   }
   changeBackground();
 
-
-  ///////////////////
+  $("#go-to-sign-in").click(function(){
+    $("#signin").css("display","");
+    $("#signup").css("display","none");    
+  });
+  $("#go-to-sign-up").click(function(){
+    $("#signin").css("display","none");
+    $("#signup").css("display","");    
+  });
 
 });
 var username = "";
 var password = "";
+
+
 export default {
   data() {
     return {
