@@ -110,13 +110,16 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AllStudentIDs(Department? id)
         {
-            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            if (id == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                id = (Department)HttpContext.Session.GetInt32("department");
-            }
-            else
-            {
-                return BadRequest("Empty argument request invalid");
+                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                {
+                    id = (Department)HttpContext.Session.GetInt32("department");
+                }
+                else
+                {
+                    return BadRequest("Empty argument request invalid");
+                }
             }
 
             if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
@@ -154,13 +157,16 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AllScoresByDepartment(Department? id)
         {
-            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            if (id == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                id = (Department)HttpContext.Session.GetInt32("department");
-            }
-            else
-            {
-                return BadRequest("Empty argument request invalid");
+                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                {
+                    id = (Department)HttpContext.Session.GetInt32("department");
+                }
+                else
+                {
+                    return BadRequest("Empty argument request invalid");
+                }
             }
 
             if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
@@ -227,7 +233,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(ScoreSummaryOfSchoolViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ScoreSummaryOfSchool()
         {
-            return Json(await counselorService.ScoreSummaryOfSchool());
+            return Json(await ScoreSummaryOfSchoolViewModel.CreateAsync(unitOfWork));
         }
 
         /// <summary>
@@ -257,13 +263,16 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ScoreSummaryByDepartment(Department? id)
         {
-            if (id == null && HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+            if (id == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                id = (Department)HttpContext.Session.GetInt32("department");
-            }
-            else
-            {
-                return BadRequest("Empty argument request invalid");
+                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                {
+                    id = (Department)HttpContext.Session.GetInt32("department");
+                }
+                else
+                {
+                    return BadRequest("Empty argument request invalid");
+                }
             }
 
             var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == id);
@@ -272,7 +281,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return NotFound();
             }
 
-            return Json(await counselorService.ScoreSummaryByDepartment(counselor));
+            return Json(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork, counselor));
         }
         #endregion
     }

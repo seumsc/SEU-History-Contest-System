@@ -3,6 +3,7 @@
 
 # History Contest
 HistoryContest.Server/Properties/launchSettings.json
+HistoryContest.Server/Properties/PublishProfiles
 HistoryContest.Wiki/index.html
 HistoryContest.Site/
 wwwroot/dist/

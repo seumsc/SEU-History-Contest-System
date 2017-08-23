@@ -51,45 +51,5 @@ namespace HistoryContest.Server.Services
             }
             return null;
         }
-
-        public async Task<ScoreSummaryOfSchoolViewModel> ScoreSummaryOfSchool()
-        {
-            // TODO: 全校的Score Summary来自/放入缓存, 及正确实现获取全校概况
-            var model = new ScoreSummaryOfSchoolViewModel
-            {
-                MaxScore = await unitOfWork.StudentRepository.HighestScore(),
-                AverageScore = await unitOfWork.StudentRepository.AverageScore(),
-                ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60)
-                },
-                UpdateTime = DateTime.Now
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeAsync() - model.ScoreBandCount.HigherThan60;
-            return model;
-        }
-
-        public async Task<ScoreSummaryByDepartmentViewModel> ScoreSummaryByDepartment(Counselor counselor)
-        {
-            // TODO: Score Summary放入缓存
-            var model = new ScoreSummaryByDepartmentViewModel
-            {
-                DepartmentID = counselor.Department,
-                CounselorName = counselor.Name,
-                MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
-                AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
-                ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department)
-                }
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department) - model.ScoreBandCount.HigherThan60;
-            return model;
-        }
-    }
-        
+    }      
 }

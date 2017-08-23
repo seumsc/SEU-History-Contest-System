@@ -63,7 +63,7 @@ namespace HistoryContest.Server.Controllers.APIs
         {
             if(!ModelState.IsValid)
             {
-                return BadRequest("Body JSON content invalid");
+                return BadRequest("Body JSON content invalid"); 
             }
             
 
