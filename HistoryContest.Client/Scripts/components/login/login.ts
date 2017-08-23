@@ -77,7 +77,7 @@ export default {
         info.password = password;
         var _this = this;
         $.ajax({
-          url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+          url: '/api/Account/Login', //请求的url地址
           type: "POST", //请求方式
           dataType: "json", //返回格式为json
           async: false, //一定要设置为同步orz
@@ -89,6 +89,7 @@ export default {
             if (req.isSuccessful) {
               if (req.userViewModel.role == "Student") {
                 _this.isStu();
+            
               }
               else if (req.userViewModel.role == "Counselor") {
                 _this.isAdmin();
