@@ -11,6 +11,7 @@ using HistoryContest.Server.Data;
 using System.IO;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Hosting;
+using HistoryContest.Server.Services;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -20,10 +21,12 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly CounselorService counselorService;
 
         public CounselorController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            counselorService = new CounselorService(unitOfWork);
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
@@ -56,34 +59,10 @@ namespace HistoryContest.Server.Controllers.APIs
             string sWebRootFolder = Startup.Environment.WebRootPath;
             string sFileName = @"excel/"+id.ToString()+".xlsx";
             
-            var datatable=(await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s);
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists)
             {
-                using (ExcelPackage package = new ExcelPackage(file))
-                {
-                    // 添加worksheet
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("aspnetcore");
-                    //添加头
-                    worksheet.Cells[1, 1].Value = "学号";
-                    worksheet.Cells[1, 2].Value = "一卡通号";
-                    worksheet.Cells[1, 3].Value = "姓名";
-                    worksheet.Cells[1, 4].Value = "是否完成";
-                    worksheet.Cells[1, 5].Value = "得分";
-                    //添加值
-                    int number = 2;
-                    foreach(var student in datatable)
-                    {
-                        worksheet.Cells[number, 1].Value = student.StudentID;
-                        worksheet.Cells[number, 2].Value = student.CardID;
-                        worksheet.Cells[number, 3].Value = student.Name;
-                        worksheet.Cells[number, 4].Value = student.IsCompleted?"是":"否";
-                        worksheet.Cells[number, 5].Value = student.Score;
-                        number++;
-                    }
-                
-                    package.Save();
-                }
+                await counselorService.CreateExcel(file,id);
             }
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
@@ -145,6 +124,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Forbid();
             }
 
+            //TODO : <yhy>将院系学生信息存入缓存中 1
             var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
             if (students == null)
             {
@@ -188,6 +168,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Forbid();
             }
 
+            //TODO : <yhy>将院系学生信息存入缓存中 2
             var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
             if (students == null)
             {
@@ -246,21 +227,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(ScoreSummaryOfSchoolViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ScoreSummaryOfSchool()
         {
-            // TODO: 全校的Score Summary来自/放入缓存, 及正确实现获取全校概况
-            var model = new ScoreSummaryOfSchoolViewModel
-            {
-                MaxScore = await unitOfWork.StudentRepository.HighestScore(),
-                AverageScore = await unitOfWork.StudentRepository.AverageScore(),
-                ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60)
-                },
-                UpdateTime = DateTime.Now
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeAsync() - model.ScoreBandCount.HigherThan60;
-            return Json(model);
+            return Json(await counselorService.ScoreSummaryOfSchool());
         }
 
         /// <summary>
@@ -305,22 +272,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return NotFound();
             }
 
-            // TODO: Score Summary放入缓存
-            var model = new ScoreSummaryByDepartmentViewModel
-            {
-                DepartmentID = counselor.Department,
-                CounselorName = counselor.Name,
-                MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
-                AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
-                ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department)
-                }
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department) - model.ScoreBandCount.HigherThan60;
-            return Json(model);
+            return Json(await counselorService.ScoreSummaryByDepartment(counselor));
         }
         #endregion
     }
