@@ -76,11 +76,11 @@ export default {
           var _this = this;
           $.ajax({
             url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+            type: "POST", //请求方式
             dataType: "json", //返回格式为json
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
             data:JSON.stringify(info),
             // data: JSON.stringify({"userName":username,"password":password}), //参数值
-            type: "POST", //请求方式
             // contentType:"application/json-patch+json;charset=utf-8",
             contentType: "application/json-patch+json",
             beforeSend: function () {
@@ -88,9 +88,10 @@ export default {
             },
             success: function (req) {
               // 请求成功时处理
+              alert("successful!");
               alert(JSON.stringify(req));
               if (req.isSuccessful) {
-                alert("success");
+                alert("valid login");
                 if (req.userViewModel.role == "Student") {
                   // window.location.href = "index.html";
                   _this.isStu();
