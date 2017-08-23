@@ -10,23 +10,27 @@ namespace HistoryContest.Server.Data.Repositories
 {
     public class StudentRepository : GenericRepository<Student>
     {
-        internal DbSet<Counselor> counselorSet;
+        //internal List<Counselor> counselorList;
+        //internal DbSet<Counselor> counselorSet;
 
         public StudentRepository(ContestContext context) : base(context)
         {
-            counselorSet = context.Set<Counselor>();
+            //counselorSet = context.Counselors;
+            //counselorSet = context.Counselors;
         }
 
         public void LoadStudentsFromCounselors()
         {
-            counselorSet.Include(c => c.Students);
-            //counselorSet.Load();
+            //counselorList = context.Counselors.Include(c => c.Students).ToList();
         }
 
         public async Task<ICollection<Student>> GetByDepartment(Department departmentID)
         {
-            var a = (await counselorSet.FirstOrDefaultAsync(c => c.Department == departmentID));
-            return a.Students;
+            //counselorSet.Load();
+            //context.Counselors.Where(c => c.Department == departmentID).Load();
+            //counselorSet.Include(c => c.Students);
+            var counselor = await context.Counselors.Where(c => c.Department == departmentID).Include(c => c.Students).SingleAsync();
+            return counselor.Students;
         }
 
         public async Task<int> SizeByDepartment(Department departmentID) =>
