@@ -55,7 +55,7 @@ namespace HistoryContest.Server.Models.ViewModels
         public static async Task<ScoreSummaryOfSchoolViewModel> CreateAsync(UnitOfWork unitOfWork)
         {
             var model = new ScoreSummaryOfSchoolViewModel
-            {
+            {// TODO: 全校的Score Summary来自/放入缓存, 及正确实现获取全校概况
                 MaxScore = await unitOfWork.StudentRepository.HighestScore(),
                 AverageScore = await unitOfWork.StudentRepository.AverageScore(),
                 ScoreBandCount =

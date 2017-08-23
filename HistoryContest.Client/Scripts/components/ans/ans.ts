@@ -18,10 +18,16 @@ export default {
 		}
 	},
 	mounted() {
+		this.send(),
 		this.load(),
 		this.loadcss()
 	},
 	methods: {
+		send:function(){
+			$.get("http://history-contest.chinacloudsites.cn/api/Student/State/Initialize",function(data){
+				alert(data);
+			})
+		},
 		load: function () {
 			var inTime = true;
 			var currentPage = 0;
