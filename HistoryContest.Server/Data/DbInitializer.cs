@@ -45,7 +45,10 @@ namespace HistoryContest.Server.Data
 
             var administrators = new Administrator[]
             {
-                new Administrator{ UserName = "vigilans", Name = "叶志浩", Email = "vigilans@foxmail.com", Password = "19970821" }
+                new Administrator{ UserName = "vigilans", Name = "叶志浩", Email = "vigilans@foxmail.com", Password = "19970821" },
+                new Administrator{ UserName = "yhy16901", Name = "杨航源", Email = "690094231@qq.com", Password = "19971020" },
+                new Administrator{ UserName = "Serica", Name = "罗崟洪", Email = "943914044@qq.com", Password = "19980417" },
+                new Administrator{ UserName = "DailinH", Name = "胡黛琳", Email = "username@seu.edu.cn", Password = "19980109" }
             };
             foreach (var a in administrators)
             {
