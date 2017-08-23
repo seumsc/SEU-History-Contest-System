@@ -239,7 +239,7 @@ namespace HistoryContest.Server
             });
             #endregion
 
-            DbInitializer.Initialize(context);
+            //DbInitializer.Initialize(context);
         }
     }
 

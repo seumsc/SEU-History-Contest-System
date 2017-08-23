@@ -13,8 +13,8 @@ using System;
 namespace HistoryContest.Server.Data.Migrations
 {
     [DbContext(typeof(ContestContext))]
-    [Migration("20170819033627_WebAPIRelease")]
-    partial class WebAPIRelease
+    [Migration("20170822154141_%1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,26 +22,6 @@ namespace HistoryContest.Server.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("HistoryContest.Server.Models.Entities.Administrator", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("HashedPassword");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Salt");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Administrators");
-                });
 
             modelBuilder.Entity("HistoryContest.Server.Models.Entities.AQuestionBase", b =>
                 {
