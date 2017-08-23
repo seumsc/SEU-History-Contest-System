@@ -7,25 +7,55 @@
                 <img src="../../../Images/logo.png" alt="东大校徽">
             </div>
             <div class="container">
-                <div class="row">
+                <div class="row" id="signin">
                     <div class="col-md-6 col-md-offset-3">
-                        <form id = "loginForm" class="form-horizontal"><!-- action="xxxx.asp"-->
+                        <form id="loginForm" class="form-horizontal">
+                            <!-- action="xxxx.asp"-->
                             <span class="heading">校史校情知识竞赛</span>
                             <div class="form-group username-field">
                                 <input type="text" id="username" class="form-control" required autofocus placeholder="账号为学号" name="usr" title="账号为八位学号！"
-                                      autocomplete="off"/>
+                                    autocomplete="off" />
                                 <span class="glyphicon glyphicon-user"></span>
-
                             </div>
                             <div class="form-group">
-                                <input type="password" id="password" class="form-control"  required placeholder="密码为一卡通号" name="pwd"
-                                    title="密码为九位一卡通号！" autocomplete="off"/>
+                                <input type="password" id="password" class="form-control" required placeholder="密码为一卡通号" name="pwd" title="密码为九位一卡通号！" autocomplete="off"
+                                />
                                 <span class="glyphicon glyphicon-lock"></span>
                             </div>
 
                             <div class="form-group">
-                                <a id="ans" @click="isStu">答题页</a> <a id="dash" @click="isAdmin">后台</a>
-                                <button @click = "submit" id="submit" class="btn btn-default">登录</button>
+                                <a id="go-to-sign-up" >注册</a>
+                                <button @click="submit" id="submit" class="btn btn-default">登录</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="row" id="signup" style="display:none">
+                    <div class="col-md-6 col-md-offset-3">
+                        <form id="loginForm" class="form-horizontal">
+                            <!-- action="xxxx.asp"-->
+                            <span class="heading">校史校情知识竞赛</span>
+                            <div class="form-group username-field">
+                                <input type="text" id="signup-username" class="form-control" required autofocus placeholder="请输入账号（8位学号）" name="usr" autocomplete="off"
+                                />
+                                <span class="glyphicon glyphicon-user"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="signup-password" class="form-control" required placeholder="请输入学号（9位一卡通号）" name="pwd" autocomplete="off"
+                                />
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="signup-name" class="form-control" required placeholder="请输入姓名" name="name" autocomplete="off" />
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <a id="go-to-sign-in">登陆</a>
+                                <button @click="submit-sign" id="submit" class="btn btn-default">注册</button>
                             </div>
                         </form>
 
