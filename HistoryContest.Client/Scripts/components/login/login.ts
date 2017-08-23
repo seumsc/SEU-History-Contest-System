@@ -59,6 +59,7 @@ export default {
     },
     submit:function(){
         if (verify() == true) {
+          alert("valid login info!");
           username = $("#username").val();
           password = $("#password").val();
           var info = {
@@ -73,8 +74,8 @@ export default {
             url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
             dataType: "json", //返回格式为json
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-            //data
-            data: JSON.stringify({"userName":username,"password":password}), //参数值
+            data:JSON.stringify(info),
+            // data: JSON.stringify({"userName":username,"password":password}), //参数值
             type: "POST", //请求方式
             // contentType:"application/json-patch+json;charset=utf-8",
             contentType: "application/json-patch+json",
@@ -108,11 +109,11 @@ export default {
             }
           });
     
-        // }
+        }
     
         }
     
     }
 
-  }
+  // }
 }
