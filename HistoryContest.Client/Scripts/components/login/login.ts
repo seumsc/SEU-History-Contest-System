@@ -58,14 +58,18 @@ export default {
       this.$router.push({ path: '/dashboard/statistics' })
     },
     submit:function(){
-        if (verify() == true) {
-          alert("valid login info!");
+    if (true/*verify() == true*/) {
+          // alert("valid login info!");
           username = $("#username").val();
           password = $("#password").val();
           var info = {
-            "userName": username,
-            "password": password
-          }
+            "userName":"",
+            "password":""
+          };
+          info.userName= username;
+          info.password= password;
+          // alert(info);
+
           // alert(JSON.stringify(info));
           // alert(info);
           // alert(verify());
@@ -80,7 +84,7 @@ export default {
             // contentType:"application/json-patch+json;charset=utf-8",
             contentType: "application/json-patch+json",
             beforeSend: function () {
-              alert(this.data);//请求前的处理
+              alert("beforesend");//请求前的处理
             },
             success: function (req) {
               // 请求成功时处理
@@ -102,10 +106,10 @@ export default {
               alert("complete");
               //请求完成的处理
             },
-            error: function () {
-              alert("error");
+            error: function (request) {
+              alert("error:"+JSON.stringify(request));
               //请求出错处理
-              alert("登录失败,请检查网络是否通畅");
+              // alert("登录失败,请检查网络是否通畅");
             }
           });
     
