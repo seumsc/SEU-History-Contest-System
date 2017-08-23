@@ -32,6 +32,7 @@ namespace HistoryContest.Server.Data
 
             modelBuilder.Entity<Counselor>()
                 .HasIndex(c => c.Department);
+
         }
     }
 }
