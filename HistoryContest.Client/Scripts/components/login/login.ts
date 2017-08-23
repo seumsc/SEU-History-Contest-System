@@ -38,12 +38,20 @@ $(function () {
   }
   changeBackground();
 
-
-  ///////////////////
+  $("#go-to-sign-in").click(function(){
+    $("#signin").css("display","");
+    $("#signup").css("display","none");    
+  });
+  $("#go-to-sign-up").click(function(){
+    $("#signin").css("display","none");
+    $("#signup").css("display","");    
+  });
 
 });
 var username = "";
 var password = "";
+
+
 export default {
   data() {
     return {
@@ -52,68 +60,55 @@ export default {
 
   methods: {
     isStu: function () {
-      this.$router.push({ path: '/ans/sheet' })
+      this.$router.replace({ path: '/ans/sheet' })
     },
     isAdmin: function () {
-      this.$router.push({ path: '/dashboard/statistics' })
+      this.$router.replace({ path: '/dashboard/statistics' })
     },
-    submit:function(){
-        if (verify() == true) {
-          alert("valid login info!");
-          username = $("#username").val();
-          password = $("#password").val();
-          var info = {
-            "userName": username,
-            "password": password
+    submit: function () {
+      if (verify() == true) {
+        username = $("#username").val();
+        password = $("#password").val();
+        var info = {
+          "userName": "",
+          "password": ""
+        };
+        info.userName = username;
+        info.password = password;
+        var _this = this;
+        $.ajax({
+          url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+          type: "POST", //请求方式
+          dataType: "json", //返回格式为json
+          async: false, //一定要设置为同步orz
+          data: JSON.stringify(info),
+          contentType: "application/json-patch+json;charset=utf-8",
+          beforeSend: function () {
+          },
+          success: function (req) {
+            if (req.isSuccessful) {
+              if (req.userViewModel.role == "Student") {
+                _this.isStu();
+              }
+              else if (req.userViewModel.role == "Counselor") {
+                _this.isAdmin();
+              }
+              else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
+            } else alert("登录失败,请检查用户名或密码是否正确")
+          },
+          complete: function () {
+          },
+          error: function (request) {
+            alert("error:" + JSON.stringify(request));
+            alert("登录失败,请检查网络是否通畅");
           }
-          // alert(JSON.stringify(info));
-          // alert(info);
-          // alert(verify());
-          var _this = this;
-          $.ajax({
-            url: 'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
-            dataType: "json", //返回格式为json
-            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-            data:JSON.stringify(info),
-            // data: JSON.stringify({"userName":username,"password":password}), //参数值
-            type: "POST", //请求方式
-            // contentType:"application/json-patch+json;charset=utf-8",
-            contentType: "application/json-patch+json",
-            beforeSend: function () {
-              alert(this.data);//请求前的处理
-            },
-            success: function (req) {
-              // 请求成功时处理
-              alert(JSON.stringify(req));
-              if (req.isSuccessful) {
-                alert("success");
-                if (req.userViewModel.role == "Student") {
-                  // window.location.href = "index.html";
-                  _this.isStu();
-                  // this.$router.push({ path: '/ans/sheet' })
-                } else {
-                  _this.isAdmin();
-                  // window.location.href = "dashboard.html";
-                  // this.$router.push({ path: '/dashboard/statistics' })              
-                }
-              } else alert("登录失败,请检查用户名或密码是否正确")
-            },
-            complete: function () {
-              alert("complete");
-              //请求完成的处理
-            },
-            error: function () {
-              alert("error");
-              //请求出错处理
-              alert("登录失败,请检查网络是否通畅");
-            }
-          });
-    
-        }
-    
-        }
-    
+        });
+
+      }
+
     }
+
+  }
 
   // }
 }

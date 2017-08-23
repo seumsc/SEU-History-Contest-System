@@ -34,8 +34,9 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 下载当前辅导员所在院系所有学生分数情况的EXCEL表
         /// </summary>
         /// <remarks>
-        /// * 第一次下载excel统计表将在wwwroot/excel/ 目录下创建以院系id为名的xlsx文件并下载
-        /// * 之后**excel文件将保存在对应目录下**，再次下载时即可直接获取
+        /// 无需参数，通过Session中department获取院系id
+        /// * 下载excel统计表将在wwwroot/excel/ 目录下创建以院系id为名的xlsx文件并下载
+        /// * 如果之前文件已经存在将会删除并重新创建，以同步更新数据
         /// 
         /// excel中的统计信息包括:
         /// 1. 学号
@@ -47,9 +48,9 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表</returns>
         /// <response code="200">返回本院系得分EXCEL统计表</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
-        [HttpGet("ExportExcel")]
+        [HttpGet("ExportDepartmentExcel")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ExportExcel()
+        public async Task<IActionResult> ExportDepartmentExcel()
         {
             if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
             { // 当前用户认证为辅导员，则取Session中的department为院系id
@@ -60,10 +61,51 @@ namespace HistoryContest.Server.Controllers.APIs
             string sFileName = @"excel/"+id.ToString()+".xlsx";
             
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            if (!file.Exists)
+            if (file.Exists)
             {
-                await counselorService.CreateExcel(file,id);
+                file.Delete();
             }
+            await counselorService.CreateExcelByDepartmentid(file,id);
+            return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
+
+        /// <summary>
+        /// 下载全校各个院系分数概况的EXCEL表
+        /// </summary>
+        /// <remarks>
+        /// 无需参数
+        /// * 第一次下载excel统计表将在wwwroot/excel/ 目录下创建 ScoreSummaryOfAllDepartments.xlsx 并下载
+        /// * 如果之前文件已经存在将会删除并重新创建，以同步更新数据
+        /// 
+        /// excel中的统计信息包括:
+        /// 1. 院系ID
+        /// 2. 辅导员姓名
+        /// 3. 最高分
+        /// 4. 平均分
+        /// 5. 分数段对应人数
+        ///     - >=90 , >=75 , >=60 , 小于60
+        /// </remarks>
+        /// <returns>全校各院系分数概况excel表</returns>
+        /// <response code="200">返回各院系得分概况EXCEL统计表</response>
+        /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
+        [HttpGet("ExportExcelOfAllDepartments")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ExportExcelOfAllDepartments()
+        {
+            if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
+            { // 当前用户认证为辅导员，则取Session中的department为院系id
+                return BadRequest("Empty argument request invalid");
+            }
+            
+            string sWebRootFolder = Startup.Environment.WebRootPath;
+            string sFileName = @"excel/" + "ScoreSummaryOfAllDepartments.xlsx";
+
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+            }
+            await counselorService.CreateExcelOfAllDepartments(file);
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 

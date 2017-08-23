@@ -388,3 +388,10 @@ API实现
 * 第一次下载时对应院系得分情况将保存在新建的excel文件中，目录为wwwroot/excel/-----.xlsx    再次下载时会直接提供，不必再新建
 * 具体见api文档
 * Counselor中api接口功能由Counselorservice实现
+
+## 8.23
+
+* 根据yzh将计算scoresummary的代码重构（在viewmodel中添加静态方法，unitOfWork作为参数），并修复若干bug
+* 将excel下载改为每次都重新创建以同步更新数据
+* 添加了统计全校各院系分数概况的excel下载的api
+* api设计具体见文档
