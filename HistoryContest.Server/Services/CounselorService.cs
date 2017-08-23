@@ -5,6 +5,7 @@ using HistoryContest.Server.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,9 +22,8 @@ namespace HistoryContest.Server.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> CreateExcel(FileInfo file, Department id)
+        public async Task<IActionResult> CreateExcelByDepartmentid(FileInfo file, Department id)
         {
-            //TODO : <yhy>将院系得分存入缓存中   ？可能会有students (括号中) 为null
             var datatable = (await unitOfWork.StudentRepository.GetByDepartment(id)).AsQueryable().Select(s => (StudentViewModel)s);
             using (ExcelPackage package = new ExcelPackage(file))
             {
@@ -52,43 +52,50 @@ namespace HistoryContest.Server.Services
             return null;
         }
 
-        public async Task<ScoreSummaryOfSchoolViewModel> ScoreSummaryOfSchool()
+        public async Task<IActionResult> CreateExcelOfAllDepartments(FileInfo file)
         {
-            // TODO: 全校的Score Summary来自/放入缓存, 及正确实现获取全校概况
-            var model = new ScoreSummaryOfSchoolViewModel
-            {
-                MaxScore = await unitOfWork.StudentRepository.HighestScore(),
-                AverageScore = await unitOfWork.StudentRepository.AverageScore(),
-                ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60)
-                },
-                UpdateTime = DateTime.Now
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeAsync() - model.ScoreBandCount.HigherThan60;
-            return model;
-        }
+            var counselors = unitOfWork.context.Counselors.Where(m => 1==1);
 
-        public async Task<ScoreSummaryByDepartmentViewModel> ScoreSummaryByDepartment(Counselor counselor)
-        {
-            // TODO: Score Summary放入缓存
-            var model = new ScoreSummaryByDepartmentViewModel
+            List<ScoreSummaryByDepartmentViewModel> datatable = null;
+            foreach (var counselor in counselors)
             {
-                DepartmentID = counselor.Department,
-                CounselorName = counselor.Name,
-                MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
-                AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
-                ScoreBandCount =
+                datatable.Add(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork,counselor));
+            }
+
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                // 添加worksheet
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("aspnetcore");
+                //添加头
+                worksheet.Cells[1, 1].Value = "院系";
+                worksheet.Cells[1, 2].Value = "辅导员";
+                worksheet.Cells[1, 3].Value = "最高分";
+                worksheet.Cells[1, 4].Value = "平均分";
+                worksheet.Cells[1, 5].Value = "分数分布";
+                worksheet.Cells[1, 6].Value = ">=90";
+                worksheet.Cells[1, 7].Value = ">=75";
+                worksheet.Cells[1, 8].Value = ">=60";
+                worksheet.Cells[1, 9].Value = "<60";
+
+                //添加值
+                int number = 2;
+                foreach (var scoreSummary in datatable)
                 {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department)
+                    worksheet.Cells[number, 1].Value = scoreSummary.DepartmentID;
+                    worksheet.Cells[number, 2].Value = scoreSummary.CounselorName;
+                    worksheet.Cells[number, 3].Value = scoreSummary.MaxScore;
+                    worksheet.Cells[number, 4].Value = scoreSummary.AverageScore;
+                    worksheet.Cells[number, 6].Value = scoreSummary.ScoreBandCount.HigherThan90;
+                    worksheet.Cells[number, 7].Value = scoreSummary.ScoreBandCount.HigherThan75;
+                    worksheet.Cells[number, 8].Value = scoreSummary.ScoreBandCount.HigherThan60;
+                    worksheet.Cells[number, 9].Value = scoreSummary.ScoreBandCount.Failed;
+
+                    number++;
                 }
-            };
-            model.ScoreBandCount.Failed = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department) - model.ScoreBandCount.HigherThan60;
-            return model;
+
+                package.Save();
+            }
+            return null;
         }
     }
         
