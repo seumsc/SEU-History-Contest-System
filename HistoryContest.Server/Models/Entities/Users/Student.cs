@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace HistoryContest.Server.Models.Entities
 {
@@ -11,6 +12,7 @@ namespace HistoryContest.Server.Models.Entities
     public class Student : IUserBase
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)] // ID为学生学号，而不是由数据库自动生成
+        [JsonConverter(typeof(HexIDConverter))]
         public int ID { get; set; }
         public string Name { get; set; }
         public int CardID { get; set; }

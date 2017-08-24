@@ -27,47 +27,47 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»Î»Ñ§ÉúµÄ¿¼ÊÔ½á¹û
+        /// è·å–ä¸€ä½å­¦ç”Ÿçš„è€ƒè¯•ç»“æœ
         /// </summary>
         /// <remarks>
-        /// ¸ù¾İÑ§ÉúµÄÑ§ºÅ(ID)·µ»Ø¸ÃÑ§ÉúµÄ¿¼ÊÔ½á¹û¡£
+        /// æ ¹æ®å­¦ç”Ÿçš„å­¦å·(ID)è¿”å›è¯¥å­¦ç”Ÿçš„è€ƒè¯•ç»“æœã€‚
         ///    
-        /// ID²ÎÊıÊÇ¿ÉÑ¡µÄ¡£Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤ÎªÑ§Éú£¬ÔòÈ¡SessionÖĞµÄÑ§ºÅ×÷ÎªID¡£
+        /// IDå‚æ•°æ˜¯å¯é€‰çš„ã€‚å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºå­¦ç”Ÿï¼Œåˆ™å–Sessionä¸­çš„å­¦å·ä½œä¸ºIDã€‚
         ///    
-        /// Ê¹ÓÃÇé¾°£º
-        /// 1. Ñ§Éú¿¼ÊÔÍê±ÏºóÖØĞÂµÇÂ¼Ê±£¬½«Ò³ÃæÖØ¶¨Ïòµ½µ÷ÓÃÕâ¸öapi£»
-        /// 2. ¸¨µ¼Ô±ÔÚ¿´±¾ÔºµÃ·ÖÇé¿öÊ±£¬ÏëÒª²é¿´Ä³Î»Ñ§ÉúµÄ¿¼ÊÔÏêÏ¸Ï¸½Ú¡£
+        /// ä½¿ç”¨æƒ…æ™¯ï¼š
+        /// 1. å­¦ç”Ÿè€ƒè¯•å®Œæ¯•åé‡æ–°ç™»å½•æ—¶ï¼Œå°†é¡µé¢é‡å®šå‘åˆ°è°ƒç”¨è¿™ä¸ªapiï¼›
+        /// 2. è¾…å¯¼å‘˜åœ¨çœ‹æœ¬é™¢å¾—åˆ†æƒ…å†µæ—¶ï¼Œæƒ³è¦æŸ¥çœ‹æŸä½å­¦ç”Ÿçš„è€ƒè¯•è¯¦ç»†ç»†èŠ‚ã€‚
         /// </remarks>
-        /// <param name="id">Ñ§ÉúµÄÑ§ºÅ£¨¿ÉÑ¡£©</param>
-        /// <returns>Ñ§ºÅ¶ÔÓ¦µÄ¿¼ÊÔ½á¹û</returns>
+        /// <param name="id">å­¦ç”Ÿçš„å­¦å·ï¼ˆå¯é€‰ï¼‰</param>
+        /// <returns>å­¦å·å¯¹åº”çš„è€ƒè¯•ç»“æœ</returns>
         /// <response code="200">
-        /// ·µ»ØÓû²éÑ¯µÄÑ§ÉúµÄ¿¼ÊÔ½á¹û£¬ÓÉÒÔÏÂ¼¸²¿·Ö×é³É£º
-        /// * ·ÖÊı
-        /// * Íê³ÉÊ±¼ä¡¢¿¼ÊÔÓÃÊ±
-        /// * ´ğÌâÏ¸½Ú
-        ///     - ´ğÌâÏ¸½ÚÎª±»²éÑ¯µÄÑ§ÉúËù×öµÄ30µÀÌâµÄÇé¿ö¹¹³ÉµÄÊı×é£¬
-        ///       Ã¿¸öÔªËØÓÉÎÊÌâID¡¢ÕıÈ·´ğ°¸¡¢Ñ§ÉúÌá½»µÄ´ğ°¸¹¹³É¡£
+        /// è¿”å›æ¬²æŸ¥è¯¢çš„å­¦ç”Ÿçš„è€ƒè¯•ç»“æœï¼Œç”±ä»¥ä¸‹å‡ éƒ¨åˆ†ç»„æˆï¼š
+        /// * åˆ†æ•°
+        /// * å®Œæˆæ—¶é—´ã€è€ƒè¯•ç”¨æ—¶
+        /// * ç­”é¢˜ç»†èŠ‚
+        ///     - ç­”é¢˜ç»†èŠ‚ä¸ºè¢«æŸ¥è¯¢çš„å­¦ç”Ÿæ‰€åšçš„30é“é¢˜çš„æƒ…å†µæ„æˆçš„æ•°ç»„ï¼Œ
+        ///       æ¯ä¸ªå…ƒç´ ç”±é—®é¢˜IDã€æ­£ç¡®ç­”æ¡ˆã€å­¦ç”Ÿæäº¤çš„ç­”æ¡ˆæ„æˆã€‚
         /// </response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇÑ§Éú»ò¶ÔÓ¦SessionÖĞÃ»ÓĞID</response>
-        /// <response code="403">±»²éÑ¯µÄÑ§ÉúÃ»ÓĞÍê³É¿¼ÊÔ</response>
-        /// <response code="404">´«ÈëIDÃ»ÓĞ¶ÔÓ¦µÄÑ§Éú</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯å­¦ç”Ÿæˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰ID</response>
+        /// <response code="403">è¢«æŸ¥è¯¢çš„å­¦ç”Ÿæ²¡æœ‰å®Œæˆè€ƒè¯•</response>
+        /// <response code="404">ä¼ å…¥IDæ²¡æœ‰å¯¹åº”çš„å­¦ç”Ÿ</response>
         [HttpGet("{id?}")]
         [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetResult(int? id)
+        public async Task<IActionResult> GetResult(string id)
         {
             if (id == null && HttpContext.User.IsInRole("Student") && HttpContext.Session.Get("id") != null)
-            { // Èç¹û²»ÊäÈëid£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤ÎªÑ§Éú£¬ÔòÈ¡SessionÖĞµÄÑ§ºÅ×÷Îªid
-                id = int.Parse(HttpContext.Session.GetString("id"));
+            { // å¦‚æœä¸è¾“å…¥idï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºå­¦ç”Ÿï¼Œåˆ™å–Sessionä¸­çš„å­¦å·ä½œä¸ºid
+                id = HttpContext.Session.GetString("id");
             }
             else
             {
                 return BadRequest("Empty argument request invalid");
             }
 
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(id);
+            var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
             if(student == null)
             {
                 return NotFound("Student not found");
@@ -78,7 +78,7 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             var model = new ResultViewModel();
-            // TODO: ½«model´Ó»º´æÖĞÈ¡³ö£¨°´Ctrl + Alt + K´ò¿ªTODOÁĞ±í£©
+            // TODO: å°†modelä»ç¼“å­˜ä¸­å–å‡ºï¼ˆæŒ‰Ctrl + Alt + Kæ‰“å¼€TODOåˆ—è¡¨ï¼‰
             
             model.Score = (int)student.Score;
             model.Details = student.QuestionSeed.QuestionIDs.Zip(student.Choices, (ID, choice) => new ResultDetailViewModel
@@ -94,17 +94,17 @@ namespace HistoryContest.Server.Controllers.APIs
 
 
         /// <summary>
-        /// ¼ÆËãÑ§Éú¿¼ÊÔ·ÖÊı
+        /// è®¡ç®—å­¦ç”Ÿè€ƒè¯•åˆ†æ•°
         /// </summary>
         /// <remarks>
-        /// **×¢Òâ**£ºÄ¿Ç°ºó¶ËµÄÊµÏÖÔİÊ±ÈÔÔÚ²ÉÓÃ*±éÀúÇ°¶Ë´«¹ıÀ´µÄanswersÊı×é*À´¼ÆËã·ÖÊı£¨Ò²¾ÍÊÇËµÑ§ÉúÃ»Ñ¡´ğ°¸µÄÌâÄ¿Èç¹ûÃ»ÓĞ´«¸øºó¶Ë£¬»áÔì³ÉÒÅÂ©£©
+        /// **æ³¨æ„**ï¼šç›®å‰åç«¯çš„å®ç°æš‚æ—¶ä»åœ¨é‡‡ç”¨*éå†å‰ç«¯ä¼ è¿‡æ¥çš„answersæ•°ç»„*æ¥è®¡ç®—åˆ†æ•°ï¼ˆä¹Ÿå°±æ˜¯è¯´å­¦ç”Ÿæ²¡é€‰ç­”æ¡ˆçš„é¢˜ç›®å¦‚æœæ²¡æœ‰ä¼ ç»™åç«¯ï¼Œä¼šé€ æˆé—æ¼ï¼‰
         /// </remarks>
-        /// <param name="answers">ÎÊÌâIDÓë¿¼ÉúÑ¡ÔñËù¹¹Êı×é</param>
-        /// <returns>¿¼ÉúµÄ¿¼ÊÔ½á¹û</returns>
-        /// <response code="200">·µ»Ø¿¼ÉúµÄ¿¼ÊÔ½á¹û¡£¸Ã½á¹ûJSONµÄÄ£ĞÍÓë`GET api/Result/{id}`ÏàÍ¬£¬¿ÉÒÔÔÚ½«À´ÖØĞÂ²éÑ¯µ½</response>
+        /// <param name="answers">é—®é¢˜IDä¸è€ƒç”Ÿé€‰æ‹©æ‰€æ„æ•°ç»„</param>
+        /// <returns>è€ƒç”Ÿçš„è€ƒè¯•ç»“æœ</returns>
+        /// <response code="200">è¿”å›è€ƒç”Ÿçš„è€ƒè¯•ç»“æœã€‚è¯¥ç»“æœJSONçš„æ¨¡å‹ä¸`GET api/Result/{id}`ç›¸åŒï¼Œå¯ä»¥åœ¨å°†æ¥é‡æ–°æŸ¥è¯¢åˆ°</response>
         /// <response code="400">
-        /// * ´«½øµÄÊı×é¸ñÊ½²»ºÏ·¨
-        /// * ´ğ°¸Êı×éÀïÓĞÒ»¸öIDÃ»ÓĞ¶ÔÓ¦µÄÎÊÌâ
+        /// * ä¼ è¿›çš„æ•°ç»„æ ¼å¼ä¸åˆæ³•
+        /// * ç­”æ¡ˆæ•°ç»„é‡Œæœ‰ä¸€ä¸ªIDæ²¡æœ‰å¯¹åº”çš„é—®é¢˜
         /// </response>
         [HttpPost]
         [Authorize(Roles = "Student, Administrator")]
@@ -113,11 +113,11 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> answers)
         {
             if(!ModelState.IsValid)
-            { // TODO:<yzh> ¿ÉÄÜĞèÒª¼ì²éÊı×éµÄsizeÊÇ·ñÕıÈ·
+            { // TODO:<yzh> å¯èƒ½éœ€è¦æ£€æŸ¥æ•°ç»„çš„sizeæ˜¯å¦æ­£ç¡®
                 return BadRequest("Body JSON content invalid");
             }
 
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(int.Parse(HttpContext.Session.GetString("id")));
+            var student = await unitOfWork.StudentRepository.GetByIDAsync(HttpContext.Session.GetString("id").ToIntID());
             student.Score = 0;
             student.DateTimeFinished = DateTime.Now;
             student.TimeConsumed = student.DateTimeFinished - HttpContext.Session.Get<DateTime>("beginTime");
@@ -141,21 +141,21 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
 
-            // TODO: ½«model´æµ½»º´æ
+            // TODO: å°†modelå­˜åˆ°ç¼“å­˜
             unitOfWork.StudentRepository.Update(student);
             await unitOfWork.SaveAsync();
             return Json(model);
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»Ì×ÊÔ¾íµÄËùÓĞ´ğ°¸
+        /// è·å–ä¸€å¥—è¯•å·çš„æ‰€æœ‰ç­”æ¡ˆ
         /// </summary>
         /// <remarks>
-        /// Õâ¸öAPI½«ÎÊÌâÖÖ×Ó¶ÔÓ¦µÄËùÓĞÎÊÌâµÄ´ğ°¸¼°·ÖÖµ·µ»Ø£¬ÈÃÇ°¶ËÔÚ±¾µØ¼ÆËã·ÖÊı¡£¿ÉÄÜÔÚ·Öµ£·şÎñÆ÷¼ÆËã¸ºµ£ÉÏÓĞËù°ïÖú¡£  
+        /// è¿™ä¸ªAPIå°†é—®é¢˜ç§å­å¯¹åº”çš„æ‰€æœ‰é—®é¢˜çš„ç­”æ¡ˆåŠåˆ†å€¼è¿”å›ï¼Œè®©å‰ç«¯åœ¨æœ¬åœ°è®¡ç®—åˆ†æ•°ã€‚å¯èƒ½åœ¨åˆ†æ‹…æœåŠ¡å™¨è®¡ç®—è´Ÿæ‹…ä¸Šæœ‰æ‰€å¸®åŠ©ã€‚  
         /// </remarks>
-        /// <returns>µ±Ç°ÎÊÌâÖÖ×Ó¶ÔÓ¦µÄËùÓĞÎÊÌâµÄ´ğ°¸</returns>
-        /// <response code="200">·µ»Øµ±Ç°ÓÃ»§SessionÖĞ´æ´¢µÄÖÖ×ÓÖĞµÄËùÓĞÎÊÌâµÄ´ğ°¸¡¢·ÖÖµ</response>
-        /// <response code="400">µ±Ç°ÓÃ»§Ã»ÓĞ¶ÔÓ¦µÄÎÊÌâÖÖ×Ó</response>
+        /// <returns>å½“å‰é—®é¢˜ç§å­å¯¹åº”çš„æ‰€æœ‰é—®é¢˜çš„ç­”æ¡ˆ</returns>
+        /// <response code="200">è¿”å›å½“å‰ç”¨æˆ·Sessionä¸­å­˜å‚¨çš„ç§å­ä¸­çš„æ‰€æœ‰é—®é¢˜çš„ç­”æ¡ˆã€åˆ†å€¼</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·æ²¡æœ‰å¯¹åº”çš„é—®é¢˜ç§å­</response>
         [HttpGet("Answer")]
         [Authorize(Roles = "Student, Administrator")]
         [ProducesResponseType(typeof(List<CorrectAnswerViewModel>), StatusCodes.Status200OK)]
@@ -171,7 +171,7 @@ namespace HistoryContest.Server.Controllers.APIs
             var source = await questionSeedService.GetQuestionsBySeedID((int)seed);
             if (source == null)
             {
-                // TODO: ÏêÏ¸¶¨ÒåÒì³£
+                // TODO: è¯¦ç»†å®šä¹‰å¼‚å¸¸
                 throw new Exception("Improper seed created, ID: " + seed);
             }
 
@@ -179,15 +179,15 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»µÀÌâµÄ´ğ°¸
+        /// è·å–ä¸€é“é¢˜çš„ç­”æ¡ˆ
         /// </summary>
         /// <remarks>
-        /// Õâ¸öAPIÖ÷ÒªÊÇÅäºÏ `POST api/question` Ê¹ÓÃ£¬Ê¹Ç°¶ËÄÜ¹»Í¨¹ıÌâºÅ·ÖÅú·Ö´ÎµØ¼ìË÷´ğ°¸£¬ÔÚ±¾µØ¼ÆËã·ÖÊı¡£
+        /// è¿™ä¸ªAPIä¸»è¦æ˜¯é…åˆ `POST api/question` ä½¿ç”¨ï¼Œä½¿å‰ç«¯èƒ½å¤Ÿé€šè¿‡é¢˜å·åˆ†æ‰¹åˆ†æ¬¡åœ°æ£€ç´¢ç­”æ¡ˆï¼Œåœ¨æœ¬åœ°è®¡ç®—åˆ†æ•°ã€‚
         /// </remarks>
-        /// /// <param name="id">ÎÊÌâ¶ÔÓ¦µÄÎ¨Ò»ID</param>
-        /// <returns>ID¶ÔÓ¦ÎÊÌâµÄ´ğ°¸</returns>
-        /// <response code="200">·µ»ØID¶ÔÓ¦ÎÊÌâµÄ´ğ°¸¡¢·ÖÖµ</response>
-        /// <response code="404">IDÃ»ÓĞ¶ÔÓ¦µÄÎÊÌâ</response>
+        /// /// <param name="id">é—®é¢˜å¯¹åº”çš„å”¯ä¸€ID</param>
+        /// <returns>IDå¯¹åº”é—®é¢˜çš„ç­”æ¡ˆ</returns>
+        /// <response code="200">è¿”å›IDå¯¹åº”é—®é¢˜çš„ç­”æ¡ˆã€åˆ†å€¼</response>
+        /// <response code="404">IDæ²¡æœ‰å¯¹åº”çš„é—®é¢˜</response>
         [HttpGet("Answer/{id}")]
         [Authorize(Roles = "Student, Administrator")]
         [ProducesResponseType(typeof(CorrectAnswerViewModel), StatusCodes.Status200OK)]

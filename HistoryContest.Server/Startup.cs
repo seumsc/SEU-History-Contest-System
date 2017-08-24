@@ -129,6 +129,8 @@ namespace HistoryContest.Server
                     Contact = new Contact { Name = "Vigilans", Email = "vigilans@foxmail.com", Url = "http://history-contest.chinacloudsites.cn/wiki" }
                 });
 
+                c.DescribeAllEnumsAsStrings();
+
                 //Set the comments path for the swagger json and ui.
                 var basePath = PlatformServices.Default.Application.ApplicationBasePath;
                 var xmlPath = Path.Combine(basePath, "HistoryContest.Server.xml");
@@ -167,7 +169,10 @@ namespace HistoryContest.Server
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseCors("OpenPolicy");
+            //app.UseCors("OpenPolicy");
+
+            // enable status code response page
+            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
             #region Static file routes
             // use wwwroot static files
@@ -233,13 +238,19 @@ namespace HistoryContest.Server
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                //routes.MapSpaFallbackRoute(
-                //    name: "spa-fallback",
-                //    defaults: new { controller = "Home", action = "Index" });
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
             #endregion
 
-            DbInitializer.Initialize(context);
+            
+            // Seed database
+            if (!context.AllMigrationsApplied())
+            {
+                context.Database.Migrate();
+                context.EnsureAllSeeded();
+            }
         }
     }
 

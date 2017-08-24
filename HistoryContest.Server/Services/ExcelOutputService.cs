@@ -1,4 +1,4 @@
-﻿using HistoryContest.Server.Data;
+using HistoryContest.Server.Data;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace HistoryContest.Server.Services
 {
     [Produces("application/json")]
-    public class CounselorService
+    public class ExcelOutputService
     {
         private UnitOfWork unitOfWork;
 
-        public CounselorService(UnitOfWork unitOfWork)
+        public ExcelOutputService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
