@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Services
 {
@@ -63,13 +64,13 @@ namespace HistoryContest.Server.Services
                 return user;
             }
 
-            user = await unitOfWork.CounselorRepository.GetByIDAsync(int.Parse(userName));
+            user = await unitOfWork.CounselorRepository.GetByIDAsync(userName.ToIntID());
             if(user != null)
             { // Check Counselors
                 return user;
             }
 
-            user = await unitOfWork.StudentRepository.GetByIDAsync(int.Parse(userName));
+            user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
             if(user != null)
             { // Check Students
                 return user;

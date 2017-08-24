@@ -69,9 +69,19 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-  <Target Name="PublishingWiki" AfterTargets="RunWebpack">
+    <Target Name="PublishDataSource" AfterTargets="RunWebpack">
+    <!-- Include the data source files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include=".\Data\Source\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>Source/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
     <Exec Command="if not exist ./index.html call powershell -command (new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')" WorkingDirectory="../HistoryContest.Wiki/" />
-    <!-- Include the newly-built files in the publish output -->
+    <!-- Include the wiki files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />
       <ResolvedFileToPublish Include="@(WikiFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">

@@ -13,17 +13,11 @@ namespace HistoryContest.Server.Models.Entities
         [Required]
         internal string _questionIDs { get; set; }
 
-        private int[] questionIDs;
         [NotMapped]
         public int[] QuestionIDs
         {
-            get { return questionIDs ?? (questionIDs = _questionIDs.Split(',').Select(int.Parse).ToArray()); } // 未来或许可以优化的地方（换成for loop）
-            set { questionIDs = value; }
-        }
-
-        public void Save()
-        {
-            _questionIDs = String.Join(",", questionIDs.Select(id => id.ToString()).ToArray());
+            get { return _questionIDs.Split(',').Select(int.Parse).ToArray(); }
+            set { _questionIDs = String.Join(",", value.Select(id => id.ToString()).ToArray()); }
         }
     }
 }

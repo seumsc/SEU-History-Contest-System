@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Dynamic;
 using Microsoft.AspNetCore.Hosting;
+using HistoryContest.Server.Services;
 
 namespace HistoryContest.Server
 {
@@ -34,6 +36,13 @@ namespace HistoryContest.Server
 
         internal static void ProcessArgs(string[] args)
         {
+            bool runBrowser = false;
+            dynamic envSetting = new ExpandoObject();
+            dynamic parseSetting = new ExpandoObject();
+
+            envSetting.SwitchEnv = false;
+            parseSetting.Type = null;
+
             for (int i = 0; i < args.Length; ++i)
             {
                 var arg = args[i];
@@ -41,14 +50,16 @@ namespace HistoryContest.Server
                 {
                     case "-rb":
                     case "--runbrowser":
-                        string url = @"http://localhost:5000";
-                        Console.WriteLine(@"Starting " + url + " with default browser...");
-                        System.Diagnostics.Process.Start("explorer", url);
+                        runBrowser = true;
                         break;
                     case "-env":
                     case "--environment":
                         ++i;
-                        EnvironmentName = args[i];
+                        envSetting = new { SwitchEnv = true, EnvName = args[i] };
+                        break;
+                    case "--parse-question-sql":
+                        ++i;
+                        parseSetting = new { Type = "question", Format = "sql", Path = args[i] };
                         break;
                     case "-h":
                     case "--help":
@@ -56,7 +67,8 @@ namespace HistoryContest.Server
                         {
                             "-h|--help                     显示帮助",
                             "-rb|--runbrowser              程序启动后运行默认浏览器打开网站",
-                            "-env|--environment <env>      设置程序运行环境。默认为\"Production\"。"
+                            "-env|--environment <env>      设置程序运行环境。默认为\"Production\"。",
+                            "--parse-question-sql <path>   设置程序运行环境。默认为\"Production\"。"
                         };
                         foreach (var message in messages)
                         {
@@ -67,17 +79,58 @@ namespace HistoryContest.Server
                 }
             }
 
-            switch(EnvironmentName.ToLowerInvariant())
+            #region Environment Setting
+            if (envSetting.SwitchEnv == true)
             {
-                case "development":
+                switch (envSetting.EnvName as string)
+                {
+                    case "development":
+                        EnvironmentName = "Development";
+                        break;
+                    case "staging":
+                        EnvironmentName = "Staging";
+                        break;
+                    case "production":
+                        EnvironmentName = "Production";
+                        break;
+                    default:
+                        throw new ArgumentException("Enviroment name provided invalid. Please choose one in \"Development\", \"Production\", or \"Staging\"");
+                }
+            }
+
+            switch (EnvironmentName)
+            {
+                case "Development":
                     ContentRootPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
                     break;
-                case "staging":
-                case "production":
+                case "Staging":
+                case "Production":
                     ContentRootPath = Directory.GetCurrentDirectory();
                     break;
-                default:
-                    throw new ArgumentException("Enviroment name provided invalid. Please choose one in \"Development\", \"Production\", or \"Staging\"");
+            }
+            #endregion
+
+            if (parseSetting.Type != null)
+            {
+                switch (parseSetting.Type as string)
+                {
+                    case "question":
+                        switch(parseSetting.Format as string)
+                        {
+                            case "sql":
+                                DocParseService.ParseQuestions(parseSetting.Path as string, DocParseService.QuestionSqlFilePattern);
+                                break;
+                        }
+                        break;
+                }
+                Environment.Exit(0);
+            }
+
+            if (runBrowser)
+            {
+                string url = @"http://localhost:5000";
+                Console.WriteLine(@"Starting " + url + " with default browser...");
+                System.Diagnostics.Process.Start("explorer", url);
             }
         }
     }
