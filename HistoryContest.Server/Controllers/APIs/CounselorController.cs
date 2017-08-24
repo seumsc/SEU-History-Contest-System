@@ -12,6 +12,7 @@ using System.IO;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -21,39 +22,39 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
-        private readonly CounselorService counselorService;
+        private readonly ExcelOutputService counselorService;
 
         public CounselorController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            counselorService = new CounselorService(unitOfWork);
+            counselorService = new ExcelOutputService(unitOfWork);
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
         /// <summary>
-        /// ÏÂÔØµ±Ç°¸¨µ¼Ô±ËùÔÚÔºÏµËùÓĞÑ§Éú·ÖÊıÇé¿öµÄEXCEL±í
+        /// ä¸‹è½½å½“å‰è¾…å¯¼å‘˜æ‰€åœ¨é™¢ç³»æ‰€æœ‰å­¦ç”Ÿåˆ†æ•°æƒ…å†µçš„EXCELè¡¨
         /// </summary>
         /// <remarks>
-        /// ÎŞĞè²ÎÊı£¬Í¨¹ıSessionÖĞdepartment»ñÈ¡ÔºÏµid
-        /// * ÏÂÔØexcelÍ³¼Æ±í½«ÔÚwwwroot/excel/ Ä¿Â¼ÏÂ´´½¨ÒÔÔºÏµidÎªÃûµÄxlsxÎÄ¼ş²¢ÏÂÔØ
-        /// * Èç¹ûÖ®Ç°ÎÄ¼şÒÑ¾­´æÔÚ½«»áÉ¾³ı²¢ÖØĞÂ´´½¨£¬ÒÔÍ¬²½¸üĞÂÊı¾İ
+        /// æ— éœ€å‚æ•°ï¼Œé€šè¿‡Sessionä¸­departmentè·å–é™¢ç³»id
+        /// * ä¸‹è½½excelç»Ÿè®¡è¡¨å°†åœ¨wwwroot/excel/ ç›®å½•ä¸‹åˆ›å»ºä»¥é™¢ç³»idä¸ºåçš„xlsxæ–‡ä»¶å¹¶ä¸‹è½½
+        /// * å¦‚æœä¹‹å‰æ–‡ä»¶å·²ç»å­˜åœ¨å°†ä¼šåˆ é™¤å¹¶é‡æ–°åˆ›å»ºï¼Œä»¥åŒæ­¥æ›´æ–°æ•°æ®
         /// 
-        /// excelÖĞµÄÍ³¼ÆĞÅÏ¢°üÀ¨:
-        /// 1. Ñ§ºÅ
-        /// 2. Ò»¿¨Í¨ºÅ
-        /// 3. ĞÕÃû
-        /// 4. ÊÇ·ñÍê³É
-        /// 5. µÃ·Ö
+        /// excelä¸­çš„ç»Ÿè®¡ä¿¡æ¯åŒ…æ‹¬:
+        /// 1. å­¦å·
+        /// 2. ä¸€å¡é€šå·
+        /// 3. å§“å
+        /// 4. æ˜¯å¦å®Œæˆ
+        /// 5. å¾—åˆ†
         /// </remarks>
-        /// <returns>ÔºÏµÑ§Éú:Ñ§ºÅ\Ò»¿¨Í¨ºÅ\ĞÕÃû\ÊÇ·ñÍê³É\µÃ·ÖµÄexcel±í</returns>
-        /// <response code="200">·µ»Ø±¾ÔºÏµµÃ·ÖEXCELÍ³¼Æ±í</response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇ¸¨µ¼Ô±»ò¶ÔÓ¦SessionÖĞÃ»ÓĞdepartment</response>
+        /// <returns>é™¢ç³»å­¦ç”Ÿ:å­¦å·\ä¸€å¡é€šå·\å§“å\æ˜¯å¦å®Œæˆ\å¾—åˆ†çš„excelè¡¨</returns>
+        /// <response code="200">è¿”å›æœ¬é™¢ç³»å¾—åˆ†EXCELç»Ÿè®¡è¡¨</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯è¾…å¯¼å‘˜æˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰department</response>
         [HttpGet("ExportDepartmentExcel")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportDepartmentExcel()
         {
             if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
-            { // µ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄdepartmentÎªÔºÏµid
+            { // å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„departmentä¸ºé™¢ç³»id
                 return BadRequest("Empty argument request invalid");
             }
             var id = (Department)HttpContext.Session.GetInt32("department");
@@ -70,30 +71,30 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// ÏÂÔØÈ«Ğ£¸÷¸öÔºÏµ·ÖÊı¸Å¿öµÄEXCEL±í
+        /// ä¸‹è½½å…¨æ ¡å„ä¸ªé™¢ç³»åˆ†æ•°æ¦‚å†µçš„EXCELè¡¨
         /// </summary>
         /// <remarks>
-        /// ÎŞĞè²ÎÊı
-        /// * µÚÒ»´ÎÏÂÔØexcelÍ³¼Æ±í½«ÔÚwwwroot/excel/ Ä¿Â¼ÏÂ´´½¨ ScoreSummaryOfAllDepartments.xlsx ²¢ÏÂÔØ
-        /// * Èç¹ûÖ®Ç°ÎÄ¼şÒÑ¾­´æÔÚ½«»áÉ¾³ı²¢ÖØĞÂ´´½¨£¬ÒÔÍ¬²½¸üĞÂÊı¾İ
+        /// æ— éœ€å‚æ•°
+        /// * ç¬¬ä¸€æ¬¡ä¸‹è½½excelç»Ÿè®¡è¡¨å°†åœ¨wwwroot/excel/ ç›®å½•ä¸‹åˆ›å»º ScoreSummaryOfAllDepartments.xlsx å¹¶ä¸‹è½½
+        /// * å¦‚æœä¹‹å‰æ–‡ä»¶å·²ç»å­˜åœ¨å°†ä¼šåˆ é™¤å¹¶é‡æ–°åˆ›å»ºï¼Œä»¥åŒæ­¥æ›´æ–°æ•°æ®
         /// 
-        /// excelÖĞµÄÍ³¼ÆĞÅÏ¢°üÀ¨:
-        /// 1. ÔºÏµID
-        /// 2. ¸¨µ¼Ô±ĞÕÃû
-        /// 3. ×î¸ß·Ö
-        /// 4. Æ½¾ù·Ö
-        /// 5. ·ÖÊı¶Î¶ÔÓ¦ÈËÊı
-        ///     - >=90 , >=75 , >=60 , Ğ¡ÓÚ60
+        /// excelä¸­çš„ç»Ÿè®¡ä¿¡æ¯åŒ…æ‹¬:
+        /// 1. é™¢ç³»ID
+        /// 2. è¾…å¯¼å‘˜å§“å
+        /// 3. æœ€é«˜åˆ†
+        /// 4. å¹³å‡åˆ†
+        /// 5. åˆ†æ•°æ®µå¯¹åº”äººæ•°
+        ///     - >=90 , >=75 , >=60 , å°äº60
         /// </remarks>
-        /// <returns>È«Ğ£¸÷ÔºÏµ·ÖÊı¸Å¿öexcel±í</returns>
-        /// <response code="200">·µ»Ø¸÷ÔºÏµµÃ·Ö¸Å¿öEXCELÍ³¼Æ±í</response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇ¸¨µ¼Ô±»ò¶ÔÓ¦SessionÖĞÃ»ÓĞdepartment</response>
+        /// <returns>å…¨æ ¡å„é™¢ç³»åˆ†æ•°æ¦‚å†µexcelè¡¨</returns>
+        /// <response code="200">è¿”å›å„é™¢ç³»å¾—åˆ†æ¦‚å†µEXCELç»Ÿè®¡è¡¨</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯è¾…å¯¼å‘˜æˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰department</response>
         [HttpGet("ExportExcelOfAllDepartments")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportExcelOfAllDepartments()
         {
             if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
-            { // µ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄdepartmentÎªÔºÏµid
+            { // å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„departmentä¸ºé™¢ç³»id
                 return BadRequest("Empty argument request invalid");
             }
             
@@ -110,14 +111,14 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡¸¨µ¼Ô±ËùÔÚÔºÏµ
+        /// è·å–è¾…å¯¼å‘˜æ‰€åœ¨é™¢ç³»
         /// </summary>
         /// <remarks>
-        /// ·µ»ØSessionÖĞ´æ´¢µÄÔºÏµ´úºÅ¡£
+        /// è¿”å›Sessionä¸­å­˜å‚¨çš„é™¢ç³»ä»£å·ã€‚
         /// </remarks>
-        /// <returns>¸¨µ¼Ô±¶ÔÓ¦ÔºÏµ´úºÅ</returns>
-        /// <response code="200">·µ»Ø¸¨µ¼Ô±ËùÔÚµÄÔºÏµ´úºÅ</response>
-        /// <response code="404">SessionÖĞÎ´ÉèÖÃÔºÏµ´úºÅ</response>
+        /// <returns>è¾…å¯¼å‘˜å¯¹åº”é™¢ç³»ä»£å·</returns>
+        /// <response code="200">è¿”å›è¾…å¯¼å‘˜æ‰€åœ¨çš„é™¢ç³»ä»£å·</response>
+        /// <response code="404">Sessionä¸­æœªè®¾ç½®é™¢ç³»ä»£å·</response>
         [HttpGet("Department")]
         [ProducesResponseType(typeof(Department), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -132,28 +133,28 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸öÔºÏµËùÓĞÑ§ÉúµÄÑ§ºÅ
+        /// è·å–ä¸€ä¸ªé™¢ç³»æ‰€æœ‰å­¦ç”Ÿçš„å­¦å·
         /// </summary>
         /// <remarks>
-        /// Õâ¸öAPI½«¸¨µ¼Ô±¶ÔÓ¦µÄËùÓĞÑ§ÉúµÄÑ§ºÅ·µ»Ø£¬ÈÃÇ°¶Ë¸ù¾İÑ§ºÅÒ»¸ö¸öµØ¼ìË÷Ñ§ÉúĞÅÏ¢¡£¿ÉÄÜÔÚÒì²½¼ÓÔØÉÏÓĞËù°ïÖú¡£
+        /// è¿™ä¸ªAPIå°†è¾…å¯¼å‘˜å¯¹åº”çš„æ‰€æœ‰å­¦ç”Ÿçš„å­¦å·è¿”å›ï¼Œè®©å‰ç«¯æ ¹æ®å­¦å·ä¸€ä¸ªä¸ªåœ°æ£€ç´¢å­¦ç”Ÿä¿¡æ¯ã€‚å¯èƒ½åœ¨å¼‚æ­¥åŠ è½½ä¸Šæœ‰æ‰€å¸®åŠ©ã€‚
         /// 
-        /// ID²ÎÊıÊÇ¿ÉÑ¡µÄ¡£Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID¡£
+        /// IDå‚æ•°æ˜¯å¯é€‰çš„ã€‚å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºIDã€‚
         /// </remarks>
-        /// <param name="id">ÔºÏµ´úºÅÃ¶¾ÙÊı£¨¿ÉÑ¡£©</param>
-        /// <returns>ÔºÏµËùÓĞÑ§ÉúÑ§ºÅ</returns>
-        /// <response code="200">·µ»Ø¸¨µ¼Ô±¶ÔÓ¦µÄËùÓĞÑ§ÉúÑ§ºÅ¹¹³ÉµÄÊı×é</response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇ¸¨µ¼Ô±»ò¶ÔÓ¦SessionÖĞÃ»ÓĞÔºÏµ´úÂë</response>
-        /// <response code="403">¸¨µ¼Ô±²éÑ¯·Ç±¾ÏµÊı¾İ</response>
-        /// <response code="404">ID²»ÊôÓÚÈÎºÎÒ»¸öÔºÏµ´úºÅ</response>
+        /// <param name="id">é™¢ç³»ä»£å·æšä¸¾æ•°ï¼ˆå¯é€‰ï¼‰</param>
+        /// <returns>é™¢ç³»æ‰€æœ‰å­¦ç”Ÿå­¦å·</returns>
+        /// <response code="200">è¿”å›è¾…å¯¼å‘˜å¯¹åº”çš„æ‰€æœ‰å­¦ç”Ÿå­¦å·æ„æˆçš„æ•°ç»„</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯è¾…å¯¼å‘˜æˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰é™¢ç³»ä»£ç </response>
+        /// <response code="403">è¾…å¯¼å‘˜æŸ¥è¯¢éæœ¬ç³»æ•°æ®</response>
+        /// <response code="404">IDä¸å±äºä»»ä½•ä¸€ä¸ªé™¢ç³»ä»£å·</response>
         [HttpGet("AllStudents/{id?}")]
-        [ProducesResponseType(typeof(IEnumerable<int>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AllStudentIDs(Department? id)
         {
             if (id == null)
-            { // Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID
+            { // å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºID
                 if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
                 {
                     id = (Department)HttpContext.Session.GetInt32("department");
@@ -165,33 +166,33 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
-            { // ²»ÔÊĞí¸¨µ¼Ô±²éÑ¯²»Í¬ÏµÑ§ÉúµÄÊı¾İ
+            { // ä¸å…è®¸è¾…å¯¼å‘˜æŸ¥è¯¢ä¸åŒç³»å­¦ç”Ÿçš„æ•°æ®
                 return Forbid();
             }
 
-            //TODO : <yhy>½«ÔºÏµÑ§ÉúĞÅÏ¢´æÈë»º´æÖĞ 1
+            //TODO : <yhy>å°†é™¢ç³»å­¦ç”Ÿä¿¡æ¯å­˜å…¥ç¼“å­˜ä¸­ 1
             var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
             if (students == null)
             {
                 return NotFound();
             }
 
-            return Json(students.AsQueryable().Select(s => s.ID));
+            return Json(students.AsQueryable().Select(s => s.ID.ToStringID()));
         }
 
         #region Scores APIs
         /// <summary>
-        /// »ñÈ¡Ò»¸öÔºÏµËùÓĞÑ§ÉúµÄ¼òÒªµÃ·ÖĞÅÏ¢
+        /// è·å–ä¸€ä¸ªé™¢ç³»æ‰€æœ‰å­¦ç”Ÿçš„ç®€è¦å¾—åˆ†ä¿¡æ¯
         /// </summary>
         /// <remarks>
-        /// ID²ÎÊıÊÇ¿ÉÑ¡µÄ¡£Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID¡£
+        /// IDå‚æ•°æ˜¯å¯é€‰çš„ã€‚å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºIDã€‚
         /// </remarks>
-        /// <param name="id">ÔºÏµ´úºÅÃ¶¾ÙÊı£¨¿ÉÑ¡£©</param>
-        /// <returns>ÔºÏµËùÓĞÑ§ÉúµÃ·Ö</returns>
-        /// <response code="200">·µ»Ø±¾ÔºÏµËùÓĞÑ§Éú¼òÒªµÃ·ÖĞÅÏ¢</response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇ¸¨µ¼Ô±»ò¶ÔÓ¦SessionÖĞÃ»ÓĞÔºÏµ´úÂë</response>
-        /// <response code="403">¸¨µ¼Ô±²éÑ¯·Ç±¾ÏµÊı¾İ</response>
-        /// <response code="404">ID²»ÊôÓÚÈÎºÎÒ»¸öÔºÏµ´úºÅ</response>
+        /// <param name="id">é™¢ç³»ä»£å·æšä¸¾æ•°ï¼ˆå¯é€‰ï¼‰</param>
+        /// <returns>é™¢ç³»æ‰€æœ‰å­¦ç”Ÿå¾—åˆ†</returns>
+        /// <response code="200">è¿”å›æœ¬é™¢ç³»æ‰€æœ‰å­¦ç”Ÿç®€è¦å¾—åˆ†ä¿¡æ¯</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯è¾…å¯¼å‘˜æˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰é™¢ç³»ä»£ç </response>
+        /// <response code="403">è¾…å¯¼å‘˜æŸ¥è¯¢éæœ¬ç³»æ•°æ®</response>
+        /// <response code="404">IDä¸å±äºä»»ä½•ä¸€ä¸ªé™¢ç³»ä»£å·</response>
         [HttpGet("Scores/All/{id?}")]
         [ProducesResponseType(typeof(IEnumerable<StudentViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -200,7 +201,7 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> AllScoresByDepartment(Department? id)
         {
             if (id == null)
-            { // Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID
+            { // å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºID
                 if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
                 {
                     id = (Department)HttpContext.Session.GetInt32("department");
@@ -212,11 +213,11 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
-            { // ²»ÔÊĞí¸¨µ¼Ô±²éÑ¯²»Í¬ÏµÑ§ÉúµÄÊı¾İ
+            { // ä¸å…è®¸è¾…å¯¼å‘˜æŸ¥è¯¢ä¸åŒç³»å­¦ç”Ÿçš„æ•°æ®
                 return Forbid();
             }
 
-            //TODO : <yhy>½«ÔºÏµÑ§ÉúĞÅÏ¢´æÈë»º´æÖĞ 2
+            //TODO : <yhy>å°†é™¢ç³»å­¦ç”Ÿä¿¡æ¯å­˜å…¥ç¼“å­˜ä¸­ 2
             var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
             if (students == null)
             {
@@ -227,30 +228,30 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸öÑ§ÉúµÄ¼òÒªµÃ·ÖĞÅÏ¢
+        /// è·å–ä¸€ä¸ªå­¦ç”Ÿçš„ç®€è¦å¾—åˆ†ä¿¡æ¯
         /// </summary>
         /// <remarks>
-        /// Õâ¸öAPIÖ÷ÒªÊÇÅäºÏ `POST api/Counselor/AllStudents/{id}` Ê¹ÓÃ£¬Ê¹Ç°¶ËÄÜ¹»ÏÈ»ñµÃÑ§ºÅ£¬È»ºó¸ù¾İÑ§ºÅ·ÖÅú·Ö´ÎµØ¼ÓÔØÑ§ÉúĞÅÏ¢¡£
+        /// è¿™ä¸ªAPIä¸»è¦æ˜¯é…åˆ `POST api/Counselor/AllStudents/{id}` ä½¿ç”¨ï¼Œä½¿å‰ç«¯èƒ½å¤Ÿå…ˆè·å¾—å­¦å·ï¼Œç„¶åæ ¹æ®å­¦å·åˆ†æ‰¹åˆ†æ¬¡åœ°åŠ è½½å­¦ç”Ÿä¿¡æ¯ã€‚
         /// </remarks>
-        /// <returns>Ñ§Éú¼òÒªµÃ·ÖĞÅÏ¢</returns>
-        /// <param name="id">Ñ§ÉúµÄÑ§ºÅ</param>
-        /// <response code="200">·µ»ØÑ§ºÅ¶ÔÓ¦Ñ§ÉúµÄµÃ·ÖĞÅÏ¢</response>
-        /// <response code="403">¸¨µ¼Ô±²éÑ¯·Ç±¾ÏµÑ§ÉúµÄÊı¾İ</response>
-        /// <response code="404">IDÃ»ÓĞ¶ÔÓ¦µÄÑ§Éú</response>
+        /// <returns>å­¦ç”Ÿç®€è¦å¾—åˆ†ä¿¡æ¯</returns>
+        /// <param name="id">å­¦ç”Ÿçš„å­¦å·</param>
+        /// <response code="200">è¿”å›å­¦å·å¯¹åº”å­¦ç”Ÿçš„å¾—åˆ†ä¿¡æ¯</response>
+        /// <response code="403">è¾…å¯¼å‘˜æŸ¥è¯¢éæœ¬ç³»å­¦ç”Ÿçš„æ•°æ®</response>
+        /// <response code="404">IDæ²¡æœ‰å¯¹åº”çš„å­¦ç”Ÿ</response>
         [HttpGet("Scores/Single/{id}")]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> StudentScoreById(int id)
+        public async Task<IActionResult> StudentScoreById(string id)
         {
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(id);
+            var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
             if (student == null)
             {
                 return NotFound();
             }
 
-            if (!HttpContext.User.IsInRole("Administrator") && student.CounselorID != int.Parse(HttpContext.Session.GetString("id")))
-            { // ²»ÔÊĞí¸¨µ¼Ô±²éÑ¯²»Í¬ÏµÑ§ÉúµÄÊı¾İ
+            if (!HttpContext.User.IsInRole("Administrator") && student.CounselorID != HttpContext.Session.GetString("id").ToIntID())
+            { // ä¸å…è®¸è¾…å¯¼å‘˜æŸ¥è¯¢ä¸åŒç³»å­¦ç”Ÿçš„æ•°æ®
                 return Forbid();
             }
 
@@ -260,16 +261,16 @@ namespace HistoryContest.Server.Controllers.APIs
 
         #region Score Summary APIs
         /// <summary>
-        /// »ñÈ¡È«Ğ£·ÖÊı¸Å¿ö
+        /// è·å–å…¨æ ¡åˆ†æ•°æ¦‚å†µ
         /// </summary>
         /// <remarks>
-        /// **NOTE:Õâ¸ö¹¦ÄÜÄ¿Ç°ÉĞÎ´±»ÕıÈ·ÊµÏÖ£¬½öÓÃÓÚ²Î¿¼JSON·µ»ØÖµ**
+        /// **NOTE:è¿™ä¸ªåŠŸèƒ½ç›®å‰å°šæœªè¢«æ­£ç¡®å®ç°ï¼Œä»…ç”¨äºå‚è€ƒJSONè¿”å›å€¼**
         /// </remarks>
-        /// <returns>È«Ğ£·ÖÊı¸Å¿ö</returns>
+        /// <returns>å…¨æ ¡åˆ†æ•°æ¦‚å†µ</returns>
         /// <response code="200">
-        /// ·µ»ØÈ«Ğ£µÄ·ÖÊı¸Å¿ö¼°Ñ§ÉúÍê³ÉÇé¿ö
-        /// * Õâ¸öÄÚÈİ²¢²»ÊÇÃ¿´ÎÇëÇóÊ±ĞÂ¼ÆËã¶øµÃµÄ£¬¶øÊÇÃ¿¸ôÒ»¶ÎÊ±¼ä£¨Èç10·ÖÖÓ£©×Ô¶¯¸üĞÂÒ»´Î
-        /// * Òò´Ë£¬JSONÎÄ¼şÀïÃæÓĞÒ»¸ö¡°¸üĞÂÊ±¼ä¡±µÄ¼ÇÂ¼¡£
+        /// è¿”å›å…¨æ ¡çš„åˆ†æ•°æ¦‚å†µåŠå­¦ç”Ÿå®Œæˆæƒ…å†µ
+        /// * è¿™ä¸ªå†…å®¹å¹¶ä¸æ˜¯æ¯æ¬¡è¯·æ±‚æ—¶æ–°è®¡ç®—è€Œå¾—çš„ï¼Œè€Œæ˜¯æ¯éš”ä¸€æ®µæ—¶é—´ï¼ˆå¦‚10åˆ†é’Ÿï¼‰è‡ªåŠ¨æ›´æ–°ä¸€æ¬¡
+        /// * å› æ­¤ï¼ŒJSONæ–‡ä»¶é‡Œé¢æœ‰ä¸€ä¸ªâ€œæ›´æ–°æ—¶é—´â€çš„è®°å½•ã€‚
         /// </response>
         [HttpGet("Scores/Summary")]
         [ProducesResponseType(typeof(ScoreSummaryOfSchoolViewModel), StatusCodes.Status200OK)]
@@ -279,26 +280,26 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸öÔºÏµµÄ·ÖÊı¸Å¿ö
+        /// è·å–ä¸€ä¸ªé™¢ç³»çš„åˆ†æ•°æ¦‚å†µ
         /// </summary>
         /// <remarks>
-        /// ÔºÏµ´úºÅÔÚºó¶ËÎªÒ»¸öÃ¶¾Ù£¬Ä¿Ç°ÄÚÈİÈçÏÂ£º
+        /// é™¢ç³»ä»£å·åœ¨åç«¯ä¸ºä¸€ä¸ªæšä¸¾ï¼Œç›®å‰å†…å®¹å¦‚ä¸‹ï¼š
         ///     
         ///     enum Department
         ///     {
-        ///         ½¨Öş = 0x010,
-        ///         ¼ÆËã»ú = 0x090
+        ///         å»ºç­‘ = 0x010,
+        ///         è®¡ç®—æœº = 0x090
         ///     }
         /// 
-        /// Ç°¶ËÒ²¿É½¨Á¢Ò»¸öÏàÍ¬µÄÃ¶¾Ù±í£¬ÕâÑù±ã¿É²»ÓÃÔÚÒâÃ¿¸öÃ¶¾ÙÖµÖĞËù´æÊı¾İ¡£
+        /// å‰ç«¯ä¹Ÿå¯å»ºç«‹ä¸€ä¸ªç›¸åŒçš„æšä¸¾è¡¨ï¼Œè¿™æ ·ä¾¿å¯ä¸ç”¨åœ¨æ„æ¯ä¸ªæšä¸¾å€¼ä¸­æ‰€å­˜æ•°æ®ã€‚
         /// 
-        /// ID²ÎÊıÊÇ¿ÉÑ¡µÄ¡£Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID¡£
+        /// IDå‚æ•°æ˜¯å¯é€‰çš„ã€‚å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºIDã€‚
         /// </remarks>
-        /// <param name="id">ÔºÏµ´úºÅÃ¶¾ÙÊı£¨¿ÉÑ¡£©</param>
-        /// <returns>ID¶ÔÓ¦ÔºÏµµÄ·ÖÊı¸Å¿ö</returns>
-        /// <response code="200">·µ»ØÔºÏµ´úÂë¶ÔÓ¦ÔºÏµµÄ·ÖÊı¸Å¿ö</response>
-        /// <response code="400">µ±Ç°ÓÃ»§²»ÊÇ¸¨µ¼Ô±»ò¶ÔÓ¦SessionÖĞÃ»ÓĞÔºÏµ´úÂë</response>
-        /// <response code="404">IDÃ»ÓĞ¶ÔÓ¦µÄÔºÏµ</response>
+        /// <param name="id">é™¢ç³»ä»£å·æšä¸¾æ•°ï¼ˆå¯é€‰ï¼‰</param>
+        /// <returns>IDå¯¹åº”é™¢ç³»çš„åˆ†æ•°æ¦‚å†µ</returns>
+        /// <response code="200">è¿”å›é™¢ç³»ä»£ç å¯¹åº”é™¢ç³»çš„åˆ†æ•°æ¦‚å†µ</response>
+        /// <response code="400">å½“å‰ç”¨æˆ·ä¸æ˜¯è¾…å¯¼å‘˜æˆ–å¯¹åº”Sessionä¸­æ²¡æœ‰é™¢ç³»ä»£ç </response>
+        /// <response code="404">IDæ²¡æœ‰å¯¹åº”çš„é™¢ç³»</response>
         [HttpGet("Scores/Summary/{id?}")]
         [ProducesResponseType(typeof(ScoreSummaryByDepartmentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -306,7 +307,7 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> ScoreSummaryByDepartment(Department? id)
         {
             if (id == null)
-            { // Èç¹û²»ÊäÈëID£¬ÇÒµ±Ç°ÓÃ»§ÈÏÖ¤Îª¸¨µ¼Ô±£¬ÔòÈ¡SessionÖĞµÄÔºÏµ´úÂë×÷ÎªID
+            { // å¦‚æœä¸è¾“å…¥IDï¼Œä¸”å½“å‰ç”¨æˆ·è®¤è¯ä¸ºè¾…å¯¼å‘˜ï¼Œåˆ™å–Sessionä¸­çš„é™¢ç³»ä»£ç ä½œä¸ºID
                 if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
                 {
                     id = (Department)HttpContext.Session.GetInt32("department");

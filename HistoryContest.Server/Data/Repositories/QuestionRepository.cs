@@ -28,6 +28,11 @@ namespace HistoryContest.Server.Data.Repositories
             return await context.Set<TQuestion>().FindAsync(id);
         }
 
+        public TQuestion GetByIndex<TQuestion>(int index) where TQuestion : AQuestionBase
+        {
+            return context.Set<TQuestion>().AsEnumerable().ElementAtOrDefault(index);
+        }
+
         public int Size<TQuestion>() where TQuestion : AQuestionBase
         {
             return context.Set<TQuestion>().Count();

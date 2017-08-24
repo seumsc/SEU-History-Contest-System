@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HistoryContest.Server.Data;
+using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.Entities;
 
 namespace HistoryContest.Server.Services
@@ -11,11 +12,15 @@ namespace HistoryContest.Server.Services
     {
         private UnitOfWork unitOfWork;
         private Random rdGenerator;
+        private int size_ChoiceQuestions;
+        private int size_TrueFalseQuestions;
 
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             rdGenerator = new Random();
+            size_ChoiceQuestions = unitOfWork.QuestionRepository.Size<ChoiceQuestion>();
+            size_TrueFalseQuestions = unitOfWork.QuestionRepository.Size<TrueFalseQuestion>();
         }
 
         public async Task<IEnumerable<AQuestionBase>> GetQuestionsBySeedID(int id)
@@ -35,53 +40,45 @@ namespace HistoryContest.Server.Services
             return questions;
         }
 
-        public async Task<QuestionSeed> CreateNewSeed()
-        { // TODO:<yhy> 解决随机数重复问题 DONE
-            var choiceQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<ChoiceQuestion>();
-            var trueFalseQuestionsSize = await unitOfWork.QuestionRepository.SizeAsync<TrueFalseQuestion>();
-            bool[] hashTableChoiceQuestions = new bool[choiceQuestionsSize];
-            bool[] hashTabletrueFalseQuestions = new bool[trueFalseQuestionsSize];
+        public List<QuestionSeed> CreateNewSeeds(int scale)
+        {
+            List<QuestionSeed> seeds = new List<QuestionSeed>(scale);
             var questionIDs = new int[30];
-            int randomnumber = 0;
-            for (int i = 0; i < choiceQuestionsSize; i++)
+    
+            using (rdGenerator.CreateContext(0, size_ChoiceQuestions, nameof(ChoiceQuestion)))
+            using (rdGenerator.CreateContext(0, size_TrueFalseQuestions, nameof(TrueFalseQuestion)))
             {
-                hashTableChoiceQuestions[i] = false;
+                Console.Write("Processing...Generated ");
+                var progress = string.Empty;
+                for (int i = 0; i < scale; ++i)
+                {
+                    Console.Write(new string('\b', progress.Length));
+                    progress = string.Format("{0}/{1}", i + 1, scale);
+                    Console.Write(progress);
+
+                    for (int j = 0; j < 20; ++j)
+                    {
+                        var index = rdGenerator.NextNonRepetitive(nameof(ChoiceQuestion));
+                        questionIDs[j] = unitOfWork.QuestionRepository.GetByIndex<ChoiceQuestion>(index).ID;
+                    }
+                    for (int j = 20; j < 30; ++j)
+                    {
+                        var index = rdGenerator.NextNonRepetitive(nameof(TrueFalseQuestion));
+                        questionIDs[j] = unitOfWork.QuestionRepository.GetByIndex<TrueFalseQuestion>(index).ID;
+                    }
+
+                    seeds.Add(new QuestionSeed { QuestionIDs = questionIDs });
+                    rdGenerator.ResetContext(nameof(ChoiceQuestion));
+                    rdGenerator.ResetContext(nameof(TrueFalseQuestion));
+                }
             }
-            for (int i = 0; i < trueFalseQuestionsSize; i++)
-            {
-                hashTabletrueFalseQuestions[i] = false;
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                randomnumber= rdGenerator.Next(0, choiceQuestionsSize - 1);
-                while (hashTableChoiceQuestions[randomnumber % choiceQuestionsSize])
-                    randomnumber++;
-                questionIDs[i] = (randomnumber % choiceQuestionsSize) + 1;
-                hashTableChoiceQuestions[randomnumber % choiceQuestionsSize] = true;
-            }
-            for (int i = 20; i < 30; i++)
-            {
-                randomnumber= rdGenerator.Next(0, trueFalseQuestionsSize - 1);
-                while (hashTabletrueFalseQuestions[randomnumber % trueFalseQuestionsSize])
-                    randomnumber++;
-                questionIDs[i] = choiceQuestionsSize + (randomnumber % trueFalseQuestionsSize) + 1;
-                hashTabletrueFalseQuestions[randomnumber % trueFalseQuestionsSize] = true;
-            }
-            QuestionSeed newSeed = new QuestionSeed { QuestionIDs = questionIDs };
-            newSeed.Save();
-            await unitOfWork.QuestionSeedRepository.InsertAsync(newSeed);
-            await unitOfWork.SaveAsync();
-            return newSeed;
+
+            return seeds;
         }
 
         public async Task<QuestionSeed> RollSeed()
         {
             return await unitOfWork.QuestionSeedRepository.GetByIDAsync(rdGenerator.Next(1, unitOfWork.QuestionSeedRepository.Size()));
-        }
-
-        public void Save()
-        {
-
         }
     }
 }

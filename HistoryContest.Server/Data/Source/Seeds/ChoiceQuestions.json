@@ -1,0 +1,1703 @@
+[
+  {
+    "Question": "东南大学在明清时曾是什么机构的原址？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "理藩院",
+    "ChoiceB": "枢密院",
+    "ChoiceC": "内阁",
+    "ChoiceD": "国子监"
+  },
+  {
+    "Question": "东南大学从创办至今总共更换了几次学校名称？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "9",
+    "ChoiceB": "10",
+    "ChoiceC": "11",
+    "ChoiceD": "8"
+  },
+  {
+    "Question": "三江师范的创始人是谁？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "张之洞",
+    "ChoiceB": "张百熙",
+    "ChoiceC": "梁启超",
+    "ChoiceD": "李鸿章"
+  },
+  {
+    "Question": "三江师范时期哪一个省的学生是不能入学的？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "江苏",
+    "ChoiceB": "江西",
+    "ChoiceC": "安徽",
+    "ChoiceD": "浙江"
+  },
+  {
+    "Question": "三江师范时期的速成科学制是几年？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "2年",
+    "ChoiceB": "1年",
+    "ChoiceC": "1年半",
+    "ChoiceD": "2年半"
+  },
+  {
+    "Question": "东南大学始创于哪一年？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1901",
+    "ChoiceB": "1902",
+    "ChoiceC": "1903",
+    "ChoiceD": "1904"
+  },
+  {
+    "Question": "三江、两江师范的教员主要来自中国和哪一国？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "英国",
+    "ChoiceB": "美国",
+    "ChoiceC": "日本",
+    "ChoiceD": "法国"
+  },
+  {
+    "Question": "两江优级师范学堂曾于哪年停办过？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1911",
+    "ChoiceB": "1912",
+    "ChoiceC": "1913",
+    "ChoiceD": "1914"
+  },
+  {
+    "Question": "东南大学的梅庵是为纪念哪位人物而兴建的？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "张之洞",
+    "ChoiceB": "李瑞清",
+    "ChoiceC": "蔡元培",
+    "ChoiceD": "周馥"
+  },
+  {
+    "Question": "学校更名为南京高等师范学校是在哪一年？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1902",
+    "ChoiceB": "1915",
+    "ChoiceC": "1988",
+    "ChoiceD": "1925"
+  },
+  {
+    "Question": "南京高等师范学校的办学方针是什么？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "忠君，尊孔",
+    "ChoiceB": "中学为体，西学为用",
+    "ChoiceC": "西学为体，中学为用",
+    "ChoiceD": "崇尚共和，融合中西"
+  },
+  {
+    "Question": "民国时期与东南大学齐名的北方的另一所高等院校是哪一所？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "北京大学",
+    "ChoiceB": "清华大学",
+    "ChoiceC": "北京师范大学",
+    "ChoiceD": "北京航空航天大学"
+  },
+  {
+    "Question": "南京高等师范学校继三所师范学校成为我国成立的最早的第四所国立高等师范学校，其中不是这三所学校之一的是_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "北京高师",
+    "ChoiceB": "武昌高师",
+    "ChoiceC": "长沙高师",
+    "ChoiceD": "广州高师"
+  },
+  {
+    "Question": "在高等师范学校的基础上东南大学在哪年成立？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1919",
+    "ChoiceB": " 1920",
+    "ChoiceC": "1921",
+    "ChoiceD": "1922"
+  },
+  {
+    "Question": "江谦任我校校长时提倡以什么为校训？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "诚",
+    "ChoiceB": "义",
+    "ChoiceC": "礼",
+    "ChoiceD": "仁"
+  },
+  {
+    "Question": "江谦认为国家的富强有赖于科学、实业的发达，先后增设了三个专修科，其中哪一个不属于这三科之一？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "农业",
+    "ChoiceB": "工业",
+    "ChoiceC": "商业",
+    "ChoiceD": "教育业"
+  },
+  {
+    "Question": "高等师范学校在哪一年开设体育专修科，把体育列为必修科，倡全国之先？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1914",
+    "ChoiceB": "1915",
+    "ChoiceC": "1916",
+    "ChoiceD": "1917"
+  },
+  {
+    "Question": "哪一年教育部任命郭秉文为我校校长？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1917",
+    "ChoiceB": "1918",
+    "ChoiceC": " 1919",
+    "ChoiceD": "1920"
+  },
+  {
+    "Question": "郭秉文提出的关于德育的标准哪一项是不正确的？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "品行要趋于中正",
+    "ChoiceB": "行为要趋于和平",
+    "ChoiceC": "学术要注意全面和长远",
+    "ChoiceD": "技能要使之精熟"
+  },
+  {
+    "Question": "南京高等师范学院主张学生应具有“三自”精神，其中不包括？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "自觉",
+    "ChoiceB": "自爱",
+    "ChoiceC": "自动",
+    "ChoiceD": "自立"
+  },
+  {
+    "Question": "南京高等师范学院时期下面哪一项不是学生自治会的机构？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "活动部",
+    "ChoiceB": "评议会",
+    "ChoiceC": "执行部",
+    "ChoiceD": "仲裁院"
+  },
+  {
+    "Question": "南京高等师范学院总共组建了几个科系？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "6",
+    "ChoiceB": "7",
+    "ChoiceC": "8",
+    "ChoiceD": "9"
+  },
+  {
+    "Question": "开女禁首创大学男女同校的是哪一所高校？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "南京高等师范学院",
+    "ChoiceB": "广州高等师范学院",
+    "ChoiceC": "北京高等师范学院",
+    "ChoiceD": "武昌高等师范学院"
+  },
+  {
+    "Question": "哪一年高校正式招收女学生？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1919",
+    "ChoiceB": "1920",
+    "ChoiceC": "1921",
+    "ChoiceD": "1922"
+  },
+  {
+    "Question": "我校正式招收女学生第一年一共正式录取的几名女生？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "6",
+    "ChoiceB": "7",
+    "ChoiceC": "8",
+    "ChoiceD": "9"
+  },
+  {
+    "Question": "南京高等师范学院的教学改革中哪一项不是其改革方案？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "改革教授法，倡导教学合一",
+    "ChoiceB": "采用选科制，推行课程改革",
+    "ChoiceC": "改良教育学科，倡导教育科学化",
+    "ChoiceD": "突出科学教育，大力发展工商学科"
+  },
+  {
+    "Question": "我校在全国率先开办暑期学校始于哪一年？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1919",
+    "ChoiceB": "1920",
+    "ChoiceC": "1921",
+    "ChoiceD": "1922"
+  },
+  {
+    "Question": "两江师范的校训是什么？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "以诚为训，以诚为本",
+    "ChoiceB": "嚼得菜根，做得大事",
+    "ChoiceC": "诚实简朴，勤学勤劳",
+    "ChoiceD": "止于至善"
+  },
+  {
+    "Question": "下面哪一项不是南京高等师范学院的精神？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "求实精神",
+    "ChoiceB": "民族的精神",
+    "ChoiceC": "民主的精神",
+    "ChoiceD": "科学的精神"
+  },
+  {
+    "Question": "下面哪一项不是南京高等师范学院的校风？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "诚朴",
+    "ChoiceB": "善问",
+    "ChoiceC": "勤奋",
+    "ChoiceD": "求实"
+  },
+  {
+    "Question": "五四运动后南京高等师范学院受到深刻影响，下面哪一项不是师生共同要求的办学理念？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "实行民主治校",
+    "ChoiceB": "推行民主管理",
+    "ChoiceC": "严谨治学",
+    "ChoiceD": "提倡科学"
+  },
+  {
+    "Question": "被誉为“南雍祭酒，纯粹君子”的哪位校长？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "江谦",
+    "ChoiceB": "李瑞清",
+    "ChoiceC": "郭秉文",
+    "ChoiceD": "刘伯明"
+  },
+  {
+    "Question": "在南京高等师范学院管理上和民主生活上一个进步中没有的一项是？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "推行民主体制",
+    "ChoiceB": "实行教师议政",
+    "ChoiceC": "提倡生活简朴",
+    "ChoiceD": "学生“自动自治”"
+  },
+  {
+    "Question": "南京高等师范学院对领导体制作了较大改革，实行校长领导下的“三会制”，下面哪一项不属于“三会”其中之一？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "学生会",
+    "ChoiceB": "评议会",
+    "ChoiceC": "教授会",
+    "ChoiceD": "行政委员会"
+  },
+  {
+    "Question": "哪一年由中国留美学生组织的“科学社”自美迁回中国并设在南京高等师范学院校园内？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1916",
+    "ChoiceB": "1917",
+    "ChoiceC": "1918",
+    "ChoiceD": "1919"
+  },
+  {
+    "Question": "下面哪一项不是南京高等师范学院办学者的宗旨，南京高等师范学院教育的特色？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "倡导学生的爱国精神，为国家培养科学人才",
+    "ChoiceB": "调和文理，沟通中西，积极引进国外的先进科学技术",
+    "ChoiceC": "用科学的精神办教育，用科学的方法育才",
+    "ChoiceD": "促进教育、科学的共同发展，促进科学人才的成长和脱颖而出"
+  },
+  {
+    "Question": "江谦任校长倡导的校风是什么？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "简朴，勤奋",
+    "ChoiceB": "诚实，朴茂",
+    "ChoiceC": "诚朴，勤奋，求实",
+    "ChoiceD": "严谨治学，止于至善"
+  },
+  {
+    "Question": "南京高等师范学院时期宣传马克思主义最积极的是哪位教授？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "陶行知",
+    "ChoiceB": "杨杏佛",
+    "ChoiceC": "胡适",
+    "ChoiceD": "李大钊"
+  },
+  {
+    "Question": "1922年南京高等师范学院的3名学生先后加入中国共产党成为南京高等师范学院的首批共产党员，下面哪一位不在这3名学生中？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "邓光禹",
+    "ChoiceB": "李国琛",
+    "ChoiceC": "谢远定",
+    "ChoiceD": "吴肃"
+  },
+  {
+    "Question": "至今东南大学已经成立多少年？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "110",
+    "ChoiceB": "111",
+    "ChoiceC": "112",
+    "ChoiceD": "113"
+  },
+  {
+    "Question": "20年代的东南大学是我国第几所国立大学？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "3",
+    "ChoiceD": "4"
+  },
+  {
+    "Question": "20年代的东南大学以哪个国家的教育体制为模板？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "日本",
+    "ChoiceB": "英国",
+    "ChoiceC": "法国",
+    "ChoiceD": "美国"
+  },
+  {
+    "Question": "20年代的东南大学成为中国综合大学先驱的原因是？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "寓师范于大学，囿文理和农工商的实科于一体",
+    "ChoiceB": "首开女禁",
+    "ChoiceC": "学并中西",
+    "ChoiceD": "工商业学科独树一帜"
+  },
+  {
+    "Question": "1925年由于什么派系军阀直接干预东大校政导致东大由盛而衰？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "直系",
+    "ChoiceB": "皖系",
+    "ChoiceC": "奉系",
+    "ChoiceD": "粤系"
+  },
+  {
+    "Question": "下面哪一位不是筹建20年代东南大学的发起人？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "张謇",
+    "ChoiceB": "蔡元培",
+    "ChoiceC": "郭秉文",
+    "ChoiceD": "吴佩孚"
+  },
+  {
+    "Question": "在20年代的东南大学的办学指导思想上哪一项不是郭秉文校长主张的？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "学者治校",
+    "ChoiceB": "学术自由",
+    "ChoiceC": "学生自治",
+    "ChoiceD": "人才培养"
+  },
+  {
+    "Question": "郭秉文管理东南大学治校学术自由时下面哪一项不是正确的主张？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "君子不党",
+    "ChoiceB": "学者治校",
+    "ChoiceC": " 学术自由",
+    "ChoiceD": "学生自治"
+  },
+  {
+    "Question": "郭秉文认为学校培养人才要提高学生的自觉，靠学生自动去学，对学生提出了什么口号？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "自动主义",
+    "ChoiceB": "自觉主义",
+    "ChoiceC": "自律主义",
+    "ChoiceD": "自强主义"
+  },
+  {
+    "Question": "下面哪一项不属于郭秉文的“自动主义”？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "学习上的自学和自力研究",
+    "ChoiceB": "思想上的自律和自强",
+    "ChoiceC": "生活上的自立和自理",
+    "ChoiceD": "学术、文化、体育活动的自行组织和主办"
+  },
+  {
+    "Question": "在东大的办学的具体方针和管理上，郭秉文认为就大学教育而言，应该力求4点，下面不对的一项是_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "通才与专才的平衡",
+    "ChoiceB": "人文与科学的平衡",
+    "ChoiceC": "师资与学生的平衡",
+    "ChoiceD": "国内与国际的平衡"
+  },
+  {
+    "Question": "“止于至善”的校训是由下面哪位校长首先提出的？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "江谦",
+    "ChoiceB": "李瑞清",
+    "ChoiceC": "郭秉文",
+    "ChoiceD": "刘伯明"
+  },
+  {
+    "Question": "“止于至善”的校训出于哪篇著作？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "《论语》",
+    "ChoiceB": "《礼记》",
+    "ChoiceC": "《中庸》",
+    "ChoiceD": "《春秋》"
+  },
+  {
+    "Question": "由于郭秉文的努力，下面哪一项使之成为南高、东大的师资来源的重要渠道？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "科学社",
+    "ChoiceB": "政府推荐",
+    "ChoiceC": "学生选拔",
+    "ChoiceD": "青年报"
+  },
+  {
+    "Question": "“北大以文史哲著称，东大以科学名世”是由北京大学哪位教授提出的？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "李大钊",
+    "ChoiceB": "梁和钧",
+    "ChoiceC": "梁启超",
+    "ChoiceD": "胡适"
+  },
+  {
+    "Question": "20年代的东大作出了许多的业绩，其中不包括_____。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "广延名师，集俊彦以育英才",
+    "ChoiceB": "兴馆建舍，为学校奠定了物质基础",
+    "ChoiceC": "面向世界，开展国际学术交流",
+    "ChoiceD": "致力教学，为新中国的建设事业培养了众多人才"
+  },
+  {
+    "Question": "20年代东大实行选课、学分制。其选课学规有三项，下面不属于这三项的是_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "必修科",
+    "ChoiceB": "自选主系辅系",
+    "ChoiceC": "公共选科",
+    "ChoiceD": "自行选科"
+  },
+  {
+    "Question": "哪位教授在东大创立了我过第一个地学系？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "李四光",
+    "ChoiceB": "竺可桢",
+    "ChoiceC": "熊庆来",
+    "ChoiceD": "吴有训"
+  },
+  {
+    "Question": "陶行知曾在东大担任过哪一科的科主任？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "教育科",
+    "ChoiceB": "体育科",
+    "ChoiceC": "文理科",
+    "ChoiceD": "工科"
+  },
+  {
+    "Question": "茅以升任主任后，提出增设_____和土木工程系与机械工程系组成工科。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "电子科学系",
+    "ChoiceB": "仪器科学系",
+    "ChoiceC": "电机工程系",
+    "ChoiceD": "电气工程系"
+  },
+  {
+    "Question": "1927年7月大学院决定将包括东大在内的一共几所高校共同组建成为国立第四中山大学？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "7",
+    "ChoiceB": "8",
+    "ChoiceC": "9",
+    "ChoiceD": "10"
+  },
+  {
+    "Question": "国立第四中山大学于哪一年正式更名为国立中央大学？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1928",
+    "ChoiceB": "1929",
+    "ChoiceC": "1931",
+    "ChoiceD": "1932"
+  },
+  {
+    "Question": "东大的发展过程中出现过易长风潮，使得东大由盛而衰。此次风潮发生在什么时期？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "20年代初期",
+    "ChoiceB": "20年代中期",
+    "ChoiceC": "20年代末期",
+    "ChoiceD": "30年代初期"
+  },
+  {
+    "Question": "东南大学从创办至今共有多少任校长？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "26",
+    "ChoiceB": "27",
+    "ChoiceC": "28",
+    "ChoiceD": "29"
+  },
+  {
+    "Question": "东大在五卅运动于_____全体学生游行，并赴宣抚使署、省长公署，要求对英、日帝国主义提出严重抗议？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "5月31日",
+    "ChoiceB": "6月1日",
+    "ChoiceC": "6月7日",
+    "ChoiceD": "6月10日"
+  },
+  {
+    "Question": "在十月革命、五四运动期间下列哪所大学是南京地区革命的摇篮，党团活动中心，马克思主义的传播中心？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "东大",
+    "ChoiceB": "河海",
+    "ChoiceC": "南大",
+    "ChoiceD": "南师"
+  },
+  {
+    "Question": "1927年6月9日，在首批试行大学区制的学校中，国立东南大学被改组为_____。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "第一中山大学",
+    "ChoiceB": "第二中山大学",
+    "ChoiceC": "第三中山大学",
+    "ChoiceD": "第四中山大学"
+  },
+  {
+    "Question": "1928年2月29日，国立第四中山大学更改校名，改称什么？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "国立中央大学",
+    "ChoiceB": "东南大学",
+    "ChoiceC": "金陵大学",
+    "ChoiceD": "江苏大学"
+  },
+  {
+    "Question": "国立中央大学成立于何时？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1927年4月28日",
+    "ChoiceB": "1928 年4月28日",
+    "ChoiceC": "1937年4月28日",
+    "ChoiceD": "1932年4月28日 "
+  },
+  {
+    "Question": "国立中央大刚成立时，_____任校长。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "张乃燕",
+    "ChoiceB": "朱家烨",
+    "ChoiceC": "罗家伦",
+    "ChoiceD": "钱天鹏"
+  },
+  {
+    "Question": "1929年，国立中央大学进行了一次重大的教学制度改革，采用了____教学制度？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "学年制",
+    "ChoiceB": "学分制",
+    "ChoiceC": "苏联学制",
+    "ChoiceD": "学年制和学分制并用"
+  },
+  {
+    "Question": "中央大学大礼堂的建设在_____竣工？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1930年6月",
+    "ChoiceB": "1931年4月",
+    "ChoiceC": "1931年6月",
+    "ChoiceD": "1931年11月"
+  },
+  {
+    "Question": "大学应当具有振兴中华民族的共同意识的论点是由____提出的？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "李四光",
+    "ChoiceB": "罗家伦",
+    "ChoiceC": "张乃燕",
+    "ChoiceD": "吴有训"
+  },
+  {
+    "Question": "“诚、朴、雄、伟”的学风是在_____被提出的？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "两江师范时期",
+    "ChoiceB": "南高时期",
+    "ChoiceC": "第四中山大学时期",
+    "ChoiceD": "国立中央大学时期"
+  },
+  {
+    "Question": "国立中央大学历史中任期最长的是_____校长？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "张乃燕",
+    "ChoiceB": "朱家烨",
+    "ChoiceC": "罗家伦",
+    "ChoiceD": "李四光"
+  },
+  {
+    "Question": "1935年5月18日，国立中央大学再度创办_____学院，共有文理法教农工医七个学院？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "农学院",
+    "ChoiceB": "法学院",
+    "ChoiceC": "文学院",
+    "ChoiceD": "医学院"
+  },
+  {
+    "Question": "1937年7月7日，日本帝国主义悍然发动侵华战争，1937年10月中央大学西迁_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "重庆",
+    "ChoiceB": "武昌",
+    "ChoiceC": "长沙",
+    "ChoiceD": "宜昌"
+  },
+  {
+    "Question": "国立中央大学入川后，校分为_____处？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "3处",
+    "ChoiceB": "4处",
+    "ChoiceC": "5处",
+    "ChoiceD": "2处"
+  },
+  {
+    "Question": "抗战期间，_____校长于1943年3月4日到校视事，并在4月对学生实行“军事管理”？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "罗家伦",
+    "ChoiceB": "顾孟于",
+    "ChoiceC": "蒋介石",
+    "ChoiceD": "顾毓绣"
+  },
+  {
+    "Question": "中央大学的下列_____教授曾在南洋举办画展，以售画所得，捐献40万元支援抗战？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "张书齐",
+    "ChoiceB": "傅抱石",
+    "ChoiceC": "徐悲鸿",
+    "ChoiceD": "茅以升"
+  },
+  {
+    "Question": "抗战时期南京临时中央大学，设在_____？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "河海大学内",
+    "ChoiceB": "金陵大学内",
+    "ChoiceC": "江苏医学院内",
+    "ChoiceD": "原中央大学内"
+  },
+  {
+    "Question": "抗日战争胜利后，国立中央大学于_____年复员南京。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1945",
+    "ChoiceB": "1946",
+    "ChoiceC": "1947",
+    "ChoiceD": "1948"
+  },
+  {
+    "Question": "在五二〇运动周年纪念时，中央大学_____校长提出了“在安定中求进步，在进步中求安定”的治校方针？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "顾孟余",
+    "ChoiceB": "蒋介石",
+    "ChoiceC": "罗家伦",
+    "ChoiceD": "吴有训"
+  },
+  {
+    "Question": "1947年，由_____发端，爆发了震撼全国的反饥饿、反内战、反迫害的五二〇运动。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "江苏大学",
+    "ChoiceB": "中山大学",
+    "ChoiceC": "国立中央大学",
+    "ChoiceD": "北京大学"
+  },
+  {
+    "Question": "在动荡的年代，国立中央大学仍积极进行国内外的学术活动。_____中央大学物理系主任赵忠尧和教授毕德显，在美国购得提供原子能研究的机器设备，设实验室于中央大学东北的太平门附近九华山下，是我国原子科学研究之始。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1947年3月",
+    "ChoiceB": "1946年3月",
+    "ChoiceC": "1948年3月",
+    "ChoiceD": "1949年3月"
+  },
+  {
+    "Question": "在国立中央大学的7个学院中，规模最大的学院是_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "工学院",
+    "ChoiceB": "师范学院",
+    "ChoiceC": "法学院",
+    "ChoiceD": "理学院"
+  },
+  {
+    "Question": "中央大学师生于_____开展反迁校斗争，迎来了南京解放？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1948年末到1949年出",
+    "ChoiceB": "1948年初",
+    "ChoiceC": "1949年末",
+    "ChoiceD": "1949年末到1950年初"
+  },
+  {
+    "Question": "中央大学内迁重庆后，在周恩来陪同下，毛泽东_____曾到东大？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "1945年8月28日",
+    "ChoiceB": "1946年8月28日",
+    "ChoiceC": "1945年10月10日",
+    "ChoiceD": "1945年9月6日"
+  },
+  {
+    "Question": "中央大学于_____在南京复校开课。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1946年5月",
+    "ChoiceB": "1946年11月",
+    "ChoiceC": "1947年5月",
+    "ChoiceD": "1947年11月"
+  },
+  {
+    "Question": "_____年1月25日，中央大学联合重庆沙磁区各校师生，举行万人大游行，高呼“反对内战，实行民主”等口号，当时，中国共产党曾为中大同学题词“一代胜似一代，青年是未来的主人”。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1945",
+    "ChoiceB": "1946",
+    "ChoiceC": "1947",
+    "ChoiceD": "1948"
+  },
+  {
+    "Question": "国立中央大学有近_____年的历史？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "18",
+    "ChoiceB": "15",
+    "ChoiceC": "22",
+    "ChoiceD": "30"
+  },
+  {
+    "Question": "1923年中国社会主义青年团第_____次代表大会在东南大学的梅庵召开？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "3",
+    "ChoiceD": "4"
+  },
+  {
+    "Question": "国立中央大学是由东南大学与其他_____所大学联合组建而成的？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "6",
+    "ChoiceB": "7",
+    "ChoiceC": "8",
+    "ChoiceD": "9"
+  },
+  {
+    "Question": "抗战时期，中央大学除罗家伦外还有3位校长，下列______不是这3位校长之一？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "顾孟余",
+    "ChoiceB": "蒋介石",
+    "ChoiceC": "吴有训",
+    "ChoiceD": "顾敏绣"
+  },
+  {
+    "Question": "中央大学复校后工学院共设_____个系。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "6",
+    "ChoiceB": "7",
+    "ChoiceC": "8",
+    "ChoiceD": "9"
+  },
+  {
+    "Question": "1928年第四中山大学改称为江苏大学，共持续了_____个多月就改为国立中央大学",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "2",
+    "ChoiceB": "3",
+    "ChoiceC": "4",
+    "ChoiceD": "5"
+  },
+  {
+    "Question": "我校现有两院院士几人？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "9",
+    "ChoiceB": "10",
+    "ChoiceC": "11",
+    "ChoiceD": "12"
+  },
+  {
+    "Question": "我校有几个国家重点实验室？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "3",
+    "ChoiceD": "4"
+  },
+  {
+    "Question": "学校的标志性建筑是什么？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "体育馆",
+    "ChoiceB": "大礼堂",
+    "ChoiceC": "梅庵",
+    "ChoiceD": "中山院"
+  },
+  {
+    "Question": "英国哲学家罗素、美国教育家杜威、印度诗人泰戈尔等曾在东大的哪个地方作过演讲？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "大礼堂",
+    "ChoiceB": "梅庵",
+    "ChoiceC": "中大院",
+    "ChoiceD": "体育馆"
+  },
+  {
+    "Question": "东南大学是一所历史悠久、学科配套、名师荟萃的高等学府，其历史最早可以追溯到1902年创立的_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "三江师范学堂",
+    "ChoiceB": "两江师范学堂",
+    "ChoiceC": "南京高等师范学校",
+    "ChoiceD": "国立东南大学"
+  },
+  {
+    "Question": "三江师范学堂_____年更名为两江师范学堂。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1905",
+    "ChoiceB": "1902",
+    "ChoiceC": "1904",
+    "ChoiceD": "1906"
+  },
+  {
+    "Question": "三江、两江师范学堂的最后一任监督、校长是_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "张之洞",
+    "ChoiceB": "李瑞清",
+    "ChoiceC": "江谦",
+    "ChoiceD": "陶行知"
+  },
+  {
+    "Question": "_____教授在南高将教授法更名为教学法",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "刘伯明",
+    "ChoiceB": "陶行知",
+    "ChoiceC": "江谦",
+    "ChoiceD": "郭秉文"
+  },
+  {
+    "Question": "抗战后的中央大学设置7个学院36个系，这7个学院是：文学院，理学院，法学院，师范学院，农学院，工学院和_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "哲学院",
+    "ChoiceB": "商学院",
+    "ChoiceC": "医学院",
+    "ChoiceD": "自然科学学院"
+  },
+  {
+    "Question": "韦钰是我国第一微电子学女博士，中国工程院院士，她创立了国内第一个_____博士点。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "电子学",
+    "ChoiceB": "生物电子学",
+    "ChoiceC": "应用电子学",
+    "ChoiceD": "物理电子学"
+  },
+  {
+    "Question": "我校_____校友获得“何梁何利科学与技术进步奖”。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "顾冠群",
+    "ChoiceB": "韦钰",
+    "ChoiceC": "齐康",
+    "ChoiceD": "吕志涛"
+  },
+  {
+    "Question": "东南大学董事会于_____年成立。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1999年",
+    "ChoiceB": "2000年",
+    "ChoiceC": "2001年",
+    "ChoiceD": "2002年"
+  },
+  {
+    "Question": "1952年,在全国五大行政区先后进行了院系调整,至1953年,原南京大学的院系调整基本完成，南京工学院以南京大学工学院为基础独立建院，_____任校长，_____任副院长兼教务处处长。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "汪海粟、刘学初",
+    "ChoiceB": "汪海粟、钱钟韩",
+    "ChoiceC": "钱钟韩、刘学初",
+    "ChoiceD": "钱钟韩、汪海粟"
+  },
+  {
+    "Question": "2001年2月12日，教育部和_____在南京签署协议，决定共同重点建设东南大学。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "南京市人民政府",
+    "ChoiceB": "江苏省人民政府",
+    "ChoiceC": "东南大学",
+    "ChoiceD": "江苏省教育厅"
+  },
+  {
+    "Question": "CIMS研究中心，即_____研究中心，于1998年成立，为跨学科的科研联合机构，接受国家“863”高技术计划自动化领域CIMS主题专家组所下达的科研任务。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "振动工程",
+    "ChoiceB": "计算机集成制造系统",
+    "ChoiceC": "国家专用集成电路系统工程技术",
+    "ChoiceD": "分子与生物分子"
+  },
+  {
+    "Question": "第四中山大学成立不到半年，更改校名就在酝酿之中，其理由是：大学院应以省为名统辖全省的大中小学。1928年2月第四中山大学改称_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "国立东南大学",
+    "ChoiceB": "江苏大学",
+    "ChoiceC": "中央大学",
+    "ChoiceD": "南京大学"
+  },
+  {
+    "Question": "下面哪位是建筑系的开创者？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "杨廷宝",
+    "ChoiceB": "顾冠群",
+    "ChoiceC": "李瑞青",
+    "ChoiceD": "江谦 "
+  },
+  {
+    "Question": "扩建中大（东大前身）在进行时，发生了_____，令扩建不得不停工？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "九一八事变",
+    "ChoiceB": "卢沟桥事变",
+    "ChoiceC": "皖南事变",
+    "ChoiceD": "西安事变"
+  },
+  {
+    "Question": "在2003年国家大学科技园的评估中，东南大学国家大学科技园名列全国第几？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "6",
+    "ChoiceB": "7",
+    "ChoiceC": "8",
+    "ChoiceD": "9"
+  },
+  {
+    "Question": "自1949年8月至1951年7月，学校实行校务委员会制，自1951-1952学年第一学期改行_____制。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "常务委员会",
+    "ChoiceB": "校长",
+    "ChoiceC": "总务长",
+    "ChoiceD": "行政教育"
+  },
+  {
+    "Question": "中央大学工学院，至抗日战争胜利后已成为全校规模最大的学院；其中的_____系发端于1934年，系全国首创。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "航空工程",
+    "ChoiceB": "水利工程",
+    "ChoiceC": "土木工程",
+    "ChoiceD": "机械工程"
+  },
+  {
+    "Question": "南京工学院于_____年改名为东南大学。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1986",
+    "ChoiceB": "1987",
+    "ChoiceC": "1988",
+    "ChoiceD": "1989"
+  },
+  {
+    "Question": "1980年11月，南工组团访问日本，与_____结为友好学校。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "南洋理工大学",
+    "ChoiceB": "东京大学",
+    "ChoiceC": "长野工业大学",
+    "ChoiceD": "爱知工业大学"
+  },
+  {
+    "Question": "东南大学校庆日为每年的_____月_____日。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "5、6",
+    "ChoiceB": "5、15",
+    "ChoiceC": "6、6",
+    "ChoiceD": "10、15"
+  },
+  {
+    "Question": "1959年12月中共中央决定_____担任南京工学院党委书记兼院长。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "刘雪初",
+    "ChoiceB": "汪海粟",
+    "ChoiceC": "杨德和",
+    "ChoiceD": "罗加仑"
+  },
+  {
+    "Question": "1976年3月，_____大学和我校的师生借清明节纪念周总理的名义，共同在南京地区点燃了反对四人帮的烈火。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "南京航空大学",
+    "ChoiceB": "南京理工大学",
+    "ChoiceC": "南京大学",
+    "ChoiceD": "南京中医药大学"
+  },
+  {
+    "Question": "1977年9月，我校制定了《南京工学院组织体制》，全院设_____，_____，_____三级。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "校，院，系",
+    "ChoiceB": "院，系，教研组",
+    "ChoiceC": "校，院，教研组",
+    "ChoiceD": "校，系，教研组"
+  },
+  {
+    "Question": "1985年10月，我校正式实行_____。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "党委负责制",
+    "ChoiceB": "团委负责制",
+    "ChoiceC": "学生自主制",
+    "ChoiceD": "院长负责制"
+  },
+  {
+    "Question": "1987年，我校和_____签订了两校教学科研合作协议。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "铁道医学院",
+    "ChoiceB": "南京医学院",
+    "ChoiceC": "无锡医学院",
+    "ChoiceD": "南京中医药学院"
+  },
+  {
+    "Question": "1980年制定发展规划时，我校提出了_____的设想。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "以工为主，理工结合",
+    "ChoiceB": "以文为主",
+    "ChoiceC": "理工文结合",
+    "ChoiceD": "以医为主"
+  },
+  {
+    "Question": "_____年_____月，南京工委正式批准将南京工学院改名为东南大学。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "1988，5",
+    "ChoiceB": "1944，2",
+    "ChoiceC": "1999，2",
+    "ChoiceD": "2006，5"
+  },
+  {
+    "Question": "1981年底，学校正式恢复了正常的教学秩序，学制改为_____年。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "3",
+    "ChoiceD": "4"
+  },
+  {
+    "Question": "在1985到1988年间，学校实行_____制。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "奖励",
+    "ChoiceB": "学分",
+    "ChoiceC": "业绩",
+    "ChoiceD": "合作"
+  },
+  {
+    "Question": "我校的两个目标是_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "办学，融资",
+    "ChoiceB": "融资，育人",
+    "ChoiceC": "办学，育人",
+    "ChoiceD": "育人，宣传"
+  },
+  {
+    "Question": "1981年，南工被委托建立了八个重点学科，下面哪个不是。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "建筑设计",
+    "ChoiceB": "通讯电子系",
+    "ChoiceC": "软件工程",
+    "ChoiceD": "自动控制理论及应用"
+  },
+  {
+    "Question": "南工从1983至1984年，先后提出开创南工新局面至1990年前的发展规划，明确提出把南工建成_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "三个中心的重点大学",
+    "ChoiceB": "两个中心的重点大学",
+    "ChoiceC": "有为大学",
+    "ChoiceD": "优秀大学"
+  },
+  {
+    "Question": "1985年2月，我校与_____大学开展校际合作协议。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "南京大学",
+    "ChoiceB": "河海大学",
+    "ChoiceC": "南京师范大学",
+    "ChoiceD": "哈佛大学"
+  },
+  {
+    "Question": "1987年4月，_____应《大自然探索》编辑部之约，撰写了《以联合求发展》。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "顾冠群",
+    "ChoiceB": "胡凌云",
+    "ChoiceC": "陈笃信",
+    "ChoiceD": "韦钰"
+  },
+  {
+    "Question": "东大更名后的首位校长是_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "陈万年",
+    "ChoiceB": "韦钰",
+    "ChoiceC": "刘钟德",
+    "ChoiceD": "汪海粟"
+  },
+  {
+    "Question": "原来的_____学院于1987年由我校分管，并于1988年10月命名为东南大学南湖分部。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "新疆理工学院",
+    "ChoiceB": "南京云溪大学",
+    "ChoiceC": "无锡能源工程学院",
+    "ChoiceD": "南京能源工程学院"
+  },
+  {
+    "Question": "浦口校区于_____年建好。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "1967",
+    "ChoiceB": "1987",
+    "ChoiceC": "2006",
+    "ChoiceD": "1990"
+  },
+  {
+    "Question": "1988年6月，学校成立了“_____“，由各院系推出专家组成，对相应院系设置提出优化方案。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "专业建设咨询委员会",
+    "ChoiceB": "专家咨询委员会",
+    "ChoiceC": "专业设置委员会",
+    "ChoiceD": "专业优化委员会"
+  },
+  {
+    "Question": "90年代，学校逐步实施按专业类招生和组织学生参加_____就业。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "双向选择",
+    "ChoiceB": "单向选择",
+    "ChoiceC": "单双合并",
+    "ChoiceD": "任意向"
+  },
+  {
+    "Question": "东南大学校歌由_____所写。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "乔雨",
+    "ChoiceB": "聂耳",
+    "ChoiceC": "沈华",
+    "ChoiceD": "王步高"
+  },
+  {
+    "Question": "_____实验室为我国毫米波研究赶超国际先进水平做出了贡献。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "厘米波国家重点试验室",
+    "ChoiceB": "微米波国家重点实验室",
+    "ChoiceC": "航空国家重点实验室",
+    "ChoiceD": "毫米波国家重点实验室"
+  },
+  {
+    "Question": "下面哪所学校不是由南京工学院分处发展而成。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "东南大学",
+    "ChoiceB": "江苏工学院",
+    "ChoiceC": "河海大学",
+    "ChoiceD": "南京化工学院"
+  },
+  {
+    "Question": "下面哪个不是我校曾聘请的名誉教授。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "吴怀华",
+    "ChoiceB": "杨政宁",
+    "ChoiceC": "吴健雄",
+    "ChoiceD": "丁肇中"
+  },
+  {
+    "Question": "自1950年始，我校以一年多的时间组织全校教师和高年级学生采取_____方法，进行课程改革。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "师生配合",
+    "ChoiceB": "师生混合编组的方法",
+    "ChoiceC": "师生联谊",
+    "ChoiceD": "师生交流"
+  },
+  {
+    "Question": "1952年7月26日，我校与_____大学合并。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "金陵大学",
+    "ChoiceB": "日本大学",
+    "ChoiceC": "江苏大学",
+    "ChoiceD": "乌鲁木齐大学"
+  },
+  {
+    "Question": "1953年我校原本的_____系和_____系，并入了金陵大学。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "中文，计算机",
+    "ChoiceB": "建筑，化工",
+    "ChoiceC": "电机，中文",
+    "ChoiceD": "电机，化工"
+  },
+  {
+    "Question": "50年代，由我校_____院与金陵大学农学院森林系和并为南京林学院，后改名为南京林业大学。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "林学院",
+    "ChoiceB": "农学院森林系",
+    "ChoiceC": "文学院",
+    "ChoiceD": "土木"
+  },
+  {
+    "Question": "_____由我校的水利工程系与其他一些大学的系组建而成。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "北京大学",
+    "ChoiceB": "河海大学",
+    "ChoiceC": "南京航空大学",
+    "ChoiceD": "南京中医药大学"
+  },
+  {
+    "Question": "我校50年代在院系调整中，衍生和共生了_____所高等学校，后来都成为国家教育部重点学校。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "8",
+    "ChoiceD": "80"
+  },
+  {
+    "Question": "至1957年，下面哪个不是属于动力系的。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "高压实验室",
+    "ChoiceB": "电网实验室",
+    "ChoiceC": "黑洞实验室",
+    "ChoiceD": "电工学实验室"
+  },
+  {
+    "Question": "1953年初，相应毛主席号召，我校坚持_____方针，取得显著成绩。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "德智体全面发展",
+    "ChoiceB": "以理科为主",
+    "ChoiceC": "以人为本",
+    "ChoiceD": "发展学生创造力"
+  },
+  {
+    "Question": "1956年，我校相应毛主席论时代关系，在学术上采取_____方针。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "百家争鸣",
+    "ChoiceB": "合作共赢",
+    "ChoiceC": "共同进步",
+    "ChoiceD": "互不干涉"
+  },
+  {
+    "Question": "九龙湖一期工程_____完成。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "2003",
+    "ChoiceB": "2004",
+    "ChoiceC": "2005",
+    "ChoiceD": "2006"
+  },
+  {
+    "Question": "_____是我校的根本任务。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "培养各科专门人才",
+    "ChoiceB": "教学与研究",
+    "ChoiceC": "培养各科人才",
+    "ChoiceD": "培养国家革命人才"
+  },
+  {
+    "Question": "三江师范学堂的创始人是_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "刘坤一",
+    "ChoiceB": "张之洞",
+    "ChoiceC": "江谦",
+    "ChoiceD": "周馥"
+  },
+  {
+    "Question": "东南大学创建于_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "1900",
+    "ChoiceB": "1901",
+    "ChoiceC": "1902",
+    "ChoiceD": "1903"
+  },
+  {
+    "Question": "东南大学现时的校训。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "止于至善",
+    "ChoiceB": "嚼得菜根，做得大事",
+    "ChoiceC": "以诚为本",
+    "ChoiceD": "诚，朴，雄，伟"
+  },
+  {
+    "Question": "下列校名哪个不是东南大学曾经的校名。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "三江示范学堂",
+    "ChoiceB": "国立中央大学",
+    "ChoiceC": "南京高等师范学院",
+    "ChoiceD": "南京工业大学"
+  },
+  {
+    "Question": "东南大学现任校长是_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "易红",
+    "ChoiceB": "韦钰",
+    "ChoiceC": "顾冠群",
+    "ChoiceD": "胡凌云"
+  },
+  {
+    "Question": "东南大学最近的一次改名是在_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1924",
+    "ChoiceB": "1988",
+    "ChoiceC": "1976",
+    "ChoiceD": "1990"
+  },
+  {
+    "Question": "东南大学的标志性建筑是_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "大礼堂",
+    "ChoiceB": "体育馆",
+    "ChoiceC": "图书馆",
+    "ChoiceD": "梅庵"
+  },
+  {
+    "Question": "我国第一本计算机网络统编教材《计算机网络》是由谁主编的。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "金远平",
+    "ChoiceB": "殷人昆",
+    "ChoiceC": "顾冠群",
+    "ChoiceD": "陈道蓄"
+  },
+  {
+    "Question": "浦口校区于何时奠基。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1990",
+    "ChoiceB": "1988",
+    "ChoiceC": "1992",
+    "ChoiceD": "1991"
+  },
+  {
+    "Question": "大礼堂于_____年建成。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1933",
+    "ChoiceB": "1931",
+    "ChoiceC": "1929",
+    "ChoiceD": "1934"
+  },
+  {
+    "Question": "东南大学是一所历史悠久、规模恢宏、学风良好的高等学府。学校处于明国子监的原址，街名“成贤”，桥名“文昌”，系培育贤才、昌明文化之意。由此命名我校浦口校区的_____和_____楼。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "成贤，文昌",
+    "ChoiceB": "文昌，笃行馆",
+    "ChoiceC": "成贤，笃行馆",
+    "ChoiceD": "梅庵，笃行馆"
+  },
+  {
+    "Question": "1915年春至1919年9月, _____任南高教务主任和南高代理校长, 期间致力于推行德智体三育并重的教育方针, 力求：（一）通才与专才的平衡，（二）人文与科学的平衡，（三）师资与设备的平衡，（四）国内与国际的平衡。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "郭秉文",
+    "ChoiceB": "顾冠群",
+    "ChoiceC": "顾毓秀",
+    "ChoiceD": "易红"
+  },
+  {
+    "Question": "“止于至善” 的校训是由郭秉文校长首先提出的，它出于_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "《礼记?大学》",
+    "ChoiceB": "《论语》",
+    "ChoiceC": "《中庸》",
+    "ChoiceD": "《孟子》"
+  },
+  {
+    "Question": "_____教授是我国地学、气象学的一代宗师，他在东大创办了我国第一个地学系，为我国地质学的发展作出了卓越的贡献。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "竺可桢",
+    "ChoiceB": "蔡元培",
+    "ChoiceC": "茅以升",
+    "ChoiceD": "李世琼"
+  },
+  {
+    "Question": "1928年2月29日，第四中山大学易名江苏大学，张乃燕继任校长。同年五月，又定名为_____，张乃燕留任，为中央大学首任校长。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "国立中央大学",
+    "ChoiceB": "两江师范学堂",
+    "ChoiceC": "三江师范学堂",
+    "ChoiceD": "东南大学"
+  },
+  {
+    "Question": "南京高等师范学校开创了3个全国之先,下列不是的是_____。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "在1916年开设体育专修科，把体育列为必修科，倡全国之先",
+    "ChoiceB": "1920年开女禁并于同年招收8名女学生首创大学男女同校",
+    "ChoiceC": "1923年开设工科",
+    "ChoiceD": "1920年开办暑期学校率全国之先。"
+  },
+  {
+    "Question": "在东大建校一百周年上_____题词为 “严谨求实，团结奋进，把东南大学建成一流人才和创新成果的培育基地”。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "李鹏",
+    "ChoiceB": "朱隆基",
+    "ChoiceC": "江泽民",
+    "ChoiceD": "胡锦涛"
+  },
+  {
+    "Question": "学校的标志性建筑是_____。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "大礼堂",
+    "ChoiceB": "梅庵",
+    "ChoiceC": "六朝松",
+    "ChoiceD": "图书馆"
+  },
+  {
+    "Question": "下面_____不是东南大学的一个校区。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "四牌楼校区",
+    "ChoiceB": "浦口校区",
+    "ChoiceC": "九龙湖校区",
+    "ChoiceD": "常州分校"
+  },
+  {
+    "Question": "学校更名为南京高等师范学校是在哪一年？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1902",
+    "ChoiceB": "1915",
+    "ChoiceC": "1988",
+    "ChoiceD": "1925"
+  },
+  {
+    "Question": "南高的学生工作对学生强调什么？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "自觉、自动、自立",
+    "ChoiceB": "启发、诱导、示范",
+    "ChoiceC": "启发、诱导、自立",
+    "ChoiceD": "自觉、自主、自信"
+  },
+  {
+    "Question": "开女禁首创大学男女同校的是哪一所高校？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "南京高等师范学院",
+    "ChoiceB": "广州高等师范学院",
+    "ChoiceC": "北京高等师范学院",
+    "ChoiceD": "武昌高等师范学院"
+  },
+  {
+    "Question": "在什么运动兴起后，陶行知教授在南高将教授法更名为教学法？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "五卅运动",
+    "ChoiceB": "五四运动",
+    "ChoiceC": "新文化运动",
+    "ChoiceD": "一二九运动"
+  },
+  {
+    "Question": "1919年12月1日，由南京高等师范学院学生发起和创办的_____月刊在南京出版，积极宣传介绍苏联社会主义革命和国际无产阶级运动的状况？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "少年世界",
+    "ChoiceB": "少年社会",
+    "ChoiceC": "少年思想",
+    "ChoiceD": "少年运动"
+  },
+  {
+    "Question": "下面哪一项不属于郭秉文的“自动主义”？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "学习上的自学和自力研究",
+    "ChoiceB": "思想上的自律和自强",
+    "ChoiceC": "生活上的自立和自理",
+    "ChoiceD": "学术、文化、体育活动的自行组织和主办"
+  },
+  {
+    "Question": "沦陷区内，南京中大师生进行了许多反日爱国活动，其中，最早成立的抗日秘密团体为_____？",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "群社",
+    "ChoiceB": "民社",
+    "ChoiceC": "青年救国社",
+    "ChoiceD": "团结救国社"
+  },
+  {
+    "Question": "抗战时期，中央大学除罗家伦外还有3位校长，下列_____不是这3位校长之一？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "顾孟余",
+    "ChoiceB": "蒋介石",
+    "ChoiceC": "吴有训",
+    "ChoiceD": "顾敏绣"
+  },
+  {
+    "Question": "三江、两江师范学堂的最后一任监督( 校长 )是_____。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "张之洞",
+    "ChoiceB": "李瑞清",
+    "ChoiceC": "江谦",
+    "ChoiceD": "陶行知"
+  },
+  {
+    "Question": "1952年,在全国五大行政区先后进行了院系调整,至1953年,原南京大学的院系调整基本完成，南京工学院以南京大学工学院为基础独立建院，_____任校长，_____任副院长兼教务处处长。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "汪海粟、刘学初",
+    "ChoiceB": "汪海粟、钱钟韩",
+    "ChoiceC": "钱钟韩、刘学初",
+    "ChoiceD": "钱钟韩、汪海粟"
+  },
+  {
+    "Question": "_____，是学校一切工作的中心。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "以教学为核心，积极提高教学质量",
+    "ChoiceB": "以争创国家一流学校",
+    "ChoiceC": "以争创国际一流学校",
+    "ChoiceD": "以培养学生交际能力"
+  },
+  {
+    "Question": "1981年至1985年间，教改点面结合，着重抓了学生_____、计算机和情报检索能力的提高。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "外语",
+    "ChoiceB": "实验",
+    "ChoiceC": "数学",
+    "ChoiceD": "现代化管理"
+  },
+  {
+    "Question": "CIMS研究中心指哪个？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "计算机辅助建设国家专业实验室",
+    "ChoiceB": "分子与生物分子电子实验室",
+    "ChoiceC": "毫米波国家总店实验室",
+    "ChoiceD": "计算机集成制造系统研究中心"
+  },
+  {
+    "Question": "1959年，学校设置了工程物理系，筹办了_____专业。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "原子核反应堆",
+    "ChoiceB": "物理",
+    "ChoiceC": "热能 ",
+    "ChoiceD": "黑洞研究"
+  },
+  {
+    "Question": "1961——1965年，我校获得的重大成果有91项，下面哪个不包括在内。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "行波管",
+    "ChoiceB": "电厂运行自动化",
+    "ChoiceC": "核能研究学",
+    "ChoiceD": "无汽鼓锅炉"
+  },
+  {
+    "Question": "自1950始，我校以一年多的时间组织全校教师和高年级学生采取_____方法，进行课程改革。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "师生配合",
+    "ChoiceB": "师生混合编组的方法",
+    "ChoiceC": "师生联谊",
+    "ChoiceD": "师生交流"
+  },
+  {
+    "Question": "在东南大学即将迎来建校110周年之际，党和国家领导人_____为我校题词\\\"以科学名世，以人才报国\\\"。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "贾庆林",
+    "ChoiceB": "回良玉",
+    "ChoiceC": "温家宝",
+    "ChoiceD": "刘延东"
+  }
+]
