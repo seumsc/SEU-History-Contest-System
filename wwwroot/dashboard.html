@@ -66,6 +66,38 @@
 
     }
 </style>
+<script>
+        function downloadExcel(){
+        $.ajax({
+            url:  'http://history-contest.chinacloudsites.cn/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
+            
+            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+            
+            crossDomain:true,
+            
+            type: "GET", //请求方式
+            
+            contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            beforeSend: function () {
+              //请求前的处理
+  
+            },
+            success: function (req,res) {
+              //请求成功时处理
+             console.log(req);
+             console.log(res);
+            },
+            complete: function () {
+              //请求完成的处理
+            },
+            error: function (xhr) {
+              //请求出错处理
+              alert("数据获取失败，请检查网络！");
+              console.log(xhr);
+            }
+          });
+    }
+</script>
 <body>
 
     <div class="wrapper">
@@ -122,7 +154,7 @@
                                 <a href="#" id="refresh-button"><span class="glyphicon glyphicon-refresh"></span> 刷新</a>
                             </li>
                             <li>
-                                <a href="#"><span class="glyphicon glyphicon-th-list"></span>
+                                <a href="#" onclick="downloadExcel()"><span class="glyphicon glyphicon-th-list"></span>
                                 导出EXCEL
                             </a>
                             </li>

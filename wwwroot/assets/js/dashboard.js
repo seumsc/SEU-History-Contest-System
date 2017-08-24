@@ -316,6 +316,7 @@ $(function () {
     setDone(config.doneList);
     initChartist();
     commonSet();*/
+
     $("#refresh-button").click(function(){
         $.ajax({
             url:  'http://hostname/api/Counselor/scores/summary{id}', //请求的url地址
