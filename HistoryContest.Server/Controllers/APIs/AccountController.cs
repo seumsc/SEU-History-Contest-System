@@ -29,29 +29,43 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// µÇÂ¼
+        /// ç™»å½•
         /// </summary>
         /// <remarks>
-        /// µÇÂ¼³É¹¦ºó£¬½«»á¸ù¾İÓÃ»§ÃûÎªÓÃ»§ÉèÖÃÉí·İ£¬²¢¸ù¾İÉí·İÎªÓÃ»§³õÊ¼»¯¸÷×ÔµÄSession¡£
+        /// ç™»å½•æˆåŠŸåï¼Œå°†ä¼šæ ¹æ®ç”¨æˆ·åä¸ºç”¨æˆ·è®¾ç½®èº«ä»½ï¼Œå¹¶æ ¹æ®èº«ä»½ä¸ºç”¨æˆ·åˆå§‹åŒ–å„è‡ªçš„Sessionã€‚
         /// 
-        /// ÓÃÒ»¸ö²¼¶ûÖµ±ê¼ÇµÇÂ¼ÊÇ·ñ³É¹¦
+        /// 
+        /// ç”¨ä¸€ä¸ªå¸ƒå°”å€¼æ ‡è®°ç™»å½•æ˜¯å¦æˆåŠŸ
+        /// 
+        /// è‹¥ç”¨æˆ·å·²ç™»å½•ï¼Œåˆ™å¸ƒå°”å€¼ä¼šè¢«æ ‡è®°ä¸ºfalse, å¹¶è¿”å›ç”¨æˆ·ä¿¡æ¯
         /// </remarks>
-        /// <param name="model">ÓÃ»§ÃûÓëÃÜÂë</param>
-        /// <returns>Ñ§ºÅ¶ÔÓ¦µÄ¿¼ÊÔ½á¹û</returns>
+        /// <param name="model">ç”¨æˆ·åä¸å¯†ç </param>
+        /// <returns>å­¦å·å¯¹åº”çš„è€ƒè¯•ç»“æœ</returns>
         /// <response code="200">
-        /// ·µ»ØµÇÂ¼½á¹û¡£·µ»ØJSON¸ñÊ½¾ÙÀı£º
+        /// è¿”å›ç™»å½•ç»“æœã€‚è¿”å›JSONæ ¼å¼ä¸¾ä¾‹ï¼š
         /// 
-        ///     Ê§°ÜÊ±£º
+        ///     éªŒè¯å¤±è´¥æ—¶ï¼š
         ///     {
         ///         "isSuccessful": false    
         ///     }
         /// 
-        ///     ³É¹¦Ê±£º
+        ///     éªŒè¯æˆåŠŸæ—¶ï¼š
         ///     {
         ///         "isSuccessful": true,
         ///         "userViewModel": {
         ///             "userName": "09016319",
-        ///             "realName": "Ò¶Ö¾ºÆ",
+        ///             "realName": "å¶å¿—æµ©",
+        ///             "role": "Student"
+        ///         }
+        ///     }
+        ///     
+        ///     å·²ç»ç™»å½•æ—¶ï¼š
+        ///     {
+        ///         "isSuccessful": false,
+        ///         "message": "User already logged in"
+        ///         "userViewModel": {
+        ///             "userName": "09016319",
+        ///             "realName": "å¶å¿—æµ©",
         ///             "role": "Student"
         ///         }
         ///     }
@@ -61,11 +75,18 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Body JSON content invalid"); 
+                return BadRequest("Body JSON content invalid");
             }
-            
+
+            if (HttpContext.Session.Get("id") != null)
+            {
+                var id = HttpContext.Session.GetString("id");
+                var user = await accountService.GetUser(id);
+                var userViewModel = new UserViewModel { UserName = id, RealName = user.Name, Role = user.GetType().Name };
+                return Json(new { isSuccessful = false, message = "User already logged in", userViewModel });
+            }
 
             var userContext = await accountService.ValidateUser(model.UserName, model.Password);
             if (userContext.UserViewModel != null)
@@ -106,12 +127,12 @@ namespace HistoryContest.Server.Controllers.APIs
         //}
 
         /// <summary>
-        /// ×¢Ïú
+        /// æ³¨é”€
         /// </summary>
         /// <remarks>
-        /// µÇ³öµ±Ç°ÓÃ»§£¬²¢Çå³ıµ±Ç°ÓÃ»§SessionÖĞµÄËùÓĞÄÚÈİ¡£
+        /// ç™»å‡ºå½“å‰ç”¨æˆ·ï¼Œå¹¶æ¸…é™¤å½“å‰ç”¨æˆ·Sessionä¸­çš„æ‰€æœ‰å†…å®¹ã€‚
         /// </remarks>
-        /// <response code="200">³É¹¦×¢Ïú</response>
+        /// <response code="200">æˆåŠŸæ³¨é”€</response>
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Logout()

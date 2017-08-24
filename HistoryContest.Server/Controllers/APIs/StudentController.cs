@@ -29,18 +29,18 @@ namespace HistoryContest.Server.Controllers.APIs
 
         #region State APIs
         /// <summary>
-        /// »ñÈ¡Ñ§Éú×´Ì¬
+        /// è·å–å­¦ç”ŸçŠ¶æ€
         /// </summary>
         /// <remarks>
-        /// Ä¿Ç°ÓÃÀ´¼ì²éÑ§Éú¿¼ÊÔ×´Ì¬£¬ÒÔ¼°ÎÊÌâÖÖ×ÓÊÇ·ñÒÑÕıÈ·ÉèÖÃ¡£**×¢ÒâÕâ¸öAPIÔİ²»¼ì²éÑ§ÉúIDÊÇ·ñ´æÔÚÓÚSessionÖĞ¡£**
+        /// ç›®å‰ç”¨æ¥æ£€æŸ¥å­¦ç”Ÿè€ƒè¯•çŠ¶æ€ï¼Œä»¥åŠé—®é¢˜ç§å­æ˜¯å¦å·²æ­£ç¡®è®¾ç½®ã€‚**æ³¨æ„è¿™ä¸ªAPIæš‚ä¸æ£€æŸ¥å­¦ç”ŸIDæ˜¯å¦å­˜åœ¨äºSessionä¸­ã€‚**
         /// 
-        /// Ñ§ÉúµÄ¿¼ÊÔ×´Ì¬ÓĞÈıÖÖ£¬ÓÃÒ»¸öÃ¶¾Ù±íÊ¾£¬¼´£º
+        /// å­¦ç”Ÿçš„è€ƒè¯•çŠ¶æ€æœ‰ä¸‰ç§ï¼Œç”¨ä¸€ä¸ªæšä¸¾è¡¨ç¤ºï¼Œå³ï¼š
         /// `enum TestState { NotTested = 0, Testing = 1, Tested = 2 }`
         /// 
-        /// ¿ÉÒÔ¸ù¾İ²»Í¬µÄ×´Ì¬½«ÍøÒ³ÖØ¶¨Ïòµ½²»Í¬µÄÎ»ÖÃ¡£
+        /// å¯ä»¥æ ¹æ®ä¸åŒçš„çŠ¶æ€å°†ç½‘é¡µé‡å®šå‘åˆ°ä¸åŒçš„ä½ç½®ã€‚
         /// </remarks>
-        /// <returns>Ñ§Éú×´Ì¬</returns>
-        /// <response code="200">·µ»ØÑ§ÉúµÄ¿¼ÊÔ×´Ì¬£¬ÒÔ¼°ÎÊÌâÖÖ×ÓÊÇ·ñÉèÖÃ</response>
+        /// <returns>å­¦ç”ŸçŠ¶æ€</returns>
+        /// <response code="200">è¿”å›å­¦ç”Ÿçš„è€ƒè¯•çŠ¶æ€ï¼Œä»¥åŠé—®é¢˜ç§å­æ˜¯å¦è®¾ç½®</response>
         /// <response code=""></response>
         [HttpGet("State")]
         [ProducesResponseType(typeof(StudentStateViewModel), StatusCodes.Status200OK)]
@@ -67,23 +67,23 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// ³õÊ¼»¯¿¼ÊÔ×´Ì¬
+        /// åˆå§‹åŒ–è€ƒè¯•çŠ¶æ€
         /// </summary>
         /// <remarks>
-        /// Ñ§Éú¿ªÊ¼¿¼ÊÔÇ°£¬ÉèÖÃÏà¹Ø¿¼ÊÔ×´Ì¬£¬¼´£º
-        /// * ÉèÖÃÎÊÌâÖÖ×Ó
-        /// * ÉèÖÃ¿¼ÊÔ¿ªÊ¼Ê±¼ä
+        /// å­¦ç”Ÿå¼€å§‹è€ƒè¯•å‰ï¼Œè®¾ç½®ç›¸å…³è€ƒè¯•çŠ¶æ€ï¼Œå³ï¼š
+        /// * è®¾ç½®é—®é¢˜ç§å­
+        /// * è®¾ç½®è€ƒè¯•å¼€å§‹æ—¶é—´
         /// </remarks>
-        /// <returns>µ±Ç°Ñ§Éú¿¼ÊÔ¿ªÊ¼Ê±¼ä</returns>
-        /// <response code="201">·µ»ØÉèÖÃµÄµ±Ç°Ñ§Éú¿¼ÊÔ¿ªÊ¼Ê±¼ä</response>
-        /// <response code="302">ÒÑ¾­³õÊ¼»¯ÔòÖØ¶¨Ïòµ½`GET State`·½·¨</response>
+        /// <returns>å½“å‰å­¦ç”Ÿè€ƒè¯•å¼€å§‹æ—¶é—´</returns>
+        /// <response code="201">è¿”å›è®¾ç½®çš„å½“å‰å­¦ç”Ÿè€ƒè¯•å¼€å§‹æ—¶é—´</response>
+        /// <response code="302">å·²ç»åˆå§‹åŒ–åˆ™é‡å®šå‘åˆ°`GET State`æ–¹æ³•</response>
         [HttpGet("State/[action]")]
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> Initialize()
         {
             if (HttpContext.Session.Get("beginTime") != null)
-            { // ÒÑ¾­³õÊ¼»¯ÔòÖØ¶¨Ïòµ½State·½·¨
+            { // å·²ç»åˆå§‹åŒ–åˆ™é‡å®šå‘åˆ°Stateæ–¹æ³•
                 return RedirectToAction(nameof(State));
             }
 
@@ -92,10 +92,10 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// ÖØÉèÑ§Éú¿¼ÊÔ×´Ì¬
+        /// é‡è®¾å­¦ç”Ÿè€ƒè¯•çŠ¶æ€
         /// </summary>
         /// <remarks>
-        /// µ±Ñ§ÉúÒòÌØÊâÇé¿öÖØ½øÍøÒ³£¬ĞèÒªÖØĞÂ¿¼ÊÔÊ±£¬ÖØĞÂÉèÖÃÑ§ÉúµÄ¿¼ÊÔ×´Ì¬¡£
+        /// å½“å­¦ç”Ÿå› ç‰¹æ®Šæƒ…å†µé‡è¿›ç½‘é¡µï¼Œéœ€è¦é‡æ–°è€ƒè¯•æ—¶ï¼Œé‡æ–°è®¾ç½®å­¦ç”Ÿçš„è€ƒè¯•çŠ¶æ€ã€‚
         /// </remarks>
         /// <returns></returns>
         /// <response code=""></response>
@@ -103,7 +103,7 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> Reset()
         {
             if (HttpContext.Session.Get("beginTime") == null)
-            { // Î´³õÊ¼»¯ÔòÖØ¶¨Ïòµ½State·½·¨
+            { // æœªåˆå§‹åŒ–åˆ™é‡å®šå‘åˆ°Stateæ–¹æ³•
                 return RedirectToAction(nameof(State));
             }
 
@@ -116,14 +116,14 @@ namespace HistoryContest.Server.Controllers.APIs
 
         #region Seed APIs
         /// <summary>
-        /// ÉèÖÃÒ»¸öÎÊÌâÖÖ×Ó
+        /// è®¾ç½®ä¸€ä¸ªé—®é¢˜ç§å­
         /// </summary>
         /// <remarks>
-        /// ÔÚÎÊÌâÖÖ×Ó³ØÖĞËæ»ú³öÒ»¸öÖÖ×ÓID£¬½«Æä±£´æÔÚµ±Ç°ÓÃ»§µÄSessionÖĞ¡£
+        /// åœ¨é—®é¢˜ç§å­æ± ä¸­éšæœºå‡ºä¸€ä¸ªç§å­IDï¼Œå°†å…¶ä¿å­˜åœ¨å½“å‰ç”¨æˆ·çš„Sessionä¸­ã€‚
         /// </remarks>
-        /// <returns>ÎÊÌâÖÖ×ÓID</returns>
-        /// <response code="201">·µ»ØÎÊÌâÖÖ×ÓµÄID</response>
-        /// <response code="204">ÎÊÌâÖÖ×ÓÒÑ¾­ÉèÖÃ</response>
+        /// <returns>é—®é¢˜ç§å­ID</returns>
+        /// <response code="201">è¿”å›é—®é¢˜ç§å­çš„ID</response>
+        /// <response code="204">é—®é¢˜ç§å­å·²ç»è®¾ç½®</response>
         [HttpPost("Seed")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -139,10 +139,10 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// Çå³ıµ±Ç°ÎÊÌâÖÖ×Ó
+        /// æ¸…é™¤å½“å‰é—®é¢˜ç§å­
         /// </summary>
         /// <remarks>
-        /// Çå³ıSessionµ±Ç°seed
+        /// æ¸…é™¤Sessionå½“å‰seed
         /// </remarks>
         /// <response code="204"></response>
         [HttpDelete("Seed")]
@@ -156,19 +156,19 @@ namespace HistoryContest.Server.Controllers.APIs
 
         #region Time APIs
         /// <summary>
-        /// ·µ»ØÊ£Óà¿¼ÊÔÊ±¼ä
+        /// è¿”å›å‰©ä½™è€ƒè¯•æ—¶é—´
         /// </summary>
         /// <remarks>
-        /// ÒÔ30·ÖÖÓÎª»ù×¼£¬Í¨¹ıµ±Ç°Ê±¼äÓëSessionÖĞ¿¼ÊÔ¿ªÊ¼Ê±¼äÖ®²î¼ÆËã³öµ±Ç°Ñ§ÉúÊ£Óà¿¼ÊÔÊ±¼ä¡£
+        /// ä»¥30åˆ†é’Ÿä¸ºåŸºå‡†ï¼Œé€šè¿‡å½“å‰æ—¶é—´ä¸Sessionä¸­è€ƒè¯•å¼€å§‹æ—¶é—´ä¹‹å·®è®¡ç®—å‡ºå½“å‰å­¦ç”Ÿå‰©ä½™è€ƒè¯•æ—¶é—´ã€‚
         /// 
-        /// ·µ»ØµÄ×Ö·û´®¸ñÊ½ÑùÀı£º
+        /// è¿”å›çš„å­—ç¬¦ä¸²æ ¼å¼æ ·ä¾‹ï¼š
         /// 
         ///     "00:29:34.2049107"
         /// 
         /// </remarks>
-        /// <returns>Ê£Óà¿¼ÊÔÊ±¼ä</returns>
-        /// <response code="200">·µ»ØÊ£ÓàµÄ¿¼ÊÔÊ±¼ä</response>
-        /// <response code="204">µ±Ç°Ñ§ÉúÉĞÎ´¿ªÊ¼¿¼ÊÔ</response>
+        /// <returns>å‰©ä½™è€ƒè¯•æ—¶é—´</returns>
+        /// <response code="200">è¿”å›å‰©ä½™çš„è€ƒè¯•æ—¶é—´</response>
+        /// <response code="204">å½“å‰å­¦ç”Ÿå°šæœªå¼€å§‹è€ƒè¯•</response>
         [HttpGet("Time")]
         [ProducesResponseType(typeof(TimeSpan), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -183,19 +183,19 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// ÉèÖÃ¿¼ÊÔ¿ªÊ¼Ê±¼ä
+        /// è®¾ç½®è€ƒè¯•å¼€å§‹æ—¶é—´
         /// </summary>
         /// <remarks>
-        /// ½«µ±Ç°ÈÕÆÚÊ±¼ä´æ´¢ÔÚSessionÖĞ£¬×÷Îª¿¼ÊÔ¿ªÊ¼Ê±¼ä¡£
+        /// å°†å½“å‰æ—¥æœŸæ—¶é—´å­˜å‚¨åœ¨Sessionä¸­ï¼Œä½œä¸ºè€ƒè¯•å¼€å§‹æ—¶é—´ã€‚
         /// 
-        /// ·µ»ØµÄ×Ö·û´®¸ñÊ½ÑùÀı£º
+        /// è¿”å›çš„å­—ç¬¦ä¸²æ ¼å¼æ ·ä¾‹ï¼š
         /// 
         ///     "2017-08-15T23:42:02.2776927+08:00"
         /// 
         /// </remarks>
-        /// <returns>µ±Ç°Ñ§Éú¿¼ÊÔ¿ªÊ¼Ê±¼ä</returns>
-        /// <response code="201">·µ»ØÉèÖÃµÄµ±Ç°Ñ§Éú¿¼ÊÔ¿ªÊ¼Ê±¼ä</response>
-        /// <response code="302">Ñ§ÉúÒÑ¿ªÊ¼¿¼ÊÔ£¬ÖØ¶¨Ïòµ½Í¬Ò»µØÖ·µÄ`GET`</response>
+        /// <returns>å½“å‰å­¦ç”Ÿè€ƒè¯•å¼€å§‹æ—¶é—´</returns>
+        /// <response code="201">è¿”å›è®¾ç½®çš„å½“å‰å­¦ç”Ÿè€ƒè¯•å¼€å§‹æ—¶é—´</response>
+        /// <response code="302">å­¦ç”Ÿå·²å¼€å§‹è€ƒè¯•ï¼Œé‡å®šå‘åˆ°åŒä¸€åœ°å€çš„`GET`</response>
         [HttpPost("Time")]
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status302Found)]
@@ -211,10 +211,10 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// Çå³ı¿¼ÊÔ¿ªÊ¼Ê±¼ä
+        /// æ¸…é™¤è€ƒè¯•å¼€å§‹æ—¶é—´
         /// </summary>
         /// <remarks>
-        /// Çå¿Õµ±Ç°Ñ§ÉúSessionÖĞ¿¼ÊÔ¿ªÊ¼Ê±¼äµÄ¼ÇÂ¼¡£
+        /// æ¸…ç©ºå½“å‰å­¦ç”ŸSessionä¸­è€ƒè¯•å¼€å§‹æ—¶é—´çš„è®°å½•ã€‚
         /// </remarks>
         /// <response code="204"></response>
         [HttpDelete("Time")]

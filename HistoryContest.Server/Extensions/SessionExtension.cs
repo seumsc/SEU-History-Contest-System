@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace HistoryContest.Server.Extensions
 {
-    public static class SessionExtensions
+    public static class SessionExtension
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
