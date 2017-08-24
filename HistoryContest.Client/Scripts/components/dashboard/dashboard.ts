@@ -525,6 +525,20 @@ export default {
         },
         goToGeneral: function () {
             this.$router.push({ path: '/dashboard/general' })
+        },
+        goToWiki: function () {
+            window.open('/wiki', 'wiki', 'height=1000px, width=1000px')
+        },
+        goToApi: function () {
+            window.open('/api', 'api', 'height=1000px, width=1000px')
+        },
+        goToAnsSheet: function () {
+            // window.open('/ans/sheet','（暂时无法显示）','height=1000px, width=1000px')
+            alert("此操作不可逆！"),
+            this.$router.push({path:'/ans/sheet'})
+        
         }
+
+
     }
 }

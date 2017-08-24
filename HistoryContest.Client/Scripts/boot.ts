@@ -6,12 +6,12 @@ import '../node_modules/font-awesome/css/font-awesome.css';
 import 'chartist';
 // import 'bootstrap-validator';
 Vue.use(VueRouter);
-
 const router = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: '/login',
+            // redirect:'/ans',
             component: require('./components/login/login.vue.html')
         },
         {
@@ -40,12 +40,15 @@ const router = new VueRouter({
                     path: 'general',
                     component: require('./components/dashboard/general/general.vue.html')
                 }
+                //  {
+                //      path: 'wiki',
+                //      component: null                 }
             ]
         }
     ]
 })
 router.push('/login');
-
+// router.push('./dashboard/statistics');
 // import dashboard from './dashboard/dashboard.ts'
 
 new Vue({
