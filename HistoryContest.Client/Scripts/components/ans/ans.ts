@@ -25,46 +25,19 @@ export default {
 	},
 	methods: {
 		setTime: function () {
-			$.ajax({
-				url: '/api/Student/Time', //请求的url地址
-				type: "POST", //请求方式
-				dataType: "json", //返回格式为json
-				async: true, //一定要设置为同步orz
-				// crossDomain:true,
-				// data: JSON.stringify(info),
-				contentType: "application/json;charset=utf-8",
-				cacheControl:"no-cache",
-				beforeSend: function () {
-					alert("beforesend:");
-				},
-				success: function (req) {
-					alert("success!")
-				},
-				complete: function () { 
-					alert("request completed!")
-				},
-				error: function (request) {
-				  alert("error:" + JSON.stringify(request));
-				//   alert("登录失败,请检查网络是否通畅");
+			var settings = {
+				"async": true,
+				"crossDomain": true,
+				"url": "/api/Student/Time",
+				"method": "POST",
+				"headers": {
+					"content-type": "application/json",
+					"cache-control": "no-cache",
 				}
-			  });
-				  // var settings = {
-			// 	"async": true,
-			// 	"crossDomain": true,
-			// 	"url": "http://localhost:5000/api/Student/Time",
-			// 	"method": "POST",
-			// 	"headers": {
-			// 		"content-type": "application/json",
-			// 		"cache-control": "no-cache",
-			// 		// "postman-token": "4ca42358-c6b6-288c-f2b1-5985abbfc6fb"
-			// 	}
-			// }
-			// $.ajax(settings).done(function (response) {
-			// 	alert(response);
-			// });
-			// // $.get("http://history-contest.chinacloudsites.cn/api/Student/Time",function(result){
-			// // 	alert("get result:"+result);
-			// // }
+			}
+			$.ajax(settings).done(function (response) {
+				alert(response);
+			});
 		},
 		load: function () {
 			var inTime = true;

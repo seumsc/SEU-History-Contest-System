@@ -22,6 +22,29 @@
                             <!-- <router-link to="/dashboard/general"><p>院系概览</p></router-link> -->
                         </a>
                     </li>
+                    <li>
+                        <a id="general" @click="goToWiki" data-toggle="tab">
+                            <i class="glyphicon glyphicon-book"></i>
+                            <p class = "T">wiki</p>
+                            <!-- <router-link to="/dashboard/general"><p>院系概览</p></router-link> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a id="general" @click="goToApi" data-toggle="tab">
+                            <i class=" glyphicon glyphicon-info-sign"></i>
+                            <p class = "T">api</p>
+                            <!-- <router-link to="/dashboard/general"><p>院系概览</p></router-link> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a id="general" @click="goToAnsSheet" data-toggle="tab">
+                            <i class="glyphicon glyphicon-edit"></i>
+                            <p class = "T">答题页</p>
+                            <!-- <router-link to="/dashboard/general"><p>院系概览</p></router-link> -->
+                        </a>
+                    </li>
+
+
                 </ul>
             </div>
         </div>
@@ -60,14 +83,6 @@
             <router-view></router-view>
             <footer class="footer">
                 <div class="container-fluid">
-                    <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <button type="button" class="btn btn-default navbar-btn">导出EXCEL</button>
-                            </li>
-
-                        </ul>
-                    </nav>
                     <p class="copyright pull-right">
                         Copyright &copy; 2017 东南大学计算机科学与工程学院、软件学院
                     </p>
