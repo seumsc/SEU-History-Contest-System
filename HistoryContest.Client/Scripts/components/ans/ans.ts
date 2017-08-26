@@ -19,24 +19,46 @@ export default {
 	},
 	mounted() {
 		// this.send(),
-		this.setTime(),
+			this.setTime(),
 			this.load(),
 			this.loadcss()
 	},
 	methods: {
 		setTime: function () {
+			var _this = this;
 			var settings = {
 				"async": true,
-				"crossDomain": true,
-				"url": "/api/Student/Time",
-				"method": "POST",
+				// "crossDomain": true,
+				"url": "/api/Student/State/Initialize",
+				"method": "GET",
 				"headers": {
 					"content-type": "application/json",
 					"cache-control": "no-cache",
 				}
 			}
 			$.ajax(settings).done(function (response) {
-				alert(response);
+				alert(JSON.stringify(response));
+				if(response.testState==1){//获取试卷
+					if(response.isSeedSet == true){
+						var setQuestions = {
+							"async":false,
+							"url":"/api/Question",
+							"method":"GET",
+							"contentType":"application/json",
+						}
+						$.ajax(setQuestions).done(function(questions){
+							alert(JSON.stringify(questions)),
+							set(questions),
+							answerCard(questions)
+						})
+					}
+					else {alert ("else")}
+
+				}
+				else{
+					_this.$router.push('./ans/result')
+				}
+					
 			});
 		},
 		load: function () {
@@ -124,8 +146,6 @@ export default {
 				}
 			}, 1000);
 			var answerQues = [];//name,answer(id)
-			set();//初始化
-			answerCard();
 			$(document).ready(function () {
 				$("#start").click(function () {
 					$("#footer").show();
