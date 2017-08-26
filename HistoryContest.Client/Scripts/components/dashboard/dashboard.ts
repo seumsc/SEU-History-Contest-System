@@ -13,6 +13,12 @@ $(function () {
 
     /* CHECKBOX PUBLIC CLASS DEFINITION
      * ============================== */
+    if(user.role != "Counselor"){
+        $("#wiki").css("display","");
+        $("#api").css("display","");
+        $("#ansSheet").css("display","");
+
+    }
 
     var Checkbox = function (element, options) {
         this.init(element, options);
