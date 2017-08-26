@@ -47,7 +47,12 @@ const router = new VueRouter({
         }
     ]
 })
-router.push('/login');
+// alert(user.role);
+if(user.isLoggedIn==false){
+    router.push('/login');    
+}else if(user.role== "Student"){
+    router.push('/ans/sheet')
+}else router.push('/dashboard/statistics')
 // router.push('./dashboard/statistics');
 // import dashboard from './dashboard/dashboard.ts'
 
