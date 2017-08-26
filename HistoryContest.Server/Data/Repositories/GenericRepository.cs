@@ -11,11 +11,13 @@ namespace HistoryContest.Server.Data.Repositories
     public class GenericRepository<TEntity> where TEntity : class
     {
         internal ContestContext context;
+        internal RedisService cache;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(ContestContext context)
+        public GenericRepository(ContestContext context, RedisService cache)
         {
             this.context = context;
+            this.cache = cache;
             dbSet = context.Set<TEntity>();
         }
 

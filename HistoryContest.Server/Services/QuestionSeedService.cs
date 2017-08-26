@@ -12,15 +12,11 @@ namespace HistoryContest.Server.Services
     {
         private UnitOfWork unitOfWork;
         private Random rdGenerator;
-        private int size_ChoiceQuestions;
-        private int size_TrueFalseQuestions;
 
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             rdGenerator = new Random();
-            size_ChoiceQuestions = unitOfWork.QuestionRepository.Size<ChoiceQuestion>();
-            size_TrueFalseQuestions = unitOfWork.QuestionRepository.Size<TrueFalseQuestion>();
         }
 
         public async Task<IEnumerable<AQuestionBase>> GetQuestionsBySeedID(int id)
@@ -45,8 +41,8 @@ namespace HistoryContest.Server.Services
             List<QuestionSeed> seeds = new List<QuestionSeed>(scale);
             var questionIDs = new int[30];
     
-            using (rdGenerator.CreateContext(0, size_ChoiceQuestions, nameof(ChoiceQuestion)))
-            using (rdGenerator.CreateContext(0, size_TrueFalseQuestions, nameof(TrueFalseQuestion)))
+            using (rdGenerator.CreateContext(0, unitOfWork.QuestionRepository.Size<ChoiceQuestion>(), nameof(ChoiceQuestion)))
+            using (rdGenerator.CreateContext(0, unitOfWork.QuestionRepository.Size<TrueFalseQuestion>(), nameof(TrueFalseQuestion)))
             {
                 Console.Write("Processing...Generated ");
                 var progress = string.Empty;

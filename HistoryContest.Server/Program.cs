@@ -65,10 +65,10 @@ namespace HistoryContest.Server
                     case "--help":
                         string[] messages = new string[]
                         {
-                            "-h|--help                     显示帮助",
-                            "-rb|--runbrowser              程序启动后运行默认浏览器打开网站",
+                            "-h|--help                     显示帮助。",
+                            "-rb|--runbrowser              程序启动后运行默认浏览器打开网站。",
                             "-env|--environment <env>      设置程序运行环境。默认为\"Production\"。",
-                            "--parse-question-sql <path>   设置程序运行环境。默认为\"Production\"。"
+                            "--parse-question-sql <path>   解析一个sql格式问题集到json数据文件。"
                         };
                         foreach (var message in messages)
                         {

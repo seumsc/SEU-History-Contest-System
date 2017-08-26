@@ -72,8 +72,8 @@
     <Target Name="PublishDataSource" AfterTargets="RunWebpack">
     <!-- Include the data source files in the publish output -->
     <ItemGroup>
-      <DistFiles Include=".\Data\Source\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <DataSourceFiles Include=".\Data\Source\**" />
+      <ResolvedFileToPublish Include="@(DataSourceFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>Source/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>

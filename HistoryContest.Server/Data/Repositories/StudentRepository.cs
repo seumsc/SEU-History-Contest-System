@@ -13,7 +13,7 @@ namespace HistoryContest.Server.Data.Repositories
         //internal List<Counselor> counselorList;
         //internal DbSet<Counselor> counselorSet;
 
-        public StudentRepository(ContestContext context) : base(context)
+        public StudentRepository(ContestContext context, RedisService cache) : base(context, cache)
         {
             //counselorSet = context.Counselors;
             //counselorSet = context.Counselors;
