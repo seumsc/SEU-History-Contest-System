@@ -18,7 +18,6 @@ namespace HistoryContest.Server.Controllers
             this.logger = logger;
         }
 
-        // GET: /<controller>/
         [HttpGet("/StatusCode/{statusCode}")]
         public IActionResult Index(int statusCode)
         {

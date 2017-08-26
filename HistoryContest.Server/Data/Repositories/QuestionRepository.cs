@@ -12,7 +12,7 @@ namespace HistoryContest.Server.Data.Repositories
         DbSet<ChoiceQuestion> choiceQuestionSet;
         DbSet<TrueFalseQuestion> trueFalseQuestionSet;
 
-        public QuestionRepository(ContestContext context) : base(context)
+        public QuestionRepository(ContestContext context, RedisService cache) : base(context, cache)
         {
             choiceQuestionSet = context.Set<ChoiceQuestion>();
             trueFalseQuestionSet = context.Set<TrueFalseQuestion>();
@@ -41,6 +41,11 @@ namespace HistoryContest.Server.Data.Repositories
         public async Task<int> SizeAsync<TQuestion>() where TQuestion : AQuestionBase
         {
             return await context.Set<TQuestion>().CountAsync();
+        }
+
+        public async Task LoadAllQuestionToCache()
+        {
+            await dbSet.ForEachAsync(q => cache.Set<AQuestionBase>(q.ID.ToString(), q));
         }
     }
 }

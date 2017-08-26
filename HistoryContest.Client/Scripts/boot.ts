@@ -6,6 +6,9 @@ import '../node_modules/font-awesome/css/font-awesome.css';
 import 'chartist';
 // import 'bootstrap-validator';
 Vue.use(VueRouter);
+
+alert(user.role);
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
