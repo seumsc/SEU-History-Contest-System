@@ -22,12 +22,12 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
-        private readonly ExcelOutputService counselorService;
+        private readonly ExcelExportService excelExportService;
 
         public CounselorController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            counselorService = new ExcelOutputService(unitOfWork);
+            excelExportService = new ExcelExportService(unitOfWork);
             unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
@@ -51,7 +51,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
         [HttpGet("ExportDepartmentExcel")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ExportDepartmentExcel()
+        public async Task<IActionResult> ExportExcelofDepartment()
         {
             if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
             { // 当前用户认证为辅导员，则取Session中的department为院系id
@@ -66,7 +66,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 file.Delete();
             }
-            await counselorService.CreateExcelByDepartmentid(file,id);
+            await excelExportService.CreateExcelByDepartmentid(file,id);
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
@@ -106,7 +106,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 file.Delete();
             }
-            await counselorService.CreateExcelOfAllDepartments(file);
+            await excelExportService.CreateExcelOfAllDepartments(file);
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 

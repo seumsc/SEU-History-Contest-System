@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace HistoryContest.Server.Services
 {
     [Produces("application/json")]
-    public class ExcelOutputService
+    public class ExcelExportService
     {
         private UnitOfWork unitOfWork;
 
-        public ExcelOutputService(UnitOfWork unitOfWork)
+        public ExcelExportService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -54,10 +54,8 @@ namespace HistoryContest.Server.Services
 
         public async Task<IActionResult> CreateExcelOfAllDepartments(FileInfo file)
         {
-            var counselors = unitOfWork.context.Counselors.Where(m => 1==1);
-
             List<ScoreSummaryByDepartmentViewModel> datatable = null;
-            foreach (var counselor in counselors)
+            foreach (var counselor in unitOfWork.context.Counselors)
             {
                 datatable.Add(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork,counselor));
             }
