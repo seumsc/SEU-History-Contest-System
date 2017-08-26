@@ -5,13 +5,14 @@ var $ = jQuery.noConflict();
 // import '../../../node_modules/font-awesome/css/font-awesome.css';
 var set = require('./questions.js').set;
 var answerCard = require('./questions.js').answerCard;
+var saveAnsID = require('./ans.js').saveAnsID;
 var saveAns = require('./ans.js').saveAns;
 var submit = require('./ans.js').submit;
 require('../../../Images/banner.jpg');
 require('../../../Images/bg.jpg');
 require('../../../Images/overlay.png');
 require('../../../Images/pic01.jpg');
-
+var globalQ = {};
 export default {
 	data() {
 		return {
@@ -19,12 +20,12 @@ export default {
 	},
 	mounted() {
 		// this.send(),
-			this.setTime(),
+			this.initialize(),
 			this.load(),
 			this.loadcss()
 	},
 	methods: {
-		setTime: function () {
+		initialize: function () {
 			var _this = this;
 			var settings = {
 				"async": true,
@@ -37,7 +38,7 @@ export default {
 				}
 			}
 			$.ajax(settings).done(function (response) {
-				alert(JSON.stringify(response));
+				// alert(JSON.stringify(response));
 				if(response.testState==1){//获取试卷
 					if(response.isSeedSet == true){
 						var setQuestions = {
@@ -47,16 +48,31 @@ export default {
 							"contentType":"application/json",
 						}
 						$.ajax(setQuestions).done(function(questions){
-							alert(JSON.stringify(questions)),
+							globalQ=questions,
 							set(questions),
 							answerCard(questions)
 						})
 					}
-					else {alert ("else")}
-
+					else {
+						alert ("Seed unset! Just hold on a second...")
+						var reset = {
+							"async": true,
+							// "crossDomain": true,
+							"url": "/api/Student/State/Reset",
+							"method": "POST",
+							"headers": {
+								"content-type": "application/json",
+								"cache-control": "no-cache",
+							}
+						}
+						$.ajax(reset).done(function(reset){
+							alert(JSON.stringify(reset))
+						})
+						alert("Boom! Bug exterminated! Now, please press F5.")
+					}
 				}
 				else{
-					_this.$router.push('./ans/result')
+					_this.$router.push('/ans/result')
 				}
 					
 			});
@@ -64,12 +80,13 @@ export default {
 		load: function () {
 			var inTime = true;
 			var currentPage = 0;
-			//saveAns(this)
 			$(document).on("click", "#wrapper input", function (id) {
 				var ID = $(id.target).attr('id');
 				if (ID != "submit") {
 					saveAns(ID);
 				} else {
+					alert(JSON.stringify(globalQ));
+					saveAnsID(globalQ);
 					submit(inTime);
 				}
 			});
@@ -152,8 +169,6 @@ export default {
 					timeState = true;
 				});
 			});
-
-
 		},
 		loadcss: function () {
 			$("body").css("display", "flex");

@@ -91,10 +91,10 @@ export default {
                 _this.isStu();
             
               }
-              else if (req.userViewModel.role == "Counselor") {
+              else {
                 _this.isAdmin();
               }
-              else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
+              // else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
             } else alert("登录失败,请检查用户名或密码是否正确")
           },
           complete: function () {
