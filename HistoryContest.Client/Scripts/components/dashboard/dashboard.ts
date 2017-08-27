@@ -13,7 +13,9 @@ $(function () {
 
     /* CHECKBOX PUBLIC CLASS DEFINITION
      * ============================== */
-    if(user.role != "Counselor"){
+    // alert(JSON.stringify(user.role));
+    // alert(JSON.stringify(user));
+     if(user.role != "Counselor"){
         $("#wiki").css("display","");
         $("#api").css("display","");
         $("#ansSheet").css("display","");
