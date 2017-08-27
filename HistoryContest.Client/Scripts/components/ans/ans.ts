@@ -103,15 +103,16 @@ export default {
 				else {
 					alert("Tested!");
 					$.ajax({
-						url: '/api/Result{id}', //请求的url地址
+						url: '/api/Result/{id}', //请求的url地址
 						type: "GET", //请求方式
 						dataType: "json", //返回格式为json
 						async: false,
-						// data: JSON.stringify(answerQues),
 						contentType: "application/json",
 						beforeSend: function () {
+							alert(this.url);
 						},
 						success: function (res) {
+							alert("tested!"+res);
 							setRESULT(res);
 						},
 						complete: function () {

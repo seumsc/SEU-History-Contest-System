@@ -29,22 +29,57 @@ var DepartmentNameMap = {
     "090": "计算机科学与工程学院、软件学院",
     "711": "计算机科学与工程学院、软件学院"
 }
-
 var undo = {
     'students': [
-        { "ID": "09016435", "Name": "***REMOVED***" },
-        { "ID": "09016423", "Name": "***REMOVED***" },
-        { "ID": "09016414", "Name": "***REMOVED***" }
-
     ]
 };
 var done = {
     'students': [
-        { "ID": "09016435", "Name": "***REMOVED***" },
-        { "ID": "09016423", "Name": "***REMOVED***" },
-        { "ID": "09016414", "Name": "***REMOVED***" }
     ]
 };
+$.ajax({
+    url: '/api/Counselor/Scores/All/{id}', //请求的url地址
+    type: "GET", //请求方式
+    dataType: "json", //返回格式为json
+    async: false,
+    contentType: "application/json",
+    beforeSend: function () {
+    },
+    success: function (res) {
+        // alert("return:"+JSON.stringify(res));
+        for(var i = 0; i<res.length;i++){
+            if(res[i].isCompleted){
+                done.students.push(res[i]);
+            }
+            else undo.students.push(res[i]);
+
+        }
+    },
+    complete: function () {
+    },
+    error: function (request) {
+        alert("get scores/all/{id}error:" + JSON.stringify(request));
+    }
+});
+// $.ajax({
+//     url: '/api/Counselor/Scores/Summary/{id}', //请求的url地址
+//     type: "GET", //请求方式
+//     dataType: "json", //返回格式为json
+//     async: false,
+//     contentType: "application/json",
+//     beforeSend: function () {
+//     },
+//     success: function (res) {
+//         alert(res);
+//         schoolInfo = res;
+//     },
+//     complete: function () {
+//     },
+//     error: function (request) {
+//         alert("get scores/summary/{id} error:" + JSON.stringify(request));
+//     }
+// });
+
 var config = {
     generalInfo: schoolInfo,
     doneNumber: done.students.length,
@@ -85,21 +120,23 @@ var by = function (name) {
 function setUndo(UNDO) {
     var undoContent = ""
     for (var undoIteratorIndex = 0; undoIteratorIndex < UNDO.students.length; undoIteratorIndex++) {
-        undoContent += '<tr><td>' + UNDO.students[undoIteratorIndex].ID
-            + '</td><td>' + UNDO.students[undoIteratorIndex].Name
-            + '</td><td>' + UNDO.students[undoIteratorIndex].CardID + '</td></tr>'
+        undoContent += '<tr><td>' + UNDO.students[undoIteratorIndex].studentID
+            + '</td><td>' + UNDO.students[undoIteratorIndex].name
+            + '</td><td>' + UNDO.students[undoIteratorIndex].cardID + '</td></tr>'
     }
     // $("#tableundo").append("<tbody>" + undoContent + "</tbody>");
     $("#table-undo").find("tbody").html(undoContent);
 
 }
 function setDone(DONE) {
+    // var DONE = JSON.stringify(done);
     var doneContent = "";
+    // alert(DONE.students.length);
     for (var doneIteratorIndex = 0; doneIteratorIndex < DONE.students.length; doneIteratorIndex++) {
-        doneContent += '<tr><td>' + DONE.students[doneIteratorIndex].ID
-            + '</td><td>' + DONE.students[doneIteratorIndex].Name
-            + '</td><td>' + DONE.students[doneIteratorIndex].Score
-            + '</td><td>' + DONE.students[doneIteratorIndex].CardID + '</td></tr>'
+        doneContent += '<tr><td>' + DONE.students[doneIteratorIndex].studentID
+            + '</td><td>' + DONE.students[doneIteratorIndex].name
+            + '</td><td>' + DONE.students[doneIteratorIndex].score
+            + '</td><td>' + DONE.students[doneIteratorIndex].cardID + '</td></tr>'
     }
     $("#table-done").find("tbody").html(doneContent);
     // $("#tabledone").append("<tbody>" + doneContent + "</tbody>");
