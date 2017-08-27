@@ -27,11 +27,8 @@ set /a i=i+1
 
 echo.
 echo (%i%/%n%)Building Server and Database...
-cd ./HistoryContest.Server
-call dotnet ef database update
+call msbuild ./HistoryContest.sln /property:Configuration=Debug /verbosity:minimal
 set /a i=i+1
-
-cd ../
 
 echo.
 echo (%i%/%n%)Restoring MDWiki renderer html...
