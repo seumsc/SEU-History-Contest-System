@@ -21,10 +21,6 @@ const router = new VueRouter({
                 {
                     path: 'sheet',
                     component: require('./components/ans/sheet/ans_sheet.vue.html')
-                },
-                {
-                    path: 'result',
-                    component: require('./components/ans/result/ans_result.vue.html')
                 }
             ]
         },
@@ -40,9 +36,6 @@ const router = new VueRouter({
                     path: 'general',
                     component: require('./components/dashboard/general/general.vue.html')
                 }
-                //  {
-                //      path: 'wiki',
-                //      component: null                 }
             ]
         }
     ]

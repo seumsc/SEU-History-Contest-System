@@ -1,8 +1,11 @@
 var $ = require("../../../node_modules/jquery/dist/jquery.min.js");
 var inTime = require('./ans.ts').inTime;
+var setRESULT = require('./questions.js').setRESULT;
 var answerQues = new Array(30);
+
 // answerQues[0] = "curAns"
 exports.saveAns = function (clickID) {
+	// var ans = 0;
 	var ans = clickID.value;
 	var id = clickID;
 	var ID = (id.length == 8 ? parseInt(id[6]) : parseInt(id[6]) * 10 + parseInt(id[7]));
@@ -11,18 +14,24 @@ exports.saveAns = function (clickID) {
 	var check = {};
 	check.id= ID;
 	check.answer = ans;
-	//answerQues.push(check);//用push方法传入数组
 	answerQues[ID - 1] = check;
 	testing = JSON.stringify(answerQues);
-	console.log(testing);
 	$("#question" + ID).addClass("answered");
 	setTimeout(function () {
 		$("#question" + ID).click();
 	}, 300);
 }
 exports.saveAnsID = function(questions){
-	// alert(questions);
+////////////////////////////////////
+// var ans = 0;
+// var ans = clickID.value;
+// var id = clickID;
+// var check = {};
+// check.id= -1;
+// check.answer = ans;
+////////////////////////////////////
 	for(var i = 0;i<30; i++){
+		// answerQues[i]=check;
 		answerQues[i].id = questions[i].id;
 		// alert(JSON.stringify(questions[i]));
 		// alert(JSON.stringify(answerQues[i]));
@@ -32,10 +41,11 @@ exports.submit = function (inTime) {
 	var tot = 0;
 	for (var i = 0; i < 30; i++)
 		if (answerQues[i] == null) tot++;
+	/////////////////////////////////
 	if (tot != 0 && inTime)
 		alert("您还有" + tot + "题未作答题目哦!");
 	else {
-		alert(JSON.stringify(answerQues));
+		// alert(JSON.stringify(answerQues));
 		$.ajax({
 			url: '/api/Result', //请求的url地址
 			type: "POST", //请求方式
@@ -45,8 +55,8 @@ exports.submit = function (inTime) {
 			contentType: "application/json",
 			beforeSend: function () {
 			},
-			success: function (req) {
-				alert(JSON.stringify(req));
+			success: function(res) {
+				setRESULT(res);
 			},
 			complete: function () {
 			},
