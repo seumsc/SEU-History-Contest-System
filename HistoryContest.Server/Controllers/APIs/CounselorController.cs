@@ -49,7 +49,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表</returns>
         /// <response code="200">返回本院系得分EXCEL统计表</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
-        [HttpGet("ExportDepartmentExcel")]
+        [HttpGet("ExportExcelofDepartment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportExcelofDepartment()
         {
