@@ -8,6 +8,7 @@ var answerCard = require('./questions.js').answerCard;
 var saveAnsID = require('./ans.js').saveAnsID;
 var saveAns = require('./ans.js').saveAns;
 var submit = require('./ans.js').submit;
+var setRESULT = require('./questions.js').setRESULT;
 require('../../../Images/banner.jpg');
 require('../../../Images/bg.jpg');
 require('../../../Images/overlay.png');
@@ -20,7 +21,7 @@ export default {
 	},
 	mounted() {
 		// this.send(),
-			this.initialize(),
+		this.initialize(),
 			this.load(),
 			this.loadcss()
 	},
@@ -38,23 +39,23 @@ export default {
 				}
 			}
 			$.ajax(settings).done(function (response) {
-				// alert(JSON.stringify(response));
-				if(response.testState==1){//获取试卷
-					if(response.isSeedSet == true){
+				alert(JSON.stringify(response));
+				if (response.testState == 0) {//获取试卷
+					if (response.isSeedSet == true) {
 						var setQuestions = {
-							"async":false,
-							"url":"/api/Question",
-							"method":"GET",
-							"contentType":"application/json",
+							"async": false,
+							"url": "/api/Question",
+							"method": "GET",
+							"contentType": "application/json",
 						}
-						$.ajax(setQuestions).done(function(questions){
-							globalQ=questions,
-							set(questions),
-							answerCard(questions)
+						$.ajax(setQuestions).done(function (questions) {
+							globalQ = questions,
+								set(questions),
+								answerCard(questions)
 						})
 					}
 					else {
-						alert ("Seed unset! Just hold on a second...")
+						alert("Seed unset! Just hold on a second...")
 						var reset = {
 							"async": true,
 							// "crossDomain": true,
@@ -65,16 +66,62 @@ export default {
 								"cache-control": "no-cache",
 							}
 						}
-						$.ajax(reset).done(function(reset){
+						$.ajax(reset).done(function (reset) {
 							alert(JSON.stringify(reset))
 						})
-						alert("Boom! Bug exterminated! Now, please press F5.")
+						alert("Boom! Bug exterminated(emmm....maybe not)!")
 					}
 				}
-				else{
-					_this.$router.push('/ans/result')
+				else if (response.testState == 1) {
+					alert("testing!We'll reset your seed for you...");
+					var reset = {
+						"async": true,
+						// "crossDomain": true,
+						"url": "/api/Student/State/Reset",
+						"method": "POST",
+						"headers": {
+							"content-type": "application/json",
+							"cache-control": "no-cache",
+						}
+					}
+					$.ajax(reset).done(function (reset) {
+						// alert(JSON.stringify(reset))
+					})
+					alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
+					var setQuestions = {
+						"async": false,
+						"url": "/api/Question",
+						"method": "GET",
+						"contentType": "application/json",
+					}
+					$.ajax(setQuestions).done(function (questions) {
+						globalQ = questions,
+							set(questions),
+							answerCard(questions)
+					})
 				}
-					
+				else {
+					alert("Tested!");
+					$.ajax({
+						url: '/api/Result{id}', //请求的url地址
+						type: "GET", //请求方式
+						dataType: "json", //返回格式为json
+						async: false,
+						// data: JSON.stringify(answerQues),
+						contentType: "application/json",
+						beforeSend: function () {
+						},
+						success: function (res) {
+							setRESULT(res);
+						},
+						complete: function () {
+						},
+						error: function (request) {
+							alert("error:" + JSON.stringify(request));
+						}
+					});
+				}
+
 			});
 		},
 		load: function () {
@@ -85,7 +132,7 @@ export default {
 				if (ID != "submit") {
 					saveAns(ID);
 				} else {
-					alert(JSON.stringify(globalQ));
+					console.log(JSON.stringify(globalQ));
 					saveAnsID(globalQ);
 					submit(inTime);
 				}
