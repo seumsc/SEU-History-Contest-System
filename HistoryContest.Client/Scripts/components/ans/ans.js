@@ -22,14 +22,6 @@ exports.saveAns = function (clickID) {
 	}, 300);
 }
 exports.saveAnsID = function(questions){
-////////////////////////////////////
-// var ans = 0;
-// var ans = clickID.value;
-// var id = clickID;
-// var check = {};
-// check.id= -1;
-// check.answer = ans;
-////////////////////////////////////
 	for(var i = 0;i<30; i++){
 		// answerQues[i]=check;
 		answerQues[i].id = questions[i].id;
