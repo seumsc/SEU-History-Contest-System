@@ -67,7 +67,38 @@
     }
 </style>
 <script>
-        function downloadExcel(){
+        function downloadDepardmentExecel(){
+            $.ajax({
+            url:  'http://history-contest.chinacloudsites.cn/api/Counselor/ExportDepartmentExcel', //请求的url地址
+            
+            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+            
+            crossDomain:true,
+            
+            type: "GET", //请求方式
+            
+            contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            beforeSend: function () {
+              //请求前的处理
+  
+            },
+            success: function (req,res) {
+              //请求成功时处理
+             console.log(req);
+             console.log(res);
+            },
+            complete: function () {
+              //请求完成的处理
+            },
+            error: function (xhr) {
+              //请求出错处理
+              alert("数据获取失败，请检查网络！");
+              console.log(xhr);
+            }
+          });
+
+        }
+        function downloadExcelOfAllDepartments(){
         $.ajax({
             url:  'http://history-contest.chinacloudsites.cn/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
             
@@ -102,14 +133,6 @@
 
     <div class="wrapper">
         <div class="sidebar" data-color="blue" data-image="images/sidebar.png">
-
-            <!--   
-        
-        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" 
-        Tip 2: you can also add an image using data-image tag
-        
-    -->
-
             <div class="sidebar-wrapper">
                 <div class="logo">
                     <img src="images/logo-including-name.png">
@@ -154,11 +177,15 @@
                                 <a href="#" id="refresh-button"><span class="glyphicon glyphicon-refresh"></span> 刷新</a>
                             </li>
                             <li>
-                                <a href="#" onclick="downloadExcel()"><span class="glyphicon glyphicon-th-list"></span>
-                                导出EXCEL
+                                <a href="#" onclick="downloadDepardmentExecel()"><span class="glyphicon glyphicon-th-list"></span>
+                                导出成绩统计EXCEL
                             </a>
                             </li>
-
+                            <li>
+                                <a href="#" onclick="downloadExcelOfAllDepartments()"><span class="glyphicon glyphicon-th-list"></span>
+                                导出院系概览EXCEL
+                            </a>
+                            </li>
 
 
                             <li>
@@ -431,7 +458,10 @@
                     <nav class="pull-left">
                         <ul>
                             <li>
-                                <button type="button" class="btn btn-default navbar-btn">导出EXCEL</button>
+                                <button type="button" onclick="downloadDepardmentExecel()" class="btn btn-default navbar-btn">导出成绩统计EXCEL</button>
+                            </li>
+                            <li>
+                                <button type="button" onclick="downloadExcelOfAllDepartments()" class="btn btn-default navbar-btn">导出院系概览EXCEL</button>
                             </li>
 
                         </ul>
@@ -444,7 +474,7 @@
 
         </div>
     </div>
-
+    </div>
 
 </body>
 
