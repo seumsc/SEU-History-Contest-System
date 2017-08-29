@@ -32,7 +32,7 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 下载当前辅导员所在院系所有学生分数情况的EXCEL表
+        /// 更新并下载当前辅导员所在院系所有学生分数情况的EXCEL表
         /// </summary>
         /// <remarks>
         /// 无需参数，通过Session中department获取院系id
@@ -49,7 +49,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表</returns>
         /// <response code="200">返回本院系得分EXCEL统计表</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
-        [HttpGet("ExportExcelofDepartment")]
+        [HttpPost("ExportExcelofDepartment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportExcelofDepartment()
         {
@@ -71,7 +71,7 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 下载全校各个院系分数概况的EXCEL表
+        /// 更新并下载全校各个院系分数概况的EXCEL表
         /// </summary>
         /// <remarks>
         /// 无需参数
@@ -89,7 +89,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>全校各院系分数概况excel表</returns>
         /// <response code="200">返回各院系得分概况EXCEL统计表</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
-        [HttpGet("ExportExcelOfAllDepartments")]
+        [HttpPost("ExportExcelOfAllDepartments")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportExcelOfAllDepartments()
         {
