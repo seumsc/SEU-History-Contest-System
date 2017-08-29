@@ -41,9 +41,9 @@ const router = new VueRouter({
     ]
 })
 // alert(user.role);
-if(user.isLoggedIn==false){
+if((<any>window).user.isLoggedIn==false){
     router.push('/login');    
-}else if(user.role== "Student"){
+}else if((<any>window).user.role== "Student"){
     router.push('/ans/sheet')
 }else router.push('/dashboard/statistics')
 // router.push('./dashboard/statistics');
