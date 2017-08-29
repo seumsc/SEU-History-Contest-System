@@ -15,7 +15,7 @@ $(function () {
      * ============================== */
     // alert(JSON.stringify(user.role));
     // alert(JSON.stringify(user));
-     if(user.role != "Counselor"){
+     if((<any>window).user.role != "Counselor"){
         $("#wiki").css("display","");
         $("#api").css("display","");
         $("#ansSheet").css("display","");
@@ -523,11 +523,28 @@ export default {
             // click:click
         }
     },
-    components:{
-        statistics:require('./statistics/statistics.vue.html'),
-        general:require('./statistics/statistics.vue.html')
-    },
     methods: {
+        downloadExcel:function(){
+            $.ajax({
+                url: '/api/Counselor/ExportExcelofDepartment', //请求的url地址
+                type: "GET", //请求方式
+                // dataType: "json", //返回格式为json
+                async: true,
+                crossDomain:true,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                beforeSend: function () {
+                    alert('start download');
+                },
+                success:function(req){
+                    alert(req);
+                },
+                complete: function () {
+                },
+                error: function (request) {
+                    alert("error:" + JSON.stringify(request));
+                }
+            });
+        },
         goToStatis: function () {
             this.$router.push({ path: '/dashboard/statistics' })            
         },

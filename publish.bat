@@ -7,14 +7,14 @@ if exist HistoryContest.Site (
 
 cd ./HistoryContest.Server
 call dotnet restore
-if %ERRORLEVEL% NEQ 0 exit
+if %ERRORLEVEL% NEQ 0 pause
 pause
 call dotnet publish --output "../HistoryContest.Site" --configuration Release
-if %ERRORLEVEL% NEQ 0 exit
+if %ERRORLEVEL% NEQ 0 pause
 
 pause
 
 cd ../HistoryContest.Site
 echo @echo off > run_app.bat
-echo call dotnet HistoryContest.Server.dll -rb -env Production >> run_app.bat
+echo call dotnet HistoryContest.Server.dll -rb -env production >> run_app.bat
 call run_app.bat
