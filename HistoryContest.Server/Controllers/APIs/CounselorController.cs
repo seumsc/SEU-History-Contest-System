@@ -32,12 +32,12 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 更新并下载当前辅导员所在院系所有学生分数情况的EXCEL表
+        /// 创建或更新当前辅导员所在院系所有学生分数情况的EXCEL表
         /// </summary>
         /// <remarks>
         /// 无需参数，通过Session中department获取院系id
-        /// * 下载excel统计表将在wwwroot/excel/ 目录下创建以院系id为名的xlsx文件并下载
-        /// * 如果之前文件已经存在将会删除并重新创建，以同步更新数据
+        /// * excel统计表将在wwwroot/excel/ 目录下创建或更新以院系id为名的xlsx文件
+        /// * 下载功能在Download中实现
         /// 
         /// excel中的统计信息包括:
         /// 1. 学号
@@ -46,8 +46,8 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 4. 是否完成
         /// 5. 得分
         /// </remarks>
-        /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表</returns>
-        /// <response code="200">返回本院系得分EXCEL统计表</response>
+        /// <returns>院系学生:学号\一卡通号\姓名\是否完成\得分的excel表名称</returns>
+        /// <response code="200">返回本院系得分EXCEL统计表名</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
         [HttpPost("ExportExcelofDepartment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -67,16 +67,16 @@ namespace HistoryContest.Server.Controllers.APIs
                 file.Delete();
             }
             await excelExportService.CreateExcelByDepartmentid(file,id);
-            return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return Json(id.ToString() + ".xlsx");
         }
 
         /// <summary>
-        /// 更新并下载全校各个院系分数概况的EXCEL表
+        /// 创建或更新全校各个院系分数概况的EXCEL表
         /// </summary>
         /// <remarks>
         /// 无需参数
-        /// * 第一次下载excel统计表将在wwwroot/excel/ 目录下创建 ScoreSummaryOfAllDepartments.xlsx 并下载
-        /// * 如果之前文件已经存在将会删除并重新创建，以同步更新数据
+        /// * excel统计表将在wwwroot/excel/ 目录下创建或更新 ScoreSummaryOfAllDepartments.xlsx
+        /// * 下载功能在Download中实现
         /// 
         /// excel中的统计信息包括:
         /// 1. 院系ID
@@ -86,8 +86,8 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 5. 分数段对应人数
         ///     - >=90 , >=75 , >=60 , 小于60
         /// </remarks>
-        /// <returns>全校各院系分数概况excel表</returns>
-        /// <response code="200">返回各院系得分概况EXCEL统计表</response>
+        /// <returns>全校各院系分数概况excel表名称</returns>
+        /// <response code="200">返回各院系得分概况EXCEL统计表名</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有department</response>
         [HttpPost("ExportExcelOfAllDepartments")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -107,7 +107,26 @@ namespace HistoryContest.Server.Controllers.APIs
                 file.Delete();
             }
             await excelExportService.CreateExcelOfAllDepartments(file);
-            return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return Json("ScoreSummaryOfAllDepartments.xlsx");
+        }
+
+        /// <summary>
+        /// 提供下载功能
+        /// </summary>
+        /// <remarks>
+        /// 参数为 excel文件名 --.xlsx
+        /// * 在创建或者更新excel文件后获得文件名
+        /// * 通过  window.location = '/Counselor/Download?file=' + returnValue;下载
+        /// </remarks>
+        /// <returns>excel文件</returns>
+        /// <response code="200">下载文件</response>
+        [HttpGet]
+        public virtual ActionResult Download(string file)
+        {
+            string sWebRootFolder = Startup.Environment.WebRootPath;
+            sWebRootFolder += @"/excel";
+            string fullPath = Path.Combine(sWebRootFolder, file);
+            return File(fullPath, "application/vnd.ms-excel", file);
         }
 
         /// <summary>

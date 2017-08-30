@@ -169,7 +169,7 @@ namespace HistoryContest.Server
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //app.UseCors("OpenPolicy");
+            app.UseCors("OpenPolicy");
 
             // enable status code response page
             app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
