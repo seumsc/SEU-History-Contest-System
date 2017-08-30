@@ -5,30 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.Entities;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Data.Repositories
 {
     public class StudentRepository : GenericRepository<Student>
     {
-        //internal List<Counselor> counselorList;
-        //internal DbSet<Counselor> counselorSet;
-
         public StudentRepository(ContestContext context, RedisService cache) : base(context, cache)
         {
-            //counselorSet = context.Counselors;
-            //counselorSet = context.Counselors;
-        }
 
-        public void LoadStudentsFromCounselors()
-        {
-            //counselorList = context.Counselors.Include(c => c.Students).ToList();
         }
 
         public async Task<ICollection<Student>> GetByDepartment(Department departmentID)
         {
-            //counselorSet.Load();
-            //context.Counselors.Where(c => c.Department == departmentID).Load();
-            //counselorSet.Include(c => c.Students);
             var counselor = await context.Counselors.Where(c => c.Department == departmentID).Include(c => c.Students).SingleAsync();
             return counselor.Students;
         }
@@ -53,6 +42,8 @@ namespace HistoryContest.Server.Data.Repositories
                    
         public async Task<int> ScoreHigherThanByDepartment(double bandScore, Department departmentID) =>           
             await (await GetByDepartment(departmentID)).AsQueryable().CountAsync(s => s.IsTested && s.Score >= bandScore);
-            
+
+        public void LoadStudentsByCounselorsToCache() =>
+            context.Counselors.Include(c => c.Students).ToList().ForEach(c => cache.Dictionary<string, Student>(c.Department.ToString()).SetRange(c.Students, s => s.ID.ToStringID()));
     }
 }

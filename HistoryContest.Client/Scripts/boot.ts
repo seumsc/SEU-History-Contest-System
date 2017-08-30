@@ -7,8 +7,6 @@ import 'chartist';
 // import 'bootstrap-validator';
 Vue.use(VueRouter);
 
-alert(user.role);
-
 const router = new VueRouter({
     mode: 'history',
     routes: [

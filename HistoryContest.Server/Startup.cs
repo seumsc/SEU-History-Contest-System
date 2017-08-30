@@ -63,13 +63,13 @@ namespace HistoryContest.Server
 
             // Add Database Services
             services.AddDbContext<ContestContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionStringByDatabase("SQL")));
+                options.UseSqlServer(Configuration.GetConnectionStringByDbType("SQL")));
 
             // Adds a redis in-memory implementation of IDistributedCache.
             services.AddDistributedRedisCache(options =>
             {
                 options.InstanceName = "HistoryContest.Redis";
-                options.Configuration = Configuration.GetConnectionStringByDatabase("Redis");
+                options.Configuration = Configuration.GetConnectionStringByDbType("Redis");
             });
 
             // Add redis service
@@ -152,7 +152,7 @@ namespace HistoryContest.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ContestContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, UnitOfWork unitOfWork)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -248,11 +248,14 @@ namespace HistoryContest.Server
 
             
             // Seed database
-            if (!context.AllMigrationsApplied())
+            if (!unitOfWork.DbContext.AllMigrationsApplied())
             {
-                context.Database.Migrate();
-                context.EnsureAllSeeded();
+                unitOfWork.DbContext.Database.Migrate();
+                unitOfWork.DbContext.EnsureAllSeeded();
             }
+
+            unitOfWork.QuestionRepository.LoadAllQuestionToCache();
+            unitOfWork.StudentRepository.LoadStudentsByCounselorsToCache();
         }
     }
 

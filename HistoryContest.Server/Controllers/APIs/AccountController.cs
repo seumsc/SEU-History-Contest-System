@@ -83,8 +83,9 @@ namespace HistoryContest.Server.Controllers.APIs
             if (HttpContext.Session.Get("id") != null)
             {
                 var id = HttpContext.Session.GetString("id");
-                var user = await accountService.GetUser(id);
-                var userViewModel = new UserViewModel { UserName = id, RealName = user.Name, Role = user.GetType().Name };
+                var name = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RealName").Value;
+                var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                var userViewModel = new UserViewModel { UserName = id, RealName = name, Role = role };
                 return Json(new { isSuccessful = false, message = "User already logged in", userViewModel });
             }
 

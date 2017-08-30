@@ -38,7 +38,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 1. 学生考试完毕后重新登录时，将页面重定向到调用这个api；
         /// 2. 辅导员在看本院得分情况时，想要查看某位学生的考试详细细节。
         /// </remarks>
-        /// <param name="id">学生的学号（可选）</param>
+        /// <param name="id?">学生的学号（可选）</param>
         /// <returns>学号对应的考试结果</returns>
         /// <response code="200">
         /// 返回欲查询的学生的考试结果，由以下几部分组成：
@@ -58,35 +58,43 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetResult(string id)
         {
-            if (id == null && HttpContext.User.IsInRole("Student") && HttpContext.Session.Get("id") != null)
+            if (id == null)
             { // 如果不输入id，且当前用户认证为学生，则取Session中的学号作为id
-                id = HttpContext.Session.GetString("id");
-            }
-            else
-            {
-                return BadRequest("Empty argument request invalid");
-            }
-
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
-            if(student == null)
-            {
-                return NotFound("Student not found");
-            }
-            if (!student.IsTested)
-            {
-                return Forbid("Contest has not been completed");
+                if (HttpContext.User.IsInRole("Student") && HttpContext.Session.Get("id") != null)
+                {
+                    id = HttpContext.Session.GetString("id");
+                }
+                else
+                {
+                    return BadRequest("Empty argument request invalid");
+                }
             }
 
-            var model = new ResultViewModel();
-            // TODO: 将model从缓存中取出（按Ctrl + Alt + K打开TODO列表）
-            
-            model.Score = (int)student.Score;
-            model.Details = student.QuestionSeed.QuestionIDs.Zip(student.Choices, (ID, choice) => new ResultDetailViewModel
+            ResultViewModel model = await unitOfWork.Cache.GetAsync<ResultViewModel>(id);
+            if (model == null)
             {
-                ID = ID,
-                RightAnswer = (unitOfWork.QuestionRepository.GetByID(ID)).Answer,
-                SubmittedAnswer = choice
-            }).ToList();
+                var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                if (!student.IsTested)
+                {
+                    return Forbid("Contest has not been completed");
+                }
+
+                model = new ResultViewModel
+                {
+                    Score = (int)student.Score,
+                    Details = student.QuestionSeed.QuestionIDs.Zip(student.Choices, (ID, choice) => new ResultDetailViewModel
+                    {
+                        ID = ID,
+                        Correct = (unitOfWork.QuestionRepository.GetByID(ID)).Answer,
+                        Submit = choice
+                    }).ToList()
+                };
+                await unitOfWork.Cache.SetAsync(id, model);
+            }
 
             return Json(model);
         }
@@ -99,7 +107,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <remarks>
         /// **注意**：目前后端的实现暂时仍在采用*遍历前端传过来的answers数组*来计算分数（也就是说学生没选答案的题目如果没有传给后端，会造成遗漏）
         /// </remarks>
-        /// <param name="answers">问题ID与考生选择所构数组</param>
+        /// <param name="submittedAnswers">问题ID与考生选择所构数组</param>
         /// <returns>考生的考试结果</returns>
         /// <response code="200">返回考生的考试结果。该结果JSON的模型与`GET api/Result/{id}`相同，可以在将来重新查询到</response>
         /// <response code="400">
@@ -110,18 +118,27 @@ namespace HistoryContest.Server.Controllers.APIs
         [Authorize(Roles = "Student, Administrator")]
         [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> answers)
+        public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
-            if(!ModelState.IsValid)
+            if(!ModelState.IsValid || submittedAnswers.Count != 30)
             { // TODO:<yzh> 可能需要检查数组的size是否正确
-                return BadRequest("Body JSON content invalid");
+                return BadRequest("Body JSON content invalid or does not fit the size: " + 30);
+            }
+
+            var seed = HttpContext.Session.GetInt32("seed");
+            if (seed == null)
+            {
+                return BadRequest("Question seed not created");
             }
 
             var student = await unitOfWork.StudentRepository.GetByIDAsync(HttpContext.Session.GetString("id").ToIntID());
             student.Score = 0;
+            student.QuestionSeedID = (int)seed;
             student.DateTimeFinished = DateTime.Now;
             student.TimeConsumed = student.DateTimeFinished - HttpContext.Session.Get<DateTime>("beginTime");
-            student.Choices = answers.Select(a => (byte)a.Answer).ToArray();
+            student.Choices = submittedAnswers.Select(a => (byte)a.Answer).ToArray();
+
+            var correctAnswers = await questionSeedService.GetAnswersBySeedID((int)seed);
 
             var model = new ResultViewModel
             {
@@ -129,21 +146,22 @@ namespace HistoryContest.Server.Controllers.APIs
                 TimeFinished = (DateTime)student.DateTimeFinished,
                 TimeConsumed = (TimeSpan)student.TimeConsumed
             };
-            foreach(var a in answers)
+            for (int i = 0; i < submittedAnswers.Count; ++i)
             {
-                var item = await unitOfWork.QuestionRepository.GetByIDAsync(a.ID);
-                if (item == null)
+                var submit = submittedAnswers[i];
+                var correct = correctAnswers[i];
+                if (submit.ID != correct.ID)
                 {
-                    return BadRequest("Encounter invalid ID in answer set: " + a.ID);
+                    return BadRequest("Encounter improper ID in answer set: " + submit.ID);
                 }
-                student.Score += a.Answer == item.Answer ? item.Points : 0;
-                model.Details.Add(new ResultDetailViewModel { ID = item.ID, RightAnswer = item.Answer, SubmittedAnswer = a.Answer });
+                student.Score += submit.Answer == correct.Answer ? correct.Points : 0;
+                model.Details.Add(new ResultDetailViewModel { ID = correct.ID, Correct = correct.Answer, Submit = submit.Answer });
             }
             model.Score = (int)student.Score;
 
-            // TODO: 将model存到缓存
             unitOfWork.StudentRepository.Update(student);
             await unitOfWork.SaveAsync();
+            await unitOfWork.Cache.SetAsync(student.ID.ToStringID(), model); // result存入缓存
             return Json(model);
         }
 
@@ -168,14 +186,14 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Question seed not created");
             }
 
-            var source = await questionSeedService.GetQuestionsBySeedID((int)seed);
-            if (source == null)
+            var answers = await questionSeedService.GetAnswersBySeedID((int)seed);
+            if (answers == null)
             {
                 // TODO: 详细定义异常
                 throw new Exception("Improper seed created, ID: " + seed);
             }
 
-            return Json(source.Select(q => new CorrectAnswerViewModel { ID = q.ID, Answer = q.Answer, Points = q.Points }));
+            return Json(answers);
         }
 
         /// <summary>
@@ -194,13 +212,13 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAnswerByID(int id)
         {
-            var item = await unitOfWork.QuestionRepository.GetByIDAsync(id);
-            if (item == null)
+            var answer = await unitOfWork.QuestionRepository.GetAnswerFromCacheAsync(id);
+            if (answer == null)
             {
                 return NotFound();
             }
 
-            return Json(new CorrectAnswerViewModel { ID = item.ID, Answer = item.Answer, Points = item.Points });
+            return Json(answer);
         }
     }
 }
