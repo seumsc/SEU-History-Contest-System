@@ -19,7 +19,7 @@ namespace HistoryContest.Server.Data
         public UnitOfWork(ContestContext context, RedisService redisService = null)
         {
             this.context = context;
-            this.redisService = redisService ?? new RedisService(Startup.Configuration);
+            this.redisService = redisService ?? new RedisService();
             lazyStudentRepository = new Lazy<StudentRepository>(() => new StudentRepository(context, redisService));
             lazyCounselorRepository = new Lazy<GenericRepository<Counselor>>(() => new GenericRepository<Counselor>(context, redisService));
             lazyAdminRepository = new Lazy<GenericRepository<Administrator>>(() => new GenericRepository<Administrator>(context, redisService));

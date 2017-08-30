@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 namespace HistoryContest.Server.Models.Entities
 {
     // Entity Framework interprets a property as a foreign key property if it's named <navigation property name><primary key property name>
+    [JsonObject(MemberSerialization.OptOut)]
     public class Student : IUserBase
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)] // ID为学生学号，而不是由数据库自动生成
@@ -26,6 +27,7 @@ namespace HistoryContest.Server.Models.Entities
         public int? QuestionSeedID { get; set; }
 
         // navigation properties
+        [JsonIgnore]
         public Counselor Counselor { get; set; } 
         public QuestionSeed QuestionSeed { get; set; }
 

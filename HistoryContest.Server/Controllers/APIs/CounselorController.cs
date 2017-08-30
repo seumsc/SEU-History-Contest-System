@@ -9,7 +9,6 @@ using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Data;
 using System.IO;
-using OfficeOpenXml;
 using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
@@ -28,7 +27,6 @@ namespace HistoryContest.Server.Controllers.APIs
         {
             this.unitOfWork = unitOfWork;
             counselorService = new ExcelOutputService(unitOfWork);
-            unitOfWork.StudentRepository.LoadStudentsFromCounselors();
         }
 
         /// <summary>

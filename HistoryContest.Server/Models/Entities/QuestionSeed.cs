@@ -17,7 +17,7 @@ namespace HistoryContest.Server.Models.Entities
         public int[] QuestionIDs
         {
             get { return _questionIDs.Split(',').Select(int.Parse).ToArray(); }
-            set { _questionIDs = String.Join(",", value.Select(id => id.ToString()).ToArray()); }
+            set { _questionIDs = string.Join(",", value.Select(id => id.ToString()).ToArray()); }
         }
     }
 }
