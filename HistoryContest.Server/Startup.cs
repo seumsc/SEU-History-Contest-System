@@ -255,7 +255,7 @@ namespace HistoryContest.Server
             }
 
             unitOfWork.QuestionRepository.LoadAllQuestionToCache();
-            unitOfWork.StudentRepository.LoadStudentsByCounselorsToCache();
+            unitOfWork.StudentRepository.LoadStudentsToCache();
         }
     }
 

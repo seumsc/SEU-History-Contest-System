@@ -22,7 +22,7 @@ namespace HistoryContest.Server.Data.Repositories
         }
 
         #region Synchronous Methods
-        public int Size()
+        public virtual int Size()
         {
             return dbSet.Count();
         }
@@ -93,7 +93,7 @@ namespace HistoryContest.Server.Data.Repositories
         #endregion
 
         #region Asynchronous Methods
-        public async Task<int> SizeAsync()
+        public virtual async Task<int> SizeAsync()
         {
             return await dbSet.CountAsync();
         }

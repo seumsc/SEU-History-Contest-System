@@ -57,7 +57,7 @@ namespace HistoryContest.Server.Services
             List<ScoreSummaryByDepartmentViewModel> datatable = null;
             foreach (var counselor in unitOfWork.DbContext.Counselors)
             {
-                datatable.Add(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork,counselor));
+                datatable.Add(await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork,counselor));
             }
 
             using (ExcelPackage package = new ExcelPackage(file))

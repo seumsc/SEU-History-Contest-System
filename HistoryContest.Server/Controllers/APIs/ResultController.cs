@@ -70,7 +70,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            ResultViewModel model = await unitOfWork.Cache.GetAsync<ResultViewModel>(id);
+            ResultViewModel model = await unitOfWork.Cache.Dictionary<string, ResultViewModel>().GetAsync(id);
             if (model == null)
             {
                 var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
@@ -93,7 +93,7 @@ namespace HistoryContest.Server.Controllers.APIs
                         Submit = choice
                     }).ToList()
                 };
-                await unitOfWork.Cache.SetAsync(id, model);
+                await unitOfWork.Cache.Dictionary<string, ResultViewModel>().SetAsync(student.ID.ToStringID(), model);
             }
 
             return Json(model);
@@ -121,7 +121,7 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
             if(!ModelState.IsValid || submittedAnswers.Count != 30)
-            { // TODO:<yzh> 可能需要检查数组的size是否正确
+            {
                 return BadRequest("Body JSON content invalid or does not fit the size: " + 30);
             }
 
@@ -161,7 +161,8 @@ namespace HistoryContest.Server.Controllers.APIs
 
             unitOfWork.StudentRepository.Update(student);
             await unitOfWork.SaveAsync();
-            await unitOfWork.Cache.SetAsync(student.ID.ToStringID(), model); // result存入缓存
+            (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student); // 更新院系概况数据
+            await unitOfWork.Cache.Dictionary<string, ResultViewModel>().SetAsync(student.ID.ToStringID(), model); // result存入缓存
             return Json(model);
         }
 

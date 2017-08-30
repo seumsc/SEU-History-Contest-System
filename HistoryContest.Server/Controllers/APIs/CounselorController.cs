@@ -21,12 +21,12 @@ namespace HistoryContest.Server.Controllers.APIs
     public class CounselorController : Controller
     {
         private readonly UnitOfWork unitOfWork;
-        private readonly ExcelOutputService counselorService;
+        private readonly ExcelOutputService excelOutputService;
 
         public CounselorController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            counselorService = new ExcelOutputService(unitOfWork);
+            excelOutputService = new ExcelOutputService(unitOfWork);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 file.Delete();
             }
-            await counselorService.CreateExcelByDepartmentid(file,id);
+            await excelOutputService.CreateExcelByDepartmentid(file,id);
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
@@ -104,7 +104,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 file.Delete();
             }
-            await counselorService.CreateExcelOfAllDepartments(file);
+            await excelOutputService.CreateExcelOfAllDepartments(file);
             return File(sFileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
@@ -169,13 +169,13 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             //TODO : <yhy>将院系学生信息存入缓存中 1
-            var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
-            if (students == null)
+            var studentIDs = (await unitOfWork.StudentRepository.GetIDsByDepartment((Department)id));
+            if (studentIDs == null)
             {
                 return NotFound();
             }
 
-            return Json(students.AsQueryable().Select(s => s.ID.ToStringID()));
+            return Json(studentIDs);
         }
 
         #region Scores APIs
@@ -215,14 +215,24 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Forbid();
             }
 
-            //TODO : <yhy>将院系学生信息存入缓存中 2
-            var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
-            if (students == null)
+            List<StudentViewModel> studentViewModels;
+            var studentVMDictionary = unitOfWork.Cache.Dictionary<string, StudentViewModel>();
+            if (await studentVMDictionary.CountAsync() != 0)
+            { // 读缓存，若没有则从数据库中读取并添加到缓存
+                studentViewModels = await studentVMDictionary.GetAllValuesAsync();
+            }
+            else
             {
-                return NotFound();
+                var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
+                if (students == null)
+                {
+                    return NotFound();
+                }
+                studentViewModels = students.Select(s => (StudentViewModel)s).ToList();
+                await studentVMDictionary.SetRangeAsync(studentViewModels, s => s.StudentID);
             }
 
-            return Json(students.AsQueryable().Select(s => (StudentViewModel)s));
+            return Json(studentViewModels);
         }
 
         /// <summary>
@@ -242,18 +252,25 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> StudentScoreById(string id)
         {
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            if (!HttpContext.User.IsInRole("Administrator") && student.CounselorID != HttpContext.Session.GetString("id").ToIntID())
+            if (!HttpContext.User.IsInRole("Administrator") && id.ToDepartmentID() != (Department)HttpContext.Session.GetInt32("department"))
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
 
-            return Json((StudentViewModel)student);
+            var studentVMDictionary = unitOfWork.Cache.Dictionary<string, StudentViewModel>();
+            var studentViewModel = await studentVMDictionary.GetAsync(id);
+            if (studentViewModel == null)
+            {
+                var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
+                if (student == null)
+                {
+                    return NotFound();
+                }
+                studentViewModel = (StudentViewModel)student;
+                await studentVMDictionary.SetAsync(studentViewModel.StudentID, studentViewModel);
+            }
+
+            return Json(studentViewModel);
         }
         #endregion
 
@@ -262,7 +279,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 获取全校分数概况
         /// </summary>
         /// <remarks>
-        /// **NOTE:这个功能目前尚未被正确实现，仅用于参考JSON返回值**
+        /// 每隔10分钟，缓存中的数据，自动过期，从而获得的model变为null。当调用这个API时，会再重新创建一个
         /// </remarks>
         /// <returns>全校分数概况</returns>
         /// <response code="200">
@@ -274,7 +291,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(ScoreSummaryOfSchoolViewModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ScoreSummaryOfSchool()
         {
-            return Json(await ScoreSummaryOfSchoolViewModel.CreateAsync(unitOfWork));
+            return Json(await ScoreSummaryOfSchoolViewModel.GetAsync(unitOfWork));
         }
 
         /// <summary>
@@ -322,7 +339,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return NotFound();
             }
 
-            return Json(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork, counselor));
+            return Json(await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, counselor));
         }
         #endregion
     }

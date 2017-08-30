@@ -34,10 +34,17 @@ namespace HistoryContest.Server.Data
             return string.Concat(typeof(T).Name.ToLower(), ":", key.ToLower());
         }
 
-        public RedisDictionary<TKey, TValue> Dictionary<TKey, TValue>(string dicName) where TValue : class
+        public RedisDictionary<TKey, TValue> Dictionary<TKey, TValue>(string dicName = "", Func<TKey, string> parser = null) where TValue : class
         {
-            var hashKey = GenerateKey<TValue>(dicName);
-            return new RedisDictionary<TKey, TValue>(this, hashKey);
+            if (dicName != "")
+            {
+                var hashKey = GenerateKey<TValue>(dicName);
+                return new RedisDictionary<TKey, TValue>(this, hashKey, parser);
+            }
+            else
+            {
+                return new RedisDictionary<TKey, TValue>(this, parser);
+            }
         }
 
         #region Synchronous Methods
@@ -48,7 +55,7 @@ namespace HistoryContest.Server.Data
             return jsonString == null? null : JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public bool Set<T>(string key, T value) where T : class
+        public bool Set<T>(string key, T value, TimeSpan? expiry = null) where T : class
         {
             if (value == null || string.IsNullOrWhiteSpace(key) || key.Contains(":"))
             {
@@ -57,7 +64,7 @@ namespace HistoryContest.Server.Data
 
             RedisKey redisKey = GenerateKey<T>(key);
             string jsonString = JsonConvert.SerializeObject(value);
-            return Database.StringSet(redisKey, jsonString);
+            return Database.StringSet(redisKey, jsonString, expiry);
         }
 
         public bool Delete<T>(string key)
@@ -70,6 +77,12 @@ namespace HistoryContest.Server.Data
             key = GenerateKey<T>(key);
             return Database.KeyDelete(key);
         }
+
+        public bool HasKey<T>(string key)
+        {
+            var redisKey = GenerateKey<T>(key);
+            return Database.KeyExists(redisKey);
+        }
         #endregion
 
         #region Asynchronous Methods
@@ -80,7 +93,7 @@ namespace HistoryContest.Server.Data
             return jsonString == null ? null : JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public async Task<bool> SetAsync<T>(string key, T value) where T : class
+        public async Task<bool> SetAsync<T>(string key, T value, TimeSpan? expiry = null) where T : class
         {
             if (value == null || string.IsNullOrWhiteSpace(key) || key.Contains(":"))
             {
@@ -88,7 +101,7 @@ namespace HistoryContest.Server.Data
             }
             RedisKey redisKey = GenerateKey<T>(key);
             string jsonString = JsonConvert.SerializeObject(value);
-            return await Database.StringSetAsync(redisKey, jsonString);
+            return await Database.StringSetAsync(redisKey, jsonString, expiry);
         }
 
         public async Task<bool> DeleteAsync<T>(string key)
@@ -101,6 +114,12 @@ namespace HistoryContest.Server.Data
             key = GenerateKey<T>(key);
             return await Database.KeyDeleteAsync(key);
         }
+
+        public async Task<bool> HasKeyAsync<T>(string key)
+        {
+            var redisKey = GenerateKey<T>(key);
+            return await Database.KeyExistsAsync(redisKey);
+        }
         #endregion
     }
 
@@ -108,47 +127,75 @@ namespace HistoryContest.Server.Data
     {
         private readonly RedisService cache;
         private readonly RedisKey hashKey;
+        private readonly Func<TKey, string> parser;
 
-        public RedisDictionary(RedisService cache, RedisKey hashKey)
+        public RedisDictionary(RedisService cache, Func<TKey, string> parser = null)
+        {
+            this.cache = cache;
+            this.hashKey = typeof(TValue).Name;
+            this.parser = parser?? (key => key.ToString());
+        }
+
+        public RedisDictionary(RedisService cache, RedisKey hashKey, Func<TKey, string> parser = null)
         {
             this.cache = cache;
             this.hashKey = hashKey;
+            this.parser = parser ?? (key => key.ToString());
         }
+
+        public long Count => cache.Database.HashLength(hashKey);
+
+        public Func<TKey, string> Parser => parser;
 
         public TValue this[TKey index]
         {
             get
             {
-                var field = index.ToString();
+                var field = parser(index);
                 var jsonString = cache.Database.HashGet(hashKey, field);
                 return JsonConvert.DeserializeObject<TValue>(jsonString);
             }
             set
             {
-                var field = index.ToString();
+                var field = parser(index);
                 var jsonString = JsonConvert.SerializeObject(value);
                 cache.Database.HashSet(hashKey, field, jsonString);
             }
         }
 
+        public async Task<long> CountAsync()
+        {
+            return await cache.Database.HashLengthAsync(hashKey);
+        }
+
         public async Task<TValue> GetAsync(TKey index)
         {
-            return JsonConvert.DeserializeObject<TValue>(await cache.Database.HashGetAsync(hashKey, index.ToString()));
+            return JsonConvert.DeserializeObject<TValue>(await cache.Database.HashGetAsync(hashKey, parser(index)));
         }
 
         public async Task SetAsync(TKey index, TValue value)
         {
-            await cache.Database.HashSetAsync(hashKey, index.ToString(), JsonConvert.SerializeObject(value));
+            await cache.Database.HashSetAsync(hashKey, parser(index), JsonConvert.SerializeObject(value));
         }
 
-        public IEnumerable<TValue> GetAll()
+        public List<string> GetAllStringKeys()
         {
-            return cache.Database.HashGetAll(hashKey).Select(e => JsonConvert.DeserializeObject<TValue>(e.Value.ToString()));
+            return cache.Database.HashKeys(hashKey).Select(v => v.ToString()).ToList();
         }
 
-        public async Task<IEnumerable<TValue>> GetAllAsync()
+        public async Task<List<string>> GetAllStringKeysAsync()
         {
-            return (await cache.Database.HashGetAllAsync(hashKey)).Select(e => JsonConvert.DeserializeObject<TValue>(e.Value.ToString()));
+            return (await cache.Database.HashKeysAsync(hashKey)).Select(e => e.ToString()).ToList();
+        }
+
+        public List<TValue> GetAllValues()
+        {
+            return cache.Database.HashValues(hashKey).Select(v => JsonConvert.DeserializeObject<TValue>(v.ToString())).ToList();
+        }
+
+        public async Task<List<TValue>> GetAllValuesAsync()
+        {
+            return (await cache.Database.HashValuesAsync(hashKey)).Select(e => JsonConvert.DeserializeObject<TValue>(e.ToString())).ToList();
         }
 
         public void SetRange(IEnumerable<TValue> range, Func<TValue, string> mapper)

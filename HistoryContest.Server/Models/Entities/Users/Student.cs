@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Models.Entities
 {
@@ -31,10 +32,9 @@ namespace HistoryContest.Server.Models.Entities
         public Counselor Counselor { get; set; } 
         public QuestionSeed QuestionSeed { get; set; }
 
-        public bool IsTested
-        {
-            get { return Score != null;  }
-        }
+        public Department Department => ID.ToStringID().ToDepartmentID();
+
+        public bool IsTested => Score != null;
 
         [NotMapped]
         public byte[] Choices
