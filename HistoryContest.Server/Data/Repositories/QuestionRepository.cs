@@ -100,8 +100,8 @@ namespace HistoryContest.Server.Data.Repositories
 
         public void LoadAllQuestionToCache()
         {
-            var questions = cache.Dictionary<int, QuestionViewModel>("questions");
-            var answers = cache.Dictionary<int, CorrectAnswerViewModel>("answers");
+            var questions = cache.Dictionary<int, QuestionViewModel>();
+            var answers = cache.Dictionary<int, CorrectAnswerViewModel>();
             foreach (var question in dbSet)
             {
                 //cache.Set(question.ID.ToString(), (QuestionViewModel)question);
