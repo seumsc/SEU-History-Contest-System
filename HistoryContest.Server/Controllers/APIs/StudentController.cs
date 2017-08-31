@@ -44,23 +44,23 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <response code=""></response>
         [HttpGet("State")]
         [ProducesResponseType(typeof(StudentStateViewModel), StatusCodes.Status200OK)]
-        public IActionResult State()
+        public JsonResult State()
         {
             var state = new StudentStateViewModel();
-            if (HttpContext.Session.Get<DateTime>("beginTime") != default(DateTime))
-            {
-                state.TestState = TestState.Testing;
-                state.IsSeedSet = HttpContext.Session.GetInt32("seed") != null;
-            }
-            else if (HttpContext.Session.GetInt32("isTested") == 1)
+            if (this.Session().IsTested)
             {
                 state.TestState = TestState.Tested;
                 state.IsSeedSet = true;
             }
+            else if (this.Session().TestBeginTime != null)
+            {
+                state.TestState = TestState.Testing;
+                state.IsSeedSet = this.Session().SeedID != null;
+            }
             else
             {
                 state.TestState = TestState.NotTested;
-                state.IsSeedSet = HttpContext.Session.GetInt32("seed") != null;
+                state.IsSeedSet = this.Session().SeedID != null;
             }
 
             return Json(state);
@@ -77,12 +77,12 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>当前学生考试开始时间</returns>
         /// <response code="201">返回设置的当前学生考试开始时间</response>
         /// <response code="302">已经初始化则重定向到`GET State`方法</response>
-        [HttpGet("State/[action]")]
+        [HttpPost("State/[action]")]
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> Initialize()
         {
-            if (HttpContext.Session.Get("beginTime") != null)
+            if (this.Session().TestBeginTime != null)
             { // 已经初始化则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -102,7 +102,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpPost("State/[action]")]
         public async Task<IActionResult> Reset()
         {
-            if (HttpContext.Session.Get("beginTime") == null)
+            if (this.Session().TestBeginTime == null)
             { // 未初始化则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -129,10 +129,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> SetSeed()
         {
-            if (HttpContext.Session.GetInt32("seed") == null)
+            if (this.Session().SeedID == null)
             {
                 var seed = await questionSeedService.RollSeed();
-                HttpContext.Session.SetInt32("seed", seed.ID);
+                this.Session().SeedID = seed.ID;
                 return CreatedAtAction(nameof(QuestionController.GetQuestionIDSet), nameof(QuestionController), null, seed.ID);
             }
             return NoContent();
@@ -149,7 +149,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult ClearSeed()
         {
-            HttpContext.Session.Remove("seed");
+            this.Session().SeedID = null;
             return NoContent();
         }
         #endregion
@@ -174,11 +174,11 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetLeftTime()
         {
-            if (HttpContext.Session.Get<DateTime>("beginTime") == default(DateTime))
+            if (this.Session().TestBeginTime == null)
             {
                 return NoContent();
             }
-            TimeSpan timeLeft = TimeSpan.FromMinutes(30) - (DateTime.Now - HttpContext.Session.Get<DateTime>("beginTime"));
+            TimeSpan timeLeft = TimeSpan.FromMinutes(30) - (DateTime.Now - (DateTime)this.Session().TestBeginTime);
             return Json(timeLeft);
         }
 
@@ -201,10 +201,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status302Found)]
         public IActionResult SetStartTime()
         {
-            if (HttpContext.Session.Get<DateTime>("beginTime") == default(DateTime))
+            if (this.Session().TestBeginTime == null)
             {
                 DateTime now = DateTime.Now;
-                HttpContext.Session.Set<DateTime>("beginTime", now);
+                this.Session().TestBeginTime = now;
                 return CreatedAtAction(nameof(GetLeftTime), now);
             }
             return RedirectToAction(nameof(GetLeftTime));
@@ -221,7 +221,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult ClearStartTime()
         {
-            HttpContext.Session.Remove("beginTime");
+            this.Session().TestBeginTime = null;
             return NoContent();
         }
         #endregion Time APIs

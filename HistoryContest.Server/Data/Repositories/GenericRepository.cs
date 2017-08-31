@@ -11,16 +11,18 @@ namespace HistoryContest.Server.Data.Repositories
     public class GenericRepository<TEntity> where TEntity : class
     {
         internal ContestContext context;
+        internal RedisService cache;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(ContestContext context)
+        public GenericRepository(ContestContext context, RedisService cache)
         {
             this.context = context;
+            this.cache = cache;
             dbSet = context.Set<TEntity>();
         }
 
         #region Synchronous Methods
-        public int Size()
+        public virtual int Size()
         {
             return dbSet.Count();
         }
@@ -91,7 +93,7 @@ namespace HistoryContest.Server.Data.Repositories
         #endregion
 
         #region Asynchronous Methods
-        public async Task<int> SizeAsync()
+        public virtual async Task<int> SizeAsync()
         {
             return await dbSet.CountAsync();
         }

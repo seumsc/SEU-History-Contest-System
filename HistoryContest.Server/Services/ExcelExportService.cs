@@ -55,9 +55,9 @@ namespace HistoryContest.Server.Services
         public async Task<IActionResult> CreateExcelOfAllDepartments(FileInfo file)
         {
             List<ScoreSummaryByDepartmentViewModel> datatable = null;
-            foreach (var counselor in unitOfWork.context.Counselors)
+            foreach (var counselor in unitOfWork.DbContext.Counselors)
             {
-                datatable.Add(await ScoreSummaryByDepartmentViewModel.CreateAsync(unitOfWork,counselor));
+                datatable.Add(await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork,counselor));
             }
 
             using (ExcelPackage package = new ExcelPackage(file))

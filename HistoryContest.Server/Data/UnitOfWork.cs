@@ -7,48 +7,41 @@ namespace HistoryContest.Server.Data
 {
     public class UnitOfWork : IDisposable
     {
-        public ContestContext context;
-        public StudentRepository StudentRepository { get; set; }
-        public GenericRepository<Counselor> CounselorRepository { get; set; }
-        public GenericRepository<Administrator> AdminRepository { get; set; }
-        public QuestionRepository QuestionRepository { get; set; }
-        public GenericRepository<QuestionSeed> QuestionSeedRepository { get; set; }
+        private readonly ContestContext context;
+        private readonly RedisService redisService;
+
+        private readonly Lazy<StudentRepository> lazyStudentRepository;
+        private readonly Lazy<GenericRepository<Counselor>> lazyCounselorRepository;
+        private readonly Lazy<GenericRepository<Administrator>> lazyAdminRepository;
+        private readonly Lazy<QuestionRepository> lazyQuestionRepository;
+        private readonly Lazy<GenericRepository<QuestionSeed>> lazyQuestionSeedRepository;
         
-        public UnitOfWork(ContestContext context)
+        public UnitOfWork(ContestContext context, RedisService redisService = null)
         {
             this.context = context;
-            StudentRepository = new StudentRepository(context);
-            CounselorRepository = new GenericRepository<Counselor>(context);
-            AdminRepository = new GenericRepository<Administrator>(context);
-            QuestionRepository = new QuestionRepository(context);
-            QuestionSeedRepository = new GenericRepository<QuestionSeed>(context);
+            this.redisService = redisService ?? new RedisService();
+            lazyStudentRepository = new Lazy<StudentRepository>(() => new StudentRepository(context, redisService));
+            lazyCounselorRepository = new Lazy<GenericRepository<Counselor>>(() => new GenericRepository<Counselor>(context, redisService));
+            lazyAdminRepository = new Lazy<GenericRepository<Administrator>>(() => new GenericRepository<Administrator>(context, redisService));
+            lazyQuestionRepository = new Lazy<QuestionRepository>(() => new QuestionRepository(context, redisService));
+            lazyQuestionSeedRepository = new Lazy<GenericRepository<QuestionSeed>>(() => new GenericRepository<QuestionSeed>(context, redisService));
         }
 
-        //#region Repository Properties
-        //public StudentRepository StudentRepository
-        //{
-        //    get { return studentRepository ?? (studentRepository = new StudentRepository(context)); }
-        //    set { studentRepository = value; }
-        //}
+        public ContestContext DbContext => context;
 
-        //public GenericRepository<Counselor> CounselorRepository
-        //{
-        //    get { return counselorRepository ?? (counselorRepository = new GenericRepository<Counselor>(context)); }
-        //    set { counselorRepository = value; }
-        //}
+        public RedisService Cache => redisService;
 
-        //public GenericRepository<Administrator> AdminRepository
-        //{
-        //    get { return adminRepository ?? (adminRepository = new GenericRepository<Administrator>(context)); }
-        //    set { adminRepository = value; }
-        //}
+        #region Repository Properties
+        public StudentRepository StudentRepository => lazyStudentRepository.Value;
 
-        //public QuestionSeedRepository QuestionSeedRepository
-        //{
-        //    get { return questionSeedRepository ?? (questionSeedRepository = new QuestionSeedRepository(context)); }
-        //    set { questionSeedRepository = value; }
-        //}
-        //#endregion
+        public GenericRepository<Counselor> CounselorRepository => lazyCounselorRepository.Value;
+
+        public GenericRepository<Administrator> AdminRepository => lazyAdminRepository.Value;
+
+        public QuestionRepository QuestionRepository => lazyQuestionRepository.Value;
+
+        public GenericRepository<QuestionSeed> QuestionSeedRepository => lazyQuestionSeedRepository.Value;
+        #endregion
 
         public int Save()
         {
