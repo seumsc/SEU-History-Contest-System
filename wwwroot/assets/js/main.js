@@ -17,7 +17,7 @@ var questionsIteratorIndex;
 var	answersIteratorIndex;
 
 //生成题目
-function setINDEX(QUESTIONS){
+function setQUESTION(QUESTIONS){
 	var content = '';
 	var	contentFooter='';
 	for (questionsIteratorIndex = 0; questionsIteratorIndex < QUESTIONS.length; questionsIteratorIndex++) {
@@ -255,7 +255,7 @@ function submit(){
 
 $(function(){
 	//Mockserver for dev purpose
-	Mock.mock("http://hostname/api/Question","get",{"array1|20":[
+/*	Mock.mock("http://hostname/api/Question","get",{"array1|20":[
 		{
 			"ID":"@guid()",
 			"type":0,
@@ -311,10 +311,80 @@ $(function(){
 				{"ID":29,"rightAnswer":1,"submittedAnswer":0}
 			]
 		
-	})
+	})*/
+	//Initialize State
+	$.ajax({
+		url: "/api/Student/State/Initialize", //请求的url地址
+		
+		async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+
+		type: "GET", //请求方式
+		beforeSend: function () {
+			//请求前的处理
+
+		},
+		success: function (req) {
+			//请求成功时处理
+			console.log(req);
+			$.ajax({
+				url: "/api/Student/State", //请求的url地址
+				
+				async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		
+				type: "GET", //请求方式
+				beforeSend: function () {
+					//请求前的处理
+		
+				},
+				success: function (req) {
+					//请求成功时处理
+					console.log(req);
+				},
+				complete: function () {
+					//请求完成的处理
+				},
+				error: function () {
+					//请求出错处理
+					
+					
+				}
+				});
+		},
+		complete: function () {
+			//请求完成的处理
+		},
+		error: function () {
+			//请求出错处理
+			
+			
+		}
+		});
+	/*	$.ajax({
+			url: "/api/Student/State", //请求的url地址
+			
+			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+	
+			type: "GET", //请求方式
+			beforeSend: function () {
+				//请求前的处理
+	
+			},
+			success: function (req) {
+				//请求成功时处理
+				console.log(req);
+			},
+			complete: function () {
+				//请求完成的处理
+			},
+			error: function () {
+				//请求出错处理
+				
+				
+			}
+			});*/
 	//GET Questions
 	$.ajax({
-		url: "http://hostname/api/Question", //请求的url地址
+		url: "/api/Question", //请求的url地址
 		dataType: "json", //返回格式为json
 		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 
@@ -325,9 +395,11 @@ $(function(){
 		},
 		success: function (req) {
 			//请求成功时处理
-			config.questionArray=req.array1.concat(req.array2);
+			//config.questionArray=req.array1.concat(req.array2);
+			console.log(req);
+			config.questionArray=req;
 			config.totalAmount=config.questionArray.length;
-			setINDEX(config.questionArray);
+			setQUESTION(config.questionArray);
 			
 			console.log(config.totalAmount);
 		},

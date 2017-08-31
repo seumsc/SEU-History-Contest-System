@@ -210,7 +210,7 @@ var temp=new Array();
 var cnt=0;
 
 $(function () {
-    //Mock server for score list
+    /*Mock server for score list
     Mock.mock(
         'http://hostname/api/Counselor/scores/all/{id}', 'get',{
           
@@ -242,10 +242,10 @@ $(function () {
                 }
         }
         }
-      );
+      );*/
     //请求有先后顺序，先获取院系总体情况，再获取得分情况，故为嵌套结构
       $.ajax({
-        url:  'http://hostname/api/Counselor/scores/summary{id}', //请求的url地址
+        url:  '/api/Counselor/scores/summary', //请求的url地址
         dataType: "json", //返回格式为json
         async: true, //请求是否异步，默认为异步，这也是ajax重要特性
         
@@ -275,7 +275,7 @@ $(function () {
             timer: 3000
         });
           $.ajax({
-            url:  'http://hostname/api/Counselor/scores/all/{id}', //请求的url地址
+            url:  '/api/Counselor/scores/all', //请求的url地址
             dataType: "json", //返回格式为json
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
             

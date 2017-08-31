@@ -48,6 +48,8 @@
       //提交帐号密码
 
       $("#login-form").submit(function (event) {
+       
+      
         event.preventDefault();
         var usn= $(this.userName).val();
         var pwd= $(this.password).val();
@@ -59,7 +61,7 @@
         $.ajax({
           
           
-          url:  'http://history-contest.chinacloudsites.cn/api/Account/Login', //请求的url地址
+          url:  '/api/Account/Login', //请求的url地址
           type: "POST", //请求方式
           async: true, //请求是否异步，默认为异步，这也是ajax重要特性
           crossDomain: true,
@@ -87,10 +89,18 @@
               }
             } 
             else {
-              $("#common-error").text("登录失败,请检查用户名或密码是否正确")
+              if(req.message=="User already logged in"){
+                $("#common-error").text("登录失败，当前用户已登录")
+                .fadeIn(setTimeout(function () {
+                  $("#common-error").fadeOut();
+                }, 2000)); 
+              }
+              else{
+                $("#common-error").text("登录失败,请检查用户名或密码是否正确")
                 .fadeIn(setTimeout(function () {
                   $("#common-error").fadeOut();
                 }, 2000));
+              }
             }
           },
           complete: function () {

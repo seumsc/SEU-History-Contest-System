@@ -41,7 +41,7 @@
 <!--<script src="assets/js/demo.js"></script>-->
 <script src="assets/js/dashboard.js"></script>
 
- <!--mockserver for dev purpose--><script src="http://mockjs.com/dist/mock.js"></script>
+ <!--mockserver for dev purpose<script src="http://mockjs.com/dist/mock.js"></script>-->
 
 
 </head>
@@ -69,7 +69,7 @@
 <script>
         function downloadDepardmentExecel(){
             $.ajax({
-            url:  'http://history-contest.chinacloudsites.cn/api/Counselor/ExportDepartmentExcel', //请求的url地址
+            url:  '/api/Counselor/ExportDepartmentExcel', //请求的url地址
             
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
             
@@ -100,7 +100,7 @@
         }
         function downloadExcelOfAllDepartments(){
         $.ajax({
-            url:  'http://history-contest.chinacloudsites.cn/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
+            url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
             
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
             
