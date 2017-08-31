@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Extensions;
+using HistoryContest.Server.Models.ViewModels;
 
 namespace HistoryContest.Server.Data.Repositories
 {
@@ -34,35 +35,39 @@ namespace HistoryContest.Server.Data.Repositories
             var departments = Enum.GetValues(typeof(Department));
             foreach (Department department in departments)
             {
-                size += (int)(await cache.Dictionary<string, Student>(department.ToString()).CountAsync());
+                size += (int)(await cache.StudentEntities(department).CountAsync());
             }
             return size;
         }
 
         public async Task<double> AverageScore() =>
-            await (await GetAll()).AsQueryable().Select(s => (int)s.Score).AverageAsync();
+            (await GetAll()).AsQueryable().Where(s => s.IsTested).Select(s => s.Score ?? 0).Average();
 
         public async Task<int> HighestScore() =>
-            await (await GetAll()).AsQueryable().Select(s => (int)s.Score).MaxAsync();
+            (await GetAll()).AsQueryable().Select(s => s.Score ?? 0).Max();
 
         public async Task<int> ScoreHigherThan(double bandScore) =>            
-            await (await GetAll()).AsQueryable().CountAsync(s => s.IsTested && s.Score >= bandScore);
+            (await GetAll()).AsQueryable().Count(s => s.IsTested && s.Score >= bandScore);
 
         public async Task<int> CountNotTested() =>
-            await (await GetAll()).AsQueryable().CountAsync(s => !s.IsTested);
+            (await GetAll()).AsQueryable().Count(s => !s.IsTested);
         #endregion
 
         #region Department Methods
         public async Task<List<string>> GetIDsByDepartment(Department department)
         {
-            var studentDictionary = cache.Dictionary<string, Student>(department.ToString());
+            var studentDictionary = cache.StudentEntities(department);
             if (await studentDictionary.CountAsync() != 0)
             {
                 return await studentDictionary.GetAllStringKeysAsync();
             }
             else
             {
-                var counselor = await context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleAsync();
+                var counselor = context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleOrDefault();
+                if (counselor == null)
+                {
+                    return new List<string>();
+                }
                 await studentDictionary.SetRangeAsync(counselor.Students, s => s.ID.ToStringID());
                 return counselor.Students.Select(s => s.ID.ToStringID()).ToList();
             }
@@ -70,14 +75,18 @@ namespace HistoryContest.Server.Data.Repositories
 
         public async Task<List<Student>> GetByDepartment(Department department)
         {
-            var studentDictionary = cache.Dictionary<string, Student>(department.ToString());
+            var studentDictionary = cache.StudentEntities(department);
             if (await studentDictionary.CountAsync() != 0)
             {
                 return await studentDictionary.GetAllValuesAsync();
             }
             else
             {
-                var counselor = await context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleAsync();
+                var counselor = context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleOrDefault();
+                if (counselor == null)
+                {
+                    return new List<Student>();
+                }
                 await studentDictionary.SetRangeAsync(counselor.Students, s => s.ID.ToStringID());
                 return counselor.Students;
             }
@@ -89,7 +98,11 @@ namespace HistoryContest.Server.Data.Repositories
             int size = (int)(await studentDictionary.CountAsync());
             if (size == 0)
             {
-                var counselor = await context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleAsync();
+                var counselor = context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleOrDefault();
+                if (counselor == null)
+                {
+                    return 0;
+                }
                 await studentDictionary.SetRangeAsync(counselor.Students, s => s.ID.ToStringID());
                 size = counselor.Students.Count;
             }
@@ -97,19 +110,23 @@ namespace HistoryContest.Server.Data.Repositories
         }
 
         public async Task<double> AverageScoreByDepartment(Department department) =>            
-            await (await GetByDepartment(department)).AsQueryable().Select(s => (int)s.Score).AverageAsync();
+            (await GetByDepartment(department)).AsQueryable().Where(s => s.IsTested).Select(s => s.Score ?? 0).Average();
             
         public async Task<int> HighestScoreByDepartment(Department department) =>           
-            await (await GetByDepartment(department)).AsQueryable().Select(s => (int)s.Score).MaxAsync();
+            (await GetByDepartment(department)).AsQueryable().Select(s => s.Score ?? 0).Max();
                    
         public async Task<int> ScoreHigherThanByDepartment(double bandScore, Department department) =>           
-            await (await GetByDepartment(department)).AsQueryable().CountAsync(s => s.IsTested && s.Score >= bandScore);
+            (await GetByDepartment(department)).AsQueryable().Count(s => s.IsTested && s.Score >= bandScore);
 
         public async Task<int> CountNotTestedByDepartment(Department department) =>
-            await (await GetByDepartment(department)).AsQueryable().CountAsync(s => !s.IsTested);
+            (await GetByDepartment(department)).AsQueryable().Count(s => !s.IsTested);
         #endregion
 
         public void LoadStudentsToCache() =>
-            context.Counselors.Include(c => c.Students).ToList().ForEach(c => cache.Dictionary<string, Student>(c.Department.ToString()).SetRange(c.Students, s => s.ID.ToStringID()));
+            context.Counselors.Include(c => c.Students).ToList().ForEach(c =>
+            {
+                cache.StudentEntities(c.Department).SetRange(c.Students, s => s.ID.ToStringID());
+                cache.StudentViewModels(c.Department).SetRange(c.Students.Select(s => (StudentViewModel)s), s => s.StudentID);
+            });
     }
 }

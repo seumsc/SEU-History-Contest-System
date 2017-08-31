@@ -17,12 +17,12 @@ namespace HistoryContest.Server.Services
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            rdGenerator = new Random();
+            rdGenerator = new Random(new Guid().GetHashCode());
         }
 
         public async Task<List<QuestionViewModel>> GetQuestionsBySeedID(int id)
         {
-            var seed = await unitOfWork.QuestionSeedRepository.GetByIDAsync(id);
+            var seed = await unitOfWork.Cache.QuestionSeeds().GetAsync(id);
             if (seed == null)
             {
                 return null;
@@ -39,7 +39,7 @@ namespace HistoryContest.Server.Services
 
         public async Task<List<CorrectAnswerViewModel>> GetAnswersBySeedID(int id)
         {
-            var seed = await unitOfWork.QuestionSeedRepository.GetByIDAsync(id);
+            var seed = await unitOfWork.Cache.QuestionSeeds().GetAsync(id);
             if (seed == null)
             {
                 return null;
@@ -83,7 +83,7 @@ namespace HistoryContest.Server.Services
                         questionIDs[j] = trueFalseQuestions[index].ID;
                     }
 
-                    seeds.Add(new QuestionSeed { QuestionIDs = questionIDs });
+                    seeds.Add(new QuestionSeed { ID = i + 1, QuestionIDs = questionIDs });
                     rdGenerator.ResetContext(nameof(ChoiceQuestion));
                     rdGenerator.ResetContext(nameof(TrueFalseQuestion));
                 }
@@ -94,7 +94,8 @@ namespace HistoryContest.Server.Services
 
         public async Task<QuestionSeed> RollSeed()
         {
-            return await unitOfWork.QuestionSeedRepository.GetByIDAsync(rdGenerator.Next(1, unitOfWork.QuestionSeedRepository.Size()));
+            var questionSeedDictionary = unitOfWork.Cache.QuestionSeeds();
+            return await questionSeedDictionary.GetAsync(rdGenerator.Next(1, (int)await questionSeedDictionary.CountAsync() + 1));
         }
     }
 }

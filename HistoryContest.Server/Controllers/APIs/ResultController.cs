@@ -9,6 +9,7 @@ using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.ViewModels;
+using HistoryContest.Server.Models.Entities;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -60,9 +61,9 @@ namespace HistoryContest.Server.Controllers.APIs
         {
             if (id == null)
             { // 如果不输入id，且当前用户认证为学生，则取Session中的学号作为id
-                if (HttpContext.User.IsInRole("Student") && HttpContext.Session.Get("id") != null)
+                if (this.Session().CheckRole("Student") && this.Session().ID != null)
                 {
-                    id = HttpContext.Session.GetString("id");
+                    id = this.Session().ID;
                 }
                 else
                 {
@@ -70,10 +71,16 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            ResultViewModel model = await unitOfWork.Cache.Dictionary<string, ResultViewModel>().GetAsync(id);
-            if (model == null)
+            if (!this.IsStudentID(id))
             {
-                var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
+                return BadRequest("Argument is not a student ID");
+            }
+
+            ResultViewModel model = await unitOfWork.Cache.Results().GetAsync(id);
+            if (model == null)
+            { // TODO: 改为从缓存中取出; 对所有参数进行合法性验证 FIX BUG;
+                //var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
+                var student = await unitOfWork.Cache.StudentEntities(id.ToDepartmentID()).GetAsync(id);
                 if (student == null)
                 {
                     return NotFound("Student not found");
@@ -83,17 +90,18 @@ namespace HistoryContest.Server.Controllers.APIs
                     return Forbid("Contest has not been completed");
                 }
 
-                model = new ResultViewModel
+                model = new ResultViewModel { Score = student.Score ?? 0 };
+                if (student.IsTested)
                 {
-                    Score = (int)student.Score,
-                    Details = student.QuestionSeed.QuestionIDs.Zip(student.Choices, (ID, choice) => new ResultDetailViewModel
+                    var seed = (await unitOfWork.Cache.QuestionSeeds().GetAsync((int)student.QuestionSeedID));
+                    model.Details = seed.QuestionIDs.Zip(student.Choices, (ID, choice) => new ResultDetailViewModel
                     {
                         ID = ID,
-                        Correct = (unitOfWork.QuestionRepository.GetByID(ID)).Answer,
+                        Correct = unitOfWork.Cache.Answers()[ID].Answer,
                         Submit = choice
-                    }).ToList()
-                };
-                await unitOfWork.Cache.Dictionary<string, ResultViewModel>().SetAsync(student.ID.ToStringID(), model);
+                    }).ToList();
+                }
+                await unitOfWork.Cache.Results().SetAsync(student.ID.ToStringID(), model);
             }
 
             return Json(model);
@@ -125,17 +133,25 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Body JSON content invalid or does not fit the size: " + 30);
             }
 
-            var seed = HttpContext.Session.GetInt32("seed");
+            if (this.Session().IsTested)
+            {
+                return Forbid();
+            }
+
+            var seed = this.Session().SeedID;
             if (seed == null)
             {
                 return BadRequest("Question seed not created");
             }
 
-            var student = await unitOfWork.StudentRepository.GetByIDAsync(HttpContext.Session.GetString("id").ToIntID());
+            string studentID = this.Session().ID;
+            //var student = await unitOfWork.StudentRepository.GetByIDAsync(studentID.ToIntID());
+            var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartmentID());
+            var student = await studentDictionary.GetAsync(studentID);
             student.Score = 0;
             student.QuestionSeedID = (int)seed;
             student.DateTimeFinished = DateTime.Now;
-            student.TimeConsumed = student.DateTimeFinished - HttpContext.Session.Get<DateTime>("beginTime");
+            student.TimeConsumed = student.DateTimeFinished - this.Session().TestBeginTime;
             student.Choices = submittedAnswers.Select(a => (byte)a.Answer).ToArray();
 
             var correctAnswers = await questionSeedService.GetAnswersBySeedID((int)seed);
@@ -159,10 +175,13 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
 
-            unitOfWork.StudentRepository.Update(student);
-            await unitOfWork.SaveAsync();
-            (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student); // 更新院系概况数据
-            await unitOfWork.Cache.Dictionary<string, ResultViewModel>().SetAsync(student.ID.ToStringID(), model); // result存入缓存
+            //unitOfWork.StudentRepository.Update(student);
+            //await unitOfWork.SaveAsync();
+
+            await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
+            await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
+            await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
+            await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据
             return Json(model);
         }
 
@@ -181,7 +200,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllAnswers()
         {
-            var seed = HttpContext.Session.GetInt32("seed");
+            var seed = this.Session().SeedID;
             if (seed == null)
             {
                 return BadRequest("Question seed not created");

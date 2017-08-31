@@ -28,14 +28,16 @@ namespace HistoryContest.Server.Models.Entities
         public int? QuestionSeedID { get; set; }
 
         // navigation properties
-        [JsonIgnore]
         public Counselor Counselor { get; set; } 
         public QuestionSeed QuestionSeed { get; set; }
 
+        [JsonIgnore]
         public Department Department => ID.ToStringID().ToDepartmentID();
 
+        [JsonIgnore]
         public bool IsTested => Score != null;
 
+        [JsonIgnore]
         [NotMapped]
         public byte[] Choices
         {

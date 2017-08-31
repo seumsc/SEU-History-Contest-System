@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace HistoryContest.Server.Models.Entities
 {
@@ -11,8 +12,10 @@ namespace HistoryContest.Server.Models.Entities
     {
         public int ID { get; set; }
         [Required]
+        [JsonRequired]
         internal string _questionIDs { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
         public int[] QuestionIDs
         {

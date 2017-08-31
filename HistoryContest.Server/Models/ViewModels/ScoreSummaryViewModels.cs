@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Models.ViewModels
 {
@@ -25,7 +26,7 @@ namespace HistoryContest.Server.Models.ViewModels
         public double AverageScore { get; set; }
         public ScoreBandCountViewModel ScoreBandCount { get; set; }
 
-        public void Update(Student student)
+        public ScoreSummaryByDepartmentViewModel Update(Student student)
         { // 当有学生出成绩时，对院系概况进行更新
             if (student.Department != DepartmentID)
             {
@@ -62,11 +63,12 @@ namespace HistoryContest.Server.Models.ViewModels
                     ++ScoreBandCount.Failed;
                     break;
             }
+            return this;
         }
 
         public static async Task<ScoreSummaryByDepartmentViewModel> GetAsync(UnitOfWork unitOfWork, Counselor counselor)
         { // 学生无改动时直接从缓存中取出，学生信息有改动时进行修改
-            var summaryVMDictionary = unitOfWork.Cache.Dictionary<Department, ScoreSummaryByDepartmentViewModel>();
+            var summaryVMDictionary = unitOfWork.Cache.DepartmentScoreSummaries();
             var model = await summaryVMDictionary.GetAsync(counselor.Department);
             if (model == null)
             {
@@ -77,14 +79,15 @@ namespace HistoryContest.Server.Models.ViewModels
                     StudentCount = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department),
                     MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
                     AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
-                    ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
-                    NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
-                }
+                    ScoreBandCount = 
+                    {
+                        HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
+                        HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
+                        HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
+                        NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
+                    }
                 };
+
                 model.ScoreBandCount.Failed = model.StudentCount - model.ScoreBandCount.NotTested - model.ScoreBandCount.HigherThan60;
                 await summaryVMDictionary.SetAsync(counselor.Department, model);
             }
@@ -108,15 +111,16 @@ namespace HistoryContest.Server.Models.ViewModels
                 {
                     MaxScore = await unitOfWork.StudentRepository.HighestScore(),
                     AverageScore = await unitOfWork.StudentRepository.AverageScore(),
-                    ScoreBandCount =
-                {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60),
-                    NotTested = await unitOfWork.StudentRepository.CountNotTested()
-                },
+                    ScoreBandCount = new ScoreBandCountViewModel()
+                    {
+                        HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThan(90),
+                        HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThan(75),
+                        HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThan(60),
+                        NotTested = await unitOfWork.StudentRepository.CountNotTested()
+                    },
                     UpdateTime = DateTime.Now
                 };
+
                 var size = await unitOfWork.StudentRepository.SizeAsync();
                 model.ScoreBandCount.Failed = size - model.ScoreBandCount.NotTested - model.ScoreBandCount.HigherThan60;
                 await unitOfWork.Cache.SetAsync("summary", model, TimeSpan.FromMinutes(10));
