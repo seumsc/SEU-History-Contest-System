@@ -14,20 +14,14 @@ namespace HistoryContest.Server.Data
 
         private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(connectionString));
 
-        public static ConnectionMultiplexer Connection
-        {
-            get { return lazyConnection.Value; }
-        }
+        public static ConnectionMultiplexer Connection => lazyConnection.Value;
 
         public RedisService()
         {
             connectionString = Startup.Configuration.GetConnectionStringByDbType("Redis");
         }
 
-        public IDatabase Database
-        {
-            get { return Connection.GetDatabase(); }
-        }
+        public IDatabase Database => Connection.GetDatabase();
 
         internal RedisKey GenerateKey<T>(string key)
         {
@@ -153,7 +147,7 @@ namespace HistoryContest.Server.Data
             {
                 var field = parser(index);
                 var jsonString = cache.Database.HashGet(hashKey, field);
-                return JsonConvert.DeserializeObject<TValue>(jsonString);
+                return jsonString.HasValue? JsonConvert.DeserializeObject<TValue>(jsonString) : null;
             }
             set
             {
@@ -170,7 +164,9 @@ namespace HistoryContest.Server.Data
 
         public async Task<TValue> GetAsync(TKey index)
         {
-            return JsonConvert.DeserializeObject<TValue>(await cache.Database.HashGetAsync(hashKey, parser(index)));
+            var field = parser(index);
+            var jsonString = await cache.Database.HashGetAsync(hashKey, field);
+            return jsonString.HasValue ? JsonConvert.DeserializeObject<TValue>(jsonString) : null;
         }
 
         public async Task SetAsync(TKey index, TValue value)

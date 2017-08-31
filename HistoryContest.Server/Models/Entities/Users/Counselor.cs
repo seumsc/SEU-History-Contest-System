@@ -20,6 +20,7 @@ namespace HistoryContest.Server.Models.Entities
         [JsonConverter(typeof(StringEnumConverter))]
         public Department Department { get; set; }
 
+        [JsonIgnore]
         public List<Student> Students { get; set; }
 
         public bool CheckPassword(string password)

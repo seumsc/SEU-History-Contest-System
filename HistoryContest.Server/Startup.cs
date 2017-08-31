@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server
 {
@@ -254,7 +255,12 @@ namespace HistoryContest.Server
                 unitOfWork.DbContext.EnsureAllSeeded();
             }
 
-            unitOfWork.QuestionRepository.LoadAllQuestionToCache();
+            // Load cache
+            var questionSeedService = new QuestionSeedService(unitOfWork);
+            int scale = int.Parse(Configuration.GetSection("Contest").GetSection("QuestionSeedScale").Value);
+
+            unitOfWork.Cache.QuestionSeeds().SetRange(questionSeedService.CreateNewSeeds(scale), s => (s.ID + 1).ToString());
+            unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
         }
     }

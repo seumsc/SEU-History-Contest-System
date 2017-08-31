@@ -51,11 +51,11 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportDepartmentExcel()
         {
-            if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
+            if (!(this.Session().CheckRole("Counselor") && this.Session().Department != null))
             { // 当前用户认证为辅导员，则取Session中的department为院系id
                 return BadRequest("Empty argument request invalid");
             }
-            var id = (Department)HttpContext.Session.GetInt32("department");
+            var id = (Department)this.Session().Department;
             string sWebRootFolder = Startup.Environment.WebRootPath;
             string sFileName = @"excel/"+id.ToString()+".xlsx";
             
@@ -91,7 +91,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExportExcelOfAllDepartments()
         {
-            if (!(HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null))
+            if (!(this.Session().CheckRole("Counselor") && this.Session().Department != null))
             { // 当前用户认证为辅导员，则取Session中的department为院系id
                 return BadRequest("Empty argument request invalid");
             }
@@ -122,7 +122,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetDepartment()
         {
-            var id = HttpContext.Session.GetInt32("department");
+            var id = this.Session().Department;
             if (id == null)
             {
                 return NotFound();
@@ -138,24 +138,29 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 
         /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
         /// </remarks>
-        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <param name="department">院系代号枚举数（可选）</param>
         /// <returns>院系所有学生学号</returns>
         /// <response code="200">返回辅导员对应的所有学生学号构成的数组</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
         /// <response code="403">辅导员查询非本系数据</response>
         /// <response code="404">ID不属于任何一个院系代号</response>
-        [HttpGet("AllStudents/{id?}")]
+        [HttpGet("AllStudents/{department?}")]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AllStudentIDs(Department? id)
+        public async Task<IActionResult> AllStudentIDs(Department? department)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Body JSON content invalid");
+            }
+
+            if (department == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
-                    id = (Department)HttpContext.Session.GetInt32("department");
+                    department = (Department)this.Session().Department;
                 }
                 else
                 {
@@ -163,13 +168,12 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
+            if (!this.Session().CheckRole("Administrator") && department != this.Session().Department)
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
 
-            //TODO : <yhy>将院系学生信息存入缓存中 1
-            var studentIDs = (await unitOfWork.StudentRepository.GetIDsByDepartment((Department)id));
+            var studentIDs = (await unitOfWork.StudentRepository.GetIDsByDepartment((Department)department));
             if (studentIDs == null)
             {
                 return NotFound();
@@ -185,24 +189,29 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <remarks>
         /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
         /// </remarks>
-        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <param name="department">院系代号枚举数（可选）</param>
         /// <returns>院系所有学生得分</returns>
         /// <response code="200">返回本院系所有学生简要得分信息</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
         /// <response code="403">辅导员查询非本系数据</response>
         /// <response code="404">ID不属于任何一个院系代号</response>
-        [HttpGet("Scores/All/{id?}")]
+        [HttpGet("Scores/All/{department?}")]
         [ProducesResponseType(typeof(IEnumerable<StudentViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AllScoresByDepartment(Department? id)
+        public async Task<IActionResult> AllScoresByDepartment(Department? department)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Body JSON content invalid");
+            }
+
+            if (department == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
-                    id = (Department)HttpContext.Session.GetInt32("department");
+                    department = (Department)this.Session().Department;
                 }
                 else
                 {
@@ -210,20 +219,20 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            if (!HttpContext.User.IsInRole("Administrator") && id != (Department)HttpContext.Session.GetInt32("department"))
+            if (!this.Session().CheckRole("Administrator") && department != this.Session().Department)
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
 
             List<StudentViewModel> studentViewModels;
-            var studentVMDictionary = unitOfWork.Cache.Dictionary<string, StudentViewModel>();
+            var studentVMDictionary = unitOfWork.Cache.StudentViewModels((Department)department);
             if (await studentVMDictionary.CountAsync() != 0)
             { // 读缓存，若没有则从数据库中读取并添加到缓存
                 studentViewModels = await studentVMDictionary.GetAllValuesAsync();
             }
             else
             {
-                var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)id));
+                var students = (await unitOfWork.StudentRepository.GetByDepartment((Department)department));
                 if (students == null)
                 {
                     return NotFound();
@@ -252,12 +261,17 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> StudentScoreById(string id)
         {
-            if (!HttpContext.User.IsInRole("Administrator") && id.ToDepartmentID() != (Department)HttpContext.Session.GetInt32("department"))
+            if (this.Session().CheckRole("Administrator") && id.ToDepartmentID() != this.Session().Department)
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
 
-            var studentVMDictionary = unitOfWork.Cache.Dictionary<string, StudentViewModel>();
+            if (!this.IsStudentID(id))
+            {
+                return BadRequest("Argument is not a student ID");
+            }
+
+            var studentVMDictionary = unitOfWork.Cache.StudentViewModels(id.ToDepartmentID());
             var studentViewModel = await studentVMDictionary.GetAsync(id);
             if (studentViewModel == null)
             {
@@ -310,22 +324,27 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 
         /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
         /// </remarks>
-        /// <param name="id">院系代号枚举数（可选）</param>
+        /// <param name="department">院系代号枚举数（可选）</param>
         /// <returns>ID对应院系的分数概况</returns>
         /// <response code="200">返回院系代码对应院系的分数概况</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
         /// <response code="404">ID没有对应的院系</response>
-        [HttpGet("Scores/Summary/{id?}")]
+        [HttpGet("Scores/Summary/{department?}")]
         [ProducesResponseType(typeof(ScoreSummaryByDepartmentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> ScoreSummaryByDepartment(Department? id)
+        public async Task<IActionResult> ScoreSummaryByDepartment(Department? department)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Body JSON content invalid");
+            }
+
+            if (department == null)
             { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                if (HttpContext.User.IsInRole("Counselor") && HttpContext.Session.Get("department") != null)
+                if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
-                    id = (Department)HttpContext.Session.GetInt32("department");
+                    department = (Department)this.Session().Department;
                 }
                 else
                 {
@@ -333,7 +352,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == id);
+            var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == department);
             if (counselor == null)
             {
                 return NotFound();

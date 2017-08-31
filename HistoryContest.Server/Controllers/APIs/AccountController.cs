@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using System.Security.Claims;
@@ -145,18 +146,18 @@ namespace HistoryContest.Server.Controllers.APIs
         [NonAction]
         private void InitializeSession(AccountContext context)
         {
-            HttpContext.Session.SetString("id", context.UserViewModel.UserName);
+            this.Session().ID = context.UserViewModel.UserName;
             switch (context.UserViewModel.Role)
             {
                 case nameof(Administrator):
                     break;
                 case nameof(Counselor):
                     var counselor = (Counselor)context.UserEntity;
-                    HttpContext.Session.SetInt32("department", (int)counselor.Department);
+                    this.Session().Department = counselor.Department;
                     break;
                 case nameof(Student):
                     var student = (Student)context.UserEntity;
-                    HttpContext.Session.SetInt32("isTested", student.IsTested ? 1 : 0);
+                    this.Session().IsTested = student.IsTested;
                     break;
                 default:
                     throw new TypeLoadException("User role invalid");

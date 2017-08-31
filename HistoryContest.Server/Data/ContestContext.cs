@@ -72,9 +72,6 @@ namespace HistoryContest.Server.Data
             EnsureSeeded<ChoiceQuestion>();
             EnsureSeeded<TrueFalseQuestion>();
 
-            var questionSeedService = new QuestionSeedService(new UnitOfWork(this));
-            int scale = 100;
-            AddRange(questionSeedService.CreateNewSeeds(scale));
             SaveChanges();
         }
 

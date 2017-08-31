@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Data.Repositories
 {
@@ -56,7 +57,7 @@ namespace HistoryContest.Server.Data.Repositories
 
         public QuestionViewModel GetQuestionFromCache(int id)
         {
-            var question = cache.Get<QuestionViewModel>(id.ToString());
+            var question = cache.Questions()[id];
             if (question == null)
             {
                 question = (QuestionViewModel)GetByID(id);
@@ -67,7 +68,7 @@ namespace HistoryContest.Server.Data.Repositories
 
         public CorrectAnswerViewModel GetAnswerFromCache(int id)
         {
-            var answer = cache.Get<CorrectAnswerViewModel>(id.ToString());
+            var answer = cache.Answers()[id];
             if (answer == null)
             {
                 answer = (CorrectAnswerViewModel)GetByID(id);
@@ -78,7 +79,7 @@ namespace HistoryContest.Server.Data.Repositories
 
         public async Task<QuestionViewModel> GetQuestionFromCacheAsync(int id)
         {
-            var question = await cache.GetAsync<QuestionViewModel>(id.ToString());
+            var question = await cache.Questions().GetAsync(id);
             if (question == null)
             {
                 question = (QuestionViewModel) await GetByIDAsync(id);
@@ -89,7 +90,7 @@ namespace HistoryContest.Server.Data.Repositories
 
         public async Task<CorrectAnswerViewModel> GetAnswerFromCacheAsync(int id)
         {
-            var answer = await cache.GetAsync<CorrectAnswerViewModel>(id.ToString());
+            var answer = await cache.Answers().GetAsync(id);
             if (answer == null)
             {
                 answer = (CorrectAnswerViewModel) await GetByIDAsync(id);
@@ -98,14 +99,12 @@ namespace HistoryContest.Server.Data.Repositories
             return answer;
         }
 
-        public void LoadAllQuestionToCache()
+        public void LoadQuestionsToCache()
         {
-            var questions = cache.Dictionary<int, QuestionViewModel>();
-            var answers = cache.Dictionary<int, CorrectAnswerViewModel>();
+            var questions = cache.Questions();
+            var answers = cache.Answers();
             foreach (var question in dbSet)
             {
-                //cache.Set(question.ID.ToString(), (QuestionViewModel)question);
-                //cache.Set(question.ID.ToString(), (CorrectAnswerViewModel)question);
                 questions[question.ID] = (QuestionViewModel)question;
                 answers[question.ID] = (CorrectAnswerViewModel)question;
             }

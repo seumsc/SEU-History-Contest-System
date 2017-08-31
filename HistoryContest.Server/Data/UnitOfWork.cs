@@ -27,41 +27,20 @@ namespace HistoryContest.Server.Data
             lazyQuestionSeedRepository = new Lazy<GenericRepository<QuestionSeed>>(() => new GenericRepository<QuestionSeed>(context, redisService));
         }
 
-        public ContestContext DbContext
-        {
-            get { return context; }
-        }
+        public ContestContext DbContext => context;
 
-        public RedisService Cache
-        {
-            get { return redisService; }
-        }
+        public RedisService Cache => redisService;
 
         #region Repository Properties
-        public StudentRepository StudentRepository
-        {
-            get { return lazyStudentRepository.Value; }
-        }
+        public StudentRepository StudentRepository => lazyStudentRepository.Value;
 
-        public GenericRepository<Counselor> CounselorRepository
-        {
-            get { return lazyCounselorRepository.Value; }
-        }
+        public GenericRepository<Counselor> CounselorRepository => lazyCounselorRepository.Value;
 
-        public GenericRepository<Administrator> AdminRepository
-        {
-            get { return lazyAdminRepository.Value; }
-        }
+        public GenericRepository<Administrator> AdminRepository => lazyAdminRepository.Value;
 
-        public QuestionRepository QuestionRepository
-        {
-            get { return lazyQuestionRepository.Value; }
-        }
+        public QuestionRepository QuestionRepository => lazyQuestionRepository.Value;
 
-        public GenericRepository<QuestionSeed> QuestionSeedRepository
-        {
-            get { return lazyQuestionSeedRepository.Value; }
-        }
+        public GenericRepository<QuestionSeed> QuestionSeedRepository => lazyQuestionSeedRepository.Value;
         #endregion
 
         public int Save()
