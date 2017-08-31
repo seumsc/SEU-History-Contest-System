@@ -7,14 +7,14 @@ set n=5
 echo (%i%/%n%)Restoring Client-side NPM Packages...
 cd ./HistoryContest.Client
 call npm install
-if %ERRORLEVEL% NEQ 0 exit
+if %ERRORLEVEL% NEQ 0 pause
 set /a i=i+1
 
 echo. 
 echo (%i%/%n%)Building Webpack...
 call node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod
 call node node_modules/webpack/bin/webpack.js --env.prod
-if %ERRORLEVEL% NEQ 0 exit
+if %ERRORLEVEL% NEQ 0 pause
 set /a i=i+1
 
 cd ../
@@ -22,7 +22,7 @@ cd ../
 echo. 
 echo (%i%/%n%)Restoring Server-side Nuget Packages...
 call dotnet restore "./HistoryContest.sln"
-if %ERRORLEVEL% NEQ 0 exit
+if %ERRORLEVEL% NEQ 0 pause
 set /a i=i+1
 
 echo.
