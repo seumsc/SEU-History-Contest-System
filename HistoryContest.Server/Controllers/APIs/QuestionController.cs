@@ -9,6 +9,7 @@ using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -58,19 +59,24 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), 400)]
         public async Task<IActionResult> GetQuestionSet()
         {
-            var seed = HttpContext.Session.GetInt32("seed");
+            if (this.Session().IsTested)
+            {
+                return Forbid();
+            }
+
+            var seed = this.Session().SeedID;
             if (seed == null)
             {
                 return BadRequest("Question seed not created");
             }
             
-            var source = await questionSeedService.GetQuestionsBySeedID((int)seed);
-            if (source == null)
+            var questions = await questionSeedService.GetQuestionsBySeedID((int)seed);
+            if (questions == null)
             {
                 throw new Exception("Improper seed created, ID: " + seed);
             }
 
-            return Json(source.Select(q => (QuestionViewModel)q));
+            return Json(questions);
         }
 
         /// <summary>
@@ -88,13 +94,18 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetQuestionById(int id)
         {
-            var item = await unitOfWork.QuestionRepository.GetByIDAsync(id);
-            if (item == null)
+            if (this.Session().IsTested)
+            {
+                return Forbid();
+            }
+
+            var question = await unitOfWork.QuestionRepository.GetQuestionFromCacheAsync(id);
+            if (question == null)
             {
                 return NotFound();
             }
 
-            return Json((QuestionViewModel)item);
+            return Json(question);
         }
 
         /// <summary>
@@ -111,12 +122,18 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), 400)]
         public async Task<IActionResult> GetQuestionIDSet()
         {
-            var seed = HttpContext.Session.GetInt32("seed");
+            if (this.Session().IsTested)
+            {
+                return Forbid();
+            }
+
+            var seed = this.Session().SeedID;
             if (seed == null)
             {
                 return BadRequest("Question seed not created");
             }
 
+            // TODO: seed加载到内存
             return Json((await unitOfWork.QuestionSeedRepository.GetByIDAsync(seed)).QuestionIDs);
         }
     }

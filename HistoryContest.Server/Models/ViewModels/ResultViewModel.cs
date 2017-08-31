@@ -11,9 +11,9 @@ namespace HistoryContest.Server.Models.ViewModels
         [DefaultValue(16)]
         public int ID { get; set; }
         [DefaultValue(1)]
-        public int RightAnswer { get; set; }
+        public int Correct { get; set; }
         [DefaultValue(0)]
-        public int SubmittedAnswer { get; set; }
+        public int Submit { get; set; }
     }
 
     public class ResultViewModel

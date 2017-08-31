@@ -40,8 +40,8 @@ namespace HistoryContest.Server.Services
                 userClaims.AddRange(new List<Claim>
                 {
                     new Claim(ClaimTypes.Role, userViewModel.Role),
-                    new Claim("displayName", userViewModel.RealName),
-                    new Claim("username", userViewModel.UserName)
+                    new Claim("RealName", userViewModel.RealName),
+                    new Claim("UserName", userViewModel.UserName)
                 });
             }
 

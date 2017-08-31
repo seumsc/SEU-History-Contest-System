@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HistoryContest.Server.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -25,5 +26,8 @@ namespace HistoryContest.Server.Models.ViewModels
         public int Answer { get; set; }
         [DefaultValue(4)]
         public int Points { get; set; }
+
+        public static explicit operator CorrectAnswerViewModel(AQuestionBase question)
+            => new CorrectAnswerViewModel { ID = question.ID, Answer = question.Answer, Points = question.Points };
     }
 }

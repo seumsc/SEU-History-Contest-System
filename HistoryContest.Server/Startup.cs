@@ -20,12 +20,13 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public static IConfigurationRoot Configuration { get; set; }
         public static IHostingEnvironment Environment { get; set; }
 
         public Startup(IHostingEnvironment env)
@@ -51,7 +52,6 @@ namespace HistoryContest.Server
         {
             // Add mvc framework services.
             var mvcBuilder = services.AddMvc();
-            string connectionEndPoint;
 
             if (Environment.IsDevelopment())
             {
@@ -60,19 +60,24 @@ namespace HistoryContest.Server
                     options.ViewLocationExpanders.Clear();
                     options.ViewLocationExpanders.Add(new LocalViewEngine());
                 });
-                connectionEndPoint = "LocalConnection";
-            }
-            else
-            {
-                connectionEndPoint = "AzureConnection";
             }
 
             // Add Database Services
             services.AddDbContext<ContestContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(connectionEndPoint)));
+                options.UseSqlServer(Configuration.GetConnectionStringByDbType("SQL")));
 
-            // Adds a default in-memory implementation of IDistributedCache.
-            services.AddDistributedMemoryCache();
+            // Adds a redis in-memory implementation of IDistributedCache.
+            services.AddDistributedRedisCache(options =>
+            {
+                options.InstanceName = "HistoryContest.Redis";
+                options.Configuration = Configuration.GetConnectionStringByDbType("Redis");
+            });
+
+            // Add redis service
+            services.AddScoped<RedisService>();
+
+            // Add Unit of work service
+            services.AddScoped<UnitOfWork>();
 
 #if NETCOREAPP2_0
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
@@ -145,12 +150,10 @@ namespace HistoryContest.Server
                        .AllowAnyHeader();
             }));
 
-            // Add Unit of work service
-            services.AddScoped<UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ContestContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, UnitOfWork unitOfWork)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -246,11 +249,19 @@ namespace HistoryContest.Server
 
             
             // Seed database
-            if (!context.AllMigrationsApplied())
+            if (!unitOfWork.DbContext.AllMigrationsApplied())
             {
-                context.Database.Migrate();
-                context.EnsureAllSeeded();
+                unitOfWork.DbContext.Database.Migrate();
+                unitOfWork.DbContext.EnsureAllSeeded();
             }
+
+            // Load cache
+            var questionSeedService = new QuestionSeedService(unitOfWork);
+            int scale = int.Parse(Configuration.GetSection("Contest").GetSection("QuestionSeedScale").Value);
+
+            unitOfWork.Cache.QuestionSeeds().SetRange(questionSeedService.CreateNewSeeds(scale), s => (s.ID + 1).ToString());
+            unitOfWork.QuestionRepository.LoadQuestionsToCache();
+            unitOfWork.StudentRepository.LoadStudentsToCache();
         }
     }
 
