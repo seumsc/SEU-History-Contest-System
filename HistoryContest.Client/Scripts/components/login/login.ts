@@ -88,10 +88,15 @@ export default {
           success: function (req) {
             if (req.isSuccessful) {
               if (req.userViewModel.role == "Student") {
+                (<any>window).user.isLoggedIn=true;
+                (<any>window).user.id= JSON.stringify(info.userName);
+                (<any>window).user.role =JSON.stringify(req.userViewModel.role);
                 _this.isStu();
-            
               }
               else {
+                (<any>window).user.isLoggedIn=true;
+                (<any>window).user.id= JSON.stringify(info.userName);
+                (<any>window).user.role =JSON.stringify(req.userViewModel.role);
                 _this.isAdmin();
               }
               // else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")

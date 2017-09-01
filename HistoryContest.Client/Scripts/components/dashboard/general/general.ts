@@ -4,6 +4,7 @@ Vue.use(VueRouter);
 import { Component } from 'vue-property-decorator';//不能被注释掉！
 import $ from 'jquery';
 import Chartist from 'chartist';
+var download = require('../download.js').download;
 
 var schoolInfo = {
     "DepartmentID": 711,
@@ -29,6 +30,7 @@ var DepartmentNameMap = {
     "090": "计算机科学与工程学院、软件学院",
     "711": "计算机科学与工程学院、软件学院"
 }
+var general= [];
 var undo = {
     'students': [
     ]
@@ -38,7 +40,7 @@ var done = {
     ]
 };
 $.ajax({
-    url: '/api/Counselor/Scores/All/{id}', //请求的url地址
+    url: '/api/Counselor/Scores/All', //请求的url地址
     type: "GET", //请求方式
     dataType: "json", //返回格式为json
     async: false,
@@ -47,11 +49,11 @@ $.ajax({
     },
     success: function (res) {
         // alert("return:"+JSON.stringify(res));
-        for(var i = 0; i<res.length;i++){
-            if(res[i].isCompleted){
-                done.students.push(res[i]);
+        for (var i = 0; i < res.length; i++) {
+            if (res[i].isCompleted) {
+                general.push(res[i]);
             }
-            else undo.students.push(res[i]);
+            else general.push(res[i]);
 
         }
     },
@@ -178,12 +180,35 @@ export default {
         return {
         }
     },
-    mounted:function(){
+    mounted: function () {
         this.$nextTick(function () {
-            this.refresh() 
+            this.refresh()
         })
     },
     methods: {
+        allDepartments: function () {
+            $.ajax({
+                url: '/api/Counselor/ExportExcelofAllDepartments', //请求的url地址
+                type: "POST", //请求方式
+                // dataType: "json", //返回格式为json
+                async: true,
+                crossDomain: true,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                beforeSend: function () {
+                    alert('start download');
+                },
+                success: function (req) {
+                    download(req);
+                },
+                complete: function () {
+                },
+                error: function (request) {
+                    alert("error:" + JSON.stringify(request));
+                }
+            });
+
+        },
+
         refresh: function () {
             // alert("click!");
             initChartist();
