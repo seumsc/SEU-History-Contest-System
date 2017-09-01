@@ -108,15 +108,14 @@ namespace HistoryContest.Server.Services
                     //最后空一行添加去全校概况
                     worksheet.Cells[number, 2].Value = "最高分";
                     worksheet.Cells[number, 3].Value = "平均分";
-                    worksheet.Cells[number, 4].Value = ">= 90人数";
+                    worksheet.Cells[number, 4].Value = ">=90人数";
                     worksheet.Cells[number, 5].Value = ">=75人数";
                     worksheet.Cells[number, 6].Value = ">=60人数";
                     worksheet.Cells[number, 7].Value = "<60人数";
                     worksheet.Cells[number, 8].Value = "未测试人数";
                     worksheet.Cells[number, 9].Value = "更新时间";
                     number++;
-
-
+                    
                     var model = await ScoreSummaryOfSchoolViewModel.GetAsync(unitOfWork);
                     worksheet.Cells[number, 1].Value = "全校分数概况";
                     worksheet.Cells[number, 2].Value = model.MaxScore;
