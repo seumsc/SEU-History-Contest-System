@@ -190,6 +190,21 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json(studentIDs);
         }
 
+        /// <summary>
+        /// 获取一个院系所有学生的学号
+        /// </summary>
+        /// <remarks>
+        /// 返回Department Enum的所有值构成的数组。如有需要，也可返回标识符（计算机）与值（0x090)
+        /// </remarks>
+        /// <returns>所有院系代号</returns>
+        /// <response code="200">返回院系代号构成的数组</response>
+        [AllowAnonymous]
+        [HttpGet("AllDepartments")]
+        public IActionResult AllDepartmentIDs()
+        {
+            return Json(Enum.GetValues(typeof(Department)));
+        }
+
         #region Scores APIs
         /// <summary>
         /// 获取一个院系所有学生的简要得分信息
