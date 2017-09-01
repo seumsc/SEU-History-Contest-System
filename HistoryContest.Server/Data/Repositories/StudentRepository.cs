@@ -41,10 +41,10 @@ namespace HistoryContest.Server.Data.Repositories
         }
 
         public async Task<double> AverageScore() =>
-            (await GetAll()).AsQueryable().Where(s => s.IsTested).Select(s => s.Score ?? 0).Average();
+            (await GetAll()).AsQueryable().Where(s => s.IsTested).DefaultIfEmpty(new Student()).Average(s => s.Score ?? 0);
 
         public async Task<int> HighestScore() =>
-            (await GetAll()).AsQueryable().Select(s => s.Score ?? 0).Max();
+            (await GetAll()).AsQueryable().DefaultIfEmpty(new Student()).Max(s => s.Score ?? 0);
 
         public async Task<int> ScoreHigherThan(double bandScore) =>            
             (await GetAll()).AsQueryable().Count(s => s.IsTested && s.Score >= bandScore);
@@ -111,10 +111,10 @@ namespace HistoryContest.Server.Data.Repositories
         }
 
         public async Task<double> AverageScoreByDepartment(Department department) =>            
-            (await GetByDepartment(department)).AsQueryable().Where(s => s.IsTested).Select(s => s.Score ?? 0).Average();
+            (await GetByDepartment(department)).AsQueryable().Where(s => s.IsTested).DefaultIfEmpty(new Student()).Average(s => s.Score ?? 0);
             
         public async Task<int> HighestScoreByDepartment(Department department) =>           
-            (await GetByDepartment(department)).AsQueryable().Select(s => s.Score ?? 0).Max();
+            (await GetByDepartment(department)).AsQueryable().DefaultIfEmpty(new Student()).Max(s => s.Score ?? 0);
                    
         public async Task<int> ScoreHigherThanByDepartment(double bandScore, Department department) =>           
             (await GetByDepartment(department)).AsQueryable().Count(s => s.IsTested && s.Score >= bandScore);

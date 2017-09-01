@@ -164,6 +164,11 @@ namespace HistoryContest.Server.Controllers.APIs
                 if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
                     department = (Department)this.Session().Department;
+                    if (department == null)
+                    {
+                        return BadRequest("Department ID not set in the session, please login again");
+                    }
+
                 }
                 else
                 {
@@ -215,6 +220,10 @@ namespace HistoryContest.Server.Controllers.APIs
                 if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
                     department = (Department)this.Session().Department;
+                    if (department == null)
+                    {
+                        return BadRequest("Department ID not set in the session, please login again");
+                    }
                 }
                 else
                 {
@@ -348,6 +357,10 @@ namespace HistoryContest.Server.Controllers.APIs
                 if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
                 {
                     department = (Department)this.Session().Department;
+                    if (department == null)
+                    {
+                        return BadRequest("Department ID not set in the session, please login again");
+                    }
                 }
                 else
                 {
