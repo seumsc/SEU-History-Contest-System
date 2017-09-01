@@ -54,6 +54,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>种子对应的所有问题</returns>
         /// <response code="200">返回当前用户Session中存储的种子对应的所有问题构成的数组</response>
         /// <response code="400">当前用户没有对应的问题种子</response>
+        /// <response code="403">考生已考完</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<QuestionViewModel>), 200)]
         [ProducesResponseType(typeof(string), 400)]
@@ -88,6 +89,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <param name="id">问题对应的唯一ID</param>
         /// <returns>ID对应的问题</returns>
         /// <response code="200">返回由ID所唯一标识的问题</response>
+        /// <response code="403">考生已考完</response>
         /// <response code="404">ID没有对应的问题</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(QuestionViewModel), 200)]
@@ -117,6 +119,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>种子存储的所有问题题号</returns>
         /// <response code="200">返回当前用户Session中存储的种子中的所有题号构成的数组</response>
         /// <response code="400">当前用户没有对应的问题种子</response>
+        /// <response code="403">考生已考完</response>
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<int>), 200)]
         [ProducesResponseType(typeof(string), 400)]
