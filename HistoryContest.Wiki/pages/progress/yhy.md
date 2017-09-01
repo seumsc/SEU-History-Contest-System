@@ -395,3 +395,8 @@ API实现
 * 将excel下载改为每次都重新创建以同步更新数据
 * 添加了统计全校各院系分数概况的excel下载的api
 * api设计具体见文档
+
+## 9.1
+
+* 第一次下载excel时创建，有excel时持续更新
+* excel中全校概况每10min更新一次，其他在学生分数变更时更新  调用ExcelExportService中的UpdateExcelByDepartmentid
