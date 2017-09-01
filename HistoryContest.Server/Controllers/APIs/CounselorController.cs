@@ -30,12 +30,14 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         /// <summary>
-        /// 创建或更新当前辅导员所在院系所有学生分数情况的EXCEL表
+        /// 创建当前辅导员所在院系所有学生分数情况的EXCEL表返回文件名
         /// </summary>
         /// <remarks>
         /// 无需参数，通过Session中department获取院系id
-        /// * excel统计表将在wwwroot/excel/ 目录下创建或更新以院系id为名的xlsx文件
+        /// * excel统计表将在wwwroot/excel/ 目录下创建以院系id为名的xlsx文件
+        /// * 如果已经创建则不再创建
         /// * 下载功能在Download中实现
+        /// * 更新已在后端完成
         /// 
         /// excel中的统计信息包括:
         /// 1. 学号
@@ -57,16 +59,19 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             var id = (Department)this.Session().Department;
             await excelExportService.CreateExcelByDepartmentid(id);
-            return Json(id.ToString() + ".xlsx");
+            string filename = id.ToString() + ".xlsx";
+            return Json(filename);
         }
 
         /// <summary>
-        /// 创建或更新全校各个院系分数概况的EXCEL表
+        /// 创建全校各个院系分数概况的EXCEL表返回文件名
         /// </summary>
         /// <remarks>
         /// 无需参数
-        /// * excel统计表将在wwwroot/excel/ 目录下创建或更新 ScoreSummaryOfAllDepartments.xlsx
+        /// * excel统计表将在wwwroot/excel/ 目录下创建 ScoreSummaryOfAllDepartments.xlsx
+        /// * 如果已经创建则不再创建
         /// * 下载功能在Download中实现
+        /// * 更新已在后端完成
         /// 
         /// excel中的统计信息包括:
         /// 1. 院系ID
@@ -74,7 +79,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 3. 最高分
         /// 4. 平均分
         /// 5. 分数段对应人数
-        ///     - >=90 , >=75 , >=60 , 小于60
+        ///     - >=90 , >=75 , >=60 , 小于60, 未测试
         /// </remarks>
         /// <returns>全校各院系分数概况excel表名称</returns>
         /// <response code="200">返回各院系得分概况EXCEL统计表名</response>
@@ -89,7 +94,8 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             
             await excelExportService.CreateExcelOfAllDepartments();
-            return Json("ScoreSummaryOfAllDepartments.xlsx");
+            string filename="ScoreSummaryOfAllDepartments.xlsx";
+            return Json(filename);
         }
 
         /// <summary>
