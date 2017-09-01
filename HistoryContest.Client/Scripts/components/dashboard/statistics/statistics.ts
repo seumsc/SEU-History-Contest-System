@@ -4,7 +4,7 @@ Vue.use(VueRouter);
 import { Component } from 'vue-property-decorator';//不能被注释掉！
 import $ from 'jquery';
 import Chartist from 'chartist';
-
+var download = require('../download.js').download;
 var schoolInfo = {
     "DepartmentID": 711,
     "CounselorName": "郭佳",
@@ -38,7 +38,7 @@ var done = {
     ]
 };
 $.ajax({
-    url: '/api/Counselor/Scores/All/{id}', //请求的url地址
+    url: '/api/Counselor/Scores/All', //请求的url地址
     type: "GET", //请求方式
     dataType: "json", //返回格式为json
     async: false,
@@ -202,6 +202,28 @@ export default {
         })
     },
     methods: {
+        department:function(){
+            $.ajax({
+                url: '/api/Counselor/ExportExcelofDepartment', //请求的url地址
+                type: "POST", //请求方式
+                // dataType: "json", //返回格式为json
+                async: true,
+                crossDomain:true,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",                
+                beforeSend: function () {
+                    alert('start download');
+                },
+                success:function(req){
+                    download(req);
+                },
+                complete: function () {
+                },
+                error: function (request) {
+                    alert("error:" + JSON.stringify(request));
+                }
+            });
+
+        },
         refresh: function () {
             // alert("click!");
             initChartist();
