@@ -64,6 +64,10 @@ namespace HistoryContest.Server.Controllers.APIs
                 if (this.Session().CheckRole("Student") && this.Session().ID != null)
                 {
                     id = this.Session().ID;
+                    if (id == null)
+                    {
+                        return BadRequest("Student ID not set in the session, please login again");
+                    }
                 }
                 else
                 {
@@ -87,7 +91,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
                 if (!student.IsTested)
                 {
-                    return Forbid("Contest has not been completed");
+                    return Forbid();
                 }
 
                 model = new ResultViewModel { Score = student.Score ?? 0 };
@@ -122,10 +126,12 @@ namespace HistoryContest.Server.Controllers.APIs
         /// * 传进的数组格式不合法
         /// * 答案数组里有一个ID没有对应的问题
         /// </response>
+        /// <response code="403">考生已考完</response>
         [HttpPost]
         [Authorize(Roles = "Student, Administrator")]
         [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
             if(!ModelState.IsValid || submittedAnswers.Count != 30)
@@ -145,14 +151,23 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             string studentID = this.Session().ID;
+            if (studentID == null)
+            {
+                return BadRequest("Student ID not set in the session, please login again");
+            }
             //var student = await unitOfWork.StudentRepository.GetByIDAsync(studentID.ToIntID());
             var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartmentID());
             var student = await studentDictionary.GetAsync(studentID);
             student.Score = 0;
             student.QuestionSeedID = (int)seed;
             student.DateTimeFinished = DateTime.Now;
-            student.TimeConsumed = student.DateTimeFinished - this.Session().TestBeginTime;
             student.Choices = submittedAnswers.Select(a => (byte)a.Answer).ToArray();
+
+            if (this.Session().TestBeginTime == null)
+            {
+                return BadRequest("Test begin time not set in the session");
+            }
+            student.TimeConsumed = student.DateTimeFinished - this.Session().TestBeginTime;
 
             var correctAnswers = await questionSeedService.GetAnswersBySeedID((int)seed);
 
@@ -178,10 +193,10 @@ namespace HistoryContest.Server.Controllers.APIs
             //unitOfWork.StudentRepository.Update(student);
             //await unitOfWork.SaveAsync();
 
+            await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据，这个要放在前面，防止重复计算
             await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据
             return Json(model);
         }
 
