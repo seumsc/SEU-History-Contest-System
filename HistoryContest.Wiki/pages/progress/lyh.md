@@ -578,6 +578,7 @@ var init={
 ### 新增： 接入后台页相关API
 
 - 接入`department` api,`summary`api与`students/all`api
+- 现在表格可以下载了
 - 登陆时会先获取departmentID作为参数，然后动态生成其余api的请求url
 - 优化代码结构，减少冗余
 
