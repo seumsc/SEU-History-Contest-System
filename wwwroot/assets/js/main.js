@@ -316,9 +316,9 @@ $(function(){
 	$.ajax({
 		url: "/api/Student/State/Initialize", //请求的url地址
 		
-		async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 
-		type: "GET", //请求方式
+		type: "POST", //请求方式
 		beforeSend: function () {
 			//请求前的处理
 
@@ -326,29 +326,55 @@ $(function(){
 		success: function (req) {
 			//请求成功时处理
 			console.log(req);
+			if(req.testState==0&&req.isSeedSet==false){
+				$.ajax({
+					url: "/api/Student/Seed", //请求的url地址
+					
+					async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+	
+					type: "POST", //请求方式
+					
+					success: function (req) {
+						//请求成功时处理
+						//config.questionArray=req.array1.concat(req.array2);
+						console.log(req);
+						
+					},
+					
+					error: function () {
+						//请求出错处理
+						alert("请检查网络");
+						
+					}
+				});	
+			}
+			//GET Questions
 			$.ajax({
-				url: "/api/Student/State", //请求的url地址
-				
+				url: "/api/Question", //请求的url地址
+				contentType:"application/json",
+				dataType: "json", //返回格式为json
 				async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-		
+
 				type: "GET", //请求方式
-				beforeSend: function () {
-					//请求前的处理
-		
-				},
+				
 				success: function (req) {
 					//请求成功时处理
+					//config.questionArray=req.array1.concat(req.array2);
 					console.log(req);
+					config.questionArray=req;
+					config.totalAmount=config.questionArray.length;
+					setQUESTION(config.questionArray);
+					
+					console.log(config.totalAmount);
 				},
-				complete: function () {
-					//请求完成的处理
-				},
+				
 				error: function () {
 					//请求出错处理
-					
+					alert("请检查网络");
 					
 				}
-				});
+			});
+				
 		},
 		complete: function () {
 			//请求完成的处理
@@ -382,36 +408,7 @@ $(function(){
 				
 			}
 			});*/
-	//GET Questions
-	$.ajax({
-		url: "/api/Question", //请求的url地址
-		dataType: "json", //返回格式为json
-		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 
-		type: "GET", //请求方式
-		beforeSend: function () {
-			//请求前的处理
-
-		},
-		success: function (req) {
-			//请求成功时处理
-			//config.questionArray=req.array1.concat(req.array2);
-			console.log(req);
-			config.questionArray=req;
-			config.totalAmount=config.questionArray.length;
-			setQUESTION(config.questionArray);
-			
-			console.log(config.totalAmount);
-		},
-		complete: function () {
-			//请求完成的处理
-		},
-		error: function () {
-			//请求出错处理
-			alert("请检查网络");
-			
-		}
-		});
 
     $("#start").click(function () {
 		 $("#footer").show();

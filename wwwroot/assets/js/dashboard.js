@@ -2,11 +2,11 @@ var schoolInfo={
     "DepartmentID":711,
     "CounselorName":"郭佳",
     "MaxScore":91,
-    "AverageScore":75.21,
-    "ScoreBandCount":{
-        "HigherThan90":1,
-        "HigherThan75":0,
-        "HigherThan60":1,
+    "averageScore":75.21,
+    "scoreBandCount":{
+        "higherThan90":1,
+        "higherThan75":0,
+        "higherThan60":1,
         "Failed":1
     }
 }//传入的院系分数概况sample
@@ -93,6 +93,7 @@ var done={
         ]
 };*/
 var config={
+    department:null,
     departmentName:null,
     generalInfo:null,
     scoreList:null,
@@ -158,31 +159,45 @@ function initChartist(){
     var labelForDone=Math.round(100*(config.doneNumber/config.total))+"%";
         labelForUndo=Math.round(100*(config.undoNumber/config.total))+"%";
         //以下总人数还没有和上面的数据统一
-        labelA=Math.round(100*(config.generalInfo.ScoreBandCount.HigherThan90/config.total))+"%";
-        labelB=Math.round(100*(config.generalInfo.ScoreBandCount.Failed/config.total))+"%";
-        labelC=Math.round(100*(config.generalInfo.ScoreBandCount.HigherThan75/config.total))+"%";
-        labelD=Math.round(100*(config.generalInfo.ScoreBandCount.HigherThan60/config.total))+"%";
+        labelA=Math.round(100*(config.generalInfo.scoreBandCount.higherThan90/config.total))+"%";
+        labelB=Math.round(100*(config.generalInfo.scoreBandCount.Failed/config.total))+"%";
+        labelC=Math.round(100*(config.generalInfo.scoreBandCount.higherThan75/config.total))+"%";
+        labelD=Math.round(100*(config.generalInfo.scoreBandCount.higherThan60/config.total))+"%";
     
     Chartist.Pie('#completion-chart', {
        
-    labels: [(config.undoNumber==0?'':labelForDone),
+    labels: [(config.doneNumber==0?'':labelForDone),
             (config.undoNumber==0?'':labelForUndo)],
     series: [config.doneNumber, config.undoNumber]
     });   
-    Chartist.Pie('#overall-chart', {
-        labels: [
-            (config.generalInfo.ScoreBandCount.HigherThan90==0?'':labelA),
-            (config.generalInfo.ScoreBandCount.Failed==0?'':labelB),
-            (config.generalInfo.ScoreBandCount.HigherThan75==0?'':labelC),
-            (config.generalInfo.ScoreBandCount.HigherThan60==0?'':labelD)
-        ],
-        series: [
-            config.generalInfo.ScoreBandCount.HigherThan90,
-            config.generalInfo.ScoreBandCount.Failed,
-            config.generalInfo.ScoreBandCount.HigherThan75,
-            config.generalInfo.ScoreBandCount.HigherThan60
-        ]
-    });   
+    if(config.doneNumber==0){
+        Chartist.Pie('#overall-chart', {
+            
+            labels: [
+               "尚未有学生作答"
+            ],
+            series: [
+                100
+            ]
+        });  
+    }
+    else{
+        Chartist.Pie('#overall-chart', {
+            
+            labels: [
+                (config.generalInfo.scoreBandCount.higherThan90==0?'':labelA),
+                (config.generalInfo.scoreBandCount.Failed==0?'':labelB),
+                (config.generalInfo.scoreBandCount.higherThan75==0?'':labelC),
+                (config.generalInfo.scoreBandCount.higherThan60==0?'':labelD)
+            ],
+            series: [
+                config.generalInfo.scoreBandCount.higherThan90,
+                config.generalInfo.scoreBandCount.Failed,
+                config.generalInfo.scoreBandCount.higherThan75,
+                config.generalInfo.scoreBandCount.higherThan60
+            ]
+        });   
+    }
 }
 
 function commonSet(){
@@ -203,13 +218,142 @@ function commonSet(){
         $("#undo-info").html(config.comments.undos.common);
         $("#empty-comment").hide();
     }
-    $("#average-score").html(config.generalInfo.AverageScore);
+    $("#average-score").html(config.generalInfo.averageScore);
+    $("#max-score").html(config.generalInfo.maxScore);
 
 }
 var temp=new Array();
 var cnt=0;
+function fetchData(){
+    $.ajax({
+        url:  '/api/Counselor/Department', //请求的url地址 
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性      
+        type: "GET", //请求方式
+        contentType:"application/json",
+        dataType: "json", //返回格式为json
+        success: function (req) {
+          //请求成功时处理
+         console.log(req);
+         config.department=req;
+         console.log(config.department);
+         fetchSummary();
+         
+        },
+        error: function () {
+          //请求出错处理
+          alert("数据获取失败，请检查网络！");
+        }
+    });
+}
+function fetchSummary(){
+    $.ajax({
+        url:  '/api/Counselor/Scores/Summary/'+config.department, //请求的url地址
+        contentType:"application/json",
+        dataType: "json", //返回格式为json
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性 
+        type: "GET", //请求方式
+        success: function (req) {
+          //请求成功时处理
+          console.log(req);
+          config.generalInfo=req;
+          console.log(config.generalInfo);
+          config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
+          console.log(config.generalInfo.DepartmentID);
+          fetchAllScores();
+        },
+        error: function () {
+          //请求出错处理
+          alert("数据获取失败，请检查网络！");
+        }
+      });
+       
+}
+function fetchAllScores(){
+    $.ajax({
+        url:  '/api/Counselor/Scores/All/'+config.department, //请求的url地址
+        contentType:"application/json",
+        dataType: "json", //返回格式为json
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+        type: "GET", //请求方式
+        success: function (req) {
+          //请求成功时处理
+          console.log(req);
+          setUndoNDo(req);
+          setUndo(config.undoList);
+          setDone(config.doneList);
+          initChartist();
+          commonSet();
+        },
+        error: function () {
+          //请求出错处理
+          alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+function downloadDepartmentExcel(){
+    $.ajax({
+    url:  '/api/Counselor/ExportExcelofDepartment', //请求的url地址
+    
+    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+    
+    crossDomain:true,
+    
+    type: "POST", //请求方式
+    
+    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    beforeSend: function () {
+      //请求前的处理
 
+    },
+    success: function (req) {
+      //请求成功时处理
+      window.location = '/excel/'+req;
+    },
+    complete: function () {
+      //请求完成的处理
+    },
+    error: function (xhr) {
+      //请求出错处理
+      alert("数据获取失败，请检查网络！");
+      console.log(xhr);
+    }
+  });
+
+}
+function downloadExcelOfAllDepartments(){
+$.ajax({
+    url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
+    
+    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+    
+    crossDomain:true,
+    
+    type: "POST", //请求方式
+    
+    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    beforeSend: function () {
+      //请求前的处理
+
+    },
+    success: function (req) {
+      //请求成功时处理
+     console.log(req);
+     window.location = '/excel/'+req;
+    },
+    complete: function () {
+      //请求完成的处理
+    },
+    error: function (xhr) {
+      //请求出错处理
+      alert("数据获取失败，请检查网络！");
+      console.log(xhr);
+    }
+  });
+}
 $(function () {
+    
+   fetchData();
+   
     /*Mock server for score list
     Mock.mock(
         'http://hostname/api/Counselor/scores/all/{id}', 'get',{
@@ -232,24 +376,23 @@ $(function () {
                 "departmentID": "711",
                 "CounselorName": "郭佳",
                 "MaxScore": "@natural(85,100)",
-                "AverageScore": "@natural(60,80)",
-                "ScoreBandCount":
+                "averageScore": "@natural(60,80)",
+                "scoreBandCount":
                 {
-                    "HigherThan90": "@natural(10,30)",
-                    "HigherThan75": "@natural(30,60)",
-                    "HigherThan60": "@natural(30,60)",
+                    "higherThan90": "@natural(10,30)",
+                    "higherThan75": "@natural(30,60)",
+                    "higherThan60": "@natural(30,60)",
                     "Failed": "@natural(10,30)"
                 }
         }
         }
       );*/
     //请求有先后顺序，先获取院系总体情况，再获取得分情况，故为嵌套结构
-      $.ajax({
-        url:  '/api/Counselor/scores/summary', //请求的url地址
+  /*    $.ajax({
+        url:  '/api/Counselor/Scores/Summary/144', //请求的url地址
+        contentType:"application/json",
         dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        
-        
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性 
         type: "GET", //请求方式
         beforeSend: function () {
           //请求前的处理
@@ -258,7 +401,7 @@ $(function () {
         success: function (req) {
           //请求成功时处理
           console.log(req);
-          config.generalInfo=req.object;
+          config.generalInfo=req;
           console.log(config.generalInfo);
           config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
           console.log(config.generalInfo.DepartmentID);
@@ -276,6 +419,7 @@ $(function () {
         });
           $.ajax({
             url:  '/api/Counselor/scores/all', //请求的url地址
+            contentType:"application/json",
             dataType: "json", //返回格式为json
             async: true, //请求是否异步，默认为异步，这也是ajax重要特性
             
@@ -308,72 +452,18 @@ $(function () {
         }
       });
        
-     
+     */
 
 
-    /*setUndoNDo(scoreList);
-    setUndo(config.undoList);
-    setDone(config.doneList);
-    initChartist();
-    commonSet();*/
 
     $("#refresh-button").click(function(){
-        $.ajax({
-            url:  'http://hostname/api/Counselor/scores/summary{id}', //请求的url地址
-            dataType: "json", //返回格式为json
-            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-            
-            
-            type: "GET", //请求方式
-            beforeSend: function () {
-              //请求前的处理
-    
-            },
-            success: function (req) {
-              //请求成功时处理
-              console.log(req);
-              config.generalInfo=req.object;
-              console.log(config.generalInfo);
-              config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
-              console.log(config.generalInfo.DepartmentID);
-            },
-            complete: function () {
-    
-              //请求完成的处理
-              
-              $.ajax({
-                url:  'http://hostname/api/Counselor/scores/all/{id}', //请求的url地址
-                dataType: "json", //返回格式为json
-                async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-                
-                
-                type: "GET", //请求方式
-                beforeSend: function () {
-                  //请求前的处理
-      
-                },
-                success: function (req) {
-                  //请求成功时处理
-                  setUndoNDo(req.array);
-                  setUndo(config.undoList);
-                  setDone(config.doneList);
-                  initChartist();
-                  commonSet();
-                },
-                complete: function () {
-                  //请求完成的处理
-                },
-                error: function () {
-                  //请求出错处理
-                  alert("数据获取失败，请检查网络！");
-                }
-              });
-            },
-            error: function () {
-              //请求出错处理
-              alert("数据获取失败，请检查网络！");
-            }
-          });
+       fetchData();
+    })
+    $(".department-excel").click(function(){
+        downloadDepartmentExcel();
+    })
+    $(".all-departments").click(function(){
+        downloadExcelOfAllDepartments();
     })
     
     $("#table-done").find("th.score").click(function(){
