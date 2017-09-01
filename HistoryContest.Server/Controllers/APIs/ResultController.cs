@@ -193,6 +193,7 @@ namespace HistoryContest.Server.Controllers.APIs
             //unitOfWork.StudentRepository.Update(student);
             //await unitOfWork.SaveAsync();
 
+            this.Session().IsTested = true;
             await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据，这个要放在前面，防止重复计算
             await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
