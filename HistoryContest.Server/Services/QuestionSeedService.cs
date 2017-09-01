@@ -83,7 +83,7 @@ namespace HistoryContest.Server.Services
                         questionIDs[j] = trueFalseQuestions[index].ID;
                     }
 
-                    seeds.Add(new QuestionSeed { ID = i + 1, QuestionIDs = questionIDs });
+                    seeds.Add(new QuestionSeed { QuestionIDs = questionIDs });
                     rdGenerator.ResetContext(nameof(ChoiceQuestion));
                     rdGenerator.ResetContext(nameof(TrueFalseQuestion));
                 }
