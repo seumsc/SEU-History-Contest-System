@@ -63,16 +63,18 @@ namespace HistoryContest.Server.Services
         {
             string sWebRootFolder = Startup.Environment.WebRootPath;
             string sFileName = @"excel/" + "ScoreSummaryOfAllDepartments.xlsx";
-
+            
+            
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists)
             {
+                /*
                 List<ScoreSummaryByDepartmentViewModel> datatable = null;
                 foreach (var counselor in unitOfWork.DbContext.Counselors)
                 {
                     datatable.Add(await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, counselor));
                 }
-
+                */
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     // 添加worksheet
@@ -87,7 +89,7 @@ namespace HistoryContest.Server.Services
                     worksheet.Cells[1, 7].Value = ">=60人数";
                     worksheet.Cells[1, 8].Value = "<60人数";
                     worksheet.Cells[1, 9].Value = "未测试人数";
-
+                    /*
                     //添加值
                     int number = 2;
                     foreach (var scoreSummary in datatable)
@@ -126,6 +128,7 @@ namespace HistoryContest.Server.Services
                     worksheet.Cells[number, 7].Value = model.ScoreBandCount.Failed;
                     worksheet.Cells[number, 8].Value = model.ScoreBandCount.NotTested;
                     worksheet.Cells[number, 9].Value = model.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    */
                     package.Save();
                 }
             }

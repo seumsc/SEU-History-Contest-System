@@ -59,7 +59,8 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             var id = (Department)this.Session().Department;
             await excelExportService.CreateExcelByDepartmentid(id);
-            return Json(id.ToString() + ".xlsx");
+            string filename = id.ToString() + ".xlsx";
+            return Json(filename);
         }
 
         /// <summary>
@@ -93,7 +94,8 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             
             await excelExportService.CreateExcelOfAllDepartments();
-            return Json("ScoreSummaryOfAllDepartments.xlsx");
+            string filename="ScoreSummaryOfAllDepartments.xlsx";
+            return Json(filename);
         }
 
         /// <summary>
