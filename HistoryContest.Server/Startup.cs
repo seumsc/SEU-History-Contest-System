@@ -262,8 +262,19 @@ namespace HistoryContest.Server
             // Load cache
             var questionSeedService = new QuestionSeedService(unitOfWork);
             int scale = int.Parse(Configuration.GetSection("Contest").GetSection("QuestionSeedScale").Value);
+            var questionSeeds = questionSeedService.CreateNewSeeds(scale);
+            
+            if (unitOfWork.DbContext.QuestionSeeds.Any())
+            {
+                unitOfWork.DbContext.QuestionSeeds.UpdateRange(questionSeeds);
+            }
+            else
+            {
+                unitOfWork.DbContext.QuestionSeeds.AddRange(questionSeeds);
+            }
+            unitOfWork.Save();
 
-            unitOfWork.Cache.QuestionSeeds().SetRange(questionSeedService.CreateNewSeeds(scale), s => (s.ID + 1).ToString());
+            unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
 

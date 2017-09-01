@@ -26,7 +26,7 @@ namespace HistoryContest.Server.Models
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Error converting value {0} to type '{1}'", reader.Value, objectType));
+                throw new Exception(string.Format(ex.Message + ": Error converting value {0} to type '{1}'", reader.Value, objectType));
             }
             throw new Exception(string.Format("Unexpected token {0} when parsing enum", reader.TokenType));
         }

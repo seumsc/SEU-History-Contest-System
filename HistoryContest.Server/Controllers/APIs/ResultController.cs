@@ -190,12 +190,13 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
 
-            //unitOfWork.StudentRepository.Update(student);
-            //await unitOfWork.SaveAsync();
+
 
             this.Session().IsTested = true;
             await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据，这个要放在前面，防止重复计算
             await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
+            unitOfWork.StudentRepository.Update(student); // 更新数据库中的Student
+            await unitOfWork.SaveAsync();
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
             return Json(model);
