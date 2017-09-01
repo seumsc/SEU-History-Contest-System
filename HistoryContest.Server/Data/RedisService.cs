@@ -16,12 +16,14 @@ namespace HistoryContest.Server.Data
 
         public static ConnectionMultiplexer Connection => lazyConnection.Value;
 
-        public RedisService()
+        public RedisService(int db = 1)
         {
-            connectionString = Startup.Configuration.GetConnectionStringByDbType("Redis");
+            connectionString = Startup.Configuration.GetConnectionStringByDbType("Redis") + ",allowAdmin = true";
+            lazyDatabase = new Lazy<IDatabase>(() => Connection.GetDatabase(db));
         }
 
-        public IDatabase Database => Connection.GetDatabase();
+        private Lazy<IDatabase> lazyDatabase;
+        public IDatabase Database => lazyDatabase.Value;
 
         internal RedisKey GenerateKey<T>(string key)
         {

@@ -255,6 +255,10 @@ namespace HistoryContest.Server
                 unitOfWork.DbContext.EnsureAllSeeded();
             }
 
+            // flush cache
+            var endpoints = RedisService.Connection.GetEndPoints();
+            RedisService.Connection.GetServer(endpoints.First()).FlushAllDatabases();
+
             // Load cache
             var questionSeedService = new QuestionSeedService(unitOfWork);
             int scale = int.Parse(Configuration.GetSection("Contest").GetSection("QuestionSeedScale").Value);

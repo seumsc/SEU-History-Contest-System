@@ -41,28 +41,14 @@ namespace HistoryContest.Server.Models.ViewModels
             AverageScore += (double)student.Score;
             ScoreBandCount.NotTested -= 1;
             AverageScore /= StudentCount - ScoreBandCount.NotTested;
-            switch ((int)student.Score / 10)
-            {
-                case 10:
-                case 9:
-                    ++ScoreBandCount.HigherThan90;
-                    break;
-                case 8:
-                    ++ScoreBandCount.HigherThan75;
-                    break;
-                case 7:
-                    if (student.Score >= 75)
-                        ++ScoreBandCount.HigherThan75;
-                    else
-                        ++ScoreBandCount.HigherThan60;
-                    break;
-                case 6:
-                    ++ScoreBandCount.HigherThan60;
-                    break;
-                default:
-                    ++ScoreBandCount.Failed;
-                    break;
-            }
+            if (student.Score >= 90)
+                ++ScoreBandCount.HigherThan90;
+            if (student.Score >= 75)
+                ++ScoreBandCount.HigherThan75;
+            if (student.Score >= 60)
+                ++ScoreBandCount.HigherThan60;
+            else
+                ++ScoreBandCount.Failed;
             return this;
         }
 
@@ -72,20 +58,19 @@ namespace HistoryContest.Server.Models.ViewModels
             var model = await summaryVMDictionary.GetAsync(counselor.Department);
             if (model == null)
             {
-                model = new ScoreSummaryByDepartmentViewModel
+                model = new ScoreSummaryByDepartmentViewModel();
+
+                model.DepartmentID = counselor.Department;
+                model.CounselorName = counselor.Name;
+                model.StudentCount = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department);
+                model.MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department);
+                model.AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department);
+                model.ScoreBandCount = new ScoreBandCountViewModel()
                 {
-                    DepartmentID = counselor.Department,
-                    CounselorName = counselor.Name,
-                    StudentCount = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department),
-                    MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
-                    AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
-                    ScoreBandCount = 
-                    {
-                        HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                        HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                        HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
-                        NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
-                    }
+                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
+                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
+                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
+                    NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
                 };
 
                 model.ScoreBandCount.Failed = model.StudentCount - model.ScoreBandCount.NotTested - model.ScoreBandCount.HigherThan60;
