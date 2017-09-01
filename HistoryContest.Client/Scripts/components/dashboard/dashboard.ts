@@ -7,6 +7,7 @@ import Chartist from 'chartist';
 // var Chartist = require('chartist').Chartist;
 require('../../../Images/sidebar.png');
 require('../../../Images/logo-including-name.png');
+var download=require('./download.js').download;
 var initChartist = require('./statistics/statistics.ts').initChartist;
 
 $(function () {
@@ -525,25 +526,6 @@ export default {
     },
     methods: {
         downloadExcel:function(){
-            $.ajax({
-                url: '/api/Counselor/ExportExcelofDepartment', //请求的url地址
-                type: "GET", //请求方式
-                // dataType: "json", //返回格式为json
-                async: true,
-                crossDomain:true,
-                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                beforeSend: function () {
-                    alert('start download');
-                },
-                success:function(req){
-                    alert(req);
-                },
-                complete: function () {
-                },
-                error: function (request) {
-                    alert("error:" + JSON.stringify(request));
-                }
-            });
         },
         goToStatis: function () {
             this.$router.push({ path: '/dashboard/statistics' })            

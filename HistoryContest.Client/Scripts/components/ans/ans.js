@@ -2,26 +2,6 @@ var $ = require("../../../node_modules/jquery/dist/jquery.min.js");
 var inTime = require('./ans.ts').inTime;
 var setRESULT = require('./questions.js').setRESULT;
 var answerQues = new Array(30);
-function disabledMouseWheel() {
-	if (document.addEventListener) {
-		document.addEventListener('DOMMouseScroll', scrollFunc, false);
-	}//W3C
-	window.onmousewheel = document.onmousewheel = scrollFunc;//IE/Opera/Chrome
-}
-function scrollFunc(evt) {
-	evt = evt || window.event;
-	if (evt.preventDefault) {
-		// Firefox
-		evt.preventDefault();
-		evt.stopPropagation();
-	} else {
-		// IE
-		evt.cancelBubble = true;
-		evt.returnValue = false;
-	}
-	return false;
-}
-window.onload = disabledMouseWheel;
 
 // answerQues[0] = "curAns"
 exports.saveAns = function (clickID) {
@@ -66,9 +46,11 @@ exports.submit = function (inTime) {
 			data: JSON.stringify(answerQues),
 			contentType: "application/json",
 			beforeSend: function () {
+				
 			},
 			success: function (res) {
 				setRESULT(res);
+		
 			},
 			complete: function () {
 			},
