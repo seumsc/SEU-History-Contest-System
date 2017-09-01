@@ -262,6 +262,14 @@ namespace HistoryContest.Server
             unitOfWork.Cache.QuestionSeeds().SetRange(questionSeedService.CreateNewSeeds(scale), s => (s.ID + 1).ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
+
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Enabled = true;
+            timer.Interval = 600000; //执行间隔时间,单位为毫秒; 这里实际间隔为10分钟  
+            ExcelExportService excelExportService = new ExcelExportService(unitOfWork);
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(excelExportService.UpdateExcelOfSchool);
+            timer.Start();
+
         }
     }
 
