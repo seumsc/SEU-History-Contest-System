@@ -43,7 +43,7 @@ namespace HistoryContest.Server.Extensions
         public Department? Department
         {
             get { return (Department?)context.Session.GetInt32("department"); }
-            set { context.Session.SetInt32("department", (int)value); }
+            set { context.Session.SetInt32("department", (int)(value?? 0)); }
         }
 
         public DateTime? TestBeginTime
@@ -55,7 +55,13 @@ namespace HistoryContest.Server.Extensions
         public int? SeedID
         {
             get { return context.Session.GetInt32("seed"); }
-            set { context.Session.SetInt32("seed", (int)value); }
+            set
+            {
+                if (value == null)
+                    context.Session.Remove("seed");
+                else
+                    context.Session.SetInt32("seed", (int)value);
+            }
         }
 
         public bool IsTested

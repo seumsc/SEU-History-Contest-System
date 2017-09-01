@@ -82,8 +82,8 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> Initialize()
         {
-            if (this.Session().TestBeginTime != null)
-            { // 已经初始化则重定向到State方法
+            if (this.Session().TestBeginTime != null || this.Session().IsTested)
+            { // 已经初始化或考完试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
 
@@ -102,8 +102,8 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpPost("State/[action]")]
         public async Task<IActionResult> Reset()
         {
-            if (this.Session().TestBeginTime == null)
-            { // 未初始化则重定向到State方法
+            if (this.Session().TestBeginTime == null || this.Session().IsTested)
+            { // 未初始化或已考试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
 
@@ -129,6 +129,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> SetSeed()
         {
+            if (this.Session().IsTested)
+            { // 已经考完试则重定向到State方法
+                return RedirectToAction(nameof(State));
+            }
             if (this.Session().SeedID == null)
             {
                 var seed = await questionSeedService.RollSeed();
@@ -174,6 +178,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetLeftTime()
         {
+            if (this.Session().IsTested)
+            { // 已经考完试则重定向到State方法
+                return RedirectToAction(nameof(State));
+            }
             if (this.Session().TestBeginTime == null)
             {
                 return NoContent();
@@ -201,6 +209,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status302Found)]
         public IActionResult SetStartTime()
         {
+            if (this.Session().IsTested)
+            { // 已经考完试则重定向到State方法
+                return RedirectToAction(nameof(State));
+            }
             if (this.Session().TestBeginTime == null)
             {
                 DateTime now = DateTime.Now;

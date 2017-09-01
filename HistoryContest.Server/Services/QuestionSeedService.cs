@@ -17,7 +17,7 @@ namespace HistoryContest.Server.Services
         public QuestionSeedService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            rdGenerator = new Random(new Guid().GetHashCode());
+            rdGenerator = new Random();
         }
 
         public async Task<List<QuestionViewModel>> GetQuestionsBySeedID(int id)
