@@ -56,15 +56,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Empty argument request invalid");
             }
             var id = (Department)this.Session().Department;
-            string sWebRootFolder = Startup.Environment.WebRootPath;
-            string sFileName = @"excel/"+id.ToString()+".xlsx";
-            
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-            await excelExportService.CreateExcelByDepartmentid(file,id);
+            await excelExportService.CreateExcelByDepartmentid(id);
             return Json(id.ToString() + ".xlsx");
         }
 
@@ -96,15 +88,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Empty argument request invalid");
             }
             
-            string sWebRootFolder = Startup.Environment.WebRootPath;
-            string sFileName = @"excel/" + "ScoreSummaryOfAllDepartments.xlsx";
-
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-            await excelExportService.CreateExcelOfAllDepartments(file);
+            await excelExportService.CreateExcelOfAllDepartments();
             return Json("ScoreSummaryOfAllDepartments.xlsx");
         }
 
