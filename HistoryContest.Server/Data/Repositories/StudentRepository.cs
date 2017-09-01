@@ -51,6 +51,7 @@ namespace HistoryContest.Server.Data.Repositories
 
         public async Task<int> CountNotTested() =>
             (await GetAll()).AsQueryable().Count(s => !s.IsTested);
+        
         #endregion
 
         #region Department Methods
