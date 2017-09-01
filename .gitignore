@@ -7,6 +7,7 @@ HistoryContest.Server/Properties/PublishProfiles
 HistoryContest.Wiki/index.html
 HistoryContest.Site/
 wwwroot/dist/
+wwwroot/excel/
 package-lock.json
 
 # User-specific files
