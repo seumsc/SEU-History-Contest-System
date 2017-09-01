@@ -59,7 +59,8 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             var id = (Department)this.Session().Department;
             await excelExportService.CreateExcelByDepartmentid(id);
-            return Json(id.ToString() + ".xlsx");
+            string filename = id.ToString() + ".xlsx";
+            return Json(filename);
         }
 
         /// <summary>
@@ -93,7 +94,8 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             
             await excelExportService.CreateExcelOfAllDepartments();
-            return Json("ScoreSummaryOfAllDepartments.xlsx");
+            string filename="ScoreSummaryOfAllDepartments.xlsx";
+            return Json(filename);
         }
 
         /// <summary>
@@ -192,6 +194,21 @@ namespace HistoryContest.Server.Controllers.APIs
             }
 
             return Json(studentIDs);
+        }
+
+        /// <summary>
+        /// 获取一个院系所有学生的学号
+        /// </summary>
+        /// <remarks>
+        /// 返回Department Enum的所有值构成的数组。如有需要，也可返回标识符（计算机）与值（0x090)
+        /// </remarks>
+        /// <returns>所有院系代号</returns>
+        /// <response code="200">返回院系代号构成的数组</response>
+        [AllowAnonymous]
+        [HttpGet("AllDepartments")]
+        public IActionResult AllDepartmentIDs()
+        {
+            return Json(Enum.GetValues(typeof(Department)));
         }
 
         #region Scores APIs
