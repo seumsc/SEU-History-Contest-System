@@ -61,7 +61,7 @@
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="webpack_build.bat" WorkingDirectory="../HistoryContest.Client/" />
     <!-- As the base of excel output folder -->
-    <Exec Command="mkdir excel" WorkingDirectory="../wwwroot/" />
+    <Exec Command="if not exist excel mkdir excel" WorkingDirectory="../wwwroot/" />
     <Exec Command="echo . &gt; .keep" WorkingDirectory="../wwwroot/excel" />
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
