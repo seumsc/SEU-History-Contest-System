@@ -59,6 +59,13 @@ namespace HistoryContest.Server.Data
             if (!Set<TEntity>().Any())
             {
                 var seeds = JsonConvert.DeserializeObject<List<TEntity>>(File.ReadAllText(GetSeedPath<TEntity>()));
+                if (typeof(TEntity) == typeof(Student))
+                {
+                    foreach (var student in seeds as List<Student>)
+                    {
+                        student.CounselorID = Counselors.FirstOrDefault(c => c.Department == student.Department).ID;
+                    }
+                }
                 AddRange(seeds);
                 SaveChanges();
             }
