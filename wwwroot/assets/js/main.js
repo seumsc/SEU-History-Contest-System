@@ -1,12 +1,6 @@
-/*
-	Ethereal by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
-var answerQues=[];//name,answer(id)
+var answerQues=[];//id,answer
 var config={
-	totalAmount:0,
+	totalAmount:30,
 	timeState:false,
 	questionArray:[],
 	resultHTML:'<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
@@ -25,23 +19,32 @@ function setQUESTION(QUESTIONS){
 		+'<div class="intro joined"><h1>'+(questionsIteratorIndex + 1)+'</h1></div>'//网页上显示的题目序号
 		+'<div class="span-3-25"><h3 class="major">'+ QUESTIONS[questionsIteratorIndex].question+'</h3>';//问题内容
 		if(QUESTIONS[questionsIteratorIndex].type==0){//选择题
+			var ansInit={};
+			ansInit.id=QUESTIONS[questionsIteratorIndex].id;
+			ansInit.answer=-1;
+			answerQues.push(ansInit);
 			for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {//四个选项
 				content += '<div class="field quarter"><input type="radio"'
 				+' id="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)//选项id，在HTML中唯一
 				+'" value="'+answersIteratorIndex //提交的答案值
 				+'" onclick="saveAns(this)"'
-				+'" name="'+QUESTIONS[questionsIteratorIndex].ID+'" class="color2" />'//hash code，同样要提交
+				+'" name="'+QUESTIONS[questionsIteratorIndex].id+'" class="color2" />'//hash code，同样要提交
 				+'<label for="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)+'">'
 				+QUESTIONS[questionsIteratorIndex].choices[answersIteratorIndex] +'</label></div><br>';
 			}//选项内容
 			content += '</div>';           
 		}
 		else{//判断题			
+			var ansInit={};
+			ansInit.id=QUESTIONS[questionsIteratorIndex].id;
+			ansInit.answer=-1;
+			answerQues.push(ansInit);
 			for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {//两个选项
+				
 				content += '<div class="field quarter"><input type="radio" id="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)
 				+'" value="'+answersIteratorIndex
 				+'" onclick="saveAns(this)"'
-				+'" name="'+QUESTIONS[questionsIteratorIndex].ID+'" class="color2" />'
+				+'" name="'+QUESTIONS[questionsIteratorIndex].id+'" class="color2" />'
 				+'<label for="choice'+(questionsIteratorIndex + 1)+(answersIteratorIndex+1)+'">'
 				+(answersIteratorIndex==0?'正确':'错误') +'</label></div><br>';
 			}//选项为正确或错误
@@ -72,7 +75,7 @@ function setRESULT(RESULT){
         if(resultsIteratorIndex%5==0)
             tableContent+="<tr>";
         tableContent+='<td><span class="num">'+(resultsIteratorIndex+1)+' </span>'
-        if(RESULT.details[resultsIteratorIndex].rightAnswer==RESULT.details[resultsIteratorIndex].submittedAnswer){
+        if(RESULT.details[resultsIteratorIndex].correct==RESULT.details[resultsIteratorIndex].submit){
             tableContent+=' <span class="fa fa-check" style="color:#3caa00"></span></td>'
         }
         else{
@@ -92,62 +95,78 @@ function saveAns(clickID){
 	var activeNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
 	var testing;
     for(var i=0;i<answerQues.length;i++){//这个循环用来覆盖保存答案
-    	if( answerQues[i].ID==ID&&answerQues[i].answer!=ans){
+    	if( answerQues[i].id==ID&&answerQues[i].answer!=ans){
+			if(answerQues[i].answer==-1){
+				$("#question"+activeNum).addClass("answered");
+				
+				setTimeout(function(){			
+					$("#question"+(activeNum+1)).click();		
+				},300);
+			}
 		   answerQues[i].answer =ans;
 		   testing=JSON.stringify(answerQues);
 		   console.log(testing);
-		   return;     
+
+		  
+	   
 	    }
-		else if(answerQues[i].ID==ID&&answerQues[i].answer==ans)
+		else if(answerQues[i].id==ID&&answerQues[i].answer==ans)
 	   		return;         
     	}
-		var check ={};
+	/*	var check ={};
        	check.ID=ID;
 		check.answer=ans;
 		answerQues.push(check);//用push方法传入数组		
 		testing=JSON.stringify(answerQues);
-		console.log(testing);
-		$("#question"+activeNum).addClass("answered");
-		setTimeout(function(){			
-			$("#question"+(activeNum+1)).click();		
-		},300);
+		console.log(testing);*/
 
 }
 
-function submit(){
-	console.log(answerQues.length);
-	if(answerQues.length<config.totalAmount)
-		alert("您还有未作答题目哦！");
-	else{
-		$.ajax({
-			url: "http://hostname/api/Result", //请求的url地址
-			dataType: "json", //返回格式为json
-			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-			//data
-			data: answerQues,
-			type: "POST", //请求方式
-			beforeSend: function () {
-			  //请求前的处理
-  
-			},
-			success: function (res) {
-			  //RESET WEBPAGE
-			  $("#welcome-container").remove();
-			  $("#quiz-container").remove();
-			  $("#submit-container").remove();
-			  $('.header_2').remove();
-			  $("#footer").remove();
-			  //SHOW RESULTS
-			  $("#result-container").html(config.resultHTML);
-			  config.resultJSON=res;
-			  setRESULT(config.resultJSON);
-			  //ADD FUNCTIONS
-			  $("td").hover(function(event) {
+function resetToShowResult(){
+	$.ajax({
+		url: '/api/Result', //请求的url地址
+		type: "GET", //请求方式
+		dataType: "json", //返回格式为json
+		async: true,
+		data: JSON.stringify(answerQues),
+		contentType: "application/json",
+		success: function (res) {
+			console.log(res);
+			$("#welcome-container").remove();
+			$("#quiz-container").remove();
+			$("#submit-container").remove();
+			$('.header_2').remove();
+			$("#footer").remove();
+			//SHOW RESULTS
+			$("#result-container").html(config.resultHTML);
+			config.timeState=false;
+			config.resultJSON=res;
+			setRESULT(config.resultJSON);
+			//CHECK QUESTION ARRAY
+			if(config.questionArray.length==0){
+				for(var i=0;i<config.totalAmount;i++){
+					var URLID=config.resultJSON.details[i].id;
+					$.ajax({
+						url: '/api/Question/'+URLID, //请求的url地址
+						type: "GET", //请求方式
+						dataType: "json", //返回格式为json
+						async: true,
+						contentType: "application/json",
+						success:function(res){
+							
+							config.questionArray.push(res);
+						}
+					});
+					
+				}
+			}
+			//ADD FUNCTIONS
+			$("td").hover(function(event) {
 				var reviewContent="";	
 				var $tgt=$(event.target);
 				var questionNum=$tgt.find(".num").text();
-				var rightAns=config.resultJSON.details[questionNum-1].rightAnswer;
-				var submittedAns=config.resultJSON.details[questionNum-1].submittedAnswer;
+				var rightAns=config.resultJSON.details[questionNum-1].correct;
+				var submittedAns=config.resultJSON.details[questionNum-1].submit;
 				var isCorrect=(rightAns==submittedAns?1:0);
 				if (questionNum<=20){//选择题
 					reviewContent+='<h3 class="major">' +questionNum+'. '+config.questionArray[questionNum-1].question+'</h3>';
@@ -161,13 +180,13 @@ function submit(){
 							reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
 							
 							+config.questionArray[questionNum-1].choices[answersIteratorIndex] +' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
-						}else{
-						reviewContent += '<div class="field quarter">'
-						
-						+config.questionArray[questionNum-1].choices[answersIteratorIndex] +'</div><br>';//选项内容
+						}
+						else{
+						  reviewContent += '<div class="field quarter">'
+						  +config.questionArray[questionNum-1].choices[answersIteratorIndex] +'</div><br>';//选项内容
 						}
 					}
-		
+		  
 				}
 				else{//判断题
 					reviewContent+='<h3 class="major">' +questionNum+'. '+config.questionArray[questionNum-1].question+'</h3>';
@@ -181,37 +200,87 @@ function submit(){
 							reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
 							
 							+(answersIteratorIndex==0?'正确':'错误')  +' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
-						}else{
-						reviewContent += '<div class="field quarter">'
-						
-						+(answersIteratorIndex==0?'正确':'错误')  +'</div><br>';//选项内容
 						}
-		
-					  
-					
+						else{
+						  reviewContent += '<div class="field quarter">'
+						  +(answersIteratorIndex==0?'正确':'错误')  +'</div><br>';//选项内容
+						}
 					}
-		
+		  
 				}
 				$("#review-container").html(reviewContent);
-			   	
+				
+				
 				$("#review-container").show();//hover后显示题目
 			},function() {
 				$("#review-container").hide();//hover后显示题目
 			});
+	
+		},
+		complete: function () {
+		},
+		error: function (request) {
+			alert("error:" + JSON.stringify(request));
+		}
+	});
+	
 
+}
+function fetchQuestions(){
+	$.ajax({
+		url: "/api/Question", //请求的url地址
+		contentType:"application/json",
+		dataType: "json", //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		type: "GET", //请求方式		
+		success: function (req) {
+			config.questionArray=req;
+			config.totalAmount=config.questionArray.length;
+			setQUESTION(config.questionArray);
+			
+			console.log(config.totalAmount);
+		},	
+		error: function (req) {
+			console.log(req);
+			alert("请检查网络");
+			
+		}
+	});
+}
+function submit(){
+	console.log(answerQues.length);
+	for(var j=0;j<answerQues.length;j++){
+		if(answerQues[j].answer==-1&&config.timeState){
+			alert("您还有未作答题目哦！");
+			return;
+		}
+	}
+	
+		$.ajax({
+			url: "/api/Result", //请求的url地址
+			contentType:"application/json",
+			dataType: "json", //返回格式为json
+			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+			//data			
+			data: JSON.stringify(answerQues),
+			type: "POST", //请求方式
+			beforeSend: function () {
+			  //请求前的处理
+  
 			},
-			complete: function () {
-			  //请求完成的处理
-			 
-
+			success: function (res) {
+			  //RESET WEBPAGE
+			  console.log(res);
+			  resetToShowResult();
 			},
+			
 			error: function () {
 			  //请求出错处理
 			  alert("提交失败，请检查网络");
 			}
 		  });
 	}
-}
+
 
 (function($) {
 
@@ -228,7 +297,8 @@ function submit(){
 				ss--;
 				alert("时间到！");
 				$(".time").hide();
-				
+				config.timeState=false;
+				submit();
 			}
 			else{
 				str = "";
@@ -254,126 +324,47 @@ function submit(){
 
 
 $(function(){
-	//Mockserver for dev purpose
-/*	Mock.mock("http://hostname/api/Question","get",{"array1|20":[
-		{
-			"ID":"@guid()",
-			"type":0,
-			"question":'@csentence(10,30)',
-			"choices|4":[
-				'@cword(3,10)',
-			]
-		}],
-		"array2|10":[
-		{
-			"ID":"@guid()",
-			"type":1,
-			"question":'@csentence(10,30)',
-		}
-	]
 	
-	})
-	Mock.mock("http://hostname/api/Result","post",{
-	  
-			"score":80,
-			"timeFinished":0,
-			"timeConsumed":0,
-			"details":[
-				{"ID":0,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":1,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":2,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":3,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":4,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":5,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":6,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":7,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":8,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":9,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":10,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":11,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":12,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":13,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":14,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":15,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":16,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":17,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":18,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":19,"rightAnswer":1,"submittedAnswer":2},
-				{"ID":20,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":21,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":22,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":23,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":24,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":25,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":26,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":27,"rightAnswer":1,"submittedAnswer":0},
-				{"ID":28,"rightAnswer":1,"submittedAnswer":1},
-				{"ID":29,"rightAnswer":1,"submittedAnswer":0}
-			]
-		
-	})*/
 	//Initialize State
 	$.ajax({
 		url: "/api/Student/State/Initialize", //请求的url地址
-		
 		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-
 		type: "POST", //请求方式
-		beforeSend: function () {
-			//请求前的处理
-
-		},
 		success: function (req) {
 			//请求成功时处理
 			console.log(req);
-			if(req.testState==0&&req.isSeedSet==false){
-				$.ajax({
-					url: "/api/Student/Seed", //请求的url地址
-					
-					async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-	
-					type: "POST", //请求方式
-					
-					success: function (req) {
-						//请求成功时处理
-						//config.questionArray=req.array1.concat(req.array2);
-						console.log(req);
+			//GET Questions	
+			if(req.testState==0){
+				if(req.isSeedSet==false){
+					$.ajax({
+						url: "/api/Student/Seed", //请求的url地址
 						
-					},
-					
-					error: function () {
-						//请求出错处理
-						alert("请检查网络");
+						async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		
+						type: "POST", //请求方式
 						
-					}
-				});	
-			}
-			//GET Questions
-			$.ajax({
-				url: "/api/Question", //请求的url地址
-				contentType:"application/json",
-				dataType: "json", //返回格式为json
-				async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-
-				type: "GET", //请求方式
-				
-				success: function (req) {
-					//请求成功时处理
-					//config.questionArray=req.array1.concat(req.array2);
-					console.log(req);
-					config.questionArray=req;
-					config.totalAmount=config.questionArray.length;
-					setQUESTION(config.questionArray);
-					
-					console.log(config.totalAmount);
-				},
-				
-				error: function () {
-					//请求出错处理
-					alert("请检查网络");
-					
+						success: function (req) {
+							//请求成功时处理
+							//config.questionArray=req.array1.concat(req.array2);
+							console.log(req);
+							
+						},
+						
+						error: function () {
+							//请求出错处理
+							alert("请检查网络");
+							
+						}
+					});	
 				}
-			});
+				fetchQuestions();
+			}
+			else if(req.testState==2){
+				resetToShowResult();
+
+			}
+			
+			
 				
 		},
 		complete: function () {
@@ -385,29 +376,7 @@ $(function(){
 			
 		}
 		});
-	/*	$.ajax({
-			url: "/api/Student/State", //请求的url地址
-			
-			async: true, //请求是否异步，默认为异步，这也是ajax重要特性
 	
-			type: "GET", //请求方式
-			beforeSend: function () {
-				//请求前的处理
-	
-			},
-			success: function (req) {
-				//请求成功时处理
-				console.log(req);
-			},
-			complete: function () {
-				//请求完成的处理
-			},
-			error: function () {
-				//请求出错处理
-				
-				
-			}
-			});*/
 
 
     $("#start").click(function () {

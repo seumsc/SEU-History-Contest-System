@@ -7,7 +7,7 @@ var schoolInfo={
         "higherThan90":1,
         "higherThan75":0,
         "higherThan60":1,
-        "Failed":1
+        "failed":1
     }
 }//传入的院系分数概况sample
 var scoreList=[
@@ -160,7 +160,7 @@ function initChartist(){
         labelForUndo=Math.round(100*(config.undoNumber/config.total))+"%";
         //以下总人数还没有和上面的数据统一
         labelA=Math.round(100*(config.generalInfo.scoreBandCount.higherThan90/config.total))+"%";
-        labelB=Math.round(100*(config.generalInfo.scoreBandCount.Failed/config.total))+"%";
+        labelB=Math.round(100*(config.generalInfo.scoreBandCount.failed/config.total))+"%";
         labelC=Math.round(100*(config.generalInfo.scoreBandCount.higherThan75/config.total))+"%";
         labelD=Math.round(100*(config.generalInfo.scoreBandCount.higherThan60/config.total))+"%";
     
@@ -186,13 +186,13 @@ function initChartist(){
             
             labels: [
                 (config.generalInfo.scoreBandCount.higherThan90==0?'':labelA),
-                (config.generalInfo.scoreBandCount.Failed==0?'':labelB),
+                (config.generalInfo.scoreBandCount.failed==0?'':labelB),
                 (config.generalInfo.scoreBandCount.higherThan75==0?'':labelC),
                 (config.generalInfo.scoreBandCount.higherThan60==0?'':labelD)
             ],
             series: [
                 config.generalInfo.scoreBandCount.higherThan90,
-                config.generalInfo.scoreBandCount.Failed,
+                config.generalInfo.scoreBandCount.failed,
                 config.generalInfo.scoreBandCount.higherThan75,
                 config.generalInfo.scoreBandCount.higherThan60
             ]
@@ -382,7 +382,7 @@ $(function () {
                     "higherThan90": "@natural(10,30)",
                     "higherThan75": "@natural(30,60)",
                     "higherThan60": "@natural(30,60)",
-                    "Failed": "@natural(10,30)"
+                    "failed": "@natural(10,30)"
                 }
         }
         }
