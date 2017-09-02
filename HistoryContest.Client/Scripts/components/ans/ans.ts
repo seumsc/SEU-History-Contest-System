@@ -3,12 +3,12 @@ import { Component } from 'vue-property-decorator';//不能被注释掉！
 import jQuery from 'jquery';
 var $ = jQuery.noConflict();
 // import '../../../node_modules/font-awesome/css/font-awesome.css';
-var set = require('./questions.js').set;
-var answerCard = require('./questions.js').answerCard;
+var set = require('./ans.js').set;
+var answerCard = require('./ans.js').answerCard;
 var saveAnsID = require('./ans.js').saveAnsID;
 var saveAns = require('./ans.js').saveAns;
 var submit = require('./ans.js').submit;
-var setRESULT = require('./questions.js').setRESULT;
+var setRESULT = require('./ans.js').setRESULT;
 require('../../../Images/banner.jpg');
 require('../../../Images/bg.jpg');
 require('../../../Images/overlay.png');
@@ -39,7 +39,7 @@ export default {
 				}
 			}
 			$.ajax(settings).done(function (response) {
-				alert(JSON.stringify(response));
+				////alert(JSON.stringify(response));
 				if (response.testState == 0) {
 					/////////////initialize///////////////
 					var settings = {
@@ -54,7 +54,7 @@ export default {
 					}
 					$.ajax(settings).done(function (res) {
 						if (response.isSeedSet != true) {
-							alert("Seed unset! Just hold on a second...")
+							////alert("Seed unset! Just hold on a second...")
 							var reset = {
 								"async": true,
 								// "crossDomain": true,
@@ -66,9 +66,9 @@ export default {
 								}
 							}
 							$.ajax(reset).done(function (res) {
-								alert(JSON.stringify(res))
+								////alert(JSON.stringify(res))
 							})
-							alert("Boom! Bug exterminated(emmm....maybe not)!")
+							////alert("Boom! Bug exterminated(emmm....maybe not)!")
 
 						}
 						///////////
@@ -79,17 +79,17 @@ export default {
 							"contentType": "application/json",
 						}
 						$.ajax(setQuestions).done(function (questions) {
-							alert(JSON.stringify(questions)),
+							////alert(JSON.stringify(questions)),
 								globalQ = questions,
 								set(questions),
 								answerCard(questions)
 						});
 					});
-					alert(JSON.stringify(response.testState));
+					////alert(JSON.stringify(response.testState));
 				}
 				if (response.testState == 1) {
 					/////////////testing/////////////
-					// 	alert("testing!We'll reset your seed for you...");
+					// 	////alert("testing!We'll reset your seed for you...");
 					var reset = {
 						"async": true,
 						// "crossDomain": true,
@@ -101,9 +101,9 @@ export default {
 						}
 					}
 					$.ajax(reset).done(function (reset) {
-						// alert(JSON.stringify(reset))
+						// ////alert(JSON.stringify(reset))
 					})
-					alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
+					////alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
 					var setQuestions = {
 						"async": false,
 						"url": "/api/Question",
@@ -117,7 +117,7 @@ export default {
 					})
 
 					/////////////////////////////////
-					alert(JSON.stringify(response.testState));
+					////alert(JSON.stringify(response.testState));
 				}
 				else if (response.testState == 2) {
 					$.ajax({
@@ -127,16 +127,16 @@ export default {
 						async: false,
 						contentType: "application/json",
 						beforeSend: function () {
-							// alert(this.url);
+							// ////alert(this.url);
 						},
 						success: function (res) {
-							alert("tested!" + res);
+							////alert("tested!" + res);
 							setRESULT(res);
 						},
 						complete: function () {
 						},
 						error: function (request) {
-							alert("error:" + JSON.stringify(request));
+							////alert("error:" + JSON.stringify(request));
 						}
 					});
 
@@ -171,7 +171,7 @@ export default {
 					});
 				}
 				else {
-					alert("Seed unset! Just hold on a second...")
+					////alert("Seed unset! Just hold on a second...")
 					var reset = {
 						"async": true,
 						// "crossDomain": true,
@@ -183,13 +183,13 @@ export default {
 						}
 					}
 					$.ajax(reset).done(function (reset) {
-						alert(JSON.stringify(reset))
+						////alert(JSON.stringify(reset))
 					})
-					alert("Boom! Bug exterminated(emmm....maybe not)!")
+					////alert("Boom! Bug exterminated(emmm....maybe not)!")
 				}
 			});
 			// else if (response.testState == 1) {
-			// 	alert("testing!We'll reset your seed for you...");
+			// 	////alert("testing!We'll reset your seed for you...");
 			// 	var reset = {
 			// 		"async": true,
 			// 		// "crossDomain": true,
@@ -201,9 +201,9 @@ export default {
 			// 		}
 			// 	}
 			// 	$.ajax(reset).done(function (reset) {
-			// 		// alert(JSON.stringify(reset))
+			// 		// ////alert(JSON.stringify(reset))
 			// 	})
-			// 	alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
+			// 	////alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
 			// 	var setQuestions = {
 			// 		"async": false,
 			// 		"url": "/api/Question",
@@ -281,7 +281,7 @@ export default {
 				if (timeState) {
 					if (mm == 0 && ss == 1) {
 						ss--;
-						alert("时间到！");
+						////alert("时间到！");
 						inTime = false;
 						submit(inTime);
 						$(".time").hide();
