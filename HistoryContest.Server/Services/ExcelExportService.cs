@@ -1,4 +1,5 @@
 using HistoryContest.Server.Data;
+using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -138,14 +139,14 @@ namespace HistoryContest.Server.Services
         public void UpdateExcelByDepartmentid(StudentViewModel student)
         {
             string sWebRootFolder = Startup.Environment.WebRootPath;
-            string sFileName1 = @"excel/" + student.StudentID.Substring(0, 3) + ".xlsx";
+            string sFileName1 = @"excel/" + student.StudentID.ToDepartmentID().ToString() + ".xlsx";
 
             FileInfo file1 = new FileInfo(Path.Combine(sWebRootFolder, sFileName1));
             if (!file1.Exists) return;
             using (ExcelPackage package = new ExcelPackage(file1))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                int tot =unitOfWork.DbContext.Students.Count(m=> HistoryContest.Server.Extensions.IDExtension.ToDepartmentID(student.StudentID)==m.Department);
+                int tot =unitOfWork.DbContext.Students.Count(m => student.StudentID.ToDepartmentID() == m.Department);
                 for (int i = 2; i < tot + 2; i++)
                     if (Convert.ToString(worksheet.Cells[i, 1].Value)== student.StudentID)
                     {
