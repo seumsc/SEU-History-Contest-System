@@ -11,7 +11,6 @@ var config = {
     resultHTML: '<section class="panel color4-alt" style = "width:95rem"><div class="inner columns"><div class="span-3-25"><h3 id = "head3" class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style = "visibility:hidden"></div></div></section>',
     resultJSON: {}
 }
-
 //生成网页
 exports.set = function (init) {
     //生成多选题html
@@ -75,6 +74,9 @@ exports.answerCard = function (init) {
 }
 
 exports.setRESULT = function (RESULT) {
+    if(!config.questionArray){
+
+    }
     console.log(JSON.stringify(RESULT));    
     $("#sec1").remove();
     $("#sec1").remove();
@@ -89,11 +91,11 @@ exports.setRESULT = function (RESULT) {
     $("#result-container").html(config.resultHTML);
     config.resultJSON=RESULT;
     var tableContent = "";  
-    for (var resultsIteratorIndex = 0; resultsIteratorIndex < 30; resultsIteratorIndex++) {
+    for (var resultsIteratorIndex = 0; resultsIteratorIndex < RESULT.details.length; resultsIteratorIndex++) {
         if (resultsIteratorIndex % 5 == 0)
             tableContent += "<tr>";
         tableContent += '<td><span class="num">' + (resultsIteratorIndex + 1) + ' </span>'
-        if (RESULT.details[resultsIteratorIndex].rightAnswer == RESULT.details[resultsIteratorIndex].submittedAnswer) {
+        if (RESULT.details[resultsIteratorIndex].correct == RESULT.details[resultsIteratorIndex].submit) {
             tableContent += ' <span class="fa fa-check" style="color:#3caa00"></span></td>'
         }
         else {
@@ -111,8 +113,8 @@ exports.setRESULT = function (RESULT) {
         var $tgt=$(event.target);
         var questionNum=$tgt.find(".num").text();
         console.log(questionNum);
-        var rightAns=RESULT.details[questionNum-1].rightAnswer;
-        var submittedAns=RESULT.details[questionNum-1].submittedAnswer;
+        var rightAns=RESULT.details[questionNum-1].correct;
+        var submittedAns=RESULT.details[questionNum-1].submit;
         var isCorrect=(rightAns==submittedAns?1:0);
         if (questionNum<=20){//选择题
             reviewContent+='<h3 class="major">' +questionNum+'. '+config.questionArray[questionNum-1].question+'</h3>';

@@ -5,18 +5,21 @@ import { Component } from 'vue-property-decorator';//不能被注释掉！
 import $ from 'jquery';
 import Chartist from 'chartist';
 var download = require('../download.js').download;
-var schoolInfo = {
-    "DepartmentID": 711,
-    "CounselorName": "郭佳",
-    "MaxScore": 91,
-    "AverageScore": 75.21,
-    "ScoreBandCount": {
-        "HigherThan90": 5,
-        "HigherThan75": 36,
-        "HigherThan60": 100,
-        "Failed": 20
-    }
+
+var departmentInfo = {
+    "maxScore": 0,
+    "averageScore": 0,
+    "scoreBandCount":
+    {
+        "higherThan90": 0,
+        "higherThan75": 0,
+        "higherThan60": 0,
+        "failed": 0,
+        "notTested": 3
+    },
+    "updateTime": "2017-09-01T18:46:26.2034528+08:00"
 }
+
 var DepartmentNameMap = {
     "010": "建筑学院",
     "020": "机械工程学院",
@@ -47,8 +50,8 @@ $.ajax({
     },
     success: function (res) {
         // alert("return:"+JSON.stringify(res));
-        for(var i = 0; i<res.length;i++){
-            if(res[i].isCompleted){
+        for (var i = 0; i < res.length; i++) {
+            if (res[i].isCompleted) {
                 done.students.push(res[i]);
             }
             else undo.students.push(res[i]);
@@ -61,27 +64,27 @@ $.ajax({
         alert("get scores/all/{id}error:" + JSON.stringify(request));
     }
 });
-// $.ajax({
-//     url: '/api/Counselor/Scores/Summary/{id}', //请求的url地址
-//     type: "GET", //请求方式
-//     dataType: "json", //返回格式为json
-//     async: false,
-//     contentType: "application/json",
-//     beforeSend: function () {
-//     },
-//     success: function (res) {
-//         alert(res);
-//         schoolInfo = res;
-//     },
-//     complete: function () {
-//     },
-//     error: function (request) {
-//         alert("get scores/summary/{id} error:" + JSON.stringify(request));
-//     }
-// });
+$.ajax({
+    url: '/api/Counselor/Scores/Summary', //请求的url地址
+    type: "GET", //请求方式
+    dataType: "json", //返回格式为json
+    async: false,
+    contentType: "application/json",
+    beforeSend: function () {
+    },
+    success: function (res) {
+        departmentInfo = res;
+        alert(JSON.stringify(departmentInfo));
+    },
+    complete: function () {
+    },
+    error: function (request) {
+        alert("get scores/summary/{id} error:" + JSON.stringify(request));
+    }
+});
 
 var config = {
-    generalInfo: schoolInfo,
+    generalInfo: departmentInfo,
     doneNumber: done.students.length,
     undoNumber: undo.students.length,
     total: done.students.length + undo.students.length,
@@ -147,10 +150,10 @@ function initChartist() {
     var labelForDone = Math.round(100 * (config.doneNumber / config.total)) + "%";
     var labelForUndo = Math.round(100 * (config.undoNumber / config.total)) + "%";
     //以下总人数还没有和上面的数据统一
-    var labelA = Math.round(100 * (config.generalInfo.ScoreBandCount.HigherThan90 / 161)) + "%";
-    var labelB = Math.round(100 * (config.generalInfo.ScoreBandCount.Failed / 161)) + "%";
-    var labelC = Math.round(100 * (config.generalInfo.ScoreBandCount.HigherThan75 / 161)) + "%";
-    var labelD = Math.round(100 * (config.generalInfo.ScoreBandCount.HigherThan60 / 161)) + "%";
+    var labelA = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan90 / 161)) + "%";
+    var labelB = Math.round(100 * (config.generalInfo.scoreBandCount.failed / 161)) + "%";
+    var labelC = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan75 / 161)) + "%";
+    var labelD = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan60 / 161)) + "%";
 
     new Chartist.Pie('#completion-chart', {
 
@@ -160,16 +163,16 @@ function initChartist() {
     });
     new Chartist.Pie('#overall-chart', {
         labels: [labelA, labelB, labelC, labelD],
-        series: [config.generalInfo.ScoreBandCount.HigherThan90,
-        config.generalInfo.ScoreBandCount.Failed,
-        config.generalInfo.ScoreBandCount.HigherThan75,
-        config.generalInfo.ScoreBandCount.HigherThan60
+        series: [config.generalInfo.scoreBandCount.higherThan90,
+        config.generalInfo.scoreBandCount.failed,
+        config.generalInfo.scoreBandCount.higherThan75,
+        config.generalInfo.scoreBandCount.higherThan60
         ]
     });
 }
 
 function commonSet() {
-    $("#school-name").html(DepartmentNameMap[config.generalInfo.DepartmentID]);
+    // $("#school-name").html(DepartmentNameMap[config.generalInfo.DepartmentID]);
     if (config.undoNumber == 0) {
         $("#done-info").html(config.comments.dones.perfect);
         $("#undo-info").hide();
@@ -185,7 +188,7 @@ function commonSet() {
         $("#undo-info").html(config.comments.undos.common);
         $("#empty-comment").hide();
     }
-    $("#average-score").html(config.generalInfo.AverageScore);
+    $("#average-score").html(config.generalInfo.averageScore);
 
 }
 var temp = $.extend(true, done);//深拷贝 !important
@@ -196,24 +199,24 @@ export default {
         return {
         }
     },
-    mounted:function(){
+    mounted: function () {
         this.$nextTick(function () {
-            this.refresh() 
+            this.refresh()
         })
     },
     methods: {
-        department:function(){
+        department: function () {
             $.ajax({
                 url: '/api/Counselor/ExportExcelofDepartment', //请求的url地址
                 type: "POST", //请求方式
                 // dataType: "json", //返回格式为json
                 async: true,
-                crossDomain:true,
-                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",                
+                crossDomain: true,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 beforeSend: function () {
                     alert('start download');
                 },
-                success:function(req){
+                success: function (req) {
                     download(req);
                 },
                 complete: function () {
