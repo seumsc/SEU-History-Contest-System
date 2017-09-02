@@ -18,6 +18,7 @@ require('../../../Images/background8.jpg');
 $(function () {
 
   var bgCounter = 0;
+  var bgCounter2 = 0;
   var backgrounds = [
     "/dist/Images/background0.jpg",
     "/dist/Images/background1.jpg",
@@ -31,13 +32,21 @@ $(function () {
 
   ];
   function changeBackground() {
+   
+
+    $('#bg1').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
     bgCounter = (bgCounter + 1) % backgrounds.length;
-
-    $('.bg').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
-    setTimeout(changeBackground, 10000);
+    setTimeout(changeBackground, 5000);
   }
-  changeBackground();
+  function changeBackground2() {
+    
 
+    $('#bg2').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter2]) }).fadeIn(1000);
+    bgCounter2 = (bgCounter2 + 1) % backgrounds.length;
+    setTimeout(changeBackground2, 5000);
+  }
+  setTimeout(changeBackground,500);
+  setTimeout(changeBackground2, 1250);
   $("#go-to-sign-in").click(function(){
     $("#signin").css("display","");
     $("#signup").css("display","none");    
