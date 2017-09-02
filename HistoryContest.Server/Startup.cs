@@ -270,6 +270,7 @@ namespace HistoryContest.Server
             }
             else
             {
+                questionSeeds.ForEach(s => s.ID = 0);
                 unitOfWork.DbContext.QuestionSeeds.AddRange(questionSeeds);
             }
             unitOfWork.Save();

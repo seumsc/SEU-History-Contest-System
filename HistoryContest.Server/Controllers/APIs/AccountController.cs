@@ -12,6 +12,7 @@ using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using System.Security.Claims;
+using System.Net;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -41,13 +42,14 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 若用户已登录，则布尔值会被标记为false, 并返回用户信息
         /// </remarks>
         /// <param name="model">用户名与密码</param>
-        /// <returns>学号对应的考试结果</returns>
+        /// <returns>登录结果</returns>
         /// <response code="200">
         /// 返回登录结果。返回JSON格式举例：
         /// 
         ///     验证失败时：
         ///     {
-        ///         "isSuccessful": false    
+        ///         "isSuccessful": false
+        ///         "message": "Validation failed"
         ///     }
         /// 
         ///     验证成功时：
@@ -104,29 +106,73 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             else
             {
-                return Json(new { isSuccessful = false });
+                return Json(new { isSuccessful = false, message = "Validation failed" });
             }
         }
 
-        //[AllowAnonymous]
-        //[HttpPost("[action]")]
-        //public IActionResult Register(RegistrationViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <remarks>
+        /// 用一个布尔值标记登录是否注册成功
+        /// 
+        /// 后台对注册的信息验证失败时，布尔值返回false
+        /// 
+        /// 目前，非学生身份注册会直接返回BadRequest。
+        /// </remarks>
+        /// <param name="model">用户名、密码、真实姓名、身份（默认为Student）</param>
+        /// <returns>注册结果</returns>
+        /// <response code="200">
+        /// 返回注册结果。返回JSON格式举例：
+        /// 
+        ///     验证失败时：
+        ///     {
+        ///         "isSuccessful": false    
+        ///     }
+        /// 
+        ///     验证成功时：
+        ///     {
+        ///         "isSuccessful": true,
+        ///         "userViewModel": {
+        ///             "userName": "09016319",
+        ///             "realName": "叶志浩",
+        ///             "role": "Student"
+        ///         }
+        ///     }
+        ///     
+        /// </response>
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Body JSON content invalid");
+            }
 
-        //    UserViewModel user = accountService.CreateUser(model.UserName, model.Password, model.role?? "Student");
-        //    if (user != null)
-        //    {
-        //        return Json(new { isSuccessful = true, user });
-        //    }
-        //    else
-        //    {
-        //        return Json(new { isSuccessful = false });
-        //    }
-        //}
+            if (model.Role != nameof(Student))
+            {
+                return BadRequest("Student registration only");
+            }
+
+            UserViewModel user = null;
+            try
+            {
+                user = await accountService.CreateUser(model);
+            }
+            catch (WebException ex)
+            {
+                return Json(new { isSuccessful = false, message = ex.Message + ", please try again" });
+            }
+            if (user != null)
+            {
+                return Json(new { isSuccessful = true, user });
+            }
+            else
+            {
+                return Json(new { isSuccessful = false, message = "Registration validation failed. Please make sure the information provided is correct." });
+            }
+        }
 
         /// <summary>
         /// 注销
