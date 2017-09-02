@@ -34,19 +34,19 @@ $(function () {
   function changeBackground() {
 
 
-    $('#bg1').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
+    $('#bg1').fadeOut(500, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(500);
     bgCounter = (bgCounter + 1) % backgrounds.length;
     setTimeout(changeBackground, 5000);
   }
   function changeBackground2() {
 
 
-    $('#bg2').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter2]) }).fadeIn(1000);
+    $('#bg2').fadeOut(500, function () { $(this).attr('src', backgrounds[bgCounter2]) }).fadeIn(500);
     bgCounter2 = (bgCounter2 + 1) % backgrounds.length;
     setTimeout(changeBackground2, 5000);
   }
-  setTimeout(changeBackground, 500);
-  setTimeout(changeBackground2, 1250);
+  setTimeout(changeBackground, 1500);
+  setTimeout(changeBackground2, 1875);
   $("#go-to-sign-in").click(function () {
     $("#signin").css("display", "");
     $("#signup").css("display", "none");
