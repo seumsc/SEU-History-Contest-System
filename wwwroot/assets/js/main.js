@@ -1,3 +1,4 @@
+/********************Webpage Common Configurations********************/
 var answerQues=[];//id,answer
 var config={
 	totalAmount:30,
@@ -7,9 +8,9 @@ var config={
 	resultJSON:{}
 }
 
+/********************Webpage Setting********************/
 var questionsIteratorIndex;
 var	answersIteratorIndex;
-
 //生成题目
 function setQUESTION(QUESTIONS){
 	var content = '';
@@ -68,7 +69,6 @@ function setQUESTION(QUESTIONS){
 
 }
 //生成结果
-
 function setRESULT(RESULT){
 	var tableContent="";
     for(var resultsIteratorIndex=0;resultsIteratorIndex<config.totalAmount;resultsIteratorIndex++){
@@ -88,40 +88,6 @@ function setRESULT(RESULT){
     $('#table-content').html(tableContent);
     $("#score").text(RESULT.score);
 }
-
-function saveAns(clickID){
-	var ans = clickID.value;
-	var ID=clickID.name;
-	var activeNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
-	var testing;
-    for(var i=0;i<answerQues.length;i++){//这个循环用来覆盖保存答案
-    	if( answerQues[i].id==ID&&answerQues[i].answer!=ans){
-			if(answerQues[i].answer==-1){
-				$("#question"+activeNum).addClass("answered");
-				
-				setTimeout(function(){			
-					$("#question"+(activeNum+1)).click();		
-				},300);
-			}
-		   answerQues[i].answer =ans;
-		   testing=JSON.stringify(answerQues);
-		   console.log(testing);
-
-		  
-	   
-	    }
-		else if(answerQues[i].id==ID&&answerQues[i].answer==ans)
-	   		return;         
-    	}
-	/*	var check ={};
-       	check.ID=ID;
-		check.answer=ans;
-		answerQues.push(check);//用push方法传入数组		
-		testing=JSON.stringify(answerQues);
-		console.log(testing);*/
-
-}
-
 function resetToShowResult(){
 	$.ajax({
 		url: '/api/Result', //请求的url地址
@@ -223,29 +189,39 @@ function resetToShowResult(){
 			alert("error:" + JSON.stringify(request));
 		}
 	});
-	
-
 }
-function fetchQuestions(){
-	$.ajax({
-		url: "/api/Question", //请求的url地址
-		contentType:"application/json",
-		dataType: "json", //返回格式为json
-		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-		type: "GET", //请求方式		
-		success: function (req) {
-			config.questionArray=req;
-			config.totalAmount=config.questionArray.length;
-			setQUESTION(config.questionArray);
-			
-			console.log(config.totalAmount);
-		},	
-		error: function (req) {
-			console.log(req);
-			alert("请检查网络");
-			
-		}
-	});
+/********************Core Functions********************/
+function saveAns(clickID){
+	var ans = clickID.value;
+	var ID=clickID.name;
+	var activeNum=parseInt(($(clickID).parents(".inner.columns").prop("id")).substr(1));
+	var testing;
+    for(var i=0;i<answerQues.length;i++){//这个循环用来覆盖保存答案
+    	if( answerQues[i].id==ID&&answerQues[i].answer!=ans){
+			if(answerQues[i].answer==-1){
+				$("#question"+activeNum).addClass("answered");
+				
+				setTimeout(function(){			
+					$("#question"+(activeNum+1)).click();		
+				},300);
+			}
+		   answerQues[i].answer =ans;
+		   testing=JSON.stringify(answerQues);
+		   console.log(testing);
+
+		  
+	   
+	    }
+		else if(answerQues[i].id==ID&&answerQues[i].answer==ans)
+	   		return;         
+    	}
+	/*	var check ={};
+       	check.ID=ID;
+		check.answer=ans;
+		answerQues.push(check);//用push方法传入数组		
+		testing=JSON.stringify(answerQues);
+		console.log(testing);*/
+
 }
 function submit(){
 	console.log(answerQues.length);
@@ -280,6 +256,29 @@ function submit(){
 			}
 		  });
 	}
+/********************API Interface********************/
+
+function fetchQuestions(){
+	$.ajax({
+		url: "/api/Question", //请求的url地址
+		contentType:"application/json",
+		dataType: "json", //返回格式为json
+		async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+		type: "GET", //请求方式		
+		success: function (req) {
+			config.questionArray=req;
+			config.totalAmount=config.questionArray.length;
+			setQUESTION(config.questionArray);
+			
+			console.log(config.totalAmount);
+		},	
+		error: function (req) {
+			console.log(req);
+			alert("请检查网络");
+			
+		}
+	});
+}
 
 
 (function($) {
