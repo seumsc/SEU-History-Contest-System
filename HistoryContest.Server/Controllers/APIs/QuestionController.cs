@@ -92,15 +92,11 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <response code="403">考生已考完</response>
         /// <response code="404">ID没有对应的问题</response>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(QuestionViewModel), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetQuestionById(int id)
         {
-            if (this.Session().IsTested)
-            {
-                return Forbid();
-            }
-
             var question = await unitOfWork.QuestionRepository.GetQuestionFromCacheAsync(id);
             if (question == null)
             {
