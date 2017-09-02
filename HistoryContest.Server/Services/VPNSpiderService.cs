@@ -25,7 +25,7 @@ namespace HistoryContest.Server.Services
 
         public async Task<bool> ValidateStudentRegistration(RegisterViewModel model)
         {
-            if (await ConnectToVPN("cardid", "password"))
+            if (await ConnectToVPN("username", "password"))
             {
                 var rawData = await GetStudentData(model.UserName);
                 await LogOut();
@@ -59,6 +59,10 @@ namespace HistoryContest.Server.Services
                 var pageSource = await (await GetRequest(response.Headers.Location.AbsoluteUri)).Content.ReadAsStringAsync();
                 var webResponse = await ConfirmOpenSession(pageSource);
                 return webResponse.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"); // 选择Session关闭失败
+            }
+            else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"))
+            { // 登录失败
+                return false;
             }
             else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi"))
             {

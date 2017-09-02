@@ -33,14 +33,14 @@ $.ajax({
     beforeSend: function () {
     },
     success: function (res) {
-        alert("return:" + JSON.stringify(res));
+        console.log("return:" + JSON.stringify(res));
         general = res;
     },
     complete: function () {
-        alert("general" + JSON.stringify(general));
+        console.log("general" + JSON.stringify(general));
     },
     error: function (request) {
-        alert("get scores/all/{id}error:" + JSON.stringify(request));
+        console.log("get scores/all/{id}error:" + JSON.stringify(request));
     }
 });
 
@@ -79,7 +79,7 @@ var by = function (name) {
 // function setDone(DONE) {
 //     // var DONE = JSON.stringify(done);
 //     var doneContent = "";
-//     // alert(DONE.students.length);
+//     // console.log(DONE.students.length);
 //     for (var doneIteratorIndex = 0; doneIteratorIndex < DONE.students.length; doneIteratorIndex++) {
 //         doneContent += '<tr><td>' + DONE.students[doneIteratorIndex].studentID
 //             + '</td><td>' + DONE.students[doneIteratorIndex].name
@@ -88,10 +88,10 @@ var by = function (name) {
 //     }
 //     $("#table-done").find("tbody").html(doneContent);
 //     // $("#tabledone").append("<tbody>" + doneContent + "</tbody>");
-//     // alert(doneContent);
+//     // console.log(doneContent);
 // }
 function initChartist() {
-    // alert("initChart");        
+    // console.log("initChart");        
     var labelForDone = Math.round(100 * (1 - general.scoreBandCount.notTested / tot)) + "%";
     var labelForUndo = Math.round(100 * (general.scoreBandCount.notTested / tot)) + "%";
     //以下总人数还没有和上面的数据统一
@@ -160,7 +160,7 @@ export default {
                 crossDomain: true,
                 contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 beforeSend: function () {
-                    alert('start download');
+                    console.log('start download');
                 },
                 success: function (req) {
                     download(req);
@@ -168,14 +168,14 @@ export default {
                 complete: function () {
                 },
                 error: function (request) {
-                    alert("error:" + JSON.stringify(request));
+                    console.log("error:" + JSON.stringify(request));
                 }
             });
 
         },
 
         refresh: function () {
-            // alert("click!");
+            // console.log("click!");
             initChartist();
             // setUndo(undo);
             // setDone(done);

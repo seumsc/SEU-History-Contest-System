@@ -19,29 +19,73 @@ var departmentInfo = {
     },
     "updateTime": "2017-09-01T18:46:26.2034528+08:00"
 }
+var undo = {
+    'students': [
+    ]
+};
+var done = {
+    'students': [
+    ]
+};
+$.ajax({
+    url: '/api/Counselor/Scores/All', //请求的url地址
+    type: "GET", //请求方式
+    dataType: "json", //返回格式为json
+    async: false,
+    contentType: "application/json",
+    beforeSend: function () {
+    },
+    success: function (res) {
+        // console.log("return:"+JSON.stringify(res));
+        for (var i = 0; i < res.length; i++) {
+            if (res[i].isCompleted) {
+                done.students.push(res[i]);
+            }
+            else undo.students.push(res[i]);
+        }
+    },
+    complete: function () {
+    },
+    error: function (request) {
+        console.log("get scores/all/{id}error:" + JSON.stringify(request));
+    }
+});
+$.ajax({
+    url: '/api/Counselor/Scores/Summary', //请求的url地址
+    type: "GET", //请求方式
+    dataType: "json", //返回格式为json
+    async: false,
+    contentType: "application/json",
+    beforeSend: function () {
+    },
+    success: function (res) {
+        departmentInfo = res;
+        console.log(JSON.stringify(departmentInfo));
+    },
+    complete: function () {
+    },
+    error: function (request) {
+        console.log("get scores/summary/{id} error:" + JSON.stringify(request));
+    }
+});
 
-var DepartmentNameMap = {
-    "010": "建筑学院",
-    "020": "机械工程学院",
-    "030": "能源与环境学院",
-    "040": "信息科学与工程学院",
-    "050": "土木工程学院",
-    "060": "电子科学与工程学院",
-    "070": "数学学院",
-    "080": "自动化学院",
-    "090": "计算机科学与工程学院、软件学院",
-    "711": "计算机科学与工程学院、软件学院"
+var config = {
+    generalInfo: departmentInfo,
+    doneNumber: done.students.length,
+    undoNumber: undo.students.length,
+    total: done.students.length + undo.students.length,
+    comments: {
+        dones: {
+            perfect: "大家都很听话，全部完成作答了哦！",
+            common: done.students.length + "人已完成答题,"
+        },
+        undos: {
+            worst: "偌大的学院，到现在还没有一人完成，大家都去哪儿浪了呢？",
+            common: "仍有" + undo.students.length + "人未完成。"
+        }
+    }
+
 }
-
-
-
-var undo = {'students': []};
-var done = {'students': []};
-var tot;
-
-
-
-
 var by = function (name) {
     return function (o, p) {
         var a, b;
@@ -88,53 +132,39 @@ function setDone(DONE) {
     // console.log(doneContent);
 }
 function initChartist() {
-    
     // console.log("initChart");        
-    var labelForDone = Math.round(100 * (done.students.length / tot)) + "%";
-    var labelForUndo = Math.round(100 * (undo.students.length / tot)) + "%";
+    var labelForDone = Math.round(100 * (config.doneNumber / config.total)) + "%";
+    var labelForUndo = Math.round(100 * (config.undoNumber / config.total)) + "%";
     //以下总人数还没有和上面的数据统一
-    var labelA = Math.round(100 * (departmentInfo.scoreBandCount.higherThan90 / done.students.length)) + "%";
-    var labelB = Math.round(100 * (departmentInfo.scoreBandCount.failed / done.students.length)) + "%";
-    var labelC = Math.round(100 * (departmentInfo.scoreBandCount.higherThan75 / done.students.length)) + "%";
-    var labelD = Math.round(100 * (departmentInfo.scoreBandCount.higherThan60 / done.students.length)) + "%";
+    var labelA = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan90 / config.doneNumber)) + "%";
+    var labelB = Math.round(100 * (config.generalInfo.scoreBandCount.failed / config.doneNumber)) + "%";
+    var labelC = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan75 / config.doneNumber)) + "%";
+    var labelD = Math.round(100 * (config.generalInfo.scoreBandCount.higherThan60 / config.doneNumber)) + "%";
 
     new Chartist.Pie('#completion-chart', {
 
         labels: [labelForDone,
-            (undo.students.length == 0 ? '' : labelForUndo)],
-        series: [done.students.length, undo.students.length]
+            (config.undoNumber == 0 ? '' : labelForUndo)],
+        series: [config.doneNumber, config.undoNumber]
     });
     new Chartist.Pie('#overall-chart', {
         labels: [labelA, labelB, labelC, labelD],
-        series: [departmentInfo.scoreBandCount.higherThan90,
-        departmentInfo.scoreBandCount.failed,
-        departmentInfo.scoreBandCount.higherThan75,
-        departmentInfo.scoreBandCount.higherThan60
+        series: [config.generalInfo.scoreBandCount.higherThan90,
+        config.generalInfo.scoreBandCount.failed,
+        config.generalInfo.scoreBandCount.higherThan75,
+        config.generalInfo.scoreBandCount.higherThan60
         ]
     });
 }
 
 function commonSet() {
-    var config = {
-        comments: {
-            dones: {
-                perfect: "大家都很听话，全部完成作答了哦！",
-                common: done.students.length + "人已完成答题,"
-            },
-            undos: {
-                worst: "偌大的学院，到现在还没有一人完成，大家都去哪儿浪了呢？",
-                common: "仍有" + undo.students.length + "人未完成。"
-            }
-        }
-    
-    }
-    // $("#school-name").html(DepartmentNameMap[departmentInfo.DepartmentID]);
-    if (undo.students.length == 0) {
+    // $("#school-name").html(DepartmentNameMap[config.generalInfo.DepartmentID]);
+    if (config.undoNumber == 0) {
         $("#done-info").html(config.comments.dones.perfect);
         $("#undo-info").hide();
         $("#empty-comment").show();
     }
-    else if (done.students.length == 0) {
+    else if (config.doneNumber == 0) {
         $("#done-info").hide();
         $("#undo-info").html(config.comments.undos.worst);
         $("#empty-comment").hide();
@@ -144,16 +174,11 @@ function commonSet() {
         $("#undo-info").html(config.comments.undos.common);
         $("#empty-comment").hide();
     }
-    $("#average-score").html(departmentInfo.averageScore);
-    $("#max-score").html(departmentInfo.maxScore);
-
+    $("#average-score").html(config.generalInfo.averageScore);
+    $("#max-score").html(config.generalInfo.maxScore);    
 }
-
-
-
-
-
-
+var temp = $.extend(true, done);//深拷贝 !important
+var cnt = 0;
 
 export default {
     data() {
@@ -161,73 +186,12 @@ export default {
         }
     },
     mounted: function () {
-        var temp = $.extend(true, done);//深拷贝 !important
-        var cnt = 0;        
         this.$nextTick(function () {
             this.refresh()
         })
     },
     methods: {
-        //function01 seperate tested and untested students
-        setUndoAndDone:function(){
-            $.ajax({
-                url: '/api/Counselor/Scores/All', //请求的url地址
-                type: "GET", //请求方式
-                dataType: "json", //返回格式为json
-                async: true,
-                contentType: "application/json",
-                beforeSend: function () {
-                },
-                success: function (res) {
-                    undo = {
-                        'students': [
-                        ]
-                    };
-                    done = {
-                        'students': [
-                        ]
-                    };
-                    for (var i = 0; i < res.length; i++) {
-                        if (res[i].isCompleted) {
-                            done.students.push(res[i]);
-                        }else undo.students.push(res[i]);
-                    }
-                    tot = res.length;
-                    console.log(JSON.stringify(undo));
-                    console.log(JSON.stringify(done));
-                    console.log(JSON.stringify(tot));
-
-                },
-                complete: function () {
-                },
-                error: function (request) {
-                    console.log("get scores/all/{id}error:" + JSON.stringify(request));
-                }
-            });    
-        },
-        //function02 get students Info for this department
-        getDepartmentInfo:function(){
-            $.ajax({
-                url: '/api/Counselor/Scores/Summary', //请求的url地址
-                type: "GET", //请求方式
-                dataType: "json", //返回格式为json
-                async: false,
-                contentType: "application/json",
-                beforeSend: function () {
-                },
-                success: function (res) {
-                    departmentInfo = res;
-                    console.log(JSON.stringify(departmentInfo));
-                },
-                complete: function () {
-                },
-                error: function (request) {
-                    console.log("get scores/summary/{id} error:" + JSON.stringify(request));
-                }
-            });
-        },
-        //function03 download excel
-        exportExcellofDepartment: function () {
+        department: function () {
             $.ajax({
                 url: '/api/Counselor/ExportExcelofDepartment', //请求的url地址
                 type: "POST", //请求方式
@@ -247,15 +211,13 @@ export default {
                     console.log("error:" + JSON.stringify(request));
                 }
             });
+
         },
         refresh: function () {
-            this.setUndoAndDone();
-            this.getDepartmentInfo();
-            setUndo(undo);
-            setDone(done);
-
             // console.log("click!");
             initChartist();
+            setUndo(undo);
+            setDone(done);
             commonSet();
             console.log(done);
             $("#table-done").find("th.score").click((function () {

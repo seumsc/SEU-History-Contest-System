@@ -32,34 +32,33 @@ $(function () {
 
   ];
   function changeBackground() {
-   
+
 
     $('#bg1').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
     bgCounter = (bgCounter + 1) % backgrounds.length;
     setTimeout(changeBackground, 5000);
   }
   function changeBackground2() {
-    
+
 
     $('#bg2').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter2]) }).fadeIn(1000);
     bgCounter2 = (bgCounter2 + 1) % backgrounds.length;
     setTimeout(changeBackground2, 5000);
   }
-  setTimeout(changeBackground,500);
+  setTimeout(changeBackground, 500);
   setTimeout(changeBackground2, 1250);
-  $("#go-to-sign-in").click(function(){
-    $("#signin").css("display","");
-    $("#signup").css("display","none");    
+  $("#go-to-sign-in").click(function () {
+    $("#signin").css("display", "");
+    $("#signup").css("display", "none");
   });
-  $("#go-to-sign-up").click(function(){
-    $("#signin").css("display","none");
-    $("#signup").css("display","");    
+  $("#go-to-sign-up").click(function () {
+    $("#signin").css("display", "none");
+    $("#signup").css("display", "");
   });
 
 });
 var username = "";
 var password = "";
-
 
 export default {
   data() {
@@ -73,6 +72,40 @@ export default {
     },
     isAdmin: function () {
       this.$router.replace({ path: '/dashboard/statistics' })
+    },
+    signup: function () {
+      // alert("click!");
+        var info = {
+          "UserName": "",
+          "Password": "",
+          "RealName": "",
+          "Role":"Student"
+        }
+        info.UserName = $("#signup-username").val();
+        info.Password = $("#signup-password").val();
+        info.RealName = $("#signup-name").val();
+        var _this = this;
+        $.ajax({
+          url: '/api/Account/Register', //请求的url地址
+          type: "POST", //请求方式
+          dataType: "json", //返回格式为json
+          async: false, //一定要设置为同步orz
+          data: JSON.stringify(info),
+          contentType: "application/json-patch+json;charset=utf-8",
+          beforeSend: function () {
+            alert(this.data)
+          },
+          success: function (req) {
+            alert(JSON.stringify(req))
+            _this.isStu();            
+          },
+          complete: function () {
+            alert("complete");
+          },
+          error: function (request) {
+            alert("sign up error:" + JSON.stringify(request));
+          }
+        });
     },
     submit: function () {
       if (verify() == true) {
@@ -97,15 +130,15 @@ export default {
           success: function (req) {
             if (req.isSuccessful) {
               if (req.userViewModel.role == "Student") {
-                (<any>window).user.isLoggedIn=true;
-                (<any>window).user.id= JSON.stringify(info.userName);
-                (<any>window).user.role =JSON.stringify(req.userViewModel.role);
+                (<any>window).user.isLoggedIn = true;
+                (<any>window).user.id = JSON.stringify(info.userName);
+                (<any>window).user.role = JSON.stringify(req.userViewModel.role);
                 _this.isStu();
               }
               else {
-                (<any>window).user.isLoggedIn=true;
-                (<any>window).user.id= JSON.stringify(info.userName);
-                (<any>window).user.role =JSON.stringify(req.userViewModel.role);
+                (<any>window).user.isLoggedIn = true;
+                (<any>window).user.id = JSON.stringify(info.userName);
+                (<any>window).user.role = JSON.stringify(req.userViewModel.role);
                 _this.isAdmin();
               }
               // else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
