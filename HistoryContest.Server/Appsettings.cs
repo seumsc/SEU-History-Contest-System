@@ -24,5 +24,7 @@ namespace HistoryContest.Server
         public QuestionCounts QuestionCount { get; set; }
         public int QuestionSeedScale;
         public TimeSpan TestTime { get; set; }
+        public TimeSpan SchoolSummaryExpireTime { get; set; }
+        public string[] VPNConnection { get; set; }
     }
 }

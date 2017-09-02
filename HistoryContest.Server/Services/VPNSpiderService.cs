@@ -25,7 +25,7 @@ namespace HistoryContest.Server.Services
 
         public async Task<bool> ValidateStudentRegistration(RegisterViewModel model)
         {
-            if (await ConnectToVPN("username", "password"))
+            if (await ConnectToVPN("cardid", "password"))
             {
                 var rawData = await GetStudentData(model.UserName);
                 await LogOut();
