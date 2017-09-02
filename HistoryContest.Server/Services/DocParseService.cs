@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Data;
 using Newtonsoft.Json;
+using HistoryContest.Server.Models;
 
 namespace HistoryContest.Server.Services
 {
@@ -59,6 +60,40 @@ namespace HistoryContest.Server.Services
 
             Console.WriteLine("Finished.");
             return new string[] { choiceSeedPath, trueFalseSeedPath };
+        }
+
+        public static string[] ParseStudentInformation(string path)
+        {
+            var students = new List<StudentInformation>();
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                Console.Write("Processing...Parsed ");
+                var entries = sr.ReadToEnd().Split("\r\n");
+                Console.WriteLine("entries:{0}", entries.Length-1);
+
+                for (int i = 1; i < entries.Length; ++i)
+                {
+                    string oneline = entries[i].ToString();
+
+                    string[] information = oneline.Split("\t");
+                    
+                    students.Add(new StudentInformation
+                    {
+                        ID = information[1],
+                        Name = information[0],
+                        CardID = information[2]
+                    });
+                }
+            }
+
+            string studentSeedPath = ContestContext.GetSeedPath<Student>();
+
+            Console.WriteLine("\nSerializing to json file...");
+            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students, Formatting.Indented));
+
+            Console.WriteLine("Finished.");
+            return new string[] { studentSeedPath };
         }
     }
 }
