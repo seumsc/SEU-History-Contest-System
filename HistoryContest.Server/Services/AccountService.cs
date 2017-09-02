@@ -51,12 +51,16 @@ namespace HistoryContest.Server.Services
 
         public async Task<UserViewModel> CreateUser(RegisterViewModel model)
         {
+            if (await GetUser(model.UserName) != null)
+            {
+                throw new ArgumentException("UserName has already been registered.");
+            }
             switch (model.Role)
             {
                 case nameof(Student):
                     try
                     {
-                        if (!new VPNSpiderService().ValidateStudentRegistration(model))
+                        if (!await new VPNSpiderService().ValidateStudentRegistration(model))
                         {
                             return null;
                         }
@@ -76,6 +80,7 @@ namespace HistoryContest.Server.Services
                     };
                     // Save Data
                     await unitOfWork.StudentRepository.InsertAsync(student);
+                    await unitOfWork.SaveAsync();
                     await unitOfWork.Cache.StudentEntities(counselor.Department).SetAsync(model.UserName, student);
                     await unitOfWork.Cache.StudentViewModels(counselor.Department).SetAsync(model.UserName, (StudentViewModel)student);
                     return new UserViewModel { UserName = model.UserName, RealName = model.RealName, Role = model.Role };

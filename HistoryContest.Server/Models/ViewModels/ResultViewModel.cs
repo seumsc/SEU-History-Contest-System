@@ -13,7 +13,7 @@ namespace HistoryContest.Server.Models.ViewModels
         [DefaultValue(1)]
         public int Correct { get; set; }
         [DefaultValue(0)]
-        public int Submit { get; set; }
+        public int? Submit { get; set; }
     }
 
     public class ResultViewModel

@@ -127,8 +127,14 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 
         ///     验证失败时：
         ///     {
-        ///         "isSuccessful": false    
+        ///         "isSuccessful": false
+        ///         "message" : string
         ///     }
+        ///     
+        /// message分为以下几种：
+        /// * 注册信息验证不通过: "Registration validation failed. Please make sure the information provided is correct."
+        /// * 用户名已存在: "UserName has already been registered."
+        /// * 验证服务器连接失败: "Problem in connecting validation network. Please Try again."
         /// 
         ///     验证成功时：
         ///     {
@@ -160,9 +166,13 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 user = await accountService.CreateUser(model);
             }
+            catch (ArgumentException ex)
+            {
+                return Json(new { isSuccessful = false, message = ex.Message });
+            }
             catch (WebException ex)
             {
-                return Json(new { isSuccessful = false, message = ex.Message + ", please try again" });
+                return Json(new { isSuccessful = false, message = ex.Message + ". Please try again." });
             }
             if (user != null)
             {

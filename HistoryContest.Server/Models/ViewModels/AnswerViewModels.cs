@@ -15,7 +15,7 @@ namespace HistoryContest.Server.Models.ViewModels
         public int ID { get; set; }
         [Required]
         [DefaultValue(0)]
-        public int Answer { get; set; }
+        public int? Answer { get; set; }
     }
 
     public class CorrectAnswerViewModel

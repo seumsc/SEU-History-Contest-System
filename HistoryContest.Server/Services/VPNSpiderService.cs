@@ -5,22 +5,37 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using HistoryContest.Server.Models.ViewModels;
+using System.Net.Http;
 
 namespace HistoryContest.Server.Services
 {
     public class VPNSpiderService
     {
-        string CookieHeader { get; set; }
+        public string CookieHeader { get; set; }
+        private CookieContainer cookieContainer;
+        private HttpClient Client { get; set; }
 
-        public bool ValidateStudentRegistration(RegisterViewModel model)
+        public VPNSpiderService()
         {
-            if (ConnectToVPN("username", "password"))
-            {
-                var rawData = GetStudentData(model.UserName);
+            cookieContainer = new CookieContainer();
+            Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = cookieContainer });
+        }
 
-                LogOut();
-                return true;
+        public async Task<bool> ValidateStudentRegistration(RegisterViewModel model)
+        {
+            if (await ConnectToVPN("username", "password"))
+            {
+                var rawData = await GetStudentData(model.UserName);
+                await LogOut();
+                if (rawData.Contains("没有找到该学生信息"))
+                {
+                    return false;
+                }
+                var matches = Regex.Matches(rawData, "<td width=\"20%\" align=\"left\">(.*?):(.*?)</td>");
+                var information = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
+                return model.UserName == information["学号"] && model.Password == information["一卡通号"] && model.RealName == information["姓名"];
             }
             else
             {
@@ -28,51 +43,61 @@ namespace HistoryContest.Server.Services
             }
         }
 
-        public bool ConnectToVPN(string userName, string password)
+        public async Task<bool> ConnectToVPN(string userName, string password)
         {
-            string formUrl = "https://vpn3.seu.edu.cn/dana-na/auth/url_default/login.cgi"; 
+            string formUrl = "https://vpn3.seu.edu.cn/dana-na/auth/url_default/login.cgi";
             string formParams = string.Format("tz_offset=480&username={0}&password={1}&realm=vpn_ids&btnSubmit=登录", userName, password);
-            WebRequest request = WebRequest.Create(formUrl);
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Headers.Add(HttpRequestHeader.Connection, @"keep-alive");
-            request.Headers.Add(HttpRequestHeader.CacheControl, @"max-age=0");
-            request.Headers.Add(HttpRequestHeader.Accept, @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-            request.Headers.Add(HttpRequestHeader.AcceptEncoding, @"gzip, deflate, br");
-            request.Headers.Add(HttpRequestHeader.AcceptLanguage, @"zh-CN,zh;q=0.8");
 
-            byte[] bytes = Encoding.UTF8.GetBytes(formParams);
-            request.ContentLength = bytes.Length;
-
-            using (Stream os = request.GetRequestStream())
-            {
-                os.Write(bytes, 0, bytes.Length);
+            var response = await PostRequest(formUrl, formParams);
+            
+            if (response.Headers.Location.AbsoluteUri.Contains(@"index.cgi"))
+            { // 正常进入学生主页
+                return true;
             }
-            WebResponse response = request.GetResponse();
-            CookieHeader = response.Headers["Set-cookie"];
-            return true;
+            else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=user-confirm"))
+            { // 当前有活动Session，需要关闭
+                var pageSource = await (await GetRequest(response.Headers.Location.AbsoluteUri)).Content.ReadAsStringAsync();
+                var webResponse = await ConfirmOpenSession(pageSource);
+                return webResponse.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"); // 选择Session关闭失败
+            }
+            else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi"))
+            {
+                return await ConnectToVPN(userName, password);
+            }
+            return false;
         }
 
-        public string GetStudentData(string ID)
-        {
-            string getUrl = string.Format(@"https://vpn3.seu.edu.cn/jw_service/service/,DanaInfo=xk.urp.seu.edu.cn+stuCurriculum.action?queryStudentId={0}&queryAcademicYear=17-18-1", ID);
-            WebRequest request = WebRequest.Create(getUrl);
-            request.Headers.Add(HttpRequestHeader.Cookie, CookieHeader);
-            WebResponse response = request.GetResponse();
-            string pageSource;
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            {
-                pageSource = sr.ReadToEnd();
-            }
-            return pageSource;
-        }
-
-        public void LogOut()
+        public async Task LogOut()
         {
             string getUrl = @"https://vpn3.seu.edu.cn/dana-na/auth/logout.cgi";
-            WebRequest request = WebRequest.Create(getUrl);
-            request.Headers.Add(HttpRequestHeader.Cookie, CookieHeader);
-            WebResponse response = request.GetResponse();
+            await GetRequest(getUrl);
+        }
+
+        private async Task<HttpResponseMessage> ConfirmOpenSession(string pageSource)
+        {
+            var matches = Regex.Matches(pageSource, "<input.*?name=\"(.*?)\".*?value=\"(.*?)\".*?>");
+            var formParams = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
+            string confirmUrl = "https://vpn3.seu.edu.cn/dana-na/auth/url_default/login.cgi";
+            string confirmParams = string.Format("postfixSID={0}&btnContinue={1}&FormDataStr={2}", formParams["postfixSID"], formParams["btnContinue"], formParams["FormDataStr"]);
+            return await PostRequest(confirmUrl, confirmParams);
+        }
+
+        private async Task<string> GetStudentData(string ID)
+        {
+            string getUrl = string.Format(@"https://vpn3.seu.edu.cn/jw_service/service/,DanaInfo=xk.urp.seu.edu.cn+stuCurriculum.action?queryStudentId={0}&queryAcademicYear=17-18-1", ID);
+            var response = await GetRequest(getUrl);
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<HttpResponseMessage> PostRequest(string formUrl, string formParams)
+        {
+            var content = new StringContent(formParams, Encoding.UTF8);
+            return await Client.PostAsync(formUrl, content);
+        }
+
+        private async Task<HttpResponseMessage> GetRequest(string getUrl)
+        {
+            return await Client.GetAsync(getUrl);
         }
     }
 }
