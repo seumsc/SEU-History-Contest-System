@@ -235,14 +235,17 @@ export default {
 			$(document).on("click", "#wrapper a.fa-angle-right", function (e) {
 				var v_id = $(e.target).attr('id');
 				if (v_id == "start") {
+					var clientWidth = document.body.clientWidth;
+					var fixWidth = (clientWidth-16*55)/(2*16);
+					var distance= "-="+(129-fixWidth)+"rem";
 					$('#wrapper').animate({
-						left: "-=115rem"
-					}, 300);
+						left: distance
+					}, 300,"swing");
 					currentPage = 1;
 				} else {
 					$('#wrapper').animate({
 						left: "-=120rem"
-					}, 300);
+					}, 300,"swing");
 					currentPage++;
 				}
 			});
@@ -256,20 +259,24 @@ export default {
 				}
 				if (tgtId < currentPage) {
 					var M = currentPage - tgtId;
-					for (var i = 0; i < M; i++) {
-						$('#wrapper').animate({
-							left: "+=120rem"
-						}, 300 / (currentPage - tgtId));
-						currentPage--;
-					}
+					var distance= "+="+(120*M)+"rem";
+				//		for (var i = 0; i < M; i++) {
+							$('#wrapper').animate({
+								left: distance
+							},500,"swing");
+				//			}, 300 / (currentPage - tgtId));
+							currentPage-=M;
+				//		}
 				} else if (tgtId > currentPage) {
 					var M = tgtId - currentPage;
-					for (var i = 0; i < M; i++) {
-						$('#wrapper').animate({
-							left: "-=120rem"
-						}, 300 / (tgtId - currentPage));
-						currentPage++;
-					}
+					var distance= "-="+(120*M)+"rem";
+				//		for (var i = 0; i < M; i++) {
+							$('#wrapper').animate({
+								left: distance
+							},500,"swing");
+				//			}, 300 / (tgtId - currentPage));
+							currentPage+=M;
+				//		}
 				}
 			});
 			var mm = 30;//分
