@@ -61,6 +61,10 @@ namespace HistoryContest.Server
                         ++i;
                         parseSetting = new { Type = "question", Format = "sql", Path = args[i] };
                         break;
+                    case "--parse-student-sql":
+                        ++i;
+                        parseSetting = new { Type = "student", Format = "sql", Path = args[i] };
+                        break;
                     case "-h":
                     case "--help":
                         string[] messages = new string[]
@@ -119,6 +123,14 @@ namespace HistoryContest.Server
                         {
                             case "sql":
                                 DocParseService.ParseQuestions(parseSetting.Path as string, DocParseService.QuestionSqlFilePattern);
+                                break;
+                        }
+                        break;
+                    case "student":
+                        switch (parseSetting.Format as string)
+                        {
+                            case "sql":
+                                DocParseService.ParseStudentInformation(parseSetting.Path as string);
                                 break;
                         }
                         break;
