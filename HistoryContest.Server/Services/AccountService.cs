@@ -60,7 +60,7 @@ namespace HistoryContest.Server.Services
                 case nameof(Student):
                     try
                     {
-                        if (!await new VPNSpiderService().ValidateStudentRegistration(model))
+                        if (!await new VPNSpiderService(unitOfWork).ValidateStudentRegistration(model))
                         {
                             return null;
                         }

@@ -95,7 +95,7 @@ namespace HistoryContest.Server.Controllers.APIs
             var userContext = await accountService.ValidateUser(model.UserName, model.Password);
             if (userContext.UserViewModel != null)
             {
-                InitializeSession(userContext);
+                await InitializeSession(userContext);
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(userContext.Claims, accountService.GetType().Name));
 #if NETCOREAPP2_0
                 await HttpContext.SignInAsync(principal);
@@ -200,7 +200,7 @@ namespace HistoryContest.Server.Controllers.APIs
         }
 
         [NonAction]
-        private void InitializeSession(AccountContext context)
+        private async Task InitializeSession(AccountContext context)
         {
             this.Session().ID = context.UserViewModel.UserName;
             switch (context.UserViewModel.Role)
@@ -212,7 +212,8 @@ namespace HistoryContest.Server.Controllers.APIs
                     this.Session().Department = counselor.Department;
                     break;
                 case nameof(Student):
-                    var student = (Student)context.UserEntity;
+                    var id = context.UserEntity.ID.ToStringID();
+                    var student = await unitOfWork.Cache.StudentEntities(id.ToDepartmentID()).GetAsync(id);
                     this.Session().IsTested = student.IsTested;
                     break;
                 default:
