@@ -9,6 +9,7 @@ using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Extensions;
+using System.Net;
 
 namespace HistoryContest.Server.Services
 {
@@ -48,10 +49,43 @@ namespace HistoryContest.Server.Services
             return new AccountContext { UserEntity = user, UserViewModel = userViewModel, Claims = userClaims };
         }
 
-        public UserViewModel CreateUser(string username, string password, string role)
+        public async Task<UserViewModel> CreateUser(RegisterViewModel model)
         {
-
-            return new UserViewModel();
+            switch (model.Role)
+            {
+                case nameof(Student):
+                    try
+                    {
+                        if (!new VPNSpiderService().ValidateStudentRegistration(model))
+                        {
+                            return null;
+                        }
+                    }
+                    catch (WebException ex)
+                    {
+                        throw ex;
+                    }
+                    var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == model.UserName.ToDepartmentID());
+                    var student = new Student
+                    {
+                        ID = model.UserName.ToIntID(),
+                        CardID = int.Parse(model.Password),
+                        Name = model.RealName,
+                        CounselorID = counselor.ID,
+                        Counselor = counselor
+                    };
+                    // Save Data
+                    await unitOfWork.StudentRepository.InsertAsync(student);
+                    await unitOfWork.Cache.StudentEntities(counselor.Department).SetAsync(model.UserName, student);
+                    await unitOfWork.Cache.StudentViewModels(counselor.Department).SetAsync(model.UserName, (StudentViewModel)student);
+                    return new UserViewModel { UserName = model.UserName, RealName = model.RealName, Role = model.Role };
+                case nameof(Counselor):
+                    return null;
+                case nameof(Administrator):
+                    return null;
+                default:
+                    return null;
+            }
         }
 
         public async Task<IUserBase> GetUser(string userName)

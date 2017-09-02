@@ -83,7 +83,7 @@ namespace HistoryContest.Server.Services
                         questionIDs[j] = trueFalseQuestions[index].ID;
                     }
 
-                    seeds.Add(new QuestionSeed { QuestionIDs = questionIDs });
+                    seeds.Add(new QuestionSeed { ID = i + 1, QuestionIDs = questionIDs });
                     rdGenerator.ResetContext(nameof(ChoiceQuestion));
                     rdGenerator.ResetContext(nameof(TrueFalseQuestion));
                 }
@@ -95,7 +95,10 @@ namespace HistoryContest.Server.Services
         public async Task<QuestionSeed> RollSeed()
         {
             var questionSeedDictionary = unitOfWork.Cache.QuestionSeeds();
-            return await questionSeedDictionary.GetAsync(rdGenerator.Next(1, (int)await questionSeedDictionary.CountAsync() + 1));
+            var size = (int)await questionSeedDictionary.CountAsync();
+            var rd = rdGenerator.Next(1, size + 1);
+            var result = await questionSeedDictionary.GetAsync(rd);
+            return result;
         }
     }
 }
