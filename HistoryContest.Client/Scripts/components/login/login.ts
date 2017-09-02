@@ -32,19 +32,21 @@ $(function () {
 
   ];
   function changeBackground() {
-    bgCounter = (bgCounter + 1) % backgrounds.length;
+   
 
     $('#bg1').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter]) }).fadeIn(1000);
+    bgCounter = (bgCounter + 1) % backgrounds.length;
     setTimeout(changeBackground, 5000);
   }
   function changeBackground2() {
-    bgCounter2 = (bgCounter2 + 1) % backgrounds.length;
+    
 
     $('#bg2').fadeOut(1000, function () { $(this).attr('src', backgrounds[bgCounter2]) }).fadeIn(1000);
+    bgCounter2 = (bgCounter2 + 1) % backgrounds.length;
     setTimeout(changeBackground2, 5000);
   }
-  changeBackground();
-  setTimeout(changeBackground2, 750);
+  setTimeout(changeBackground,500);
+  setTimeout(changeBackground2, 1250);
   $("#go-to-sign-in").click(function(){
     $("#signin").css("display","");
     $("#signup").css("display","none");    
