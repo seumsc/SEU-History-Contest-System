@@ -8,24 +8,26 @@ using System.Text;
 using System.Text.RegularExpressions;
 using HistoryContest.Server.Models.ViewModels;
 using System.Net.Http;
+using HistoryContest.Server.Data;
 
 namespace HistoryContest.Server.Services
 {
     public class VPNSpiderService
     {
-        public string CookieHeader { get; set; }
-        private CookieContainer cookieContainer;
-        private HttpClient Client { get; set; }
+        private readonly UnitOfWork unitOfWork;
+        public CookieContainer CookieContainer { get; set; }
+        public HttpClient Client { get; set; }
 
-        public VPNSpiderService()
+        public VPNSpiderService(UnitOfWork unitOfWork)
         {
-            cookieContainer = new CookieContainer();
-            Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = cookieContainer });
+            this.unitOfWork = unitOfWork;
+            CookieContainer = new CookieContainer();
+            Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = CookieContainer });
         }
 
         public async Task<bool> ValidateStudentRegistration(RegisterViewModel model)
         {
-            if (await ConnectToVPN("cardid", "password"))
+            if (await ConnectToVPN(unitOfWork.Configuration.VPNConnection[0], unitOfWork.Configuration.VPNConnection[1]))
             {
                 var rawData = await GetStudentData(model.UserName);
                 await LogOut();
@@ -59,6 +61,10 @@ namespace HistoryContest.Server.Services
                 var pageSource = await (await GetRequest(response.Headers.Location.AbsoluteUri)).Content.ReadAsStringAsync();
                 var webResponse = await ConfirmOpenSession(pageSource);
                 return webResponse.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"); // 选择Session关闭失败
+            }
+            else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"))
+            { // 登录失败
+                return false;
             }
             else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi"))
             {

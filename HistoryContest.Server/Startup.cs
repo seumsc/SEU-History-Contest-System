@@ -62,6 +62,17 @@ namespace HistoryContest.Server
                 });
             }
 
+            // Bind Contest Setting with Configuration
+            services.Configure<ContestSetting>(Configuration.GetSection("Contest"));
+
+            // Add Contest Settings
+            services.Configure<ContestSetting>(c => 
+            {
+                var contest = Configuration.GetSection("Contest");
+                c.TestTime = TimeSpan.FromMinutes(int.Parse(contest["TestTime"]));
+                c.SchoolScoreSummaryExpireTime = TimeSpan.FromMinutes(int.Parse(contest["SchoolScoreSummaryExpireTime"]));
+            });
+
             // Add Database Services
             services.AddDbContext<ContestContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionStringByDbType("SQL")));
@@ -261,19 +272,19 @@ namespace HistoryContest.Server
 
             // Load cache
             var questionSeedService = new QuestionSeedService(unitOfWork);
-            int scale = int.Parse(Configuration.GetSection("Contest").GetSection("QuestionSeedScale").Value);
+            int scale = unitOfWork.Configuration.QuestionSeedScale;
             var questionSeeds = questionSeedService.CreateNewSeeds(scale);
             
-            if (unitOfWork.DbContext.QuestionSeeds.Any())
-            {
-                unitOfWork.DbContext.QuestionSeeds.UpdateRange(questionSeeds);
-            }
-            else
-            {
-                questionSeeds.ForEach(s => s.ID = 0);
-                unitOfWork.DbContext.QuestionSeeds.AddRange(questionSeeds);
-            }
-            unitOfWork.Save();
+            //if (unitOfWork.DbContext.QuestionSeeds.Any())
+            //{
+            //    unitOfWork.DbContext.QuestionSeeds.UpdateRange(questionSeeds);
+            //}
+            //else
+            //{
+            //    questionSeeds.ForEach(s => s.ID = 0);
+            //    unitOfWork.DbContext.QuestionSeeds.AddRange(questionSeeds);
+            //}
+            //unitOfWork.Save();
 
             unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();

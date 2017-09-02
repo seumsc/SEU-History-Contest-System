@@ -72,15 +72,15 @@ namespace HistoryContest.Server.Services
                     progress = string.Format("{0}/{1}", i + 1, scale); 
                     Console.Write(progress);
 
-                    for (int j = 0; j < 20; ++j)
+                    for (int j = 0; j < unitOfWork.Configuration.QuestionCount.Choice; ++j)
                     {
                         var index = rdGenerator.NextNonRepetitive(nameof(ChoiceQuestion));
                         questionIDs[j] = choiceQuestions[index].ID;
                     }
-                    for (int j = 20; j < 30; ++j)
+                    for (int j = 0; j < unitOfWork.Configuration.QuestionCount.TrueFalse; ++j)
                     {
                         var index = rdGenerator.NextNonRepetitive(nameof(TrueFalseQuestion));
-                        questionIDs[j] = trueFalseQuestions[index].ID;
+                        questionIDs[unitOfWork.Configuration.QuestionCount.Choice + j] = trueFalseQuestions[index].ID;
                     }
 
                     seeds.Add(new QuestionSeed { ID = i + 1, QuestionIDs = questionIDs });

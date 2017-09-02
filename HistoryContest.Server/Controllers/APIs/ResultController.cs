@@ -134,9 +134,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
-            if(!ModelState.IsValid || submittedAnswers.Count != 30)
+            var size = unitOfWork.Configuration.QuestionCount.Choice + unitOfWork.Configuration.QuestionCount.TrueFalse;
+            if(!ModelState.IsValid || submittedAnswers.Count != size)
             {
-                return BadRequest("Body JSON content invalid or does not fit the size: " + 30);
+                return BadRequest("Body JSON content invalid or does not fit the size: " + size);
             }
 
             if (this.Session().IsTested)
@@ -173,7 +174,7 @@ namespace HistoryContest.Server.Controllers.APIs
 
             var model = new ResultViewModel
             {
-                Details = new List<ResultDetailViewModel>(capacity: 30),
+                Details = new List<ResultDetailViewModel>(capacity: size),
                 TimeFinished = (DateTime)student.DateTimeFinished,
                 TimeConsumed = (TimeSpan)student.TimeConsumed
             };
@@ -190,13 +191,11 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
 
-
-
             this.Session().IsTested = true;
             await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, (await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor)).Update(student)); // 更新院系概况数据，这个要放在前面，防止重复计算
             await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
-            unitOfWork.StudentRepository.Update(student); // 更新数据库中的Student
-            await unitOfWork.SaveAsync();
+            //unitOfWork.StudentRepository.Update(student); // 更新数据库中的Student
+            //await unitOfWork.SaveAsync();
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
             return Json(model);

@@ -108,7 +108,7 @@ namespace HistoryContest.Server.Models.ViewModels
 
                 var size = await unitOfWork.StudentRepository.SizeAsync();
                 model.ScoreBandCount.Failed = size - model.ScoreBandCount.NotTested - model.ScoreBandCount.HigherThan60;
-                await unitOfWork.Cache.SetAsync("summary", model, TimeSpan.FromMinutes(10));
+                await unitOfWork.Cache.SetAsync("summary", model, unitOfWork.Configuration.SchoolScoreSummaryExpireTime);
             }
             return model;
         }

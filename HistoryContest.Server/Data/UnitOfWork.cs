@@ -2,6 +2,7 @@
 using HistoryContest.Server.Data.Repositories;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace HistoryContest.Server.Data
 {
@@ -9,6 +10,7 @@ namespace HistoryContest.Server.Data
     {
         private readonly ContestContext context;
         private readonly RedisService redisService;
+        private readonly ContestSetting option;
 
         private readonly Lazy<StudentRepository> lazyStudentRepository;
         private readonly Lazy<GenericRepository<Counselor>> lazyCounselorRepository;
@@ -16,16 +18,19 @@ namespace HistoryContest.Server.Data
         private readonly Lazy<QuestionRepository> lazyQuestionRepository;
         private readonly Lazy<GenericRepository<QuestionSeed>> lazyQuestionSeedRepository;
         
-        public UnitOfWork(ContestContext context, RedisService redisService = null)
+        public UnitOfWork(ContestContext context, IOptions<ContestSetting> option, RedisService redisService = null)
         {
             this.context = context;
             this.redisService = redisService ?? new RedisService();
+            this.option = option.Value;
             lazyStudentRepository = new Lazy<StudentRepository>(() => new StudentRepository(context, redisService));
             lazyCounselorRepository = new Lazy<GenericRepository<Counselor>>(() => new GenericRepository<Counselor>(context, redisService));
             lazyAdminRepository = new Lazy<GenericRepository<Administrator>>(() => new GenericRepository<Administrator>(context, redisService));
             lazyQuestionRepository = new Lazy<QuestionRepository>(() => new QuestionRepository(context, redisService));
             lazyQuestionSeedRepository = new Lazy<GenericRepository<QuestionSeed>>(() => new GenericRepository<QuestionSeed>(context, redisService));
         }
+
+        public ContestSetting Configuration => option;
 
         public ContestContext DbContext => context;
 

@@ -186,7 +186,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 return NoContent();
             }
-            TimeSpan timeLeft = TimeSpan.FromMinutes(30) - (DateTime.Now - (DateTime)this.Session().TestBeginTime);
+            TimeSpan timeLeft = unitOfWork.Configuration.TestTime - (DateTime.Now - (DateTime)this.Session().TestBeginTime);
             return Json(timeLeft);
         }
 

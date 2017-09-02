@@ -97,5 +97,5 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-  <ProjectExtensions><VisualStudio><UserProperties global_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties global_1json__JSONSchema="" appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

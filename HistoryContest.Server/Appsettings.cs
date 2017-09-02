@@ -22,9 +22,9 @@ namespace HistoryContest.Server
         }
 
         public QuestionCounts QuestionCount { get; set; }
-        public int QuestionSeedScale;
+        public int QuestionSeedScale { get; set; }
         public TimeSpan TestTime { get; set; }
-        public TimeSpan SchoolSummaryExpireTime { get; set; }
+        public TimeSpan SchoolScoreSummaryExpireTime { get; set; }
         public string[] VPNConnection { get; set; }
     }
 }
