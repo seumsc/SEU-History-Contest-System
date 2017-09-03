@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Extensions;
+using System.Threading;
 
 namespace HistoryContest.Server.Models.ViewModels
 {
@@ -26,8 +27,11 @@ namespace HistoryContest.Server.Models.ViewModels
         public double AverageScore { get; set; }
         public ScoreBandCountViewModel ScoreBandCount { get; set; }
 
-        public ScoreSummaryByDepartmentViewModel Update(Student student)
+        private static ManualResetEvent handleLock = new ManualResetEvent(true);
+
+        public async Task UpdateAsync(UnitOfWork unitOfWork, Student student)
         { // 当有学生出成绩时，对院系概况进行更新
+            handleLock.Reset();
             if (student.Department != DepartmentID)
             {
                 throw new ArgumentException("Student's department not consistent");
@@ -49,28 +53,31 @@ namespace HistoryContest.Server.Models.ViewModels
                 ++ScoreBandCount.HigherThan60;
             else
                 ++ScoreBandCount.Failed;
-            return this;
+            await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, this);
+            handleLock.Set();
         }
 
         public static async Task<ScoreSummaryByDepartmentViewModel> GetAsync(UnitOfWork unitOfWork, Counselor counselor)
         { // 学生无改动时直接从缓存中取出，学生信息有改动时进行修改
+            handleLock.WaitOne();
             var summaryVMDictionary = unitOfWork.Cache.DepartmentScoreSummaries();
             var model = await summaryVMDictionary.GetAsync(counselor.Department);
             if (model == null)
             {
-                model = new ScoreSummaryByDepartmentViewModel();
-
-                model.DepartmentID = counselor.Department;
-                model.CounselorName = counselor.Name;
-                model.StudentCount = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department);
-                model.MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department);
-                model.AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department);
-                model.ScoreBandCount = new ScoreBandCountViewModel()
+                model = new ScoreSummaryByDepartmentViewModel
                 {
-                    HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
-                    HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
-                    HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
-                    NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
+                    DepartmentID = counselor.Department,
+                    CounselorName = counselor.Name,
+                    StudentCount = await unitOfWork.StudentRepository.SizeByDepartment(counselor.Department),
+                    MaxScore = await unitOfWork.StudentRepository.HighestScoreByDepartment(counselor.Department),
+                    AverageScore = await unitOfWork.StudentRepository.AverageScoreByDepartment(counselor.Department),
+                    ScoreBandCount = new ScoreBandCountViewModel()
+                    {
+                        HigherThan90 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(90, counselor.Department),
+                        HigherThan75 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(75, counselor.Department),
+                        HigherThan60 = await unitOfWork.StudentRepository.ScoreHigherThanByDepartment(60, counselor.Department),
+                        NotTested = await unitOfWork.StudentRepository.CountNotTestedByDepartment(counselor.Department)
+                    }
                 };
 
                 model.ScoreBandCount.Failed = model.StudentCount - model.ScoreBandCount.NotTested - model.ScoreBandCount.HigherThan60;

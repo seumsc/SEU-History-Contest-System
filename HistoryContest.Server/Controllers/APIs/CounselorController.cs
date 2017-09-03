@@ -355,38 +355,22 @@ namespace HistoryContest.Server.Controllers.APIs
         /// 
         /// 前端也可建立一个相同的枚举表，这样便可不用在意每个枚举值中所存数据。
         /// 
-        /// ID参数是可选的。如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID。
+        /// ID参数为必选。
         /// </remarks>
-        /// <param name="department">院系代号枚举数（可选）</param>
+        /// <param name="department">院系代号枚举数</param>
         /// <returns>ID对应院系的分数概况</returns>
         /// <response code="200">返回院系代码对应院系的分数概况</response>
         /// <response code="400">当前用户不是辅导员或对应Session中没有院系代码</response>
         /// <response code="404">ID没有对应的院系</response>
-        [HttpGet("Scores/Summary/{department?}")]
+        [HttpGet("Scores/Summary/{department}")]
         [ProducesResponseType(typeof(ScoreSummaryByDepartmentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> ScoreSummaryByDepartment(Department? department)
+        public async Task<IActionResult> ScoreSummaryByDepartment(Department department)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Body JSON content invalid");
-            }
-
-            if (department == null)
-            { // 如果不输入ID，且当前用户认证为辅导员，则取Session中的院系代码作为ID
-                if (this.Session().CheckRole("Counselor") && this.Session().Department != null)
-                {
-                    department = (Department)this.Session().Department;
-                    if (department == null)
-                    {
-                        return BadRequest("Department ID not set in the session, please login again");
-                    }
-                }
-                else
-                {
-                    return BadRequest("Empty argument request invalid");
-                }
             }
 
             var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == department);
