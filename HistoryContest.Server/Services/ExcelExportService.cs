@@ -4,8 +4,10 @@ using HistoryContest.Server.Models;
 using HistoryContest.Server.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +46,7 @@ namespace HistoryContest.Server.Services
                     worksheet.Cells[1, 5].Value = "得分";
                     //添加值
                     int number = 2;
+
                     foreach (var student in datatable)
                     {
                         worksheet.Cells[number, 1].Value = student.StudentID;
@@ -51,11 +54,35 @@ namespace HistoryContest.Server.Services
                         worksheet.Cells[number, 3].Value = student.Name;
                         worksheet.Cells[number, 4].Value = student.IsCompleted ? "是" : "否";
                         worksheet.Cells[number, 5].Value = student.Score;
+                        
                         number++;
                     }
 
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                    worksheet.View.ShowGridLines = false;//去掉sheet的网格线
+                    worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.LightYellow);//设置背景色
+
                     package.Save();
                 }
+
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    // 添加worksheet
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    var rowCnt = worksheet.Dimension.End.Row;
+                    var colCnt = worksheet.Dimension.End.Column;
+                    for (int i = 1; i <= rowCnt; i++)
+                        if (i % 2 == 0)
+                            for (int j = 1; j <= colCnt; j++)
+                            {
+                                worksheet.Cells[i, j].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                worksheet.Cells[i, j].Style.Fill.BackgroundColor.SetColor(Color.LightBlue);
+                            }
+
+                    package.Save();
+                }
+
             }
             return null;
         }
@@ -69,8 +96,7 @@ namespace HistoryContest.Server.Services
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists)
             {
-                var dataTable = unitOfWork.DbContext.Counselors.Select( c => ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, c)).ToList();
-                
+                var datatable =unitOfWork.DbContext.Counselors.Select(m=>  ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, m)).ToList();
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     // 添加worksheet
@@ -80,17 +106,17 @@ namespace HistoryContest.Server.Services
                     worksheet.Cells[1, 2].Value = "辅导员";
                     worksheet.Cells[1, 3].Value = "最高分";
                     worksheet.Cells[1, 4].Value = "平均分";
-                    worksheet.Cells[1, 5].Value = ">=90人数";
-                    worksheet.Cells[1, 6].Value = ">=75人数";
-                    worksheet.Cells[1, 7].Value = ">=60人数";
-                    worksheet.Cells[1, 8].Value = "<60人数";
-                    worksheet.Cells[1, 9].Value = "未测试人数";
-                    
+                    worksheet.Cells[1, 5].Value = ">=90";
+                    worksheet.Cells[1, 6].Value = ">=75";
+                    worksheet.Cells[1, 7].Value = ">=60";
+                    worksheet.Cells[1, 8].Value = "不及格";
+                    worksheet.Cells[1, 9].Value = "未测试";
+
                     //添加值
                     int number = 2;
-                    foreach (var scoreSummaryTask in dataTable)
+                    foreach (var scoreSummarytask in datatable)
                     {
-                        var scoreSummary =  await scoreSummaryTask;
+                        var scoreSummary = await scoreSummarytask;
                         worksheet.Cells[number, 1].Value = scoreSummary.DepartmentID;
                         worksheet.Cells[number, 2].Value = scoreSummary.CounselorName;
                         worksheet.Cells[number, 3].Value = scoreSummary.MaxScore;
@@ -100,21 +126,24 @@ namespace HistoryContest.Server.Services
                         worksheet.Cells[number, 7].Value = scoreSummary.ScoreBandCount.HigherThan60;
                         worksheet.Cells[number, 8].Value = scoreSummary.ScoreBandCount.Failed;
                         worksheet.Cells[number, 9].Value = scoreSummary.ScoreBandCount.NotTested;
+                        
 
                         number++;
                     }
+
                     number++;
                     //最后空一行添加去全校概况
                     worksheet.Cells[number, 2].Value = "最高分";
                     worksheet.Cells[number, 3].Value = "平均分";
-                    worksheet.Cells[number, 4].Value = ">=90人数";
-                    worksheet.Cells[number, 5].Value = ">=75人数";
-                    worksheet.Cells[number, 6].Value = ">=60人数";
-                    worksheet.Cells[number, 7].Value = "<60人数";
-                    worksheet.Cells[number, 8].Value = "未测试人数";
+                    worksheet.Cells[number, 4].Value = ">=90";
+                    worksheet.Cells[number, 5].Value = ">=75";
+                    worksheet.Cells[number, 6].Value = ">=60";
+                    worksheet.Cells[number, 7].Value = "不及格";
+                    worksheet.Cells[number, 8].Value = "未测试";
                     worksheet.Cells[number, 9].Value = "更新时间";
-                    number++;
                     
+                    number++;
+
                     var model = await ScoreSummaryOfSchoolViewModel.GetAsync(unitOfWork);
                     worksheet.Cells[number, 1].Value = "全校分数概况";
                     worksheet.Cells[number, 2].Value = model.MaxScore;
@@ -125,9 +154,32 @@ namespace HistoryContest.Server.Services
                     worksheet.Cells[number, 7].Value = model.ScoreBandCount.Failed;
                     worksheet.Cells[number, 8].Value = model.ScoreBandCount.NotTested;
                     worksheet.Cells[number, 9].Value = model.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss");
-                    
+
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                    worksheet.View.ShowGridLines = false;//去掉sheet的网格线
+                    worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.LightYellow);//设置背景色
+
                     package.Save();
                 }
+
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    // 添加worksheet
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    var rowCnt = worksheet.Dimension.End.Row;
+                    var colCnt = worksheet.Dimension.End.Column;
+                    for (int i = 1; i <= rowCnt; i++)
+                        if (i % 2 == 0)
+                            for(int j = 1; j <= colCnt; j++)
+                            {
+                                worksheet.Cells[i, j].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                worksheet.Cells[i, j].Style.Fill.BackgroundColor.SetColor(Color.LightBlue);
+                            }
+
+                    package.Save();
+                }
+
             }
             return null;
         }
