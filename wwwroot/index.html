@@ -11,7 +11,28 @@
 	<script src="assets/js/skel.min.js"></script>
 	<script src="assets/js/index.js"></script>
 </head>
-
+<script type="text/javascript">
+    window.onbeforeunload=function(event){
+        var warning="closing...";
+    $.ajax({
+        url: '/api/Account/Logout',
+        contentType: "application/json",
+        dataType: "json",
+        async: true,
+        type: "POST",
+        success: function (req) {
+            console.log(req);
+            alert("closing...")
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+    });
+    // alert("closing");
+    return;
+    }
+</script>
 <body>
 	<!--Header-->
 	<div id="header">
