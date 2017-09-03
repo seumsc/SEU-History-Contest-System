@@ -10,14 +10,13 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/animate.min.css" rel="stylesheet" />
     <link href="assets/css/dashboard.css" rel="stylesheet" />
+   
     <script src="assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
     <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="assets/js/chartist.min.js"></script>
+    <script src="assets/js/chartist.js"></script>
     <script src="assets/js/bootstrap-notify.js"></script>
-    <script src="assets/js/light-bootstrap-dashboard.js"></script>
+   <!-- <script src="assets/js/light-bootstrap-dashboard.js"></script>-->
     <script src="assets/js/dashboard.js"></script>
-
- <!--mockserver for dev purpose<script src="http://mockjs.com/dist/mock.js"></script>-->
 </head>
 <style>
     img {
@@ -40,7 +39,21 @@
 
     }
 </style>
+<script>
+    $(function(){
+        $("#tab1").click(function(){
+            $("#score").fadeIn("fast");
+            $("#general").fadeOut("fast");
+            setChartist();
+        })
+        $("#tab2").click(function(){
+            $("#general").fadeIn("fast");
+            $("#score").fadeOut("fast");
+            setGeneralChartist();
 
+        })
+    })
+</script>
 <body>
 
     <div class="wrapper">
@@ -53,14 +66,14 @@
 
 
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active">
+                    <li class="active" id="tab1">
                         <a href="#score" data-toggle="tab">  
                         <i class="glyphicon glyphicon-tasks"></i> 
                         <p>成绩统计</p>
                     </a>
                     </li>
 
-                    <li>
+                    <li id="tab2">
                         <a href="#general" data-toggle="tab">  
                         <i class="glyphicon glyphicon-equalizer"></i> 
                         <p>院系概览</p>
@@ -110,8 +123,8 @@
                     </div>
                 </div>
             </nav>
-            <div class="content tab-content">
-                <div class="tab-pane fade in active" id="score">
+            <div class="content tab-content" id="tab-content">
+                <div   id="score">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card">
@@ -140,7 +153,7 @@
                             </div>
                             <div class="card">
                                 <div class="header">
-                                    <h4 class="title">成绩分布情况</h4>
+                                    <h4 class="title">已完成学生成绩分布情况</h4>
 
                                 </div>
                                 <div class="content">
@@ -243,7 +256,7 @@
                 </div>
 
 
-                <div class="tab-pane fade" id="general">
+                <div  style="display: none" id="general">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card">
@@ -259,24 +272,17 @@
                                             <p> <span class="glyphicon glyphicon-record text-danger"></span> 未完成</p>
 
                                         </div>
-                                        <hr>
-                                        <div class="stats">
-                                            <p> 
-                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                <span id="done-info-general"></span>
-                                                <span id="undo-info-general"></span>
-                                            </p>
-                                        </div>
+                                     
                                     </div>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="header">
-                                    <h4 class="title">全校学生成绩分布情况</h4>
+                                    <h4 class="title">全校已完成学生成绩分布情况</h4>
 
                                 </div>
                                 <div class="content">
-                                    <div id="overall-chart-generall" class="ct-chart ct-perfect-fourth"></div>
+                                    <div id="overall-chart-general" class="ct-chart ct-perfect-fourth"></div>
 
                                     <div class="footer">
                                         <div class="legend">
@@ -291,6 +297,10 @@
                                             <p> 
                                                 <span class="glyphicon glyphicon-stats"></span> 
                                                 平均分：<span id="average-score-general"></span>分
+                                            </p>
+                                            <p> 
+                                                <span class="glyphicon glyphicon-flag"></span> 
+                                                最高分：<span id="max-score-general"></span>分
                                             </p>
                                         </div>
                                     </div>
@@ -316,44 +326,33 @@
                                 <div class="content table-responsive table-full-width restricted" id="table-general">
                                     <table class="table table-hover table-striped">
                                         <thead>
-                                            <th>
-                                                院系
+                                            <th class="score" id="dpt">
+                                                <span>院系</span>
+                                                <i></i>
                                             </th>
-                                            <th class="score">
+                                            <th class="score" id="avg">
                                                 <span>平均分</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                                <i></i>
                                             </th>
-                                            <th class="score">
-                                                <span>完成率</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                            <th class="score" id="cpl">
+                                                <span>完成率 (%)</span>
+                                                <i></i>
                                             </th>
-                                            <th class="score">
+                                            <th class="score" id="pta">
                                                 <span>90分以上 (%)</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                                <i></i>
                                             </th>
-                                            <th class="score">
+                                            <th class="score" id="ptb">
                                                 <span>75分至90分 (%)</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                               <i></i>
                                             </th>
-                                            <th class="score">
+                                            <th class="score" id="ptc">
                                                 <span>60分至75分 (%)</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                                <i></i>
                                             </th>
-                                            <th class="score">
+                                            <th class="score" id="ptd">
                                                 <span>不及格 (%)</span>
-                                                <span class="glyphicon glyphicon-sort sort-general"></span>
-                                                <span class="glyphicon glyphicon-triangle-top triangle-top-general" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom triangle-bottom-general" style="display:none"></span>
+                                                <i></i>
                                             </th>
 
                                         </thead>

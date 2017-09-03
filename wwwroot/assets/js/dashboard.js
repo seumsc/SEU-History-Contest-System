@@ -1,20 +1,25 @@
 /********************Webpage Common Configurations********************/
 var DepartmentNameMap={
-    "010":"建筑学院",
-    "020":"机械工程学院",
-    "030":"能源与环境学院",
-    "040":"信息科学与工程学院",
-    "050":"土木工程学院",
-    "060":"电子科学与工程学院",
-    "070":"数学学院",
-    "080":"自动化学院",
-    "144":"计算机科学与工程学院、软件学院",
-    "711":"计算机科学与工程学院、软件学院"
+    1:"建筑学院",
+    2:"机械工程学院",
+    3:"能源与环境学院",
+    4:"信息科学与工程学院",
+    5:"土木工程学院",
+    6:"电子科学与工程学院",
+    7:"数学学院",
+    8:"自动化学院",
+    9:"计算机科学与工程学院、软件学院",
+    71:"计算机科学与工程学院、软件学院"
 }
 var config={
     department:null,
     departmentName:null,
-    generalInfo:null,
+    departmentInfo:{}, //summuray of current department
+    generalInfo:{
+        allDepartments:[], //all departments enum
+        summary:{}, //general
+        statistics:[] //summary of all departments
+    },
     scoreList:null,
     undoList:[],
     undoNumber:null,
@@ -86,17 +91,21 @@ function setDone(DONE){
     }
     $("#table-done").find("tbody").html(doneContent);
 }
-function initChartist(){ 
+function setGeneralData(){
+    fetchSummary("",setGeneralChartist);
+    fetchAllDepartments(); 
+}
+function setChartist(){ 
     var labelForDone=Math.round(100*(config.doneNumber/config.total))+"%";
     var labelForUndo=Math.round(100*(config.undoNumber/config.total))+"%";
-    var labelA=Math.round(100*(config.generalInfo.scoreBandCount.higherThan90/config.total))+"%";
-    var labelB=Math.round(100*(config.generalInfo.scoreBandCount.failed/config.total))+"%";
-    var labelC=Math.round(100*(config.generalInfo.scoreBandCount.higherThan75/config.total))+"%";
-    var labelD=Math.round(100*(config.generalInfo.scoreBandCount.higherThan60/config.total))+"%";
+    var labelA=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan90/config.doneNumber))+"%";
+    var labelB=Math.round(100*(config.departmentInfo.scoreBandCount.failed/config.doneNumber))+"%";
+    var labelC=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan75/config.doneNumber))+"%";
+    var labelD=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan60/config.doneNumber))+"%";
     
     Chartist.Pie('#completion-chart', {   
-        labels: [(config.doneNumber==0?'':labelForDone),
-                (config.undoNumber==0?'':labelForUndo)],
+        labels: [(config.doneNumber==0?" ":labelForDone),
+                (config.undoNumber==0?" ":labelForUndo)],
         series: [config.doneNumber, config.undoNumber]
     });   
     //若无人作答，显示相应提示信息
@@ -115,21 +124,104 @@ function initChartist(){
         Chartist.Pie('#overall-chart', {
             
             labels: [
-                (config.generalInfo.scoreBandCount.higherThan90==0?'':labelA),
-                (config.generalInfo.scoreBandCount.failed==0?'':labelB),
-                (config.generalInfo.scoreBandCount.higherThan75==0?'':labelC),
-                (config.generalInfo.scoreBandCount.higherThan60==0?'':labelD)
+                (config.departmentInfo.scoreBandCount.higherThan90==0?'':labelA),
+                (config.departmentInfo.scoreBandCount.failed==0?'':labelB),
+                (config.departmentInfo.scoreBandCount.higherThan75==0?'':labelC),
+                (config.departmentInfo.scoreBandCount.higherThan60==0?'':labelD)
             ],
             series: [
-                config.generalInfo.scoreBandCount.higherThan90,
-                config.generalInfo.scoreBandCount.failed,
-                config.generalInfo.scoreBandCount.higherThan75,
-                config.generalInfo.scoreBandCount.higherThan60
+                config.departmentInfo.scoreBandCount.higherThan90,
+                config.departmentInfo.scoreBandCount.failed,
+                config.departmentInfo.scoreBandCount.higherThan75,
+                config.departmentInfo.scoreBandCount.higherThan60
             ]
         });   
     }
 }
+function setGeneralChartist(){
+    $("#average-score-general").html(config.generalInfo.summary.averageScore.toFixed(2));
+    $("#max-score-general").html(config.generalInfo.summary.maxScore);
+    var gDoneNum=config.generalInfo.summary.scoreBandCount.failed
+        +config.generalInfo.summary.scoreBandCount.higherThan60
+        +config.generalInfo.summary.scoreBandCount.higherThan75
+        +config.generalInfo.summary.scoreBandCount.higherThan90;
+    var gUndoNum=config.generalInfo.summary.scoreBandCount.notTested;
+    var gTot=gDoneNum+gUndoNum;
+    var labelForDone=Math.round(100*(gDoneNum/gTot))+"%";
+    var labelForUndo=Math.round(100*(gUndoNum/gTot))+"%";
+    var labelA=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan90/gDoneNum))+"%";
+    var labelB=Math.round(100*(config.generalInfo.summary.scoreBandCount.failed/gDoneNum))+"%";
+    var labelC=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan75/gDoneNum))+"%";
+    var labelD=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan60/gDoneNum))+"%";
 
+    Chartist.Pie('#completion-chart-general', {   
+    labels: [(gDoneNum==0?' ':labelForDone),
+    (gUndoNum==0?' ':labelForUndo)],
+    series: [gDoneNum, gUndoNum]
+    });   
+    //若无人作答，显示相应提示信息
+    if(gDoneNum==0){
+    Chartist.Pie('#overall-chart-general', {
+
+    labels: [
+    "尚未有学生作答"
+    ],
+    series: [
+    100
+    ]
+    });  
+    }
+    else{
+    Chartist.Pie('#overall-chart-general', {
+
+    labels: [
+    (config.generalInfo.summary.scoreBandCount.higherThan90==0?'':labelA),
+    (config.generalInfo.summary.scoreBandCount.failed==0?'':labelB),
+    (config.generalInfo.summary.scoreBandCount.higherThan75==0?'':labelC),
+    (config.generalInfo.summary.scoreBandCount.higherThan60==0?'':labelD)
+    ],
+    series: [
+    config.generalInfo.summary.scoreBandCount.higherThan90,
+    config.generalInfo.summary.scoreBandCount.failed,
+    config.generalInfo.summary.scoreBandCount.higherThan75,
+    config.generalInfo.summary.scoreBandCount.higherThan60
+    ]
+    });   
+    }
+}
+function setGENERAL(){
+ /*   for(var statIteratorIndex=0;statIteratorIndex<config.generalInfo.statistics.length;statIteratorIndex++){
+        config.generalInfo.statistics[statIteratorIndex].donenum = config.generalInfo.statistics[statIteratorIndex].studentCount - config.generalInfo.statistics[statIteratorIndex].scoreBandCount.notTested;
+        config.generalInfo.statistics[statIteratorIndex].average = config.generalInfo.statistics[statIteratorIndex].averageScore.toFixed(2);
+        config.generalInfo.statistics[statIteratorIndex].completion = 100 * (1 - config.generalInfo.statistics[statIteratorIndex].scoreBandCount.notTested/config.generalInfo.statistics[statIteratorIndex].studentCount);
+        config.generalInfo.statistics[statIteratorIndex].proportionA = Math.round (100 * (config.generalInfo.statistics[statIteratorIndex].scoreBandCount.higherThan90/donenum));
+        config.generalInfo.statistics[statIteratorIndex].proportionB = Math.round (100 * (config.generalInfo.statistics[statIteratorIndex].scoreBandCount.higherThan75/donenum));
+        config.generalInfo.statistics[statIteratorIndex].proportionC = Math.round (100 * (config.generalInfo.statistics[statIteratorIndex].scoreBandCount.higherThan60/donenum));
+        config.generalInfo.statistics[statIteratorIndex].proportionD = Math.round (100 * (config.generalInfo.statistics[statIteratorIndex].scoreBandCount.failed/donenum));
+        
+    }*/
+    var generalContent="";
+    var STAT=config.generalInfo.statistics;
+
+      console.log(STAT);
+    for(var statIteratorIndex=0;statIteratorIndex<STAT.length;statIteratorIndex++){
+        var donenum = STAT[statIteratorIndex].donenum;
+        var average = STAT[statIteratorIndex].average;
+        var completion = STAT[statIteratorIndex].completion;
+        var proportionA = STAT[statIteratorIndex].proportionA;
+        var proportionB = STAT[statIteratorIndex].proportionB;
+        var proportionC = STAT[statIteratorIndex].proportionC;
+        var proportionD = STAT[statIteratorIndex].proportionD;
+        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID
+        +'</td><td>'+average
+        +'</td><td>'+completion
+        +'</td><td>'+proportionA
+        +'</td><td>'+proportionB
+        +'</td><td>'+proportionC
+        +'</td><td>'+proportionD+'</td></tr>'
+    }
+    $("#table-general").find("tbody").html(generalContent);
+}
 function commonSet(){
     console.log(config.departmentName);
     $("#school-name").html(config.departmentName);
@@ -148,127 +240,9 @@ function commonSet(){
         $("#undo-info").html(config.comments.undos.common);
         $("#empty-comment").hide();
     }
-    $("#average-score").html(config.generalInfo.averageScore.toFixed(2));
-    $("#max-score").html(config.generalInfo.maxScore);
+    $("#average-score").html(config.departmentInfo.averageScore.toFixed(2));
+    $("#max-score").html(config.departmentInfo.maxScore);
 
-}
-
-/********************API Interfaces********************/
-function fetchData(){
-    $.ajax({
-        url:  '/api/Counselor/Department', //请求的url地址 
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性      
-        type: "GET", //请求方式
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        success: function (req) {
-          //请求成功时处理
-         console.log(req);
-         config.department=req;
-         console.log(config.department);
-         fetchSummary();
-         
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-    });
-}
-function fetchSummary(){
-    $.ajax({
-        url:  '/api/Counselor/Scores/Summary/'+config.department, //请求的url地址
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性 
-        type: "GET", //请求方式
-        success: function (req) {
-          //请求成功时处理
-          console.log(req);
-          config.generalInfo=req;
-          console.log(config.generalInfo);
-          config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
-          console.log(config.generalInfo.departmentID);
-          fetchAllScores();
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-      });
-       
-}
-function fetchAllScores(){
-    $.ajax({
-        url:  '/api/Counselor/Scores/All/'+config.department, //请求的url地址
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        type: "GET", //请求方式
-        success: function (req) {
-          //请求成功时处理
-          console.log(req);
-          setUndoNDo(req);
-          setUndo(config.undoList);
-          setDone(config.doneList);
-          initChartist();
-          commonSet();
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-      });
-}
-function downloadDepartmentExcel(){
-    $.ajax({
-    url:  '/api/Counselor/ExportExcelofDepartment', //请求的url地址
-    
-    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-    
-    crossDomain:true,
-    
-    type: "POST", //请求方式
-    
-    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    
-    success: function (req) {
-      //请求成功时处理
-      window.location = '/excel/'+req;
-    },
-    
-    error: function (xhr) {
-      //请求出错处理
-      alert("数据获取失败，请检查网络！");
-      console.log(xhr);
-    }
-  });
-
-}
-function downloadExcelOfAllDepartments(){
-    $.ajax({
-        url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
-        
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        
-        crossDomain:true,
-        
-        type: "POST", //请求方式
-        
-        contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        
-        success: function (req) {
-        //请求成功时处理
-        console.log(req);
-        window.location = '/excel/'+req;
-        },
-        
-        error: function (xhr) {
-        //请求出错处理
-        alert("数据获取失败，请检查网络！");
-        console.log(xhr);
-        }
-  });
 }
 /********************Variable Needed for Search********************/
 var temp=new Array();
@@ -292,15 +266,220 @@ var by = function(name){
         }
     }
 }
+/********************API Interfaces********************/
+//Initialize the Score Tab, call this function only once.
+function setScoreData(){
+    $.ajax({
+        url:  '/api/Counselor/Department', 
+        async: true,   
+        type: "GET", 
+        contentType:"application/json",
+        dataType: "json", 
+        success: function (req) {
+         console.log(req);
+         config.department=req;
+         console.log(config.department);
+         fetchSummary(config.department,fetchAllScores);
+        },
+        error: function (xhr) {
+          alert("数据获取失败，请检查网络！");
+          console.log(xhr);
+        }
+    });
+}
+//When department summary is fetched, a callback may be needed to fetch all scores of current department.
+//However, Counselor CANNOT get scores of other departments.
+//To fetch general summary of all departments, no params are needed.
+function fetchSummary(department,callback){
+    if(department==undefined){
+        department="";
+    }
+    else{
+        department='/'+department;
+    }
+    $.ajax({
+        url:  '/api/Counselor/Scores/Summary'+department,
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+            //Department Info
+            if(req.departmentID!=undefined){
+                //counselor department
+                if(req.departmentID==config.department){
+                    console.log(req);
+                    config.departmentInfo=req;
+                    console.log(config.departmentInfo);
+                    config.departmentName=DepartmentNameMap[config.departmentInfo.departmentID];
+                    console.log(config.departmentInfo.departmentID);
+                    var stat=req;
+                    stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
+                    stat.average = stat.averageScore.toFixed(2);
+                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested/stat.studentCount);
+                    stat.proportionA = Math.round (100 * (stat.scoreBandCount.higherThan90/stat.donenum));
+                    stat.proportionB = Math.round (100 * (stat.scoreBandCount.higherThan75/stat.donenum));
+                    stat.proportionC = Math.round (100 * (stat.scoreBandCount.higherThan60/stat.donenum));
+                    stat.proportionD = Math.round (100 * (stat.scoreBandCount.failed/stat.donenum));
+                    config.generalInfo.statistics.push(stat);// !!!danger
+                    if(callback!=undefined){
+                        callback();
+                    }
+                    
+                }
+                //other
+                else{
+                    console.log(req);
+                    var stat=req;
+                    stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
+                    stat.average = stat.averageScore.toFixed(2);
+                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested/stat.studentCount);
+                    stat.proportionA = Math.round (100 * (stat.scoreBandCount.higherThan90/stat.donenum));
+                    stat.proportionB = Math.round (100 * (stat.scoreBandCount.higherThan75/stat.donenum));
+                    stat.proportionC = Math.round (100 * (stat.scoreBandCount.higherThan60/stat.donenum));
+                    stat.proportionD = Math.round (100 * (stat.scoreBandCount.failed/stat.donenum));
+                    config.generalInfo.statistics.push(stat);
+                    if(callback!=undefined){
+                        config.generalInfo.statistics.sort(by("departmentID"));
+                        config.generalInfo.statistics.reverse();
+                        callback();//setGENERAL
+                    }
+                }
+               
+            }
+            //General Info
+            else{
+                console.log(req);
+                config.generalInfo.summary=req;
+                console.log( config.generalInfo.summary);
+                //set chartist
+                if(callback!=undefined){
+                    callback();
+                }
+
+            }
+        },
+        error: function () {
+          alert("数据获取失败，请检查网络！");
+        }
+      });
+       
+}
+//Ensure Counselor CANNOT get scores of other departments.
+//Set tab1 tables
+function fetchAllScores(){
+   
+    $.ajax({
+        url:  '/api/Counselor/Scores/All', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          setUndoNDo(req);
+          setUndo(config.undoList);
+          setDone(config.doneList);
+          setChartist();
+          commonSet();
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+function fetchAllStudents(){
+    $.ajax({
+        url:  '/api/Counselor/AllStudents', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+//fetch department id enum & statistics
+function fetchAllDepartments(){
+    $.ajax({
+        url:  '/api/Counselor/AllDepartments', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          config.generalInfo.allDepartments=req;
+          
+          for(var i=0;i<config.generalInfo.allDepartments.length;i++){
+              if(config.generalInfo.allDepartments[i]==config.department){
+                  continue;
+              }
+              if(i+1<config.generalInfo.allDepartments.length){
+                fetchSummary(config.generalInfo.allDepartments[i]);
+              }
+              else{
+                fetchSummary(config.generalInfo.allDepartments[i],setGENERAL);
+              }
+          }
+          
+         
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+function downloadDepartmentExcel(){
+    $.ajax({
+    url:  '/api/Counselor/ExportExcelofDepartment',
+    async: true, 
+    type: "POST", 
+    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    success: function (req) {
+      window.location = '/excel/'+req;
+    },
+    error: function (xhr) {
+      alert("数据获取失败，请检查网络！");
+      console.log(xhr);
+    }
+  });
+}
+function downloadExcelOfAllDepartments(){
+    $.ajax({
+        url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+        crossDomain:true,
+        type: "POST", //请求方式
+        contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        success: function (req) {
+            console.log(req);
+            window.location = '/excel/'+req;
+        },
+        error: function (xhr) {
+            alert("数据获取失败，请检查网络！");
+            console.log(xhr);
+        }
+  });
+}
+
 /********************Document Ready Function********************/
 $(function () {
-    
-   fetchData();
-
-
+   
+  setScoreData();
+ setTimeout(setGeneralData(),1000);
     //Refresh
     $("#refresh-button").click(function(){
-       fetchData();
+       setScoreData();
+      
     })
     //Download
     $(".department-excel").click(function(){
@@ -344,10 +523,146 @@ $(function () {
         setDone(config.doneList);
 
        }
-       
+      
        
       
     })
+    
+    function resetIcon(){
+        $("#dpt i").removeClass();
+        $("#avg i").removeClass();
+        $("#cpl i").removeClass();
+        $("#pta i").removeClass();
+        $("#ptb i").removeClass();
+        $("#ptc i").removeClass();
+        $("#ptd i").removeClass();
+    }
+    var dpt=0;
+    var avg=0;
+    var cpl=0;
+    var pta=0;
+    var ptb=0;
+    var ptc=0;
+    var ptd=0;
+    $("#dpt").click(
+        function(){
+            resetIcon();
+             if(dpt==0){
+                 $("#dpt i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("departmentID"));
+                 dpt=1;
+             }
+             else{
+                 $("#dpt i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("departmentID"));
+                 config.generalInfo.statistics.reverse();
+                 dpt=0;
+             }
+             setGENERAL();
+         } 
+     )
+    $("#avg").click(
+       function(){
+           resetIcon();
+            if(avg==0){
+                $("#avg i").addClass("glyphicon glyphicon-triangle-top");
+                config.generalInfo.statistics.sort(by("average"));
+                avg=1;
+            }
+            else{
+                $("#avg i").addClass("glyphicon glyphicon-triangle-bottom");
+                config.generalInfo.statistics.sort(by("average"));
+                config.generalInfo.statistics.reverse();
+                avg=0;
+            }
+            setGENERAL();
+        } 
+    )
+    $("#cpl").click(
+        function(){
+            resetIcon();
+             if(cpl==0){
+                 $("#cpl i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("completion"));
+                 cpl=1;
+             }
+             else{
+                 $("#cpl i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("completion"));
+                 config.generalInfo.statistics.reverse();
+                 cpl=0;
+             }
+             setGENERAL();
+         } 
+     )
+     $("#pta").click(
+        function(){
+            resetIcon();
+             if(pta==0){
+                 $("#pta i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("proportionA"));
+                 pta=1;
+             }
+             else{
+                 $("#pta i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("proportionA"));
+                 config.generalInfo.statistics.reverse();
+                 pta=0;
+             }
+             setGENERAL();
+         } 
+     )
+     $("#ptb").click(
+        function(){
+            resetIcon();
+             if(ptb==0){
+                 $("#ptb i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("proportionB"));
+                 ptb=1;
+             }
+             else{
+                 $("#ptb i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("proportionB"));
+                 config.generalInfo.statistics.reverse();
+                 ptb=0;
+             }
+             setGENERAL();
+         } 
+     )
+     $("#ptc").click(
+        function(){
+            resetIcon();
+             if(ptc==0){
+                 $("#ptc i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("proportionC"));
+                 ptc=1;
+             }
+             else{
+                 $("#ptc i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("proportionC"));
+                 config.generalInfo.statistics.reverse();
+                 ptc=0;
+             }
+             setGENERAL();
+         } 
+     )
+     $("#ptd").click(
+        function(){
+            resetIcon();
+             if(ptd==0){
+                 $("#ptd i").addClass("glyphicon glyphicon-triangle-top");
+                 config.generalInfo.statistics.sort(by("proportionD"));
+                 ptd=1;
+             }
+             else{
+                 $("#ptd i").addClass("glyphicon glyphicon-triangle-bottom");
+                 config.generalInfo.statistics.sort(by("proportionD"));
+                 config.generalInfo.statistics.reverse();
+                 ptd=0;
+             }
+             setGENERAL();
+         } 
+     )
     //Search 先隐藏再筛选
      $("#search-undo-text").keyup(function () {
          var $key=$('#search-undo-text').val();
@@ -359,7 +674,166 @@ $(function () {
      });
 
      
-
+     var searchVisible = 0;
+     var transparent = true;
+     
+     var transparentDemo = true;
+     var fixedTop = false;
+     
+     var navbar_initialized = false;
+     
+     $(document).ready(function(){
+         window_width = $(window).width();
+         
+         // check if there is an image set for the sidebar's background
+         lbd.checkSidebarImage();
+         
+         // Init navigation toggle for small screens   
+         if(window_width <= 991){
+             lbd.initRightMenu();   
+         }
+          
+         //  Activate the tooltips   
+         $('[rel="tooltip"]').tooltip();
+     
+         //      Activate the switches with icons 
+         if($('.switch').length != 0){
+             $('.switch')['bootstrapSwitch']();
+         }  
+         //      Activate regular switches
+         if($("[data-toggle='switch']").length != 0){
+              $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();     
+         }
+          
+         $('.form-control').on("focus", function(){
+             $(this).parent('.input-group').addClass("input-group-focus");
+         }).on("blur", function(){
+             $(this).parent(".input-group").removeClass("input-group-focus");
+         });
+           
+     });
+     
+     // activate collapse right menu when the windows is resized 
+     $(window).resize(function(){
+         if($(window).width() <= 991){
+             lbd.initRightMenu();   
+         }
+     });
+         
+     lbd = {
+         misc:{
+             navbar_menu_visible: 0
+         },
+         
+         checkSidebarImage: function(){
+             $sidebar = $('.sidebar');
+             image_src = $sidebar.data('image');
+             
+             if(image_src !== undefined){
+                 sidebar_container = '<div class="sidebar-background" style="background-image: url(' + image_src + ') "/>'
+                 $sidebar.append(sidebar_container);
+             }  
+         },
+         initRightMenu: function(){  
+              if(!navbar_initialized){
+                 $navbar = $('nav').find('.navbar-collapse').first().clone(true);
+                 
+                 $sidebar = $('.sidebar');
+                 sidebar_color = $sidebar.data('color');
+                 
+                 $logo = $sidebar.find('.logo').first();
+                 logo_content = $logo[0].outerHTML;
+                         
+                 ul_content = '';
+                  
+                 $navbar.attr('data-color',sidebar_color);
+                  
+                 // add the content from the sidebar to the right menu
+                 content_buff = $sidebar.find('.nav').html();
+                 ul_content = ul_content + content_buff;
+                 
+                 //add the content from the regular header to the right menu
+                 $navbar.children('ul').each(function(){
+                     content_buff = $(this).html();
+                     ul_content = ul_content + content_buff;   
+                 });
+                  
+                 ul_content = '<ul class="nav navbar-nav">' + ul_content + '</ul>';
+                 
+                 navbar_content = logo_content + ul_content;
+                 
+                 $navbar.html(navbar_content);
+                  
+                 $('body').append($navbar);
+                  
+                 background_image = $sidebar.data('image');
+                 if(background_image != undefined){
+                     $navbar.css('background',"url('" + background_image + "')")
+                            .removeAttr('data-nav-image')
+                            .addClass('has-image');                
+                 }
+                  
+                  
+                  $toggle = $('.navbar-toggle');
+                  
+                  $navbar.find('a').removeClass('btn btn-round btn-default');
+                  $navbar.find('button').removeClass('btn-round btn-fill btn-info btn-primary btn-success btn-danger btn-warning btn-neutral');
+                  $navbar.find('button').addClass('btn-simple btn-block');
+                 
+                  $toggle.click(function (){    
+                     if(lbd.misc.navbar_menu_visible == 1) {
+                         $('html').removeClass('nav-open'); 
+                         lbd.misc.navbar_menu_visible = 0;
+                         $('#bodyClick').remove();
+                          setTimeout(function(){
+                             $toggle.removeClass('toggled');
+                          }, 400);
+                     
+                     } else {
+                         setTimeout(function(){
+                             $toggle.addClass('toggled');
+                         }, 430);
+                         
+                         div = '<div id="bodyClick"></div>';
+                         $(div).appendTo("body").click(function() {
+                             $('html').removeClass('nav-open');
+                             lbd.misc.navbar_menu_visible = 0;
+                             $('#bodyClick').remove();
+                              setTimeout(function(){
+                                 $toggle.removeClass('toggled');
+                              }, 400);
+                         });
+                        
+                         $('html').addClass('nav-open');
+                         lbd.misc.navbar_menu_visible = 1;
+                         
+                     }
+                 });
+                 navbar_initialized = true;
+             }
+        
+         }
+     }
+     
+     
+     // Returns a function, that, as long as it continues to be invoked, will not
+     // be triggered. The function will be called after it stops being called for
+     // N milliseconds. If `immediate` is passed, trigger the function on the
+     // leading edge, instead of the trailing.
+     
+     function debounce(func, wait, immediate) {
+         var timeout;
+         return function() {
+             var context = this, args = arguments;
+             clearTimeout(timeout);
+             timeout = setTimeout(function() {
+                 timeout = null;
+                 if (!immediate) func.apply(context, args);
+             }, wait);
+             if (immediate && !timeout) func.apply(context, args);
+         };
+     };
+     
  
 
 
