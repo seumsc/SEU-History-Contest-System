@@ -249,6 +249,14 @@ export default {
 					currentPage++;
 				}
 			});
+			//page-scroll for field quarter
+			$(document).on("click", "label", function () {
+					$('#wrapper').animate({
+						left: "-=120rem"
+					}, 300,"swing");
+					currentPage++;
+			});
+
 			//page-scroll for footer
 			$(document).on("click", "#answerCard a.questionId", function (c) {
 				var tgt = $(c.target).attr('id');
