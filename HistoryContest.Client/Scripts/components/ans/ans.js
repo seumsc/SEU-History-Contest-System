@@ -196,7 +196,8 @@ exports.saveAns = function (clickID) {
 	$("#question" + ID).addClass("answered");
 	setTimeout(function () {
 		$("#question" + ID).click();
-	}, 300);
+    }, 300);
+    
 }
 exports.saveAnsID = function (questions) {
 	for (var i = 0; i < 30; i++) {
