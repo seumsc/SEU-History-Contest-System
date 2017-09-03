@@ -30,7 +30,11 @@ namespace HistoryContest.Server.Services
             {
                 var rawData = await GetStudentData(model.UserName);
                 await LogOut();
-                if (!rawData.Any() || rawData.Contains("没有找到该学生信息"))
+                if (!rawData.Any())
+                {
+                    throw new WebException("Problem in connecting validation network");
+                }
+                if (rawData.Contains("没有找到该学生信息"))
                 {
                     return false;
                 }

@@ -277,14 +277,11 @@ namespace HistoryContest.Server
             var questionSeedService = new QuestionSeedService(unitOfWork);
             int scale = unitOfWork.Configuration.QuestionSeedScale;
             var questionSeeds = questionSeedService.CreateNewSeeds(scale);
-            
-
-            //unitOfWork.Save();
 
             unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
-
+            new TestDataService(unitOfWork).SeedTestedStudents();
 
             syncWithDatabaseTimer = new Timer(async o =>
             {
@@ -309,8 +306,7 @@ namespace HistoryContest.Server
             context.Values["customviewlocation"] = nameof(LocalViewEngine);
         }
 
-        public IEnumerable<string> ExpandViewLocations(
-             ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
+        public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
             return new[]
             {
