@@ -379,9 +379,9 @@ exports.setScoreData = function () {
                 common: ""
             }
         }
-    
+
     }
-    
+
     $.ajax({
         url: '/api/Counselor/Department',
         async: true,
@@ -682,7 +682,12 @@ exports.sort = function () {
     });
 }
 
-exports.logOut=function(){
+exports.logOut = function () {
+    function onbeforeunload_handler() {
+        var warning = "确认退出?";
+        return warning;
+    }
+    window.onbeforeunload = onbeforeunload_handler;
     $.ajax({
         url: '/api/Account/Logout',
         contentType: "application/json",
@@ -697,5 +702,6 @@ exports.logOut=function(){
             alert("数据获取失败，请检查网络！");
         }
     });
-   
+
 }
+

@@ -95,7 +95,8 @@ exports.setRESULT = function (RESULT) {
         }
     }
     console.log(JSON.stringify(RESULT));
-    $("#sec1").remove();
+
+    // $("#sec1").remove();
     $("#sec1").remove();
     $("#sec2").remove();
     $("#quiz-container").remove();
