@@ -14,7 +14,7 @@
 
 数据库地址：http://history-contest.database.chinacloudapi.cn/
 
-Azure管理中心:https://portal.azure.cn
+Azure管理中心: https://portal.azure.cn
 
 ### 配置 & 开发流程
 
