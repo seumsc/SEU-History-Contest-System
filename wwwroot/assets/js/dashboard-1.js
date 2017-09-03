@@ -1,20 +1,25 @@
 /********************Webpage Common Configurations********************/
 var DepartmentNameMap={
-    "010":"建筑学院",
-    "020":"机械工程学院",
-    "030":"能源与环境学院",
-    "040":"信息科学与工程学院",
-    "050":"土木工程学院",
-    "060":"电子科学与工程学院",
-    "070":"数学学院",
-    "080":"自动化学院",
-    "144":"计算机科学与工程学院、软件学院",
-    "711":"计算机科学与工程学院、软件学院"
+    1:"建筑学院",
+    2:"机械工程学院",
+    3:"能源与环境学院",
+    4:"信息科学与工程学院",
+    5:"土木工程学院",
+    6:"电子科学与工程学院",
+    7:"数学学院",
+    8:"自动化学院",
+    9:"计算机科学与工程学院、软件学院",
+    71:"计算机科学与工程学院、软件学院"
 }
 var config={
     department:null,
     departmentName:null,
-    generalInfo:null,
+    departmentInfo:{}, //summuray of current department
+    generalInfo:{
+        allDepartments:[], //all departments enum
+        summary:{}, //general
+        statistics:[] //summary of all departments
+    },
     scoreList:null,
     undoList:[],
     undoNumber:null,
@@ -86,13 +91,16 @@ function setDone(DONE){
     }
     $("#table-done").find("tbody").html(doneContent);
 }
-function initChartist(){ 
+function setGeneralData(){
+    fetchAllDepartments(); 
+}
+function setChartist(){ 
     var labelForDone=Math.round(100*(config.doneNumber/config.total))+"%";
     var labelForUndo=Math.round(100*(config.undoNumber/config.total))+"%";
-    var labelA=Math.round(100*(config.generalInfo.scoreBandCount.higherThan90/config.total))+"%";
-    var labelB=Math.round(100*(config.generalInfo.scoreBandCount.failed/config.total))+"%";
-    var labelC=Math.round(100*(config.generalInfo.scoreBandCount.higherThan75/config.total))+"%";
-    var labelD=Math.round(100*(config.generalInfo.scoreBandCount.higherThan60/config.total))+"%";
+    var labelA=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan90/config.doneNumber))+"%";
+    var labelB=Math.round(100*(config.departmentInfo.scoreBandCount.failed/config.doneNumber))+"%";
+    var labelC=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan75/config.doneNumber))+"%";
+    var labelD=Math.round(100*(config.departmentInfo.scoreBandCount.higherThan60/config.doneNumber))+"%";
     
     Chartist.Pie('#completion-chart', {   
         labels: [(config.doneNumber==0?'':labelForDone),
@@ -115,21 +123,91 @@ function initChartist(){
         Chartist.Pie('#overall-chart', {
             
             labels: [
-                (config.generalInfo.scoreBandCount.higherThan90==0?'':labelA),
-                (config.generalInfo.scoreBandCount.failed==0?'':labelB),
-                (config.generalInfo.scoreBandCount.higherThan75==0?'':labelC),
-                (config.generalInfo.scoreBandCount.higherThan60==0?'':labelD)
+                (config.departmentInfo.scoreBandCount.higherThan90==0?'':labelA),
+                (config.departmentInfo.scoreBandCount.failed==0?'':labelB),
+                (config.departmentInfo.scoreBandCount.higherThan75==0?'':labelC),
+                (config.departmentInfo.scoreBandCount.higherThan60==0?'':labelD)
             ],
             series: [
-                config.generalInfo.scoreBandCount.higherThan90,
-                config.generalInfo.scoreBandCount.failed,
-                config.generalInfo.scoreBandCount.higherThan75,
-                config.generalInfo.scoreBandCount.higherThan60
+                config.departmentInfo.scoreBandCount.higherThan90,
+                config.departmentInfo.scoreBandCount.failed,
+                config.departmentInfo.scoreBandCount.higherThan75,
+                config.departmentInfo.scoreBandCount.higherThan60
             ]
         });   
     }
 }
+function setGeneralChartist(){
+    var gDoneNum=config.generalInfo.summary.scoreBandCount.failed
+        +config.generalInfo.summary.scoreBandCount.higherThan60
+        +config.generalInfo.summary.scoreBandCount.higherThan75
+        +config.generalInfo.summary.scoreBandCount.higherThan90;
+    var gUndoNum=config.generalInfo.summary.scoreBandCount.notTested;
+    var gTot=gDoneNum+gUndoNum;
+    var labelForDone=Math.round(100*(gDoneNum/gTot))+"%";
+    var labelForUndo=Math.round(100*(gUndoNum/gTot))+"%";
+    var labelA=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan90/gDoneNum))+"%";
+    var labelB=Math.round(100*(config.generalInfo.summary.scoreBandCount.failed/gDoneNum))+"%";
+    var labelC=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan75/gDoneNum))+"%";
+    var labelD=Math.round(100*(config.generalInfo.summary.scoreBandCount.higherThan60/gDoneNum))+"%";
 
+    Chartist.Pie('#completion-chart-general', {   
+    labels: [(gDoneNum==0?'':labelForDone),
+    (gUndoNum==0?'':labelForUndo)],
+    series: [gDoneNum, gUndoNum]
+    });   
+    //若无人作答，显示相应提示信息
+    if(gDoneNum==0){
+    Chartist.Pie('#overall-chart-general', {
+
+    labels: [
+    "尚未有学生作答"
+    ],
+    series: [
+    100
+    ]
+    });  
+    }
+    else{
+    Chartist.Pie('#overall-chart-general', {
+
+    labels: [
+    (config.generalInfo.summary.scoreBandCount.higherThan90==0?'':labelA),
+    (config.generalInfo.summary.scoreBandCount.failed==0?'':labelB),
+    (config.generalInfo.summary.scoreBandCount.higherThan75==0?'':labelC),
+    (config.generalInfo.summary.scoreBandCount.higherThan60==0?'':labelD)
+    ],
+    series: [
+    config.generalInfo.summary.scoreBandCount.higherThan90,
+    config.generalInfo.summary.scoreBandCount.failed,
+    config.generalInfo.summary.scoreBandCount.higherThan75,
+    config.generalInfo.summary.scoreBandCount.higherThan60
+    ]
+    });   
+    }
+}
+function setGENERAL(){
+    var generalContent="";
+    var STAT=config.generalInfo.statistics;
+      console.log(STAT);
+    for(var statIteratorIndex=0;statIteratorIndex<STAT.length;statIteratorIndex++){
+        var donenum = STAT[statIteratorIndex].studentCount - STAT[statIteratorIndex].scoreBandCount.notTested;
+        var average = STAT[statIteratorIndex].averageScore.toFixed(2);
+        var completion = 100 * (1 - STAT[statIteratorIndex].scoreBandCount.notTested/STAT[statIteratorIndex].studentCount);
+        var proportionA = Math.round (100 * (STAT[statIteratorIndex].scoreBandCount.higherThan90/donenum));
+        var proportionB = Math.round (100 * (STAT[statIteratorIndex].scoreBandCount.higherThan75/donenum));
+        var proportionC = Math.round (100 * (STAT[statIteratorIndex].scoreBandCount.higherThan60/donenum));
+        var proportionD = Math.round (100 * (STAT[statIteratorIndex].scoreBandCount.failed/donenum));
+        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID
+        +'</td><td>'+average
+        +'</td><td>'+completion
+        +'</td><td>'+proportionA
+        +'</td><td>'+proportionB
+        +'</td><td>'+proportionC
+        +'</td><td>'+proportionD+'</td></tr>'
+    }
+    $("#table-general").find("tbody").html(generalContent);
+}
 function commonSet(){
     console.log(config.departmentName);
     $("#school-name").html(config.departmentName);
@@ -148,127 +226,9 @@ function commonSet(){
         $("#undo-info").html(config.comments.undos.common);
         $("#empty-comment").hide();
     }
-    $("#average-score").html(config.generalInfo.averageScore.toFixed(2));
-    $("#max-score").html(config.generalInfo.maxScore);
+    $("#average-score").html(config.departmentInfo.averageScore.toFixed(2));
+    $("#max-score").html(config.departmentInfo.maxScore);
 
-}
-
-/********************API Interfaces********************/
-function fetchData(){
-    $.ajax({
-        url:  '/api/Counselor/Department', //请求的url地址 
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性      
-        type: "GET", //请求方式
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        success: function (req) {
-          //请求成功时处理
-         console.log(req);
-         config.department=req;
-         console.log(config.department);
-         fetchSummary();
-         
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-    });
-}
-function fetchSummary(){
-    $.ajax({
-        url:  '/api/Counselor/Scores/Summary/'+config.department, //请求的url地址
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性 
-        type: "GET", //请求方式
-        success: function (req) {
-          //请求成功时处理
-          console.log(req);
-          config.generalInfo=req;
-          console.log(config.generalInfo);
-          config.departmentName=DepartmentNameMap[config.generalInfo.departmentID];
-          console.log(config.generalInfo.departmentID);
-          fetchAllScores();
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-      });
-       
-}
-function fetchAllScores(){
-    $.ajax({
-        url:  '/api/Counselor/Scores/All/'+config.department, //请求的url地址
-        contentType:"application/json",
-        dataType: "json", //返回格式为json
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        type: "GET", //请求方式
-        success: function (req) {
-          //请求成功时处理
-          console.log(req);
-          setUndoNDo(req);
-          setUndo(config.undoList);
-          setDone(config.doneList);
-          initChartist();
-          commonSet();
-        },
-        error: function () {
-          //请求出错处理
-          alert("数据获取失败，请检查网络！");
-        }
-      });
-}
-function downloadDepartmentExcel(){
-    $.ajax({
-    url:  '/api/Counselor/ExportExcelofDepartment', //请求的url地址
-    
-    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-    
-    crossDomain:true,
-    
-    type: "POST", //请求方式
-    
-    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    
-    success: function (req) {
-      //请求成功时处理
-      window.location = '/excel/'+req;
-    },
-    
-    error: function (xhr) {
-      //请求出错处理
-      alert("数据获取失败，请检查网络！");
-      console.log(xhr);
-    }
-  });
-
-}
-function downloadExcelOfAllDepartments(){
-    $.ajax({
-        url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
-        
-        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        
-        crossDomain:true,
-        
-        type: "POST", //请求方式
-        
-        contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        
-        success: function (req) {
-        //请求成功时处理
-        console.log(req);
-        window.location = '/excel/'+req;
-        },
-        
-        error: function (xhr) {
-        //请求出错处理
-        alert("数据获取失败，请检查网络！");
-        console.log(xhr);
-        }
-  });
 }
 /********************Variable Needed for Search********************/
 var temp=new Array();
@@ -292,15 +252,193 @@ var by = function(name){
         }
     }
 }
+/********************API Interfaces********************/
+//Initialize the Score Tab, call this function only once.
+function setScoreData(){
+    $.ajax({
+        url:  '/api/Counselor/Department', 
+        async: true,   
+        type: "GET", 
+        contentType:"application/json",
+        dataType: "json", 
+        success: function (req) {
+         console.log(req);
+         config.department=req;
+         console.log(config.department);
+         fetchSummary(config.department,fetchAllScores);
+        },
+        error: function (xhr) {
+          alert("数据获取失败，请检查网络！");
+          console.log(xhr);
+        }
+    });
+}
+//When department summary is fetched, a callback may be needed to fetch all scores of current department.
+//However, Counselor CANNOT get scores of other departments.
+//To fetch general summary of all departments, no params are needed.
+function fetchSummary(department,callback){
+    if(department==undefined){
+        department="";
+    }
+    else{
+        department='/'+department;
+    }
+    $.ajax({
+        url:  '/api/Counselor/Scores/Summary'+department,
+        contentType:"application/json",
+        dataType: "json", 
+        async: false, 
+        type: "GET", 
+        success: function (req) {
+            //Department Info
+            if(req.departmentID!=undefined){
+                //counselor department
+                if(req.departmentID==config.department){
+                    console.log(req);
+                    config.departmentInfo=req;
+                    console.log(config.departmentInfo);
+                    config.departmentName=DepartmentNameMap[config.departmentInfo.departmentID];
+                    console.log(config.departmentInfo.departmentID);
+                    config.generalInfo.statistics[0] = req;// !!!danger
+                }
+                //other
+                else{
+                    console.log(req);
+                    config.generalInfo.statistics.push(req);
+                }
+                if(callback!=undefined){
+                    callback();
+                }
+            }
+            //General Info
+            else{
+                console.log(req);
+                config.generalInfo.summary=req;
+                console.log( config.generalInfo.summary);
+                //set chartist
+                if(callback!=undefined){
+                    callback();
+                }
+
+            }
+        },
+        error: function () {
+          alert("数据获取失败，请检查网络！");
+        }
+      });
+       
+}
+//Ensure Counselor CANNOT get scores of other departments.
+//Set tab1 tables
+function fetchAllScores(){
+   
+    $.ajax({
+        url:  '/api/Counselor/Scores/All', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          setUndoNDo(req);
+          setUndo(config.undoList);
+          setDone(config.doneList);
+          setChartist();
+          commonSet();
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+function fetchAllStudents(){
+    $.ajax({
+        url:  '/api/Counselor/AllStudents', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+//fetch department id enum & statistics
+function fetchAllDepartments(){
+    $.ajax({
+        url:  '/api/Counselor/AllDepartments', 
+        contentType:"application/json",
+        dataType: "json", 
+        async: true, 
+        type: "GET", 
+        success: function (req) {
+          console.log(req);
+          config.generalInfo.allDepartments=req;
+          for(var i=0;i<config.generalInfo.allDepartments.length;i++){
+              if(i+1<config.generalInfo.allDepartments.length){
+                fetchSummary(config.generalInfo.allDepartments[i]);
+              }
+              else{
+                fetchSummary(config.generalInfo.allDepartments[i],setGENERAL);
+              }
+          }
+          
+         
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert("数据获取失败，请检查网络！");
+        }
+      });
+}
+function downloadDepartmentExcel(){
+    $.ajax({
+    url:  '/api/Counselor/ExportExcelofDepartment',
+    async: true, 
+    type: "POST", 
+    contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    success: function (req) {
+      window.location = '/excel/'+req;
+    },
+    error: function (xhr) {
+      alert("数据获取失败，请检查网络！");
+      console.log(xhr);
+    }
+  });
+}
+function downloadExcelOfAllDepartments(){
+    $.ajax({
+        url:  '/api/Counselor/ExportExcelOfAllDepartments', //请求的url地址
+        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+        crossDomain:true,
+        type: "POST", //请求方式
+        contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        success: function (req) {
+            console.log(req);
+            window.location = '/excel/'+req;
+        },
+        error: function (xhr) {
+            alert("数据获取失败，请检查网络！");
+            console.log(xhr);
+        }
+  });
+}
+
 /********************Document Ready Function********************/
 $(function () {
     
-   fetchData();
-
-
+  setScoreData();
+ 
+  setGeneralData();
     //Refresh
     $("#refresh-button").click(function(){
-       fetchData();
+       setScoreData();
     })
     //Download
     $(".department-excel").click(function(){
