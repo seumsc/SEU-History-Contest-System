@@ -10,15 +10,14 @@
 	</div>
 </template>
 <style>
-	@import '../../../node_modules/font-awesome/css/font-awesome.min.css';
-	/* Page */
-		html {
+	html {
 		font-size: 16px;
 		width: 100%;
 		height: 100%;
 	}
 
-	 body {
+	body {
+		/* text-align: center; */
 		overflow: hidden;
 		width: 100%;
 		height: 100%;
@@ -32,12 +31,12 @@
 		height: 100%;
 		background-attachment: fixed;
 		background-color: #eee;
-		background-image: /*url("/dist/Images/overlay.png"), url("/dist/Images/bg.jpg")*/;
+		/* background-image: /*url("/dist/Images/overlay.png"), url("/dist/Images/bg.jpg")*/
 		background-repeat: repeat, repeat-x;
 		background-size: 128px 128px, cover;
-	} 
+	}
 
-		#txt {
+	#txt {
 		color: rgba(255, 255, 255, 0.75);
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		/*font-family:Micorcoft YaHei;*/
@@ -46,7 +45,7 @@
 		line-height: 1.65;
 	}
 
-	#head3{
+	#head3 {
 		/* font-size: 1.325rem; */
 		margin: 0;
 		padding: 0;
@@ -61,15 +60,25 @@
 		line-height: 1.3;
 		margin: 0 0 0.75rem 0;
 		letter-spacing: -0.05em;
-
 	}
-	.major{
-		/* color:#fff;		 */
+
+	h1 {
+		/* font-size: 3rem; */
+		line-height: 1.2;
+	}
+
+	h1.major {
+		margin: 0 0 2.625rem 0;
+		position: relative;
+	}
+
+	.major {
+		color: #fff;
 		color: rgba(255, 255, 255, 0.875);
 		position: relative;
 	}
 
-	major:after{
+	major:after {
 		content: '';
 		position: absolute;
 		left: 0;
@@ -78,8 +87,8 @@
 		color: rgba(255, 255, 255, 0.875);
 		/* color:#fff; */
 	}
-
 	/* Form */
+
 	input[type="radio"] {
 		-moz-appearance: none;
 		-webkit-appearance: none;
@@ -92,6 +101,7 @@
 		width: 1rem;
 		z-index: -1;
 	}
+
 	input[type="radio"]+label {
 		text-decoration: none;
 		position: relative;
@@ -166,7 +176,6 @@
 	input[type="radio"]+label:before {
 		border-radius: 100%;
 	}
-
 	/* Icon */
 
 	.icon {
@@ -367,7 +376,6 @@
 		width: 100%;
 	}
 	/* List */
-
 
 	ul {
 		list-style: disc;
@@ -665,7 +673,6 @@
 	ul.grid-icons.four>li:nth-child(4n - 3):before {
 		display: none;
 	}
-
 	/* Button */
 
 	input[type="submit"],
@@ -1991,7 +1998,6 @@
 		background-size: 128px 128px, auto;
 		background-color: #323459;
 	}
-
 	/* Panel (Banner) */
 
 	.panel.banner {
@@ -2140,7 +2146,6 @@
 	.panel.spotlight.right .content {
 		background-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.125) 30%, rgba(0, 0, 0, 0.175) 50%);
 	}
-
 	/* Page Wrapper */
 
 	#page-wrapper {
@@ -2164,8 +2169,11 @@
 		-webkit-flex-shrink: 1;
 		-ms-flex-shrink: 1;
 		flex-shrink: 1;
-		height: 34rem;
-		margin: 10rem;
+		height: 100%;
+		padding: 8rem;
+		/* margin: 10rem auto 10rem 10rem; */
+		/* top:10rem;  */
+		/* bottom:50%; */
 	}
 
 	@media screen and (orientation: portrait) {
