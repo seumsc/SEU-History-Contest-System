@@ -8,6 +8,7 @@ using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Data;
 using Newtonsoft.Json;
 using HistoryContest.Server.Models;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Services
 {
@@ -62,38 +63,46 @@ namespace HistoryContest.Server.Services
             return new string[] { choiceSeedPath, trueFalseSeedPath };
         }
 
-        public static string[] ParseStudentInformation(string path)
+        public static string ParseStudents(string path)
         {
-            var students = new List<StudentInformation>();
+            var students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(ContestContext.GetSeedPath<Student>()));
+            var studentIDs = students.Select(s => s.ID).ToHashSet();
 
             using (StreamReader sr = new StreamReader(path))
             {
-                Console.Write("Processing...Parsed ");
-                var entries = sr.ReadToEnd().Split("\r\n");
-                Console.WriteLine("entries:{0}", entries.Length-1);
-
-                for (int i = 1; i < entries.Length; ++i)
+                Console.Write("Processing...Read ");
+                sr.ReadLine();
+                for (int i = 0; !sr.EndOfStream; ++i)
                 {
-                    string oneline = entries[i].ToString();
+                    Console.Write(i);
+                    string entry = sr.ReadLine();
+                    string[] information = entry.Split("\t");
 
-                    string[] information = oneline.Split("\t");
-                    
-                    students.Add(new StudentInformation
+                    var student = new Student
                     {
-                        ID = information[1],
+                        ID = information[1].ToIntID(),
                         Name = information[0],
-                        CardID = information[2]
-                    });
+                        CardID = int.Parse(information[2])
+                    };
+                    if (!studentIDs.Contains(student.ID))
+                    {
+                        students.Add(student);
+                    }
+                    Console.Write(new string('\b', i.ToString().Length));
                 }
             }
-
             string studentSeedPath = ContestContext.GetSeedPath<Student>();
 
             Console.WriteLine("\nSerializing to json file...");
-            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students, Formatting.Indented));
+            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students.Select(s => new
+            {
+                ID = s.ID.ToStringID(),
+                Name = s.Name,
+                CardID = s.CardID.ToString()
+            }), Formatting.Indented));
 
             Console.WriteLine("Finished.");
-            return new string[] { studentSeedPath };
+            return studentSeedPath;
         }
     }
 }

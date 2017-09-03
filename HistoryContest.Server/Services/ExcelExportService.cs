@@ -69,12 +69,7 @@ namespace HistoryContest.Server.Services
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists)
             {
-                
-                List<ScoreSummaryByDepartmentViewModel> datatable = null;
-                foreach (var counselor in unitOfWork.DbContext.Counselors)
-                {
-                    datatable.Add(await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, counselor));
-                }
+                var dataTable = unitOfWork.DbContext.Counselors.Select( c => ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, c)).ToList();
                 
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
@@ -93,8 +88,9 @@ namespace HistoryContest.Server.Services
                     
                     //添加值
                     int number = 2;
-                    foreach (var scoreSummary in datatable)
+                    foreach (var scoreSummaryTask in dataTable)
                     {
+                        var scoreSummary =  await scoreSummaryTask;
                         worksheet.Cells[number, 1].Value = scoreSummary.DepartmentID;
                         worksheet.Cells[number, 2].Value = scoreSummary.CounselorName;
                         worksheet.Cells[number, 3].Value = scoreSummary.MaxScore;
@@ -209,7 +205,7 @@ namespace HistoryContest.Server.Services
             return;
         }
 
-        public void UpdateExcelOfSchool(object source, ElapsedEventArgs e)
+        public void UpdateExcelOfSchool()
         {
             string sWebRootFolder = Startup.Environment.WebRootPath;
             string sFileName = @"excel/" + "ScoreSummaryOfAllDepartments.xlsx";

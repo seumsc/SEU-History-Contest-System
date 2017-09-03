@@ -87,6 +87,7 @@ namespace HistoryContest.Server.Services
                     rdGenerator.ResetContext(nameof(ChoiceQuestion));
                     rdGenerator.ResetContext(nameof(TrueFalseQuestion));
                 }
+                Console.WriteLine();
             }
 
             return seeds;

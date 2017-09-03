@@ -3,6 +3,8 @@ using HistoryContest.Server.Data.Repositories;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using System.Linq;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Data
 {
@@ -57,7 +59,23 @@ namespace HistoryContest.Server.Data
         {
             return await context.SaveChangesAsync();
         }
-        
+
+        public async Task SaveCacheToDataBase()
+        {
+            var questionSeeds = await Cache.QuestionSeeds().GetAllValuesAsync();
+            if (!DbContext.QuestionSeeds.Any())
+            {
+                questionSeeds.ForEach(s => s.ID = 0);
+                await DbContext.QuestionSeeds.AddRangeAsync(questionSeeds);
+            }
+            else
+            {
+                DbContext.QuestionSeeds.UpdateRange(questionSeeds);
+            }
+            DbContext.Students.UpdateRange(await StudentRepository.GetAll());
+            await DbContext.SaveChangesAsync();
+        }
+
         #region Disposal Setting
         private bool disposed = false;
 
