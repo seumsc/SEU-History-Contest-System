@@ -178,6 +178,10 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 return Json(new { isSuccessful = false, message = ex.Message + ". Please try again." });
             }
+            catch (KeyNotFoundException ex)
+            {
+                return Json(new { isSuccessful = false, message = "Student data not found. Raw page data: \n" + ex.Message });
+            }
             if (user != null)
             {
                 return Json(new { isSuccessful = true, user });
