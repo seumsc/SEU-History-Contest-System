@@ -61,18 +61,19 @@ namespace HistoryContest.Server
                         ++i;
                         parseSetting = new { Type = "question", Format = "sql", Path = args[i] };
                         break;
-                    case "--parse-student-sql":
+                    case "--parse-student-text":
                         ++i;
-                        parseSetting = new { Type = "student", Format = "sql", Path = args[i] };
+                        parseSetting = new { Type = "student", Format = "text", Path = args[i] };
                         break;
                     case "-h":
                     case "--help":
                         string[] messages = new string[]
                         {
-                            "-h|--help                     显示帮助。",
-                            "-rb|--runbrowser              程序启动后运行默认浏览器打开网站。",
-                            "-env|--environment <env>      设置程序运行环境。默认为\"Production\"。",
-                            "--parse-question-sql <path>   解析一个sql格式问题集到json数据文件。"
+                            "-h|--help                      显示帮助。",
+                            "-rb|--runbrowser               程序启动后运行默认浏览器打开网站。",
+                            "-env|--environment <env>       设置程序运行环境。默认为\"Production\"。",
+                            "--parse-question-sql <path>    解析一个sql格式问题集到json数据文件。",
+                            "--parse-question-text <path>   解析一个文本格式学生信息集到json数据文件。"
                         };
                         foreach (var message in messages)
                         {
@@ -86,7 +87,7 @@ namespace HistoryContest.Server
             #region Environment Setting
             if (envSetting.SwitchEnv == true)
             {
-                switch (envSetting.EnvName as string)
+                switch ((envSetting.EnvName as string).ToLowerInvariant())
                 {
                     case "development":
                         EnvironmentName = "Development";
@@ -129,8 +130,8 @@ namespace HistoryContest.Server
                     case "student":
                         switch (parseSetting.Format as string)
                         {
-                            case "sql":
-                                DocParseService.ParseStudentInformation(parseSetting.Path as string);
+                            case "text":
+                                DocParseService.ParseStudents(parseSetting.Path as string);
                                 break;
                         }
                         break;

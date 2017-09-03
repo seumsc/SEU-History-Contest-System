@@ -15,13 +15,12 @@ namespace HistoryContest.Server.Services
     public class VPNSpiderService
     {
         private readonly UnitOfWork unitOfWork;
-        public CookieContainer CookieContainer { get; set; }
+        public static CookieContainer CookieContainer { get; set; } = new CookieContainer();
         public HttpClient Client { get; set; }
 
         public VPNSpiderService(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            CookieContainer = new CookieContainer();
             Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = CookieContainer });
         }
 
@@ -31,7 +30,7 @@ namespace HistoryContest.Server.Services
             {
                 var rawData = await GetStudentData(model.UserName);
                 await LogOut();
-                if (rawData.Contains("没有找到该学生信息"))
+                if (!rawData.Any() || rawData.Contains("没有找到该学生信息"))
                 {
                     return false;
                 }
@@ -41,6 +40,7 @@ namespace HistoryContest.Server.Services
             }
             else
             {
+                await LogOut();
                 throw new WebException("Problem in connecting validation network");
             }
         }
@@ -60,7 +60,7 @@ namespace HistoryContest.Server.Services
             { // 当前有活动Session，需要关闭
                 var pageSource = await (await GetRequest(response.Headers.Location.AbsoluteUri)).Content.ReadAsStringAsync();
                 var webResponse = await ConfirmOpenSession(pageSource);
-                return webResponse.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"); // 选择Session关闭失败
+                return !webResponse.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"); // 选择Session关闭失败
             }
             else if (response.Headers.Location.AbsoluteUri.Contains(@"welcome.cgi?p=failed"))
             { // 登录失败
@@ -84,7 +84,7 @@ namespace HistoryContest.Server.Services
             var matches = Regex.Matches(pageSource, "<input.*?name=\"(.*?)\".*?value=\"(.*?)\".*?>");
             var formParams = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
             string confirmUrl = "https://vpn3.seu.edu.cn/dana-na/auth/url_default/login.cgi";
-            string confirmParams = string.Format("postfixSID={0}&btnContinue={1}&FormDataStr={2}", formParams["postfixSID"], formParams["btnContinue"], formParams["FormDataStr"]);
+            string confirmParams = string.Format("postfixSID={0}&btnContinue=关闭选定会话并登录&FormDataStr={1}", formParams["postfixSID"], formParams["FormDataStr"]);
             return await PostRequest(confirmUrl, confirmParams);
         }
 
@@ -97,7 +97,8 @@ namespace HistoryContest.Server.Services
 
         private async Task<HttpResponseMessage> PostRequest(string formUrl, string formParams)
         {
-            var content = new StringContent(formParams, Encoding.UTF8);
+            var client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = CookieContainer });
+            var content = new StringContent(formParams, Encoding.UTF8, "application/x-www-form-urlencoded");
             return await Client.PostAsync(formUrl, content);
         }
 

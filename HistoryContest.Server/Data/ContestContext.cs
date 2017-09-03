@@ -16,6 +16,11 @@ namespace HistoryContest.Server.Data
 {
     public class ContestContext : DbContext
     {
+        public ContestContext()
+        {
+
+        }
+
         public ContestContext(DbContextOptions<ContestContext> options) : base(options)
         {
 
@@ -61,9 +66,10 @@ namespace HistoryContest.Server.Data
                 var seeds = JsonConvert.DeserializeObject<List<TEntity>>(File.ReadAllText(GetSeedPath<TEntity>()));
                 if (typeof(TEntity) == typeof(Student))
                 {
+                    var counselors = Counselors.ToList();
                     foreach (var student in seeds as List<Student>)
                     {
-                        student.CounselorID = Counselors.FirstOrDefault(c => c.Department == student.Department).ID;
+                        student.CounselorID = counselors.FirstOrDefault(c => c.Department == student.Department).ID;
                     }
                 }
                 AddRange(seeds);

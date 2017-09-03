@@ -99,7 +99,9 @@ namespace HistoryContest.Server.Data.Repositories
             int size = (int)(await studentDictionary.CountAsync());
             if (size == 0)
             {
-                var counselor = context.Counselors.Where(c => c.Department == department).Include(c => c.Students).SingleOrDefault();
+                var set = context.Counselors.Where(c => c.Department == department);
+                var relativeReadSet = set.Include(c => c.Students);
+                var counselor = relativeReadSet.SingleOrDefault();
                 if (counselor == null)
                 {
                     return 0;

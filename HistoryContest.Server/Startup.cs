@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace HistoryContest.Server
 {
@@ -28,6 +30,7 @@ namespace HistoryContest.Server
     {
         public static IConfigurationRoot Configuration { get; set; }
         public static IHostingEnvironment Environment { get; set; }
+        private static Timer syncWithDatabaseTimer;
 
         public Startup(IHostingEnvironment env)
         {
@@ -275,28 +278,27 @@ namespace HistoryContest.Server
             int scale = unitOfWork.Configuration.QuestionSeedScale;
             var questionSeeds = questionSeedService.CreateNewSeeds(scale);
             
-            //if (unitOfWork.DbContext.QuestionSeeds.Any())
-            //{
-            //    unitOfWork.DbContext.QuestionSeeds.UpdateRange(questionSeeds);
-            //}
-            //else
-            //{
-            //    questionSeeds.ForEach(s => s.ID = 0);
-            //    unitOfWork.DbContext.QuestionSeeds.AddRange(questionSeeds);
-            //}
+
             //unitOfWork.Save();
 
             unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
 
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Enabled = true;
-            timer.Interval = 600000; //执行间隔时间,单位为毫秒; 这里实际间隔为10分钟  
-            ExcelExportService excelExportService = new ExcelExportService(unitOfWork);
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(excelExportService.UpdateExcelOfSchool);
-            timer.Start();
 
+            syncWithDatabaseTimer = new Timer(async o =>
+            {
+                var _services = new ServiceCollection();
+                ConfigureServices(_services);
+                using (var _serviceProvider = _services.BuildServiceProvider())
+                using (UnitOfWork _unitOfWork = _serviceProvider.GetService<UnitOfWork>())
+                {
+                    await _unitOfWork.SaveCacheToDataBase();
+                    new ExcelExportService(_unitOfWork).UpdateExcelOfSchool();
+                }
+                GC.Collect();
+                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
+            }, null, (int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
         }
     }
 

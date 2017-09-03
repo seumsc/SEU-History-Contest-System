@@ -198,6 +198,7 @@ namespace HistoryContest.Server.Controllers.APIs
             //await unitOfWork.SaveAsync();
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
+            new ExcelExportService(unitOfWork).UpdateExcelByDepartmentid((StudentViewModel)student);
             return Json(model);
         }
 
