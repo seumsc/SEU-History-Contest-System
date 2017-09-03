@@ -52,7 +52,7 @@ namespace HistoryContest.Server.Services
                             var submits = new byte[30];
                             for (int k = 0; k < answers.Count; ++k)
                             {
-                                submits[k] = (byte)rdGenerator.Next(0, 4);
+                                submits[k] = (byte)rdGenerator.Next(0, 2);
                                 score += submits[k] == answers[k].Answer ? answers[k].Points : 0;
                             }
                             student.Score = score;

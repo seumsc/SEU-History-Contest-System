@@ -14,14 +14,14 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li @click="loadData">
-                            <a id="refresh"><span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+                            <a href="#" id="refresh"><span class="glyphicon glyphicon-refresh"></span> 刷新</a>
                         </li>
                         <li @click="downloadDepartmentExcel">
-                            <a><span class="glyphicon glyphicon-th-list"></span>
+                            <a href="#"><span class="glyphicon glyphicon-th-list"></span>
                                                         导出EXCEL
                                                     </a>
                         </li>
-                        <li>
+                        <li @click="logOut">
                             <a href="#"><span class="glyphicon glyphicon-off"></span>
                                                         退出
                                                     </a>
@@ -173,7 +173,7 @@
         }
     
         .restricted {
-            max-height: 500px;
+            max-height: 100%;
             overflow-y: auto;
         }
     
