@@ -24,6 +24,9 @@ using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
+using HistoryContest.Server.Models.ViewModels;
+using HistoryContest.Server.Models.Entities;
 
 namespace HistoryContest.Server
 {
@@ -182,7 +185,7 @@ namespace HistoryContest.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, UnitOfWork unitOfWork)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, UnitOfWork unitOfWork, IAntiforgery antiforgery)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -201,10 +204,7 @@ namespace HistoryContest.Server
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseCors("OpenPolicy");
-
-            // enable status code response page
-            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
+            //app.UseCors("OpenPolicy");
 
             #region Static file routes
             // use wwwroot static files
@@ -242,6 +242,45 @@ namespace HistoryContest.Server
             });
             #endregion
 
+            // use sessions
+            app.UseSession();
+
+            app.Use(async (context, next) =>
+            {
+                string path = context.Request.Path.Value;
+                if (!path.ToLower().Contains("/api/account/logout"))
+                {
+                    // This is needed to provide the token generator with the logged in context (if any) 
+                    var authInfo = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    context.User = authInfo.Principal;
+
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+                }
+                await next.Invoke();
+                if (path.ToLower() == "/api/result/" && context.Request.Method == "POST")
+                {
+                    // 改分后更新数据
+                    var student = context.Session.Get<Student>("StudentToUpdate");
+                    var result = context.Session.Get<ResultViewModel>("ResultToUpdate");
+                    //context.Session.Remove("StudentToUpdate");
+                    //context.Session.Remove("ResultToUpdate");
+                    using (var _unitOfWork = context.RequestServices.GetService<UnitOfWork>())
+                    {
+                        var ID = student.ID.ToStringID();
+                        var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(_unitOfWork, student.Counselor);
+                        await summary.UpdateAsync(_unitOfWork, student); // 更新院系概况，放在前面防止重复计算
+                        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // 更新Student
+                        await _unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(ID, (StudentViewModel)student);
+                        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // 学生ID放入待更新列表
+                        await _unitOfWork.Cache.Results().SetAsync(ID, result); // result存入缓存
+                        new ExcelExportService(_unitOfWork).UpdateExcelByStudent((StudentViewModel)student);
+                    }
+                    // 注销
+                    context.Session.Clear(); // 注销账户
+                    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            });
 
             #region Authentication settings
             // Use Cookie Authentication
@@ -257,11 +296,10 @@ namespace HistoryContest.Server
                 AutomaticChallenge = true
             });
 #endif
-
-            // use sessions
-            app.UseSession();
             #endregion
 
+            // enable status code response page
+            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
             #region Javascript spa routes
             app.UseMvc(routes =>
