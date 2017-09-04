@@ -90,6 +90,7 @@ function setRESULT(RESULT){
 }
 function resetToShowResult(){
 	//Common Set & SHOW RESULTS
+	$("#wrapper").removeClass("testing");
 	$("#welcome-container").remove();
 	$("#quiz-container").remove();
 	$("#submit-container").remove();
@@ -97,7 +98,8 @@ function resetToShowResult(){
 	$("#footer").remove();
 	config.timeState=false;
 	//SHOW RESULTS
-	$("#result-container").html(config.resultHTML);	
+	//$("#result-container").html(config.resultHTML);
+	$("#result-container").show();	
 	setRESULT(config.resultJSON);
 	//CHECK QUESTION ARRAY
 	if(config.questionArray.length==0){
@@ -210,7 +212,8 @@ function initialize(){
 		success: function (req) {
 			console.log(req);
 			getStateNShowWebpage();
-			console.log("Hi");
+
+			
 		},
 		error: function (req) {
 			alert("初始化失败，请检查网络是否通畅")
@@ -219,7 +222,7 @@ function initialize(){
 	});
 }
 function getStateNShowWebpage(){
-	console.log("Function");
+	console.log("Setting Webpage...");
 	$.ajax({
 		url: "/api/Student/State", 
 		async: true, 
@@ -228,15 +231,18 @@ function getStateNShowWebpage(){
 			//Show Questions	
 			console.log(req);
 			if(req.testState==1){
+				//setSeed
 				if(req.isSeedSet==false){
 					setSeed();
 				}
 				fetchQuestions();
+				$("#wrapper").addClass("testing");
 			}
 			//Show Result
 			else if(req.testState==2){
 				console.log("inState2");
 				getResult();
+				$("#wrapper").addClass("tested");
 			}
 		},
 		error: function (req) {
@@ -303,7 +309,7 @@ function postResult(){
 		  //RESET WEBPAGE
 		  console.log(res);
 		  config.resultJSON=res;
-		  getResult();
+		  resetToShowResult();
 		},
 		error: function () {
 		  alert("提交失败，请检查网络");

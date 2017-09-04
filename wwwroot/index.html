@@ -10,34 +10,74 @@
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/skel.min.js"></script>
 	<script src="assets/js/index.js"></script>
+	<script type="text/javascript">
+		
+	 $(function(){
+		window.onbeforeunload=function(event){
+			var warning="closing...";
+		$.ajax({
+			url: '/api/Account/Logout',
+			contentType: "application/json",
+			dataType: "json",
+			async: true,
+			type: "POST",
+			success: function (req) {
+				console.log(req);
+			   
+			},
+			error: function (xhr) {
+				console.log(xhr);
+				
+			}
+		});
+		// alert("closing");
+		return;
+		}
+		if (window.$ && window.$.ajaxSetup) {
+		$.ajaxSetup({
+			 beforeSend: function (xhr) {
+			 var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+			 xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+			 }
+			 });
+	 }
+		$("#logout").click(function(){
+        console.log("Logging out...");
+        window.location="login.html";
+       $.ajax({       
+            url: '/api/Account/Logout',
+            type: "POST",
+            async: true,
+            contentType: "application/json-patch+json",
+            dataType: "json",
+            error: function (req) {
+                console.log(req);
+            }
+        })            
+    })
+	 })
+	
+	</script>
+	<style>
+		.is-ie #wrapper.testing{
+			min-width:3712rem;
+		}
+		.is-ie #result-container{
+			display:none;
+			position:fixed;
+			height:34rem;
+			bottom:5rem;
+			left:5rem;
+		}
+	</style>
 </head>
-<script type="text/javascript">
-    window.onbeforeunload=function(event){
-        var warning="closing...";
-    $.ajax({
-        url: '/api/Account/Logout',
-        contentType: "application/json",
-        dataType: "json",
-        async: true,
-        type: "POST",
-        success: function (req) {
-            console.log(req);
-            alert("closing...")
-        },
-        error: function (xhr) {
-            console.log(xhr);
-            alert("数据获取失败，请检查网络！");
-        }
-    });
-    // alert("closing");
-    return;
-    }
-</script>
+
 <body>
 	<!--Header-->
 	<div id="header">
 		<div class="header_1">校史校情知识竞赛</div>
 		<div class="header_2 time"></div>
+		<a id="logout">退出</a>
 	</div>
 	<!--Footer-->
 	<div id="footer" style="display:none">
@@ -106,7 +146,10 @@
 				</section>
 			</div>
 
-			<div id="result-container" class="panel"></div>	
+			<div id="result-container" class="panel" style="display:none">
+					<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>
+				
+			</div>	
 		</div>
 	</div>
 	<!--End of Page Wrapper-->

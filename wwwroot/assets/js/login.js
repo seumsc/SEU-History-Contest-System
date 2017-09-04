@@ -38,7 +38,7 @@ $(function () {
                                 $("#common-error").fadeOut();
                             }, 2000));
                         ///////logout     !!!delete before dist
-                  /*      $.ajax({
+                        $.ajax({
                             
                             url: '/api/Account/Logout',
                             type: "POST",
@@ -47,7 +47,7 @@ $(function () {
                             dataType: "json",
 
                             success: function (req) {}
-                        })*/
+                        })
                     } 
                     else {
                         $("#common-error").text("用户名或密码错误，或尚未注册账号")

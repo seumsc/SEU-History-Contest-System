@@ -18,6 +18,16 @@
    <!-- <script src="assets/js/light-bootstrap-dashboard.js"></script>-->
     <script src="assets/js/dashboard.js"></script>
 </head>
+<script>
+      if (window.$ && window.$.ajaxSetup) {
+    $.ajaxSetup({
+         beforeSend: function (xhr) {
+         var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+         xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+         }
+         });
+ }
+</script>
 <style>
     img {
         max-width: 100%;
@@ -43,7 +53,7 @@
 <body>
 
     <div class="wrapper">
-            <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal">
+            <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -131,6 +141,37 @@
                 <div   id="score">
                     <div class="row">
                         <div class="col-md-4">
+                                <div class="card">
+                                        <div class="header">
+                                            <h4 class="title">已完成学生成绩分布情况</h4>
+        
+                                        </div>
+                                        <div class="content">
+                                            <div id="overall-chart" class="ct-chart ct-perfect-fourth"></div>
+        
+                                            <div class="footer">
+                                                <div class="legend">
+                                                    <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+        
+                                                    <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                                    <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                                    <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
+                                                </div>
+                                                <hr>
+                                                <div class="stats">
+                                                    <p> 
+                                                        <span class="glyphicon glyphicon-stats"></span> 
+                                                        平均分：<span id="average-score"></span>分
+                                                    </p>
+                                                    <p> 
+                                                        <span class="glyphicon glyphicon-flag"></span> 
+                                                        最高分：<span id="max-score"></span>分
+                                                    </p>
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             <div class="card">
                                 <div class="header">
                                     <h4 class="title">学院学生答题情况</h4>
@@ -155,37 +196,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="header">
-                                    <h4 class="title">已完成学生成绩分布情况</h4>
 
-                                </div>
-                                <div class="content">
-                                    <div id="overall-chart" class="ct-chart ct-perfect-fourth"></div>
-
-                                    <div class="footer">
-                                        <div class="legend">
-                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
-
-                                            <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
-                                            <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
-                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
-                                        </div>
-                                        <hr>
-                                        <div class="stats">
-                                            <p> 
-                                                <span class="glyphicon glyphicon-stats"></span> 
-                                                平均分：<span id="average-score"></span>分
-                                            </p>
-                                            <p> 
-                                                <span class="glyphicon glyphicon-flag"></span> 
-                                                最高分：<span id="max-score"></span>分
-                                            </p>
-                                           
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-md-8">
@@ -263,6 +274,36 @@
                 <div  style="display: none" id="general">
                     <div class="row">
                         <div class="col-md-4">
+                                <div class="card">
+                                        <div class="header">
+                                            <h4 class="title">全校已完成学生成绩分布情况</h4>
+        
+                                        </div>
+                                        <div class="content">
+                                            <div id="overall-chart-general" class="ct-chart ct-perfect-fourth"></div>
+        
+                                            <div class="footer">
+                                                <div class="legend">
+                                                    <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+        
+                                                    <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                                    <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                                    <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
+                                                </div>
+                                                <hr>
+                                                <div class="stats">
+                                                    <p> 
+                                                        <span class="glyphicon glyphicon-stats"></span> 
+                                                        平均分：<span id="average-score-general"></span>分
+                                                    </p>
+                                                    <p> 
+                                                        <span class="glyphicon glyphicon-flag"></span> 
+                                                        最高分：<span id="max-score-general"></span>分
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             <div class="card">
                                 <div class="header">
                                     <h4 class="title">全校学生答题情况</h4>
@@ -280,36 +321,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="header">
-                                    <h4 class="title">全校已完成学生成绩分布情况</h4>
-
-                                </div>
-                                <div class="content">
-                                    <div id="overall-chart-general" class="ct-chart ct-perfect-fourth"></div>
-
-                                    <div class="footer">
-                                        <div class="legend">
-                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
-
-                                            <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
-                                            <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
-                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
-                                        </div>
-                                        <hr>
-                                        <div class="stats">
-                                            <p> 
-                                                <span class="glyphicon glyphicon-stats"></span> 
-                                                平均分：<span id="average-score-general"></span>分
-                                            </p>
-                                            <p> 
-                                                <span class="glyphicon glyphicon-flag"></span> 
-                                                最高分：<span id="max-score-general"></span>分
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                  
                         </div>
 
                         <div class="col-md-8">
@@ -378,10 +390,10 @@
                     <nav class="pull-left">
                         <ul>
                             <li>
-                                <button type="button" class="department-Excel btn btn-default navbar-btn">导出成绩统计EXCEL</button>
+                                <button type="button" class="department-excel btn btn-default navbar-btn">导出成绩统计EXCEL</button>
                             </li>
                             <li>
-                                <button type="button" class="all-Departments btn btn-default navbar-btn">导出院系概览EXCEL</button>
+                                <button type="button" class="all-departments btn btn-default navbar-btn">导出院系概览EXCEL</button>
                             </li>
 
                         </ul>

@@ -124,10 +124,10 @@ function setChartist(){
         Chartist.Pie('#overall-chart', {
             
             labels: [
-                (config.departmentInfo.scoreBandCount.higherThan90==0?'':labelA),
-                (config.departmentInfo.scoreBandCount.failed==0?'':labelB),
-                (config.departmentInfo.scoreBandCount.higherThan75==0?'':labelC),
-                (config.departmentInfo.scoreBandCount.higherThan60==0?'':labelD)
+                (config.departmentInfo.scoreBandCount.higherThan90==0?" ":labelA),
+                (config.departmentInfo.scoreBandCount.failed==0?" ":labelB),
+                (config.departmentInfo.scoreBandCount.higherThan75==0?" ":labelC),
+                (config.departmentInfo.scoreBandCount.higherThan60==0?" ":labelD)
             ],
             series: [
                 config.departmentInfo.scoreBandCount.higherThan90,
@@ -161,32 +161,30 @@ function setGeneralChartist(){
     });   
     //若无人作答，显示相应提示信息
     if(gDoneNum==0){
-    Chartist.Pie('#overall-chart-general', {
-
-    labels: [
-    "尚未有学生作答"
-    ],
-    series: [
-    100
-    ]
-    });  
+        Chartist.Pie('#overall-chart-general', {
+            labels: [
+                "尚未有学生作答"
+            ],
+            series: [
+                100
+            ]
+        });  
     }
     else{
     Chartist.Pie('#overall-chart-general', {
-
-    labels: [
-    (config.generalInfo.summary.scoreBandCount.higherThan90==0?" ":labelA),
-    (config.generalInfo.summary.scoreBandCount.failed==0?" ":labelB),
-    (config.generalInfo.summary.scoreBandCount.higherThan75==0?" ":labelC),
-    (config.generalInfo.summary.scoreBandCount.higherThan60==0?" ":labelD)
-    ],
-    series: [
-    config.generalInfo.summary.scoreBandCount.higherThan90,
-    config.generalInfo.summary.scoreBandCount.failed,
-    config.generalInfo.summary.scoreBandCount.higherThan75,
-    config.generalInfo.summary.scoreBandCount.higherThan60
-    ]
-    });   
+        labels: [
+            (config.generalInfo.summary.scoreBandCount.higherThan90==0?" ":labelA),
+            (config.generalInfo.summary.scoreBandCount.failed==0?" ":labelB),
+            (config.generalInfo.summary.scoreBandCount.higherThan75==0?" ":labelC),
+            (config.generalInfo.summary.scoreBandCount.higherThan60==0?" ":labelD)
+        ],
+        series: [
+            config.generalInfo.summary.scoreBandCount.higherThan90,
+            config.generalInfo.summary.scoreBandCount.failed,
+            config.generalInfo.summary.scoreBandCount.higherThan75,
+            config.generalInfo.summary.scoreBandCount.higherThan60
+        ]
+        });   
     }
 }
 function setGENERAL(){
@@ -689,7 +687,7 @@ $(function () {
     })
     //Log out
     $("#logout").click(function(){
-        console.log("Hi");
+        console.log("Logging out...");
         window.location="login.html";
        $.ajax({       
             url: '/api/Account/Logout',
