@@ -89,11 +89,21 @@ $(function () {
             dataType: "json", //返回格式为json
             success: function (req) {
                 console.log(req);
+                if(req.isSuccessful){
+                    $("#register-message").removeClass().addClass("text-success")
+                    $("#register-message").text("注册成功").fadeIn();          
+                }
+                else{
+                    $("#register-message").removeClass().addClass("text-danger")
+                    $("#register-message").text("注册失败，用户已存在").fadeIn(); 
+                }
                
             },
             error: function (req) {
                 //请求出错处理
-              console.log(req);
+              console.log(req);  
+              $("#register-message").removeClass().addClass("text-danger")
+              $("#register-message").text("注册失败，请检查网络").fadeIn(); 
             }
         });
     })
