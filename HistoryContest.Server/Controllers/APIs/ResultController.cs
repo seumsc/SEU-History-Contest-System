@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
