@@ -9,7 +9,7 @@ using System.Net.Http.Formatting;  //在Microsoft.AspNet.WebApi.Client包中
 using HistoryContest.Server.Controllers.APIs;
 using Xunit;
 
-namespace XUnitTest.IntegrationTest.WebAPItest
+namespace XUnitTest.WebAPItest.IntegrationTest
 {
     public class ApiIdeasControllerTests : IClassFixture<TestFixture<HistoryContest.Server.Startup>>
     {
