@@ -7,7 +7,7 @@ import Chartist from 'chartist';
 // var Chartist = require('chartist').Chartist;
 require('../../../Images/sidebar.png');
 require('../../../Images/logo-including-name.png');
-var download=require('./download.js').download;
+// var download=require('./download.js').download;
 var initChartist = require('./statistics/statistics.ts').initChartist;
 
 $(function () {
@@ -525,8 +525,6 @@ export default {
         }
     },
     methods: {
-        downloadExcel:function(){
-        },
         goToStatis: function () {
             this.$router.push({ path: '/dashboard/statistics' })            
         },

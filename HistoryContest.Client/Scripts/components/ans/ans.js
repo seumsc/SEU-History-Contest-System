@@ -95,7 +95,8 @@ exports.setRESULT = function (RESULT) {
         }
     }
     console.log(JSON.stringify(RESULT));
-    $("#sec1").remove();
+
+    // $("#sec1").remove();
     $("#sec1").remove();
     $("#sec2").remove();
     $("#quiz-container").remove();
@@ -192,11 +193,13 @@ exports.saveAns = function (clickID) {
 	check.id = ID;
 	check.answer = ans;
 	answerQues[ID - 1] = check;
-	testing = JSON.stringify(answerQues);
+    testing = JSON.stringify(answerQues);
+    console.log(testing);
 	$("#question" + ID).addClass("answered");
 	setTimeout(function () {
 		$("#question" + ID).click();
-	}, 300);
+    }, 300);
+    
 }
 exports.saveAnsID = function (questions) {
 	for (var i = 0; i < 30; i++) {
@@ -214,6 +217,7 @@ exports.submit = function (inTime) {
 	if (tot != 0 && inTime)
 		alert("您还有" + tot + "题未作答题目哦!");
 	else {
+        console.log(JSON.stringify(answerQues));
 		// alert(JSON.stringify(answerQues));
 		$.ajax({
 			url: '/api/Result', //请求的url地址
@@ -226,7 +230,8 @@ exports.submit = function (inTime) {
 				
 			},
 			success: function (res) {
-				setRESULT(res);
+                console.log(res);
+                setRESULT(res);
 		
 			},
 			complete: function () {
