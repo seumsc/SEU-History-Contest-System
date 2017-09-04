@@ -76,6 +76,7 @@ namespace HistoryContest.Server.Data
             }
             await DbContext.SaveChangesAsync();
             var studentIDs = await Cache.Database.ListRangeAsync("StudentIDsToUpdate");
+            await Cache.Database.KeyDeleteAsync("StudentIDsToUpdate");
             var studentTasks = studentIDs.Select(async ID => await Cache.StudentEntities(ID.ToString().ToDepartmentID()).GetAsync(ID));
             foreach (var studentTask in studentTasks)
             {
