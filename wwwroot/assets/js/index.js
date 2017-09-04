@@ -7,7 +7,12 @@ var config={
 	resultHTML:'<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
 	resultJSON:{}
 }
-
+var match=window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+$.ajaxSetup({
+	headers:{
+		"X-XSRF-TOKEN": match
+	}
+})
 /********************Webpage Setting********************/
 var questionsIteratorIndex;
 var	answersIteratorIndex;
@@ -209,6 +214,10 @@ function initialize(){
 		url: "/api/Student/State/Initialize", 
 		async: true, 
 		type: "POST",
+		beforeSend: function (xhr) {
+			var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+			xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+			},
 		success: function (req) {
 			console.log(req);
 			getStateNShowWebpage();

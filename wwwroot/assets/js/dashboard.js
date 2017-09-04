@@ -23,6 +23,7 @@ var DepartmentNameMap={
     24:"艺术学院",
     25:"法学院",
     26:"学习科学研究中心",
+    41:"不存在的",
     42:"公共卫生学院",
     43:"医学院",
     61:"吴健雄学院",
@@ -55,6 +56,12 @@ var config={
     }
 
 }
+var match=window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+$.ajaxSetup({
+	headers:{
+		"X-XSRF-TOKEN": match
+	}
+})
 /********************Webpage Setting********************/
 function setUndoNDo(SCORES){
     var undo=[];
@@ -217,7 +224,7 @@ function setGENERAL(){
         var proportionB = STAT[statIteratorIndex].proportionB;
         var proportionC = STAT[statIteratorIndex].proportionC;
         var proportionD = STAT[statIteratorIndex].proportionD;
-        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID
+        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID//+DepartmentNameMap[STAT[statIteratorIndex].departmentID]
         +'</td><td>'+average
         +'</td><td>'+completion
         +'</td><td>'+proportionA
@@ -321,11 +328,6 @@ function fetchSummary(department,callback){
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    /*stat.completion = Math.round (100 * ((1 - stat.scoreBandCount.notTested/stat.studentCount)==NaN?0:(1 - stat.scoreBandCount.notTested/stat.studentCount)));
-                    stat.proportionA = Math.round (100 * ((stat.scoreBandCount.higherThan90/stat.donenum)==NaN?0:(stat.scoreBandCount.higherThan90/stat.donenum)));
-                    stat.proportionB = Math.round (100 * ((stat.scoreBandCount.higherThan75/stat.donenum)==NaN?0:(stat.scoreBandCount.higherThan75/stat.donenum)));
-                    stat.proportionC = Math.round (100 * ((stat.scoreBandCount.higherThan60/stat.donenum)==NaN?0:(stat.scoreBandCount.higherThan60/stat.donenum)));
-                    stat.proportionD = Math.round (100 * ((stat.scoreBandCount.failed/stat.donenum)==NaN?0:(stat.scoreBandCount.failed/stat.donenum)));*/
                     stat.completion = Math.round (100 * (stat.studentCount==0?0:(1 - stat.scoreBandCount.notTested/stat.studentCount)));
                     stat.proportionA = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan90/stat.donenum)));
                     stat.proportionB = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan75/stat.donenum)));
@@ -343,11 +345,6 @@ function fetchSummary(department,callback){
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    /*stat.completion = 100 * (1 - stat.scoreBandCount.notTested/stat.studentCount);
-                    stat.proportionA = Math.round (100 * (stat.scoreBandCount.higherThan90/stat.donenum));
-                    stat.proportionB = Math.round (100 * (stat.scoreBandCount.higherThan75/stat.donenum));
-                    stat.proportionC = Math.round (100 * (stat.scoreBandCount.higherThan60/stat.donenum));
-                    stat.proportionD = Math.round (100 * (stat.scoreBandCount.failed/stat.donenum));*/
                     stat.completion = Math.round (100 * (stat.studentCount==0?0:(1 - stat.scoreBandCount.notTested/stat.studentCount)));
                     stat.proportionA = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan90/stat.donenum)));
                     stat.proportionB = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan75/stat.donenum)));

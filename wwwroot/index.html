@@ -33,14 +33,14 @@
 		// alert("closing");
 		return;
 		}
-		if (window.$ && window.$.ajaxSetup) {
+		
 		$.ajaxSetup({
 			 beforeSend: function (xhr) {
 			 var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
 			 xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
 			 }
-			 });
-	 }
+			});
+
 		$("#logout").click(function(){
         console.log("Logging out...");
         window.location="login.html";

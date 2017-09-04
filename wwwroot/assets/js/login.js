@@ -19,14 +19,15 @@ $(function () {
             //data
             data: JSON.stringify(dt), //参数值
             dataType: "json", //返回格式为json
-            success: function (req) {
+            success: function (req,status,xhr) {
                 console.log(req);
+                console.log(xhr.getResponseHeader("Set-Cookie"));
                 if (req.isSuccessful) {
                     if (req.userViewModel.role == "Student") {
                         window.location.href = "index.html";
                     } else if (req.userViewModel.role == "Administrator" ||
                         req.userViewModel.role == "Counselor") {
-                        window.location.href = "dashboard.html";
+                       window.location.href = "dashboard.html";
                     } else {
                         console.log(req.role);
                     }

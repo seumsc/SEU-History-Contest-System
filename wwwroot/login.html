@@ -76,15 +76,15 @@ function clearCookie(){
 }  
   $(function(){
    
-
-    if (window.$ && window.$.ajaxSetup) {
-    $.ajaxSetup({
+   console.log( window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/));
+   
+    /*$.ajaxSetup({
          beforeSend: function (xhr) {
          var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
          xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
          }
-         });
-        }
+         });*/
+        
   })
   $(window).load(function() {
     clearCookie();
