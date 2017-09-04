@@ -91,13 +91,16 @@ export default {
           dataType: "json", //返回格式为json
           async: false, //一定要设置为同步orz
           data: JSON.stringify(info),
-          contentType: "application/json-patch+json;charset=utf-8",
+          contentType: "application/json;charset=utf-8",
           beforeSend: function () {
             alert(this.data)
           },
           success: function (req) {
             alert(JSON.stringify(req))
-            _this.isStu();            
+            if(req.isSuccessful==true){
+              _this.isStu();                          
+            }
+            else _this.$router.replace({path:'/login'})
           },
           complete: function () {
             alert("complete");
