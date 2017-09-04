@@ -14,6 +14,7 @@ using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using System.Security.Claims;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -85,18 +86,11 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 return BadRequest("Body JSON content invalid");
             }
-
-            
-
             if (HttpContext.Session.Get("id") != null)
             {
-                var id = HttpContext.Session.GetString("id");
-                var name = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RealName").Value;
-                var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-                var userViewModel = new UserViewModel { UserName = id, RealName = name, Role = role };
+                var userViewModel = GetUserViewModel();
                 return Json(new { isSuccessful = false, message = "User already logged in", userViewModel });
             }
-
 
             AccountContext userContext = null;
             try
@@ -112,13 +106,14 @@ namespace HistoryContest.Server.Controllers.APIs
                 await InitializeSession(userContext);
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(userContext.Claims, accountService.GetType().Name));
 #if NETCOREAPP2_0
-                await HttpContext.SignInAsync(principal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                //HttpContext.User = principal;
 #else
-                await HttpContext.Authentication.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                HttpContext.User = principal;
 #endif
-                var token = antiforgery.GetAndStoreTokens(HttpContext);
-                Response.Cookies.Append("XSRF-TOKEN", token.RequestToken, new CookieOptions { HttpOnly = false });
-                return Json(new { isSuccessful = true, userContext.UserViewModel });
+                //return RedirectToAction(nameof(GetAntiForgery));
+                return RedirectToAction(nameof(GetAntiForgery));
             }
             else
             {
@@ -224,16 +219,48 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
-            await antiforgery.ValidateRequestAsync(HttpContext);
             HttpContext.Session.Clear();
-            await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             Response.Cookies.Delete("HistoryContest.Cookie.Session");
             Response.Cookies.Delete(".AspNetCore.Session");
-            return NoContent();
+            return RedirectToAction(nameof(GetAntiForgery));
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAntiForgery()
+        {
+            var authInfo = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.User = authInfo.Principal;
+            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            Response.Cookies.Delete("XSRF-TOKEN");
+            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+            var userViewModel = GetUserViewModel();
+            if (userViewModel == null)
+            {
+                return Json(new { isSuccessful = false });
+            }
+            else
+            {
+                return Json(new { isSuccessful = true, userViewModel });
+            }
+        }
+
+        [NonAction]
+        private UserViewModel GetUserViewModel()
+        {
+            var id = HttpContext.Session.GetString("id");
+            if (id == null)
+            {
+                return null;
+            }
+            var name = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RealName").Value;
+            var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+            return new UserViewModel { UserName = id, RealName = name, Role = role };
         }
 
         [NonAction]

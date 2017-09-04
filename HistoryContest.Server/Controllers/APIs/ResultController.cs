@@ -13,10 +13,12 @@ using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Models.Entities;
 using System.Threading;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
+    [ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
@@ -197,23 +199,16 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
             this.Session().IsTested = true;
+            HttpContext.Session.Set("StudentToUpdate", student);
+            HttpContext.Session.Set("ResultToUpdate", model);
             #endregion
 
             #region save data
-            var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor);
-            await summary.UpdateAsync(unitOfWork, student); // 更新院系概况，放在前面防止重复计算
-            await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
-            await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
-            await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
-            await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            // new ExcelExportService(unitOfWork).UpdateExcelByDepartmentid((StudentViewModel)student);
+
             #endregion
 
             #region logout
-            HttpContext.Session.Clear(); // 注销账户
-            await HttpContext.SignOutAsync();
-            Response.Cookies.Delete("HistoryContest.Cookie.Session");
-            Response.Cookies.Delete(".AspNetCore.Session");
+
             #endregion
             return Json(model);
         }
