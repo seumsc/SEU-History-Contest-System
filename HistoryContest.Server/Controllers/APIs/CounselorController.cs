@@ -16,7 +16,7 @@ using HistoryContest.Server.Extensions;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize(Roles = "Counselor, Administrator")]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class CounselorController : Controller
