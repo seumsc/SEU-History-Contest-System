@@ -23,6 +23,7 @@ using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HistoryContest.Server
 {
@@ -54,7 +55,10 @@ namespace HistoryContest.Server
         public void ConfigureServices(IServiceCollection services)
         {
             // Add mvc framework services.
-            var mvcBuilder = services.AddMvc();
+            var mvcBuilder = services.AddMvc(options =>
+            {
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             if (Environment.IsDevelopment())
             {

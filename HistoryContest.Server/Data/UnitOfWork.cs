@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using HistoryContest.Server.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace HistoryContest.Server.Data
 {
@@ -65,6 +66,7 @@ namespace HistoryContest.Server.Data
             var questionSeeds = await Cache.QuestionSeeds().GetAllValuesAsync();
             if (!DbContext.QuestionSeeds.Any())
             {
+                DbContext.Database.ExecuteSqlCommand("DBCC CHECKIDENT('QuestionSeeds', RESEED, 1)");
                 questionSeeds.ForEach(s => s.ID = 0);
                 await DbContext.QuestionSeeds.AddRangeAsync(questionSeeds);
             }
@@ -72,7 +74,14 @@ namespace HistoryContest.Server.Data
             {
                 DbContext.QuestionSeeds.UpdateRange(questionSeeds);
             }
-            DbContext.Students.UpdateRange(await StudentRepository.GetAll());
+            await DbContext.SaveChangesAsync();
+            var studentIDs = await Cache.Database.ListRangeAsync("StudentIDsToUpdate");
+            var studentTasks = studentIDs.Select(async ID => await Cache.StudentEntities(ID.ToString().ToDepartmentID()).GetAsync(ID));
+            foreach (var studentTask in studentTasks)
+            {
+                var student = await studentTask;
+                StudentRepository.Update(student);
+            }
             await DbContext.SaveChangesAsync();
         }
 

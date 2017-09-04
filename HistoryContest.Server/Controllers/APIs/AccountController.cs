@@ -116,9 +116,6 @@ namespace HistoryContest.Server.Controllers.APIs
 #else
                 await HttpContext.Authentication.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal);
 #endif
-                //
-                //antiforgery.SetCookieTokenAndHeader(HttpContext); // 让别人自己做吧……不要给自己加戏
-                //Response.Cookies.Append("HistoryContest.AntiForgery", token.CookieToken, new CookieOptions { HttpOnly = true });
                 var token = antiforgery.GetAndStoreTokens(HttpContext);
                 Response.Cookies.Append("XSRF-TOKEN", token.RequestToken, new CookieOptions { HttpOnly = false });
                 return Json(new { isSuccessful = true, userContext.UserViewModel });
@@ -227,11 +224,11 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
-            //await antiforgery.ValidateRequestAsync(HttpContext);
+            await antiforgery.ValidateRequestAsync(HttpContext);
             HttpContext.Session.Clear();
             await HttpContext.SignOutAsync();
             Response.Cookies.Delete("HistoryContest.Cookie.Session");
