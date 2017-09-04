@@ -258,28 +258,22 @@ namespace HistoryContest.Server
                     context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
                 }
                 await next.Invoke();
-                if (path.ToLower() == "/api/result/" && context.Request.Method == "POST")
-                {
-                    // 改分后更新数据
-                    var student = context.Session.Get<Student>("StudentToUpdate");
-                    var result = context.Session.Get<ResultViewModel>("ResultToUpdate");
-                    //context.Session.Remove("StudentToUpdate");
-                    //context.Session.Remove("ResultToUpdate");
-                    using (var _unitOfWork = context.RequestServices.GetService<UnitOfWork>())
-                    {
-                        var ID = student.ID.ToStringID();
-                        var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(_unitOfWork, student.Counselor);
-                        await summary.UpdateAsync(_unitOfWork, student); // 更新院系概况，放在前面防止重复计算
-                        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // 更新Student
-                        await _unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(ID, (StudentViewModel)student);
-                        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // 学生ID放入待更新列表
-                        await _unitOfWork.Cache.Results().SetAsync(ID, result); // result存入缓存
-                        new ExcelExportService(_unitOfWork).UpdateExcelByStudent((StudentViewModel)student);
-                    }
-                    // 注销
-                    context.Session.Clear(); // 注销账户
-                    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                }
+                //if (path.ToLower() == "/api/result/" && context.Request.Method == "POST")
+                //{
+                //    using (var _unitOfWork = context.RequestServices.GetService<UnitOfWork>())
+                //    {
+                //        var student = context.Session.Get<Student>("StudentToUpdate");
+                //        var result = context.Session.Get<ResultViewModel>("ResultToUpdate");
+                //        var ID = student.ID.ToStringID();
+                //        var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(_unitOfWork, student.Counselor);
+                //        await summary.UpdateAsync(_unitOfWork, student); // 更新院系概况，放在前面防止重复计算
+                //        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // 更新Student
+                //        await _unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(ID, (StudentViewModel)student);
+                //        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // 学生ID放入待更新列表
+                //        await _unitOfWork.Cache.Results().SetAsync(ID, result); // result存入缓存
+                //        new ExcelExportService(_unitOfWork).UpdateExcelByStudent(student);
+                //    }
+                //}
             });
 
             #region Authentication settings
@@ -347,8 +341,8 @@ namespace HistoryContest.Server
                     new ExcelExportService(_unitOfWork).UpdateExcelOfSchool();
                 }
                 GC.Collect();
-                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
-            }, null, (int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
+                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(0.5).TotalMilliseconds, Timeout.Infinite);
+            }, null, (int)TimeSpan.FromMinutes(0.5).TotalMilliseconds, Timeout.Infinite);
         }
     }
 

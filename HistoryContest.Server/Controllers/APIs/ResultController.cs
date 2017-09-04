@@ -204,11 +204,18 @@ namespace HistoryContest.Server.Controllers.APIs
             #endregion
 
             #region save data
-
+            var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor);
+            await summary.UpdateAsync(unitOfWork, student); // 更新院系概况，放在前面防止重复计算
+            await unitOfWork.Cache.StudentEntities(student.Department).SetAsync(studentID, student); // 更新Student
+            await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student);
+            await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
+            await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
+            new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
             #endregion
 
             #region logout
-
+            HttpContext.Session.Clear(); // 注销账户
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             #endregion
             return Json(model);
         }
@@ -222,7 +229,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>当前问题种子对应的所有问题的答案</returns>
         /// <response code="200">返回当前用户Session中存储的种子中的所有问题的答案、分值</response>
         /// <response code="400">当前用户没有对应的问题种子</response>
-        [HttpGet("Answer")]
+        [HttpPost("Answer")]
         [Authorize(Roles = "Student, Administrator")]
         [ProducesResponseType(typeof(List<CorrectAnswerViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -254,19 +261,19 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <returns>ID对应问题的答案</returns>
         /// <response code="200">返回ID对应问题的答案、分值</response>
         /// <response code="404">ID没有对应的问题</response>
-        [HttpGet("Answer/{id}")]
-        [Authorize(Roles = "Student, Administrator")]
-        [ProducesResponseType(typeof(CorrectAnswerViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAnswerByID(int id)
-        {
-            var answer = await unitOfWork.QuestionRepository.GetAnswerFromCacheAsync(id);
-            if (answer == null)
-            {
-                return NotFound();
-            }
+        //[HttpGet("Answer/{id}")]
+        //[Authorize(Roles = "Student, Administrator")]
+        //[ProducesResponseType(typeof(CorrectAnswerViewModel), StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<IActionResult> GetAnswerByID(int id)
+        //{
+        //    var answer = await unitOfWork.QuestionRepository.GetAnswerFromCacheAsync(id);
+        //    if (answer == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Json(answer);
-        }
+        //    return Json(answer);
+        //}
     }
 }
