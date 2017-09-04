@@ -1,6 +1,7 @@
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models;
+using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -96,7 +97,7 @@ namespace HistoryContest.Server.Services
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists)
             {
-                var datatable =unitOfWork.DbContext.Counselors.Select(m=>  ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, m)).ToList();
+                var datatable = unitOfWork.DbContext.Counselors.Select(m => ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, m)).ToList();
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     // 添加worksheet
@@ -184,19 +185,19 @@ namespace HistoryContest.Server.Services
             return null;
         }
 
-        public void UpdateExcelByStudent(StudentViewModel student)
+        public void UpdateExcelByStudent(Student student)
         {
             string sWebRootFolder = Startup.Environment.WebRootPath;
-            string sFileName1 = @"excel/" + student.StudentID.ToDepartmentID().ToString() + ".xlsx";
+            string sFileName1 = @"excel/" + student.Department.ToString() + ".xlsx";
 
             FileInfo file1 = new FileInfo(Path.Combine(sWebRootFolder, sFileName1));
             if (!file1.Exists) return;
             using (ExcelPackage package = new ExcelPackage(file1))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                int tot =unitOfWork.DbContext.Students.Count(m => student.StudentID.ToDepartmentID() == m.Department);
+                int tot = (int)unitOfWork.Cache.StudentEntities(student.Department).Count;
                 for (int i = 2; i < tot + 2; i++)
-                    if (Convert.ToString(worksheet.Cells[i, 1].Value)== student.StudentID)
+                    if (Convert.ToString(worksheet.Cells[i, 1].Value) == student.ID.ToStringID())
                     {
                         worksheet.Cells[i, 4].Value = "是";
                         worksheet.Cells[i, 5].Value = student.Score;
@@ -211,10 +212,9 @@ namespace HistoryContest.Server.Services
             using (ExcelPackage package = new ExcelPackage(file2))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                var std = unitOfWork.DbContext.Students.FirstOrDefault(m=>m.Name==student.Name);
-                int tot = unitOfWork.DbContext.Counselors.Count();
+                int tot = Enum.GetValues(typeof(Department)).Length;
                 for (int i = 2; i < tot + 2; i++)
-                    if (Convert.ToString(worksheet.Cells[i, 2].Value) == std.Counselor.Name)
+                    if (Convert.ToString(worksheet.Cells[i, 2].Value) == student.Counselor.Name)
                     {
                         int MaxScore, AverageScore, HigherThan90, HigherThan75, HigherThan60, Failed, NotTested;
                         MaxScore = Convert.ToInt32(worksheet.Cells[i, 3].Value);
@@ -267,7 +267,7 @@ namespace HistoryContest.Server.Services
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             if (!file.Exists) return;
             
-
+            
             //无法使用异步 -_-  所有数据的异步访问都不可用  通过计算更新
             var model = new ScoreSummaryOfSchoolViewModel {
                 MaxScore = 0,
@@ -282,7 +282,7 @@ namespace HistoryContest.Server.Services
                 },
                 UpdateTime =DateTime.Now
             };
-            int number = unitOfWork.DbContext.Counselors.Count();
+            int number = Enum.GetValues(typeof(Department)).Length;
             int x;
             double y;
             using (ExcelPackage package = new ExcelPackage(file))
