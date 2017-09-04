@@ -184,7 +184,7 @@ namespace HistoryContest.Server.Services
             return null;
         }
 
-        public void UpdateExcelByDepartmentid(StudentViewModel student)
+        public void UpdateExcelByStudent(StudentViewModel student)
         {
             string sWebRootFolder = Startup.Environment.WebRootPath;
             string sFileName1 = @"excel/" + student.StudentID.ToDepartmentID().ToString() + ".xlsx";
@@ -229,7 +229,9 @@ namespace HistoryContest.Server.Services
                         int score = student.Score??0;
                         AverageScore += score;
                         NotTested--;
-                        AverageScore /= NotTested;
+                        // bug fixed
+                        AverageScore /= num - NotTested;
+
                         MaxScore = Math.Max(MaxScore,score);
                         if (score < 60) { Failed++; }
                         else
