@@ -341,8 +341,8 @@ namespace HistoryContest.Server
                     new ExcelExportService(_unitOfWork).UpdateExcelOfSchool();
                 }
                 GC.Collect();
-                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(0.5).TotalMilliseconds, Timeout.Infinite);
-            }, null, (int)TimeSpan.FromMinutes(0.5).TotalMilliseconds, Timeout.Infinite);
+                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
+            }, null, (int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
         }
     }
 
