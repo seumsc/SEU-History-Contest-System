@@ -72,8 +72,8 @@ namespace HistoryContest.Server
             services.Configure<ContestSetting>(c => 
             {
                 var contest = Configuration.GetSection("Contest");
-                c.TestTime = TimeSpan.FromMinutes(int.Parse(contest["TestTime"]));
-                c.SchoolScoreSummaryExpireTime = TimeSpan.FromMinutes(int.Parse(contest["SchoolScoreSummaryExpireTime"]));
+                c.TestTime = TimeSpan.FromMinutes(int.Parse(contest[nameof(c.TestTime)]));
+                c.SchoolScoreSummaryExpireTime = TimeSpan.FromMinutes(int.Parse(contest[nameof(c.SchoolScoreSummaryExpireTime)]));
             });
 
             // Add Database Services
@@ -94,6 +94,17 @@ namespace HistoryContest.Server
             services.AddScoped<UnitOfWork>();
 
 #if NETCOREAPP2_0
+            services.AddAntiforgery(options =>
+            {
+                //options.Cookie.Domain = "mydomain.com";
+                //options.Cookie.Name = "HistoryContest.AntiForgery";
+                options.Cookie.Path = "/";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.FormFieldName = "AntiforgeryField";
+                options.HeaderName = "X-XSRF-TOKEN";
+                options.SuppressXFrameOptionsHeader = false;
+            });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = new PathString("/Account/Login/");
@@ -104,7 +115,7 @@ namespace HistoryContest.Server
                 options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
                 // options.Cookie.SameSite = SameSiteMode.Lax;
-                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
             services.AddSession(options =>
@@ -115,7 +126,7 @@ namespace HistoryContest.Server
                 options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
                 // options.Cookie.SameSite = SameSiteMode.Lax;
-                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
 #else

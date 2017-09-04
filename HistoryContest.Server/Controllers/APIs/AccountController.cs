@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Antiforgery;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
@@ -22,11 +23,13 @@ namespace HistoryContest.Server.Controllers.APIs
     public class AccountController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly IAntiforgery antiforgery;
         private readonly AccountService accountService;
 
-        public AccountController(UnitOfWork unitOfWork)
+        public AccountController(UnitOfWork unitOfWork, IAntiforgery antiforgery)
         {
             this.unitOfWork = unitOfWork;
+            this.antiforgery = antiforgery;
             accountService = new AccountService(unitOfWork);
         }
 
@@ -83,6 +86,8 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Body JSON content invalid");
             }
 
+            
+
             if (HttpContext.Session.Get("id") != null)
             {
                 var id = HttpContext.Session.GetString("id");
@@ -92,7 +97,16 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Json(new { isSuccessful = false, message = "User already logged in", userViewModel });
             }
 
-            var userContext = await accountService.ValidateUser(model.UserName, model.Password);
+
+            AccountContext userContext = null;
+            try
+            {
+                userContext = await accountService.ValidateUser(model.UserName, model.Password);
+            }
+            catch (Exception)
+            {
+                return Json(new { isSuccessful = false, message = "Validation failed" });
+            }
             if (userContext.UserViewModel != null)
             {
                 await InitializeSession(userContext);
@@ -102,6 +116,11 @@ namespace HistoryContest.Server.Controllers.APIs
 #else
                 await HttpContext.Authentication.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, principal);
 #endif
+                //
+                //antiforgery.SetCookieTokenAndHeader(HttpContext); // 让别人自己做吧……不要给自己加戏
+                //Response.Cookies.Append("HistoryContest.AntiForgery", token.CookieToken, new CookieOptions { HttpOnly = true });
+                var token = antiforgery.GetAndStoreTokens(HttpContext);
+                Response.Cookies.Append("XSRF-TOKEN", token.RequestToken, new CookieOptions { HttpOnly = false });
                 return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
@@ -153,7 +172,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -164,11 +183,15 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 return BadRequest("Student registration only");
             }
-
+            
             UserViewModel user = null;
             try
             {
                 user = await accountService.CreateUser(model);
+            }
+            catch (FormatException)
+            {
+                return Json(new { isSuccessful = false, message = "Invalid account format." });
             }
             catch (ArgumentException ex)
             {
@@ -177,6 +200,14 @@ namespace HistoryContest.Server.Controllers.APIs
             catch (WebException ex)
             {
                 return Json(new { isSuccessful = false, message = ex.Message + ". Please try again." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Json(new { isSuccessful = false, message = "Student data not found. Raw page data: \n" + ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccessful = false, message = "Internal server failure. Exception message: " + ex.Message });
             }
             if (user != null)
             {
@@ -196,11 +227,16 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+            //await antiforgery.ValidateRequestAsync(HttpContext);
             HttpContext.Session.Clear();
-            return SignOut();
+            await HttpContext.SignOutAsync();
+            Response.Cookies.Delete("HistoryContest.Cookie.Session");
+            Response.Cookies.Delete(".AspNetCore.Session");
+            return NoContent();
         }
 
         [NonAction]

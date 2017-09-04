@@ -40,6 +40,10 @@ namespace HistoryContest.Server.Services
                 }
                 var matches = Regex.Matches(rawData, "<td width=\"20%\" align=\"left\">(.*?):(.*?)</td>");
                 var information = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
+                if (!information.ContainsKey("学号") || !information.ContainsKey("一卡通号") || !information.ContainsKey("姓名"))
+                {
+                    throw new KeyNotFoundException(rawData);
+                }
                 return model.UserName == information["学号"] && model.Password == information["一卡通号"] && model.RealName == information["姓名"];
             }
             else
