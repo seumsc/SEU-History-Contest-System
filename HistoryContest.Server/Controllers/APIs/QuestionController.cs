@@ -14,7 +14,6 @@ using HistoryContest.Server.Extensions;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize(Roles = "Student, Administrator")]
-    [AutoValidateAntiforgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class QuestionController : Controller

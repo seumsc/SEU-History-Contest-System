@@ -65,6 +65,7 @@ namespace HistoryContest.Server.Services
                             finalStudents.Add(student);
                             studentDictionary[student.ID.ToStringID()] = student;
                             unitOfWork.Cache.StudentViewModels(department)[student.ID.ToStringID()] = (StudentViewModel)student;
+                            unitOfWork.Cache.Database.ListRightPush("StudentIDsToUpdate", student.ID.ToStringID()); // 学生ID放入待更新列表
                         }
                     }
                 }
