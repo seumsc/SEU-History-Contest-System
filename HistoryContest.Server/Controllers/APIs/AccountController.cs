@@ -153,7 +153,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {

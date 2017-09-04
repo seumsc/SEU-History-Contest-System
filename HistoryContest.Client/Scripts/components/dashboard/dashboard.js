@@ -682,12 +682,8 @@ exports.sort = function () {
     });
 }
 
+
 exports.logOut = function () {
-    function onbeforeunload_handler() {
-        var warning = "确认退出?";
-        return warning;
-    }
-    window.onbeforeunload = onbeforeunload_handler;
     $.ajax({
         url: '/api/Account/Logout',
         contentType: "application/json",
