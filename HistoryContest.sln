@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryContest.Server", "HistoryContest.Server\HistoryContest.Server.csproj", "{0F8705F9-D0E1-4B27-B894-C7E3BC9EA0F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{E1B96453-192A-4B4A-A45A-92B3B8578725}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryContest.Test", "XUnitTest\HistoryContest.Test.csproj", "{E1B96453-192A-4B4A-A45A-92B3B8578725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
