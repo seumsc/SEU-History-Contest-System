@@ -21,14 +21,14 @@ namespace HistoryContest.Server.Extensions
         public static bool IsHexNumber(this string hexString)
             => int.TryParse(hexString, System.Globalization.NumberStyles.HexNumber, null, out int result);
 
-        public static bool IsDepartmentID(this Controller controller, string ID)
+        public static bool IsDepartmentID(this string ID)
             => Enum.IsDefined(typeof(Department), ID.ToDepartmentID());
 
-        public static bool IsStudentID(this Controller controller, string ID)
+        public static bool IsStudentID(this string ID)
         {
             var a = ID.Length == 8;
             var b = a && ID.IsHexNumber();
-            var c = b && controller.IsDepartmentID(ID.Substring(0, 2));
+            var c = b && ID.Substring(0, 2).IsDepartmentID();
             var d = c && int.Parse(ID.Substring(3, 2)) <= 17 && int.Parse(ID.Substring(3, 2)) >= 12;
             return d;
         }

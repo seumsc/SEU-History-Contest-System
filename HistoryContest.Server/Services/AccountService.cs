@@ -109,10 +109,13 @@ namespace HistoryContest.Server.Services
                 return user;
             }
 
-            user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
-            if(user != null)
-            { // Check Students
-                return user;
+            if (userName.IsStudentID())
+            {
+                user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
+                if (user != null)
+                { // Check Students
+                    return user;
+                }
             }
 
             return null;

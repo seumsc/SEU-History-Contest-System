@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using HistoryContest.Server.Data;
 using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Models.Entities;
+using System.Threading;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
+    [AutoValidateAntiforgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
@@ -75,7 +79,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 }
             }
 
-            if (!this.IsStudentID(id))
+            if (!id.IsStudentID())
             {
                 return BadRequest("Argument is not a student ID");
             }
@@ -118,6 +122,8 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </summary>
         /// <remarks>
         /// **注意**：目前后端的实现暂时仍在采用*遍历前端传过来的answers数组*来计算分数（也就是说学生没选答案的题目如果没有传给后端，会造成遗漏）
+        /// 
+        /// 分数计算完成后，会在后端更新各种信息，然后注销账户。
         /// </remarks>
         /// <param name="submittedAnswers">问题ID与考生选择所构数组</param>
         /// <returns>考生的考试结果</returns>
@@ -156,7 +162,8 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 return BadRequest("Student ID not set in the session, please login again");
             }
-            //var student = await unitOfWork.StudentRepository.GetByIDAsync(studentID.ToIntID());
+
+            #region calculate score and update student data
             var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartmentID());
             var student = await studentDictionary.GetAsync(studentID);
             student.Score = 0;
@@ -184,23 +191,30 @@ namespace HistoryContest.Server.Controllers.APIs
                 var correct = correctAnswers[i];
                 if (submit.ID != correct.ID)
                 {
-                    return BadRequest("Encounter improper ID in answer set: " + submit.ID);
+                    return BadRequest("Encounter improper ID in your answer set: " + submit.ID + " at " + i);
                 }
                 student.Score += submit.Answer == correct.Answer ? correct.Points : 0;
                 model.Details.Add(new ResultDetailViewModel { ID = correct.ID, Correct = correct.Answer, Submit = submit.Answer });
             }
             model.Score = (int)student.Score;
-
             this.Session().IsTested = true;
+            #endregion
 
+            #region save data
             var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor);
             await summary.UpdateAsync(unitOfWork, student); // 更新院系概况，放在前面防止重复计算
             await studentDictionary.SetAsync(studentID, student); // 更新StudentEntity
-            //unitOfWork.StudentRepository.Update(student); // 更新数据库中的Student
-            //await unitOfWork.SaveAsync();
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student); // 更新StudentViewModel
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            new ExcelExportService(unitOfWork).UpdateExcelByDepartmentid((StudentViewModel)student);
+            // new ExcelExportService(unitOfWork).UpdateExcelByDepartmentid((StudentViewModel)student);
+            #endregion
+
+            #region logout
+            HttpContext.Session.Clear(); // 注销账户
+            await HttpContext.SignOutAsync();
+            Response.Cookies.Delete("HistoryContest.Cookie.Session");
+            Response.Cookies.Delete(".AspNetCore.Session");
+            #endregion
             return Json(model);
         }
 

@@ -16,6 +16,7 @@ using HistoryContest.Server.Extensions;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize(Roles = "Counselor, Administrator")]
+    [AutoValidateAntiforgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class CounselorController : Controller
@@ -299,7 +300,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Forbid();
             }
 
-            if (!this.IsStudentID(id))
+            if (!id.IsStudentID())
             {
                 return BadRequest("Argument is not a student ID");
             }
