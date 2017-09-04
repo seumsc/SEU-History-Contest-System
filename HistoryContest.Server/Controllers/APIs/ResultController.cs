@@ -141,6 +141,11 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
+            if (DateTime.Now - this.Session().TestBeginTime >= TimeSpan.FromMinutes(35))
+            {
+                return BadRequest("Test time exceeded");
+            }
+
             var size = unitOfWork.Configuration.QuestionCount.Choice + unitOfWork.Configuration.QuestionCount.TrueFalse;
             if(!ModelState.IsValid || submittedAnswers.Count != size)
             {
