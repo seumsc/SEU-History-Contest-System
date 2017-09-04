@@ -20,9 +20,18 @@ function onbeforeunload_handler() {
         }
     });
     // alert("closing");
-    return;
+    return warning;
     // return warning;
 }
 exports.onClose=function(){
     window.onbeforeunload = onbeforeunload_handler;    
+}
+exports.onLoad=function(){
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+        console.log("ajax setup"+xhr);
+        var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+        xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+        }
+   });
 }

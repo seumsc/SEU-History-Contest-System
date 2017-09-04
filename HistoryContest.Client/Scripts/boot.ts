@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import '../node_modules/font-awesome/css/font-awesome.css';
 import 'chartist';
 var onClose = require('./event.js').onClose;
+var onLoad = require('./event.js').onLoad;
 // import 'bootstrap-validator';
 Vue.use(VueRouter);
 
@@ -51,7 +52,7 @@ if((<any>window).user.isLoggedIn==false){
 // router.push('./dashboard/statistics');
 // import dashboard from './dashboard/dashboard.ts'
 onClose();
-
+onLoad();
 new Vue({
     el: '#app-root',
     router,
