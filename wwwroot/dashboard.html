@@ -10,23 +10,22 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/animate.min.css" rel="stylesheet" />
     <link href="assets/css/dashboard.css" rel="stylesheet" />
-   
+
     <script src="assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
     <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="assets/js/chartist.js"></script>
     <script src="assets/js/bootstrap-notify.js"></script>
-   <!-- <script src="assets/js/light-bootstrap-dashboard.js"></script>-->
     <script src="assets/js/dashboard.js"></script>
 </head>
 <script>
-      if (window.$ && window.$.ajaxSetup) {
-    $.ajaxSetup({
-         beforeSend: function (xhr) {
-         var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-         xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
-         }
-         });
- }
+    if (window.$ && window.$.ajaxSetup) {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+                xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+            }
+        });
+    }
 </script>
 <style>
     img {
@@ -34,42 +33,44 @@
         max-height: 100%;
     }
 
-    #table-undo.restricted,#table-done.restricted {
-        max-height: 500px;
+    #table-undo.restricted,
+    #table-done.restricted {
+        max-height: 600px;
         overflow-y: auto;
     }
-    .restricted{
+
+    .restricted {
         max-height: 1000px;
         overflow-y: auto;
     }
-    .table > thead > tr > th.score:hover {
-  
-    color: #1DC7EA;
-    cursor: pointer;
 
+    .table>thead>tr>th.score:hover {
+
+        color: #1DC7EA;
+        cursor: pointer;
     }
 </style>
 
 <body>
 
     <div class="wrapper">
-            <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="log-out-modal">退出</h4>
-                        </div>
-                        <div class="modal-body">                      
-                            确认退出吗？                   
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary" id="logout">退出</button>
-                        </div>
-                      </div>
+        <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="log-out-modal">退出</h4>
                     </div>
-                  </div>
+                    <div class="modal-body">
+                        确认退出吗？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="logout">退出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="sidebar" data-color="blue" data-image="images/sidebar.png">
             <div class="sidebar-wrapper">
                 <div class="logo">
@@ -138,40 +139,40 @@
                 </div>
             </nav>
             <div class="content tab-content" id="tab-content">
-                <div   id="score">
+                <div id="score">
                     <div class="row">
                         <div class="col-md-4">
-                                <div class="card">
-                                        <div class="header">
-                                            <h4 class="title">已完成学生成绩分布情况</h4>
-        
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title">已完成学生成绩分布情况</h4>
+
+                                </div>
+                                <div class="content">
+                                    <div id="overall-chart" class="ct-chart ct-perfect-fourth"></div>
+
+                                    <div class="footer">
+                                        <div class="legend">
+                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+
+                                            <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                            <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
                                         </div>
-                                        <div class="content">
-                                            <div id="overall-chart" class="ct-chart ct-perfect-fourth"></div>
-        
-                                            <div class="footer">
-                                                <div class="legend">
-                                                    <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
-        
-                                                    <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
-                                                    <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
-                                                    <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
-                                                </div>
-                                                <hr>
-                                                <div class="stats">
-                                                    <p> 
-                                                        <span class="glyphicon glyphicon-stats"></span> 
-                                                        平均分：<span id="average-score"></span>分
-                                                    </p>
-                                                    <p> 
-                                                        <span class="glyphicon glyphicon-flag"></span> 
-                                                        最高分：<span id="max-score"></span>分
-                                                    </p>
-                                                   
-                                                </div>
-                                            </div>
+                                        <hr>
+                                        <div class="stats">
+                                            <p>
+                                                <span class="glyphicon glyphicon-stats"></span> 平均分：
+                                                <span id="average-score"></span>分
+                                            </p>
+                                            <p>
+                                                <span class="glyphicon glyphicon-flag"></span> 最高分：
+                                                <span id="max-score"></span>分
+                                            </p>
+
                                         </div>
                                     </div>
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="header">
                                     <h4 class="title">学院学生答题情况</h4>
@@ -187,7 +188,7 @@
                                         </div>
                                         <hr>
                                         <div class="stats">
-                                            <p> 
+                                            <p>
                                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                                 <span id="done-info"></span>
                                                 <span id="undo-info"></span>
@@ -209,27 +210,27 @@
                                                 表格空空如也，为学院点赞！
                                             </p>
                                         </div>
-                                       
-                                        <div class="col-md-5">    
-                                                                                
-                                                <input type="text" class="form-control" id="search-undo-text" placeholder="在此输入学号、一卡通号或姓名...">                                            
+
+                                        <div class="col-md-5">
+
+                                            <input type="text" class="form-control" id="search-undo-text" placeholder="在此输入学号、一卡通号或姓名...">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="content table-responsive table-full-width restricted" id="table-undo">
-                                    <table class="table table-hover table-striped" >
-                                        <thead>
+                                    <div class="row" style="margin-bottom:0">
+                                        <table style="margin-bottom:0" class="table table-hover table-striped table-responsive">
+                                            <thead>
                                                 <th>学号</th>
-                                                <th>姓名</th>                                  
+                                                <th>姓名</th>
                                                 <th>一卡通</th>
-                                        </thead>
-                                        <tbody>
-                                            
-                                           
-                                            
-                                        </tbody>
-                                    </table>
+                                            </thead>
 
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-undo">
+                                    <table class="table table-hover table-striped">
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="card">
@@ -239,29 +240,32 @@
                                             <h4 class="title">学院已答题学生成绩单</h4>
                                             <p class="category">提示：点击“成绩”，可以将表格按成绩排序哦！</p>
                                         </div>
-                                        <div class="col-md-5">       
-                                                <input type="text" class="form-control" id="search-done-text" placeholder="在此输入学号、一卡通号或姓名...">                                               
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" id="search-done-text" placeholder="在此输入学号、一卡通号或姓名...">
                                         </div>
+                                    </div>
+                                    <div class="row" style="margin-bottom:0">
+                                        <table class="table table-hover table-striped" style="margin-bottom:0">
+                                            <thead>
+                                                <th>学号</th>
+                                                <th>姓名</th>
+                                                <th class="score">
+                                                    <span>成绩</span>
+                                                    <span class="glyphicon glyphicon-sort" id="sort"></span>
+                                                    <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span>
+                                                    <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
+                                                </th>
+                                                <th>一卡通</th>
+
+                                            </thead>
+
+                                        </table>
                                     </div>
                                 </div>
 
-                                <div class="content table-responsive table-full-width restricted" id="table-done">
+                                <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-done">
                                     <table class="table table-hover table-striped">
-                                        <thead>
-                                            <th>学号</th>
-                                            <th>姓名</th>
-                                            <th class="score">
-                                                <span>成绩</span>
-                                                <span class="glyphicon glyphicon-sort" id="sort"></span>
-                                                <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span> 
-                                                <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
-                                            </th>
-                                            <th>一卡通</th>
-
-                                        </thead>
-                                        <tbody>
-                                          
-                                        </tbody>
+                                        <tbody> </tbody>
                                     </table>
 
                                 </div>
@@ -271,39 +275,39 @@
                 </div>
 
 
-                <div  style="display: none" id="general">
+                <div style="display: none" id="general">
                     <div class="row">
                         <div class="col-md-4">
-                                <div class="card">
-                                        <div class="header">
-                                            <h4 class="title">全校已完成学生成绩分布情况</h4>
-        
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title">全校已完成学生成绩分布情况</h4>
+
+                                </div>
+                                <div class="content">
+                                    <div id="overall-chart-general" class="ct-chart ct-perfect-fourth"></div>
+
+                                    <div class="footer">
+                                        <div class="legend">
+                                            <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
+
+                                            <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
+                                            <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
+                                            <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
                                         </div>
-                                        <div class="content">
-                                            <div id="overall-chart-general" class="ct-chart ct-perfect-fourth"></div>
-        
-                                            <div class="footer">
-                                                <div class="legend">
-                                                    <p> <span class="glyphicon glyphicon-record text-info"></span> 90分及以上</p>
-        
-                                                    <p> <span class="glyphicon glyphicon-record text-warning"></span> 75分至90分</p>
-                                                    <p> <span class="glyphicon glyphicon-record" style="color:purple"></span> 60分至75分</p>
-                                                    <p> <span class="glyphicon glyphicon-record text-danger"></span> 不及格</p>
-                                                </div>
-                                                <hr>
-                                                <div class="stats">
-                                                    <p> 
-                                                        <span class="glyphicon glyphicon-stats"></span> 
-                                                        平均分：<span id="average-score-general"></span>分
-                                                    </p>
-                                                    <p> 
-                                                        <span class="glyphicon glyphicon-flag"></span> 
-                                                        最高分：<span id="max-score-general"></span>分
-                                                    </p>
-                                                </div>
-                                            </div>
+                                        <hr>
+                                        <div class="stats">
+                                            <p>
+                                                <span class="glyphicon glyphicon-stats"></span> 平均分：
+                                                <span id="average-score-general"></span>分
+                                            </p>
+                                            <p>
+                                                <span class="glyphicon glyphicon-flag"></span> 最高分：
+                                                <span id="max-score-general"></span>分
+                                            </p>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="header">
                                     <h4 class="title">全校学生答题情况</h4>
@@ -317,15 +321,15 @@
                                             <p> <span class="glyphicon glyphicon-record text-danger"></span> 未完成</p>
 
                                         </div>
-                                     
+
                                     </div>
                                 </div>
                             </div>
-                  
+
                         </div>
 
                         <div class="col-md-8">
-                            
+
                             <div class="card">
                                 <div class="header">
                                     <div class="row">
@@ -333,79 +337,79 @@
                                             <h4 class="title">全校各院系概览</h4>
                                             <p class="category">提示：点击相应表头，可以进行排序哦！</p>
                                         </div>
-                                        <div class="col-md-5">       
-                                                <input type="text" class="form-control" id="search-general" placeholder="在此输入院系代码...">                                               
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" id="search-general" placeholder="在此输入院系代码...">
                                         </div>
+                                    </div>
+                                    <div class="row" style="margin-bottom:0">
+                                        <table class="table table-hover table-striped" style="margin-bottom:0">
+                                            <thead>
+                                                <th class="score" id="dpt">
+                                                    <span>院系</span>
+                                                    <i class="glyphicon glyphicon-triangle-bottom"></i>
+                                                </th>
+                                                <th class="score" id="avg">
+                                                    <span>平均分</span>
+                                                    <i></i>
+                                                </th>
+                                                <th class="score" id="cpl">
+                                                    <span>完成率 (%)</span>
+                                                    <i></i>
+                                                </th>
+                                                <th class="score" id="pta">
+                                                    <span>90分以上 (%)</span>
+                                                    <i></i>
+                                                </th>
+                                                <th class="score" id="ptb">
+                                                    <span>75分至90分 (%)</span>
+                                                    <i></i>
+                                                </th>
+                                                <th class="score" id="ptc">
+                                                    <span>60分至75分 (%)</span>
+                                                    <i></i>
+                                                </th>
+                                                <th class="score" id="ptd">
+                                                    <span>不及格 (%)</span>
+                                                    <i></i>
+                                                </th>
+
+                                            </thead>
+                                        </table>
                                     </div>
                                 </div>
 
-                                <div class="content table-responsive table-full-width restricted" id="table-general">
+                                <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-general">
                                     <table class="table table-hover table-striped">
-                                        <thead>
-                                            <th class="score" id="dpt">
-                                                <span>院系</span>
-                                                <i class="glyphicon glyphicon-triangle-bottom"></i>
-                                            </th>
-                                            <th class="score" id="avg">
-                                                <span>平均分</span>
-                                                <i></i>
-                                            </th>
-                                            <th class="score" id="cpl">
-                                                <span>完成率 (%)</span>
-                                                <i></i>
-                                            </th>
-                                            <th class="score" id="pta">
-                                                <span>90分以上 (%)</span>
-                                                <i></i>
-                                            </th>
-                                            <th class="score" id="ptb">
-                                                <span>75分至90分 (%)</span>
-                                               <i></i>
-                                            </th>
-                                            <th class="score" id="ptc">
-                                                <span>60分至75分 (%)</span>
-                                                <i></i>
-                                            </th>
-                                            <th class="score" id="ptd">
-                                                <span>不及格 (%)</span>
-                                                <i></i>
-                                            </th>
-
-                                        </thead>
-                                        <tbody>
-                                          
-                                        </tbody>
+                                        <tbody> </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul>
+                                <li>
+                                    <button type="button" class="department-excel btn btn-default navbar-btn">导出成绩统计EXCEL</button>
+                                </li>
+                                <li>
+                                    <button type="button" class="all-departments btn btn-default navbar-btn">导出院系概览EXCEL</button>
+                                </li>
+
+                            </ul>
+                        </nav>
+                        <p class="copyright pull-right">
+                            Copyright &copy; 2017 东南大学计算机科学与工程学院、软件学院
+                        </p>
+                    </div>
+                </footer>
 
             </div>
-
-           
-            <footer class="footer">
-                <div class="container-fluid">
-                    <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <button type="button" class="department-excel btn btn-default navbar-btn">导出成绩统计EXCEL</button>
-                            </li>
-                            <li>
-                                <button type="button" class="all-departments btn btn-default navbar-btn">导出院系概览EXCEL</button>
-                            </li>
-
-                        </ul>
-                    </nav>
-                    <p class="copyright pull-right">
-                        Copyright &copy; 2017 东南大学计算机科学与工程学院、软件学院
-                    </p>
-                </div>
-            </footer>
-
         </div>
-    </div>
     </div>
 
 </body>
