@@ -53,14 +53,14 @@ $(function () {
   }
   setTimeout(changeBackground, 1500);
   setTimeout(changeBackground2, 1875);
-  $("#go-to-sign-in").click(function () {
-    $("#signin").css("display", "");
-    $("#signup").css("display", "none");
-  });
-  $("#go-to-sign-up").click(function () {
-    $("#signin").css("display", "none");
-    $("#signup").css("display", "");
-  });
+  // $("#go-to-sign-in").click(function () {
+  //   $("#signin").css("display", "");
+  //   $("#signup").css("display", "none");
+  // });
+  // $("#go-to-sign-up").click(function () {
+  //   $("#signin").css("display", "none");
+  //   $("#signup").css("display", "");
+  // });
 
 });
 var username = "";
@@ -108,15 +108,23 @@ export default {
             console.log(req);
             // console.log(xhr.getResponseHeader("Set-Cookie"));
             if(req.isSuccessful==true){
-              _this.isStu();                          
+              $("#register-message").removeClass().addClass("text-success");
+              $("#register-message").text("注册成功,即将进入答题系统...").fadeIn();          
+              setTimeout(_this.isStu(),1000);                          
             }
-            else _this.$router.replace({path:'/login'})
+            else{
+              $("#register-message").removeClass().addClass("text-danger");
+              $("#register-message").text("注册失败，用户已存在").fadeIn(); 
+               _this.$router.replace({path:'/login'});
+            }
           },
           complete: function () {
             alert("complete");
           },
           error: function (request) {
             alert("sign up error:" + JSON.stringify(request));
+            $("#register-message").removeClass().addClass("text-danger");
+            $("#register-message").text("注册失败，请检查网络").fadeIn(); 
           }
         });
     },
@@ -155,13 +163,32 @@ export default {
                 _this.isAdmin();
               }
               // else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
-            } else alert("登录失败,请检查用户名或密码是否正确")
+            } 
+            // else alert("登录失败,请检查用户名或密码是否正确")
+            else {
+              if (req.message == "User already logged in") {
+                  $("#common-error").text("当前用户已登录")
+                      .fadeIn(setTimeout(function () {
+                          $("#common-error").fadeOut();
+                      }, 2000));
+              } 
+              else {
+                  $("#common-error").text("用户名或密码错误，或尚未注册账号")
+                      .fadeIn(setTimeout(function () {
+                          $("#common-error").fadeOut();
+                      }, 2000));
+              }
+          }
           },
           complete: function () {
           },
           error: function (request) {
             alert("error:" + JSON.stringify(request));
-            alert("登录失败,请检查网络是否通畅");
+            // alert("登录失败,请检查网络是否通畅");
+            $("#common-error").text("登录失败,请检查网络是否通畅")
+            .fadeIn(setTimeout(function () {
+                $("#common-error").fadeOut();
+            }, 2000));
           }
         });
 

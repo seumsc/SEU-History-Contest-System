@@ -14,7 +14,6 @@
                 <div class="row" id="signin">
                     <div class="col-md-6 col-md-offset-3">
                         <form id="loginForm" class="form-horizontal">
-                            <!-- action="xxxx.asp"-->
                             <span class="heading">校史校情知识竞赛</span>
                             <div class="form-group username-field">
                                 <input type="text" id="username" class="form-control" required autofocus placeholder="账号为学号" name="usr" title="账号为八位学号！"
@@ -28,7 +27,9 @@
                             </div>
 
                             <div class="form-group">
-                                <a id="go-to-sign-up">注册</a>
+                                <!-- <a id="go-to-sign-up">注册</a> -->
+                                <div id="common-error" style="display:none;color:red"></div>
+                                <a href="#" data-toggle="modal" data-target="#signup">还未注册？</a>
                                 <button @click="submit" id="submit" class="btn btn-default">登录</button>
                             </div>
                         </form>
@@ -36,10 +37,9 @@
                     </div>
 
                 </div>
-                <div class="row" id="signup" style="display:none">
+                <!-- <div class="row" id="signup" style="display:none">
                     <div class="col-md-6 col-md-offset-3">
                         <form id="loginForm" class="form-horizontal">
-                            <!-- action="xxxx.asp"-->
                             <span class="heading">校史校情知识竞赛</span>
                             <div class="form-group username-field">
                                 <input type="text" id="signup-username" class="form-control" required autofocus placeholder="请输入账号（8位学号）" name="usr" autocomplete="off"
@@ -58,14 +58,75 @@
                             </div>
 
                             <div class="form-group">
-                                <a id="go-to-sign-in">登陆</a>
+                                <a id="go-to-sign-in">登录</a>
+                              
                                 <button @click="signup" id="signup" class="btn btn-default">注册</button>
                             </div>
                         </form>
 
-                    </div>
+                    </div> -->
 
                 </div>
+                <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-labelledby="signup-modal">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="signup-modal">注册</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form class="form-horizontal" data-toggle="validator" id="signup-form">
+                            
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="signup-name"
+                                  required  autofocus autocomplete="off"
+                                  placeholder="请输入您的姓名" 
+                                  name="realName"
+                                  title="请输入姓名"
+                                  data-toggle="validator" 
+                                  data-error="请输入姓名！">
+                              <span class="glyphicon glyphicon-pencil"></span>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="signup-username"
+                                  pattern="^[0-9A-Z]{8}$" 
+                                  required autocomplete="off"
+                                  placeholder="请输入您的学号" 
+                                  name="userName" 
+                                  title="请输入您的学号"
+                                  data-toggle="validator" 
+                                  data-error="账号为八位学号！">
+                              <span class="glyphicon glyphicon-user"></span>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                
+                            <div class="form-group">
+                              <input type="password" class="form-control" id="signup-password"
+                                  pattern="^[0-9]{9}$" 
+                                  required autocomplete="off"
+                                  placeholder="请输入您的一卡通号" 
+                                  data-toggle="validator" 
+                                  name="password"
+                                  title="请输入您的一卡通号"  
+                                  data-error="密码为九位一卡通号！" >
+                              <span class="glyphicon glyphicon-lock"></span>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                              <button type="submit" class="btn btn-default"  @click="signup" id="signup" >注册</button>
+                            </div>
+                            <div class="modal-footer">
+                              <span id="register-message"></span>
+                          </div>
+                          </form>
+                        </div>
+                       
+                      </div>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
