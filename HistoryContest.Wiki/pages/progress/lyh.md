@@ -695,3 +695,7 @@ var init={
 - EXCEL下载按钮无法正常工作的bug
 - 调整图表位置
 
+
+## General
+
+- CSRF保护

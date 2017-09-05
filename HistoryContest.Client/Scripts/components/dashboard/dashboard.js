@@ -172,10 +172,10 @@ function setGeneralChartist() {
         Chartist.Pie('#overall-chart-general', {
 
             labels: [
-                (config.generalInfo.summary.scoreBandCount.higherThan90 == 0 ? '' : labelA),
-                (config.generalInfo.summary.scoreBandCount.failed == 0 ? '' : labelB),
-                (config.generalInfo.summary.scoreBandCount.higherThan75 == 0 ? '' : labelC),
-                (config.generalInfo.summary.scoreBandCount.higherThan60 == 0 ? '' : labelD)
+                (config.generalInfo.summary.scoreBandCount.higherThan90 == 0 ? ' ' : labelA),
+                (config.generalInfo.summary.scoreBandCount.failed == 0 ? ' ' : labelB),
+                (config.generalInfo.summary.scoreBandCount.higherThan75 == 0 ? ' ' : labelC),
+                (config.generalInfo.summary.scoreBandCount.higherThan60 == 0 ? ' ' : labelD)
             ],
             series: [
                 config.generalInfo.summary.scoreBandCount.higherThan90,
