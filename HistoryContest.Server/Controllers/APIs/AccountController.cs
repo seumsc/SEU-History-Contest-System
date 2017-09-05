@@ -278,7 +278,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 case nameof(Student):
                     var id = context.UserEntity.ID.ToStringID();
                     var student = await unitOfWork.Cache.StudentEntities(id.ToDepartmentID()).GetAsync(id);
-                    this.Session().IsTested = student.IsTested;
+                    this.Session().TestState = student.IsTested ? TestState.Tested : TestState.NotTested;
                     break;
                 default:
                     throw new TypeLoadException("User role invalid");

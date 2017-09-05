@@ -152,7 +152,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Body JSON content invalid or does not fit the size: " + size);
             }
 
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             {
                 return Forbid();
             }
@@ -203,7 +203,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 model.Details.Add(new ResultDetailViewModel { ID = correct.ID, Correct = correct.Answer, Submit = submit.Answer });
             }
             model.Score = (int)student.Score;
-            this.Session().IsTested = true;
+            this.Session().TestState = TestState.Tested;
             HttpContext.Session.Set("StudentToUpdate", student);
             HttpContext.Session.Set("ResultToUpdate", model);
             #endregion

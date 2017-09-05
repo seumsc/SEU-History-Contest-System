@@ -45,26 +45,13 @@ namespace HistoryContest.Server.Controllers.APIs
         /// <response code=""></response>
         [HttpGet("State")]
         [ProducesResponseType(typeof(StudentStateViewModel), StatusCodes.Status200OK)]
-        public JsonResult State()
+        public IActionResult State()
         {
-            var state = new StudentStateViewModel();
-            if (this.Session().IsTested)
+            return Json(new StudentStateViewModel
             {
-                state.TestState = TestState.Tested;
-                state.IsSeedSet = true;
-            }
-            else if (this.Session().TestBeginTime != null)
-            {
-                state.TestState = TestState.Testing;
-                state.IsSeedSet = this.Session().SeedID != null;
-            }
-            else
-            {
-                state.TestState = TestState.NotTested;
-                state.IsSeedSet = this.Session().SeedID != null;
-            }
-
-            return Json(state);
+                TestState = this.Session().TestState,
+                IsSeedSet = this.Session().TestState == TestState.Tested ? true : this.Session().SeedID != null
+            });
         }
 
         /// <summary>
@@ -83,11 +70,12 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> Initialize()
         {
-            if (this.Session().TestBeginTime != null || this.Session().IsTested)
+            if (this.Session().TestBeginTime != null || this.Session().TestState != TestState.NotTested)
             { // 已经初始化或考完试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
 
+            this.Session().TestState = TestState.Testing;
             await SetSeed();
             return SetStartTime();
         }
@@ -103,7 +91,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpPost("State/[action]")]
         public async Task<IActionResult> Reset()
         {
-            if (this.Session().TestBeginTime == null || this.Session().IsTested)
+            if (this.Session().TestBeginTime == null || this.Session().TestState != TestState.Testing)
             { // 未初始化或已考试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -130,7 +118,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> SetSeed()
         {
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             { // 已经考完试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -179,7 +167,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetLeftTime()
         {
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             { // 已经考完试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }
@@ -210,7 +198,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status302Found)]
         public IActionResult SetStartTime()
         {
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             { // 已经考完试则重定向到State方法
                 return RedirectToAction(nameof(State));
             }

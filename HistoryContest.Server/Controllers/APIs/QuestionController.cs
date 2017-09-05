@@ -61,7 +61,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), 400)]
         public async Task<IActionResult> GetQuestionSet()
         {
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             {
                 return Forbid();
             }
@@ -122,7 +122,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(typeof(string), 400)]
         public async Task<IActionResult> GetQuestionIDSet()
         {
-            if (this.Session().IsTested)
+            if (this.Session().TestState == TestState.Tested)
             {
                 return Forbid();
             }

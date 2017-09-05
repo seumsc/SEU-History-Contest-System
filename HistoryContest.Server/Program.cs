@@ -141,7 +141,7 @@ namespace HistoryContest.Server
 
             if (runBrowser)
             {
-                string url = @"http://localhost:5000";
+                string url = @"https://localhost:5000";
                 Console.WriteLine(@"Starting " + url + " with default browser...");
                 System.Diagnostics.Process.Start("explorer", url);
             }
