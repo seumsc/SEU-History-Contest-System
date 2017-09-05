@@ -3,14 +3,10 @@
 ## PPT模块
 
 1. 学生答题流程
-
    * 前端设计：
-
-
    * 后端设计：问题随机性、得分持久化所用方案简介（或者放后面）？
 
 2. 辅导员操作流程介绍
-
    * 前端设计：
    * 后端设计：概况更新机制
 
@@ -21,18 +17,19 @@
    * ↓ Request [ViewModel] ↑ Response
    * <===========**后端介绍**============
    * <--------[Controllers]-------/>（点击矩形框后进入Controller介绍）
-   * ​         ↑↓      ↑   ↓         
-   * ​         ↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
-   * ​         ↑↓      ↑   ↓         
+   * 　　　　　　↑↓      ↑   ↓         
+   * 　　　　　　↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
+   * 　　　　　　↑↓      ↑   ↓         
    * <--------[Unit Of Work]--------
-   *  [RepositoryA]...[RepositoryN]
-   * ​         ↑↓      ↑   ↓         
-   * ​         ↑↓     [Redis]        （缓存层，缓存设计放这里）
-   * ​         ↑↓      ↑   ↓        
-   * ​    [Entity Framework Core]
+   * .[RepositoryA]...[RepositoryN].
+   * 　　　　　　↑↓      ↑   ↓         
+   * 　　　　　　↑↓     [Redis]        （缓存层，缓存设计放这里）
+   * 　　　　　　↑↓      ↑   ↓        
+   * 　　　[Entity Framework Core]
    * ---------[Unit Of Work]------/>
-   * ​     ↑ [Data Entity Model] ↓
-   * <---------[SQL Server]-------/> （数据库层，数据库设计，SQL脚本相关都放在这里）============**后端介绍**==========/>
+   * 　　　［Data Entity Model] ↓
+   * <---------[SQL Server]-------/> （数据库层，数据库设计，SQL脚本相关都放在这里）
+   * ============**后端介绍**==========/>
 
 4. 开发（开发模式、github、api文档、Wiki）
 
@@ -41,7 +38,6 @@
 6. 维护（~~测试代码、日志~~、管理员界面）（这三点感觉也可以摆到后面……
 
 7. 后端细节：
-
    * 性能
    * 安全
    * 特殊工具（命令行操作等）
