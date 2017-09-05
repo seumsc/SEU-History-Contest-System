@@ -26,7 +26,7 @@ var config = {
     resultJSON: {}
 }
 //生成网页
-exports.set = function (init) {
+function set(init) {
     //生成多选题html
     config.questionArray = init;
     console.log(JSON.stringify(config.questionArray));
@@ -80,7 +80,7 @@ exports.set = function (init) {
     $('#TF-sum').text(init.length - multipleChoice);     //判断题数量
 }
 var contentFooter = '';
-exports.answerCard = function (init) {
+function answerCard(init) {
     for (var i = 0; i < init.length; i++) {
         contentFooter += '<a id="question' + (i + 1) + '" class="questionId">' + (i + 1) + "</a>";
     }
@@ -191,7 +191,7 @@ function setRESULT(RESULT) {
 
 }
 
-exports.saveAns = function (clickID) {
+function saveAns(clickID) {
     // var ans = 0;
     var ans = clickID.value;
     var id = clickID;
@@ -210,7 +210,7 @@ exports.saveAns = function (clickID) {
     }, 300);
 
 }
-exports.saveAnsID = function (questions) {
+function saveAnsID(questions) {
     for (var i = 0; i < 30; i++) {
         // answerQues[i]=check;
         answerQues[i].id = questions[i].id;
@@ -218,15 +218,15 @@ exports.saveAnsID = function (questions) {
         // alert(JSON.stringify(answerQues[i]));
     }
 }
-exports.submit = function (inTime) {
+function submit(inTime) {
     var tot = 0;
     for (var i = 0; i < 30; i++)
         if (answerQues[i] == null) tot++;
     /////////////////////////////////
-    if( tot==0 && inTime == false){
+    if (tot == 0 && inTime == false) {
         alert("请认真完成答题哦~")
     }
-    else if (tot != 0 || inTime== true)
+    else if (tot != 0 || inTime == true)
         alert("您还有" + tot + "题未作答题目哦!");
     else {
         console.log(JSON.stringify(answerQues));
@@ -495,7 +495,7 @@ exports.getState = function () {
         }
     });
 }
-exports.initialize = function () {
+function initialize() {
     var _this = this;
     // var settings = {
     // 	"async": true,
@@ -560,7 +560,12 @@ exports.initialize = function () {
         }
     });
 }
-exports.load=function () {
+exports.load = function () {
+
+    var mm = 30;//分
+    var ss = 0;//秒
+    var timeState = false;//时间状态 默认为true 开启时间
+
     var inTime = false;
     var currentPage = 0;
     $(document).on("click", "#wrapper input", function (id) {
@@ -592,13 +597,12 @@ exports.load=function () {
         }
     });
     //page-scroll for field quarter
-    $(document).on("click", "label", function () {
-        $('#wrapper').animate({
-            left: "-=120rem"
-        }, 300, "swing");
-        currentPage++;
-    });
-
+    // $(document).on("click", "label", function () {
+    //     $('#wrapper').animate({
+    //         left: "-=120rem"
+    //     }, 300);
+    //     currentPage++;
+    // });
     //page-scroll for footer
     $(document).on("click", "#answerCard a.questionId", function (c) {
         var tgt = $(c.target).attr('id');
@@ -629,9 +633,6 @@ exports.load=function () {
             //		}
         }
     });
-    var mm = 30;//分
-    var ss = 0;//秒
-    var timeState = false;//时间状态 默认为true 开启时间
     /*实现计时器*/
 
     var time = setInterval(function () {
@@ -642,7 +643,7 @@ exports.load=function () {
                 submit(inTime);
                 $(".time").hide();
             }
-            else if (mm >=25 ){
+            else if (mm <= 25) {
                 inTime = true;
             }
             else {
@@ -662,12 +663,12 @@ exports.load=function () {
         }
     }, 1000);
     var answerQues = [];//name,answer(id)
-    $(document).ready(function () {
-        $("#start").click(function () {
-            $("#footer").show();
-            timeState = true;
-        });
+    // $(document).ready(function () {
+    $("#start").click(function () {
+        $("#footer").show();
+        timeState = true;
     });
+    // });
 }
 
 

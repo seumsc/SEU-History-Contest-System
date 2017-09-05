@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';//不能被注释掉！
 import jQuery from 'jquery';
 var $ = jQuery.noConflict();
 // import '../../../node_modules/font-awesome/css/font-awesome.css';
-var set = require('./ans.js').set;
+// var set = require('./ans.js').set;
 // var answerCard = require('./ans.js').answerCard;
 // var saveAnsID = require('./ans.js').saveAnsID;
 // var saveAns = require('./ans.js').saveAns;
