@@ -3,8 +3,17 @@ var jQuery = require("../../../node_modules/jquery/dist/jquery.min.js");
 var inTime = require('./ans.ts').inTime;
 var answerQues = new Array(30);
 var $ = jQuery.noConflict();
+var globalQ = {};
 
 // answerQues[0] = "curAns"
+var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+$.ajaxSetup({
+    headers: {
+        "X-XSRF-TOKEN": match
+    }
+});
+
+
 
 var content = '',
     questionsIteratorIndex,
@@ -78,7 +87,7 @@ exports.answerCard = function (init) {
     $("#answerCard").html(contentFooter);
 }
 
-exports.setRESULT = function (RESULT) {
+function setRESULT(RESULT) {
     if (config.questionArray.length == 0) {
         for (var i = 0; i < RESULT.details.length; i++) {
             var URLID = RESULT.details[i].id;
@@ -249,7 +258,7 @@ exports.submit = function (inTime) {
                     }
                 }
                 console.log(JSON.stringify(RESULT));
-            
+
                 // $("#sec1").remove();
                 $("#sec1").remove();
                 $("#sec2").remove();
@@ -273,7 +282,7 @@ exports.submit = function (inTime) {
                     else {
                         tableContent += '  <span class="fa fa-close" style="color:rgb(240,130,0)"></span></td>'
                     }
-            
+
                     if (resultsIteratorIndex % 5 == 4)
                         tableContent += "</tr>";
                 }
@@ -293,40 +302,40 @@ exports.submit = function (inTime) {
                         for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {
                             if (answersIteratorIndex == rightAns) {
                                 reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
-            
+
                                     + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + '</div><br>';//选项内容
                             }
                             else if (answersIteratorIndex == submittedAns && !isCorrect) {
                                 reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
-            
+
                                     + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + ' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
                             } else {
                                 reviewContent += '<div class="field quarter">'
-            
+
                                     + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + '</div><br>';//选项内容
                             }
                         }
-            
+
                     }
                     else {//判断题
                         reviewContent += '<h3 class="major">' + questionNum + '. ' + config.questionArray[questionNum - 1].question + '</h3>';
                         for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {
                             if (answersIteratorIndex == rightAns) {
                                 reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
-            
+
                                     + (answersIteratorIndex == 0 ? '正确' : '错误') + '</div><br>';//选项内容
                             }
                             else if (answersIteratorIndex == submittedAns && !isCorrect) {
                                 reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
-            
+
                                     + (answersIteratorIndex == 0 ? '正确' : '错误') + ' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
                             } else {
                                 reviewContent += '<div class="field quarter">'
-            
+
                                     + (answersIteratorIndex == 0 ? '正确' : '错误') + '</div><br>';//选项内容
                             }
                         }
-            
+
                     }
                     $("#review-container").html(reviewContent);
                     $("#review-container").css("visibility", "");//hover后显示题目
@@ -344,6 +353,320 @@ exports.submit = function (inTime) {
         });
     }
 }
+exports.getState = function () {
+    var _this = this;
+    var settings = {
+        "async": true,
+        // "crossDomain": true,
+        "url": "/api/Student/State",
+        "method": "GET",
+        "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-cache",
+        }
+    }
+    $.ajax(settings).done(function (response) {
+        console.log("get state response" + JSON.stringify(response));
+        if (response.testState == 0) {
+            /////////////initialize///////////////
+            var settings = {
+                "async": true,
+                // "crossDomain": true,
+                "url": "/api/Student/State/Initialize",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                }
+            }
+            $.ajax(settings).done(function (response) {
+
+                if (response.isSeedSet != true) {
+                    ////alert("Seed unset! Just hold on a second...")
+                    var reset = {
+                        "async": true,
+                        // "crossDomain": true,
+                        "url": "/api/Student/State/Reset",
+                        "method": "POST",
+                        "headers": {
+                            "content-type": "application/json",
+                            "cache-control": "no-cache",
+                        }
+                    }
+                    $.ajax(reset).done(function (res) {
+                        var setQuestions = {
+                            "async": false,
+                            "url": "/api/Question",
+                            "method": "GET",
+                            "contentType": "application/json",
+                        }
+                        $.ajax(setQuestions).done(function (questions) {
+                            ////alert(JSON.stringify(questions)),
+                            globalQ = questions,
+                                set(questions),
+                                answerCard(questions)
+                        });
+                        ////alert(JSON.stringify(res))
+                    })
+                }
+                else {
+                    console.log("start testing!");
+                    var setQuestions = {
+                        "async": false,
+                        "url": "/api/Question",
+                        "method": "GET",
+                        "contentType": "application/json",
+                    }
+                    $.ajax(setQuestions).done(function (questions) {
+                        ////alert(JSON.stringify(questions)),
+                        globalQ = questions,
+                            set(questions),
+                            answerCard(questions)
+
+
+                    });
+                    ////alert("Boom! Bug exterminated(emmm....maybe not)!")
+
+                }
+                ///////////
+
+            });
+            ////alert(JSON.stringify(response.testState));
+        }
+        if (response.testState == 1) {
+            /////////////testing/////////////
+            // 	////alert("testing!We'll reset your seed for you...");
+            var reset = {
+                "async": true,
+                // "crossDomain": true,
+                "url": "/api/Student/State/Reset",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                }
+            }
+            $.ajax(reset).done(function (reset) {
+                console.log("when teststate = 1, reset state" + reset);
+                var setQuestions = {
+                    "async": false,
+                    "url": "/api/Question",
+                    "method": "GET",
+                    "contentType": "application/json",
+                }
+                $.ajax(setQuestions).done(function (questions) {
+                    globalQ = questions,
+                        set(questions),
+                        answerCard(questions)
+                })
+
+                // ////alert(JSON.stringify(reset))
+            })
+            ////alert("Boom! Bug exterminated(emmm...possibly not yet...)!")
+
+            /////////////////////////////////
+            ////alert(JSON.stringify(response.testState));
+        }
+        else if (response.testState == 2) {
+            $.ajax({
+                url: '/api/Result', //请求的url地址
+                type: "GET", //请求方式
+                dataType: "json", //返回格式为json
+                async: false,
+                contentType: "application/json",
+                beforeSend: function () {
+                    // ////alert(this.url);
+                },
+                success: function (res) {
+                    ////alert("tested!" + res);
+                    setRESULT(res);
+                },
+                complete: function () {
+                },
+                error: function (request) {
+                    ////alert("error:" + JSON.stringify(request));
+                }
+            });
+
+
+        }
+    });
+}
+exports.initialize = function () {
+    var _this = this;
+    // var settings = {
+    // 	"async": true,
+    // 	// "crossDomain": true,
+    // 	"url": "/api/Student/State/Initialize",
+    // 	"method": "POST",
+    // 	"headers": {
+    // 		"content-type": "application/json",
+    // 		"cache-control": "no-cache",
+    // 	}
+    // }
+    // $.ajax(settings).done(function (response) {
+
+    // });
+
+    $.ajax({
+        url: "/api/Student/State/Initialize",
+        async: true,
+        type: "POST",
+        beforeSend: function () {
+            console.log("initialize");
+            // cookieBeforeSend(xhr)
+        },
+        success: function (response) {
+            console.log("initialize response" + response);
+            if (response.isSeedSet == true) {
+                var setQuestions = {
+                    "async": false,
+                    "url": "/api/Question",
+                    "method": "GET",
+                    "contentType": "application/json",
+                }
+                $.ajax(setQuestions).done(function (questions) {
+                    globalQ = questions,
+                        set(questions),
+                        answerCard(questions)
+                });
+            }
+            else {
+                ////alert("Seed unset! Just hold on a second...")
+                var reset = {
+                    "async": true,
+                    // "crossDomain": true,
+                    "url": "/api/Student/Seed",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json",
+                        "cache-control": "no-cache",
+                    }
+                }
+                $.ajax(reset).done(function (reset) {
+                    console.log(JSON.stringify("RESET:" + reset))
+                })
+                ////alert("Boom! Bug exterminated(emmm....maybe not)!")
+            }
+
+
+        },
+        error: function (req) {
+            alert("初始化失败，请检查网络是否通畅")
+            console.log(req);
+        }
+    });
+}
+exports.load=function () {
+    var inTime = true;
+    var currentPage = 0;
+    $(document).on("click", "#wrapper input", function (id) {
+        var ID = $(id.target).attr('id');
+        if (ID != "submit") {
+            saveAns(ID);
+        } else {
+            console.log(JSON.stringify(globalQ));
+            saveAnsID(globalQ);
+            submit(inTime);
+        }
+    });
+    //page-scroll for icon fa-angle-right
+    $(document).on("click", "#wrapper a.fa-angle-right", function (e) {
+        var v_id = $(e.target).attr('id');
+        if (v_id == "start") {
+            var clientWidth = document.body.clientWidth;
+            var fixWidth = (clientWidth - 16 * 55) / (2 * 16);
+            var distance = "-=" + (129 - fixWidth) + "rem";
+            $('#wrapper').animate({
+                left: distance
+            }, 300, "swing");
+            currentPage = 1;
+        } else {
+            $('#wrapper').animate({
+                left: "-=120rem"
+            }, 300, "swing");
+            currentPage++;
+        }
+    });
+    //page-scroll for field quarter
+    $(document).on("click", "label", function () {
+        $('#wrapper').animate({
+            left: "-=120rem"
+        }, 300, "swing");
+        currentPage++;
+    });
+
+    //page-scroll for footer
+    $(document).on("click", "#answerCard a.questionId", function (c) {
+        var tgt = $(c.target).attr('id');
+        if (tgt.length == 9) {
+            var tgtId = parseInt(tgt[8]);
+        } else {
+            var tgtId = parseInt(tgt[8]) * 10 + parseInt(tgt[9]);
+        }
+        if (tgtId < currentPage) {
+            var M = currentPage - tgtId;
+            var distance = "+=" + (120 * M) + "rem";
+            //		for (var i = 0; i < M; i++) {
+            $('#wrapper').animate({
+                left: distance
+            }, 500, "swing");
+            //			}, 300 / (currentPage - tgtId));
+            currentPage -= M;
+            //		}
+        } else if (tgtId > currentPage) {
+            var M = tgtId - currentPage;
+            var distance = "-=" + (120 * M) + "rem";
+            //		for (var i = 0; i < M; i++) {
+            $('#wrapper').animate({
+                left: distance
+            }, 500, "swing");
+            //			}, 300 / (tgtId - currentPage));
+            currentPage += M;
+            //		}
+        }
+    });
+    var mm = 30;//分
+    var ss = 0;//秒
+    var timeState = false;//时间状态 默认为true 开启时间
+    /*实现计时器*/
+
+    var time = setInterval(function () {
+        if (timeState) {
+            if (mm == 0 && ss == 1) {
+                ss--;
+                ////alert("时间到！");
+                inTime = false;
+                submit(inTime);
+                $(".time").hide();
+            }
+            else {
+                var str = "";
+                if (ss-- == 0) {
+                    --mm;
+                    ss = 59;
+                }
+                str += mm < 10 ? "0" + mm : mm;
+                str += ":";
+                str += ss < 10 ? "0" + ss : ss;
+                $(".time").text(str);
+            }
+
+        }
+        else {
+            $(".time").text(' ');
+        }
+    }, 1000);
+    var answerQues = [];//name,answer(id)
+    $(document).ready(function () {
+        $("#start").click(function () {
+            $("#footer").show();
+            timeState = true;
+        });
+    });
+}
+
+
 // exports.ajaxSetup = function () {
 //     $.ajaxSetup({
 //         beforeSend: function (xhr) {

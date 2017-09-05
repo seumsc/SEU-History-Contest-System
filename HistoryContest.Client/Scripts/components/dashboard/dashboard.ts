@@ -9,7 +9,7 @@ require('../../../Images/sidebar.png');
 require('../../../Images/logo-including-name.png');
 // var download=require('./download.js').download;
 var initChartist = require('./statistics/statistics.ts').initChartist;
-
+var onload = require('./dashboard.js').onload;
 $(function () {
 
     /* CHECKBOX PUBLIC CLASS DEFINITION
@@ -125,12 +125,6 @@ $(function () {
     });
 
 });
-
-
-
-/* =============================================================
- * flatui-radio v0.0.3
- * ============================================================ */
 
 $(function () {
 
@@ -267,15 +261,6 @@ $(function () {
     });
 
 });
-
-
-/* ============================================================
- * bootstrapSwitch v1.3 by Larentis Mattia @spiritualGuru
- * http://www.larentis.eu/switch/
- * ============================================================
- * Licensed under the Apache License, Version 2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- * ============================================================ */
 
 
 $(function () {
@@ -523,6 +508,9 @@ export default {
         return {
             // click:click
         }
+    },
+    mounted:function(){
+        onload();
     },
     methods: {
         goToStatis: function () {

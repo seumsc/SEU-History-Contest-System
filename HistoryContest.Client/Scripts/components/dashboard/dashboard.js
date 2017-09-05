@@ -1,8 +1,16 @@
+
 var $ = require("../../../node_modules/jquery/dist/jquery.min.js");
 var jQuery = require("../../../node_modules/jquery/dist/jquery.min.js");
 var $ = jQuery.noConflict();
 var Chartist = require("../../../node_modules/chartist/dist/chartist.js");
 /********************Webpage Common Configurations********************/
+var match=window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+$.ajaxSetup({
+	headers:{
+		"X-XSRF-TOKEN": match
+	}
+})
+
 var DepartmentNameMap = {
     1: "建筑学院",
     2: "机械工程学院",
@@ -701,3 +709,12 @@ exports.logOut = function () {
 
 }
 
+exports.onLoad=function(){
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+        console.log("ajax setup"+xhr);
+        var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+        xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+        }
+   });
+}

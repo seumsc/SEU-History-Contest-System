@@ -24,7 +24,7 @@ function onbeforeunload_handler() {
     // return warning;
 }
 exports.onClose=function(){
-    window.onbeforeunload = onbeforeunload_handler;    
+    // window.onbeforeunload = onbeforeunload_handler;    
 }
 exports.onLoad=function(){
     $.ajaxSetup({

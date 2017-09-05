@@ -108,9 +108,11 @@ export default {
             console.log(req);
             // console.log(xhr.getResponseHeader("Set-Cookie"));
             if(req.isSuccessful==true){
-              _this.isStu();                          
+              _this.isStu();         
+              // alert("successful!");                 
             }
-            else _this.$router.replace({path:'/login'})
+            else alert("unsuccessful!");
+              // _this.$router.replace({path:'/login'})
           },
           complete: function () {
             alert("complete");
@@ -147,11 +149,13 @@ export default {
                 (<any>window).user.id = JSON.stringify(info.userName);
                 (<any>window).user.role = JSON.stringify(req.userViewModel.role);
                 _this.isStu();
+                // alert("successful");
               }
               else {
                 (<any>window).user.isLoggedIn = true;
                 (<any>window).user.id = JSON.stringify(info.userName);
                 (<any>window).user.role = JSON.stringify(req.userViewModel.role);
+                // alert("other successful");
                 _this.isAdmin();
               }
               // else alert("管理员页面尚未开放！请直接ctrl+L，手动输入网址，蟹蟹~")
