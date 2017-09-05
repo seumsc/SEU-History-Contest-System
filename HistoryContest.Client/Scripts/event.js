@@ -20,7 +20,7 @@ function onbeforeunload_handler() {
         }
     });
     // alert("closing");
-    return warning;
+    return;
     // return warning;
 }
 exports.onClose=function(){

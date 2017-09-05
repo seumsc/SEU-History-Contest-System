@@ -117,7 +117,7 @@ export default {
 									answerCard(questions)
 
 
-							}
+							});
 							////alert("Boom! Bug exterminated(emmm....maybe not)!")
 
 						}
