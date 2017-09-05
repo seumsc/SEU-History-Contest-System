@@ -103,10 +103,13 @@ namespace HistoryContest.Server.Services
                 return user;
             }
 
-            user = await unitOfWork.CounselorRepository.GetByIDAsync(userName.ToIntID());
-            if(user != null)
-            { // Check Counselors
-                return user;
+            if (userName.IsHexNumber())
+            {
+                user = await unitOfWork.CounselorRepository.GetByIDAsync(userName.ToIntID());
+                if (user != null)
+                { // Check Counselors
+                    return user;
+                }
             }
 
             if (userName.IsStudentID())
