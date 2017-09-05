@@ -223,7 +223,10 @@ exports.submit = function (inTime) {
     for (var i = 0; i < 30; i++)
         if (answerQues[i] == null) tot++;
     /////////////////////////////////
-    if (tot != 0 && inTime)
+    if( tot==0 && inTime == false){
+        alert("请认真完成答题哦~")
+    }
+    else if (tot != 0 || inTime== true)
         alert("您还有" + tot + "题未作答题目哦!");
     else {
         console.log(JSON.stringify(answerQues));
@@ -386,7 +389,7 @@ exports.getState = function () {
                     var reset = {
                         "async": true,
                         // "crossDomain": true,
-                        "url": "/api/Student/State/Reset",
+                        "url": "/api/Student/Seed",
                         "method": "POST",
                         "headers": {
                             "content-type": "application/json",
@@ -558,7 +561,7 @@ exports.initialize = function () {
     });
 }
 exports.load=function () {
-    var inTime = true;
+    var inTime = false;
     var currentPage = 0;
     $(document).on("click", "#wrapper input", function (id) {
         var ID = $(id.target).attr('id');
@@ -635,10 +638,12 @@ exports.load=function () {
         if (timeState) {
             if (mm == 0 && ss == 1) {
                 ss--;
-                ////alert("时间到！");
                 inTime = false;
                 submit(inTime);
                 $(".time").hide();
+            }
+            else if (mm >=25 ){
+                inTime = true;
             }
             else {
                 var str = "";
@@ -651,7 +656,6 @@ exports.load=function () {
                 str += ss < 10 ? "0" + ss : ss;
                 $(".time").text(str);
             }
-
         }
         else {
             $(".time").text(' ');
