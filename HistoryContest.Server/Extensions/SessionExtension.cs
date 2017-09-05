@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using HistoryContest.Server.Models;
+using HistoryContest.Server.Models.ViewModels;
 
 namespace HistoryContest.Server.Extensions
 {
@@ -64,10 +65,10 @@ namespace HistoryContest.Server.Extensions
             }
         }
 
-        public bool IsTested
+        public TestState TestState
         {
-            get { return context.Session.GetInt32("isTested") == 1; }
-            set { context.Session.SetInt32("isTested", value ? 1 : 0); }
+            get { return (TestState)(context.Session.GetInt32("isTested") ?? 0); }
+            set { context.Session.SetInt32("isTested", (int)value); }
         }
 
         public bool CheckRole(string role)

@@ -7,9 +7,9 @@ namespace HistoryContest.Server.Models.ViewModels
 {
     public enum TestState
     {
-        NotTested,
-        Testing,
-        Tested
+        NotTested = 0,
+        Testing = 1,
+        Tested = 2
     }
 
     public class StudentStateViewModel

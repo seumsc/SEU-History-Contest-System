@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Antiforgery;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Models.Entities;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace HistoryContest.Server
 {
@@ -60,6 +61,7 @@ namespace HistoryContest.Server
             // Add mvc framework services.
             var mvcBuilder = services.AddMvc(options =>
             {
+                options.Filters.Add(new RequireHttpsAttribute());
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
@@ -203,6 +205,9 @@ namespace HistoryContest.Server
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // Redirect all http requests to https
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
 
             //app.UseCors("OpenPolicy");
 
