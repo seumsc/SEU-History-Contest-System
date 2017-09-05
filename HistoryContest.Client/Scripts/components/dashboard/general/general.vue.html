@@ -1,14 +1,31 @@
 <template>
     <div>
+        <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="log-out-modal">退出</h4>
+                    </div>
+                    <div class="modal-body">
+                        确认退出吗？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" @click="logOut">退出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                                                    <span class="sr-only">Toggle navigation</span>
-                                                    <span class="icon-bar"></span>
-                                                    <span class="icon-bar"></span>
-                                                    <span class="icon-bar"></span>
-                                            </button>
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <p class="navbar-brand">校史校情知识竞赛管理系统 —— <span id="school-name"></span></p>
                 </div>
                 <div class="collapse navbar-collapse">
@@ -21,7 +38,7 @@
                                                         导出EXCEL
                                                     </a>
                         </li>
-                        <li @click="logOut">
+                        <li  data-toggle="modal" data-target="#log-out">
                             <a href="#"><span class="glyphicon glyphicon-off"></span>
                                                         退出
                                                     </a>

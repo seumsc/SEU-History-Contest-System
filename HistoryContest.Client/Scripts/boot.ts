@@ -52,7 +52,11 @@ if((<any>window).user.isLoggedIn==false){
 // router.push('./dashboard/statistics');
 // import dashboard from './dashboard/dashboard.ts'
 onClose();
+<<<<<<< HEAD
 onLoad();
+=======
+//onLoad();
+>>>>>>> 283995245f520d3e86abb12fde54a8b3c65043a9
 new Vue({
     el: '#app-root',
     router,
