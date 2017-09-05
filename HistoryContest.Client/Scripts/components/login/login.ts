@@ -108,23 +108,11 @@ export default {
             console.log(req);
             // console.log(xhr.getResponseHeader("Set-Cookie"));
             if(req.isSuccessful==true){
-<<<<<<< HEAD
               _this.isStu();         
               // alert("successful!");                 
             }
             else alert("unsuccessful!");
               // _this.$router.replace({path:'/login'})
-=======
-              $("#register-message").removeClass().addClass("text-success");
-              $("#register-message").text("注册成功,即将进入答题系统...").fadeIn();          
-              setTimeout(_this.isStu(),1000);                          
-            }
-            else{
-              $("#register-message").removeClass().addClass("text-danger");
-              $("#register-message").text("注册失败，用户已存在").fadeIn(); 
-               _this.$router.replace({path:'/login'});
-            }
->>>>>>> 283995245f520d3e86abb12fde54a8b3c65043a9
           },
           complete: function () {
             alert("complete");

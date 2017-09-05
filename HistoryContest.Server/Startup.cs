@@ -61,7 +61,6 @@ namespace HistoryContest.Server
             // Add mvc framework services.
             var mvcBuilder = services.AddMvc(options =>
             {
-                options.Filters.Add(new RequireHttpsAttribute());
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
@@ -71,6 +70,13 @@ namespace HistoryContest.Server
                 {
                     options.ViewLocationExpanders.Clear();
                     options.ViewLocationExpanders.Add(new LocalViewEngine());
+                });
+            }
+            else
+            {
+                mvcBuilder.AddMvcOptions(options =>
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
                 });
             }
 
@@ -204,10 +210,9 @@ namespace HistoryContest.Server
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // Redirect all http requests to https
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
             }
-
-            // Redirect all http requests to https
-            app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
 
             //app.UseCors("OpenPolicy");
 
