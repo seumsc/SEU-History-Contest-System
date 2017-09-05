@@ -183,62 +183,187 @@ exports.setRESULT = function (RESULT) {
 }
 
 exports.saveAns = function (clickID) {
-	// var ans = 0;
-	var ans = clickID.value;
-	var id = clickID;
-	var ID = (id.length == 8 ? parseInt(id[6]) : parseInt(id[6]) * 10 + parseInt(id[7]));
-	var testing;
-	var ans = parseInt(id[id.length - 1]) - 1;
-	var check = {};
-	check.id = ID;
-	check.answer = ans;
-	answerQues[ID - 1] = check;
+    // var ans = 0;
+    var ans = clickID.value;
+    var id = clickID;
+    var ID = (id.length == 8 ? parseInt(id[6]) : parseInt(id[6]) * 10 + parseInt(id[7]));
+    var testing;
+    var ans = parseInt(id[id.length - 1]) - 1;
+    var check = {};
+    check.id = ID;
+    check.answer = ans;
+    answerQues[ID - 1] = check;
     testing = JSON.stringify(answerQues);
     console.log(testing);
-	$("#question" + ID).addClass("answered");
-	setTimeout(function () {
-		$("#question" + ID).click();
+    $("#question" + ID).addClass("answered");
+    setTimeout(function () {
+        $("#question" + ID).click();
     }, 300);
-    
+
 }
 exports.saveAnsID = function (questions) {
-	for (var i = 0; i < 30; i++) {
-		// answerQues[i]=check;
-		answerQues[i].id = questions[i].id;
-		// alert(JSON.stringify(questions[i]));
-		// alert(JSON.stringify(answerQues[i]));
-	}
+    for (var i = 0; i < 30; i++) {
+        // answerQues[i]=check;
+        answerQues[i].id = questions[i].id;
+        // alert(JSON.stringify(questions[i]));
+        // alert(JSON.stringify(answerQues[i]));
+    }
 }
 exports.submit = function (inTime) {
-	var tot = 0;
-	for (var i = 0; i < 30; i++)
-		if (answerQues[i] == null) tot++;
-	/////////////////////////////////
-	if (tot != 0 && inTime)
-		alert("您还有" + tot + "题未作答题目哦!");
-	else {
+    var tot = 0;
+    for (var i = 0; i < 30; i++)
+        if (answerQues[i] == null) tot++;
+    /////////////////////////////////
+    if (tot != 0 && inTime)
+        alert("您还有" + tot + "题未作答题目哦!");
+    else {
         console.log(JSON.stringify(answerQues));
-		// alert(JSON.stringify(answerQues));
-		$.ajax({
-			url: '/api/Result', //请求的url地址
-			type: "POST", //请求方式
-			dataType: "json", //返回格式为json
-			async: false,
-			data: JSON.stringify(answerQues),
-			contentType: "application/json",
-			beforeSend: function () {
-				
-			},
-			success: function (res) {
+        // alert(JSON.stringify(answerQues));
+        $.ajax({
+            url: '/api/Result', //请求的url地址
+            type: "POST", //请求方式
+            dataType: "json", //返回格式为json
+            async: false,
+            data: JSON.stringify(answerQues),
+            contentType: "application/json",
+            beforeSend: function () {
+
+            },
+            success: function (res) {
                 console.log(res);
-                setRESULT(res);
-		
-			},
-			complete: function () {
-			},
-			error: function (request) {
-				alert("error:" + JSON.stringify(request));
-			}
-		});
-	}
+                var RESULT = res;
+                //////////////////////////////////////////////////////////
+                if (config.questionArray.length == 0) {
+                    for (var i = 0; i < RESULT.details.length; i++) {
+                        var URLID = RESULT.details[i].id;
+                        $.ajax({
+                            url: '/api/Question/' + URLID, //请求的url地址
+                            type: "GET", //请求方式
+                            dataType: "json", //返回格式为json
+                            async: true,
+                            contentType: "application/json",
+                            success: function (res) {
+                                config.questionArray.push(res);
+                            }
+                        });
+                    }
+                }
+                console.log(JSON.stringify(RESULT));
+            
+                // $("#sec1").remove();
+                $("#sec1").remove();
+                $("#sec2").remove();
+                $("#quiz-container").remove();
+                $("#banner").remove();
+                $("#submission").remove();
+                $(".header_2").remove();
+                $("#footer").remove();
+                $(".panel").css("width", "95rem");
+                //SHOW RESULTS
+                $("#result-container").html(config.resultHTML);
+                config.resultJSON = RESULT;
+                var tableContent = "";
+                for (var resultsIteratorIndex = 0; resultsIteratorIndex < RESULT.details.length; resultsIteratorIndex++) {
+                    if (resultsIteratorIndex % 5 == 0)
+                        tableContent += "<tr>";
+                    tableContent += '<td><span class="num">' + (resultsIteratorIndex + 1) + ' </span>'
+                    if (RESULT.details[resultsIteratorIndex].correct == RESULT.details[resultsIteratorIndex].submit) {
+                        tableContent += ' <span class="fa fa-check" style="color:#3caa00"></span></td>'
+                    }
+                    else {
+                        tableContent += '  <span class="fa fa-close" style="color:rgb(240,130,0)"></span></td>'
+                    }
+            
+                    if (resultsIteratorIndex % 5 == 4)
+                        tableContent += "</tr>";
+                }
+                $('#table-content').html(tableContent);
+                $("#score").text(RESULT.score);
+                $('#wrapper').css('left', '0px');
+                $("td").hover(function (event) {
+                    var reviewContent = "";
+                    var $tgt = $(event.target);
+                    var questionNum = $tgt.find(".num").text();
+                    console.log(questionNum);
+                    var rightAns = RESULT.details[questionNum - 1].correct;
+                    var submittedAns = RESULT.details[questionNum - 1].submit;
+                    var isCorrect = (rightAns == submittedAns ? 1 : 0);
+                    if (questionNum <= 20) {//选择题
+                        reviewContent += '<h3 class="major">' + questionNum + '. ' + config.questionArray[questionNum - 1].question + '</h3>';
+                        for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {
+                            if (answersIteratorIndex == rightAns) {
+                                reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
+            
+                                    + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + '</div><br>';//选项内容
+                            }
+                            else if (answersIteratorIndex == submittedAns && !isCorrect) {
+                                reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
+            
+                                    + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + ' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
+                            } else {
+                                reviewContent += '<div class="field quarter">'
+            
+                                    + config.questionArray[questionNum - 1].choices[answersIteratorIndex] + '</div><br>';//选项内容
+                            }
+                        }
+            
+                    }
+                    else {//判断题
+                        reviewContent += '<h3 class="major">' + questionNum + '. ' + config.questionArray[questionNum - 1].question + '</h3>';
+                        for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {
+                            if (answersIteratorIndex == rightAns) {
+                                reviewContent += '<div class="field quarter" style="color:#3caa00">答案：'
+            
+                                    + (answersIteratorIndex == 0 ? '正确' : '错误') + '</div><br>';//选项内容
+                            }
+                            else if (answersIteratorIndex == submittedAns && !isCorrect) {
+                                reviewContent += '<div class="field quarter" style="color:rgb(240,130,0)">'
+            
+                                    + (answersIteratorIndex == 0 ? '正确' : '错误') + ' <span class="fa fa-close" style="color:rgb(240,130,0)"></span></div><br>';//选项内容
+                            } else {
+                                reviewContent += '<div class="field quarter">'
+            
+                                    + (answersIteratorIndex == 0 ? '正确' : '错误') + '</div><br>';//选项内容
+                            }
+                        }
+            
+                    }
+                    $("#review-container").html(reviewContent);
+                    $("#review-container").css("visibility", "");//hover后显示题目
+                }, function () {
+                    $("#review-container").css("visibility", "hidden");//hover后显示题目
+                });
+                /////////////////////////////////////////////////////////
+
+            },
+            complete: function () {
+            },
+            error: function (request) {
+                alert("error:" + JSON.stringify(request));
+            }
+        });
+    }
 }
+// exports.ajaxSetup = function () {
+//     $.ajaxSetup({
+//         beforeSend: function (xhr) {
+//             var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+//             xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+//         }
+//     });
+// // }
+
+// exports.ajaxMatchSetup = function () {
+//     var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+//     $.ajaxSetup({
+//         headers: {
+//             "X-XSRF-TOKEN": match
+//         }
+//     })
+// }
+
+// exports.cookieBeforeSend = function (xhr) {
+//         var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+//         xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+//     }
+// }

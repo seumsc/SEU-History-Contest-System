@@ -2,7 +2,8 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import $ from 'jquery';
 var verify = require("./verify.js").verify;
-
+var matchCookie = require("./verify.js").matchCookie;
+var clearCookie = require("./verify.js").clearCookie;
 //validator malfunctioning at present.
 require('../../../Images/background0.jpg');
 require('../../../Images/background1.jpg');
@@ -14,8 +15,13 @@ require('../../../Images/background6.jpg');
 require('../../../Images/background7.jpg');
 require('../../../Images/background8.jpg');
 
+// $(window).load(function() {
+//   clearCookie();
+// });
+
 //import boolstrap from 'boolstrap';
 $(function () {
+  matchCookie();
 
   var bgCounter = 0;
   var bgCounter2 = 0;
@@ -65,7 +71,9 @@ export default {
     return {
     }
   },
-
+  mounted: function(){
+    clearCookie();
+  },
   methods: {
     isStu: function () {
       this.$router.replace({ path: '/ans/sheet' })
@@ -95,8 +103,10 @@ export default {
           beforeSend: function () {
             alert(this.data)
           },
-          success: function (req) {
-            alert(JSON.stringify(req))
+          success: function (req,status,xhr) {
+            // alert(JSON.stringify(req))
+            console.log(req);
+            // console.log(xhr.getResponseHeader("Set-Cookie"));
             if(req.isSuccessful==true){
               _this.isStu();                          
             }
