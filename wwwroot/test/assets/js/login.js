@@ -1,3 +1,21 @@
+function logout(){
+    $.ajax({
+        url: '/api/Account/Logout',
+        contentType: "application/json",
+        dataType: "json",
+        async: true,
+        type: "POST",
+        success: function (req) {
+            console.log(req);
+           
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            
+        }
+    });
+}
+
 $(function () {
 
     //提交帐号密码

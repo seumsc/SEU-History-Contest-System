@@ -23,11 +23,42 @@ var DepartmentNameMap={
     24:"艺术学院",
     25:"法学院",
     26:"学习科学研究中心",
-    41:"不存在的",
+    41:"生命科学研究院",
     42:"公共卫生学院",
     43:"医学院",
     61:"吴健雄学院",
     71:"软件学院"
+}
+var shortForm={
+    1:"建筑",
+    2:"机械",
+    3:"能环",
+    4:"信息",
+    5:"土木",
+    6:"电子",
+    7:"数学",
+    8:"自动化",
+    9:"计科",
+    10:"物理",
+    11:"生医",
+    12:"材料",
+    13:"人文",
+    14:"经管",
+    16:"电气",
+    17:"外国语",
+    18:"体育系",
+    19:"化学化工",
+    21:"交通",
+    22:"仪科",
+    24:"艺术",
+    25:"法学院",
+    26:"学习科学研究中心",
+    41:"生命科学研究院",
+    42:"公共卫生学院",
+    43:"医学院",
+    61:"吴院",
+    71:"软件"
+
 }
 var config={
     department:null,
@@ -224,7 +255,7 @@ function setGENERAL(){
         var proportionB = STAT[statIteratorIndex].proportionB;
         var proportionC = STAT[statIteratorIndex].proportionC;
         var proportionD = STAT[statIteratorIndex].proportionD;
-        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID//+DepartmentNameMap[STAT[statIteratorIndex].departmentID]
+        generalContent+='<tr><td>'+STAT[statIteratorIndex].departmentID+" "+shortForm[STAT[statIteratorIndex].departmentID]
         +'</td><td>'+average
         +'</td><td>'+completion
         +'</td><td>'+proportionA
@@ -501,7 +532,7 @@ $(function () {
         downloadExcelOfAllDepartments();
     })
     //Sort
-    $("#table-done").find("th.score").click(function(){
+    $("#done-head").find("th.score").click(function(){
        if(cnt%3==0){
         $("#sort").hide();
         $("#triangle-bottom").show();
