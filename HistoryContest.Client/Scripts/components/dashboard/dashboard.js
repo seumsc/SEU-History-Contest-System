@@ -307,11 +307,11 @@ function fetchSummary(department, callback) {
                     var stat = req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested / stat.studentCount);
-                    stat.proportionA = Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum));
-                    stat.proportionB = Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum));
-                    stat.proportionC = Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum));
-                    stat.proportionD = Math.round(100 * (stat.scoreBandCount.failed / stat.donenum));
+                    stat.completion = (100 * (1 - stat.scoreBandCount.notTested / stat.studentCount)).toFixed(2);
+                    stat.proportionA = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum)):0).toFixed(2);
+                    stat.proportionB = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum)):0).toFixed(2);
+                    stat.proportionC = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum)):0).toFixed(2);
+                    stat.proportionD = (stat.donenum? Math.round(100 * (stat.scoreBandCount.failed / stat.donenum)):0).toFixed(2);
                     config.generalInfo.statistics.push(stat);// !!!danger
                     if (callback != undefined) {
                         callback();
@@ -324,11 +324,11 @@ function fetchSummary(department, callback) {
                     var stat = req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested / stat.studentCount);
-                    stat.proportionA = Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum));
-                    stat.proportionB = Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum));
-                    stat.proportionC = Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum));
-                    stat.proportionD = Math.round(100 * (stat.scoreBandCount.failed / stat.donenum));
+                    stat.completion = (100 * (1 - stat.scoreBandCount.notTested / stat.studentCount)).toFixed(2);
+                    stat.proportionB = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum)):0).toFixed(2);
+                    stat.proportionA = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum)):0).toFixed(2);
+                    stat.proportionC = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum)):0).toFixed(2);
+                    stat.proportionD = (stat.donenum?Math.round(100 * (stat.scoreBandCount.failed / stat.donenum)):0).toFixed(2);
                     config.generalInfo.statistics.push(stat);
                     if (callback != undefined) {
                         config.generalInfo.statistics.sort(by("departmentID"));

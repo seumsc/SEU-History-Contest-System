@@ -510,7 +510,7 @@ export default {
         }
     },
     mounted:function(){
-        onload();
+
     },
     methods: {
         goToStatis: function () {

@@ -20,12 +20,7 @@ require('../../../Images/bg.jpg');
 require('../../../Images/overlay.png');
 require('../../../Images/pic01.jpg');
 
-$("#wrapper input").click(function(){
-	alert("clicked");
-    $('#wrapper').animate({
-        left: "-=120rem"
-    }, 300);
-})
+
 
 export default {
 	data() {
