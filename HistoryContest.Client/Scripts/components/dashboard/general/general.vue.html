@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
+        <!-- <div class="modal fade" id="log-out" tabindex="-1" role="dialog" aria-labelledby="log-out-modal" style="z-index: 1000">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -38,7 +38,8 @@
                                                         导出EXCEL
                                                     </a>
                         </li>
-                        <li  data-toggle="modal" data-target="#log-out">
+                        <li @click ="logOut">
+                        <!-- <li > data-toggle="modal" data-target="#log-out"> -->
                             <a href="#"><span class="glyphicon glyphicon-off"></span>
                                                         退出
                                                     </a>
