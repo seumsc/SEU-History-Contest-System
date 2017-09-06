@@ -16,6 +16,7 @@ export default {
         }
     },
     mounted: function () {
+        sort();
         this.loadGeneralData();
     },
     methods:{

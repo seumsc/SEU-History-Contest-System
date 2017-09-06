@@ -19,7 +19,8 @@ export default {
         }
     },
     mounted:  function(){
-        this.loadData()
+        this.loadData();
+        sort();
         },
     methods: {
         downloadDepartmentExcel: function () {

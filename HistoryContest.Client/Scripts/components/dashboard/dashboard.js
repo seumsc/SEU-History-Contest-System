@@ -225,7 +225,7 @@ function setGENERAL() {
         var proportionB = STAT[statIteratorIndex].proportionB;
         var proportionC = STAT[statIteratorIndex].proportionC;
         var proportionD = STAT[statIteratorIndex].proportionD;
-        generalContent += '<tr><td>' + STAT[statIteratorIndex].departmentID
+        generalContent += '<tr><td class = "departmentID">' + STAT[statIteratorIndex].departmentID
             + '</td><td>' + average
             + '</td><td>' + completion
             + '</td><td>' + proportionA
@@ -307,11 +307,11 @@ function fetchSummary(department, callback) {
                     var stat = req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested / stat.studentCount);
-                    stat.proportionA = Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum));
-                    stat.proportionB = Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum));
-                    stat.proportionC = Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum));
-                    stat.proportionD = Math.round(100 * (stat.scoreBandCount.failed / stat.donenum));
+                    stat.completion = (100 * (1 - stat.scoreBandCount.notTested / stat.studentCount)).toFixed(2);
+                    stat.proportionA = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum)):0).toFixed(2);
+                    stat.proportionB = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum)):0).toFixed(2);
+                    stat.proportionC = (stat.donenum? Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum)):0).toFixed(2);
+                    stat.proportionD = (stat.donenum? Math.round(100 * (stat.scoreBandCount.failed / stat.donenum)):0).toFixed(2);
                     config.generalInfo.statistics.push(stat);// !!!danger
                     if (callback != undefined) {
                         callback();
@@ -324,11 +324,11 @@ function fetchSummary(department, callback) {
                     var stat = req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore.toFixed(2);
-                    stat.completion = 100 * (1 - stat.scoreBandCount.notTested / stat.studentCount);
-                    stat.proportionA = Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum));
-                    stat.proportionB = Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum));
-                    stat.proportionC = Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum));
-                    stat.proportionD = Math.round(100 * (stat.scoreBandCount.failed / stat.donenum));
+                    stat.completion = (100 * (1 - stat.scoreBandCount.notTested / stat.studentCount)).toFixed(2);
+                    stat.proportionB = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan75 / stat.donenum)):0).toFixed(2);
+                    stat.proportionA = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan90 / stat.donenum)):0).toFixed(2);
+                    stat.proportionC = (stat.donenum?Math.round(100 * (stat.scoreBandCount.higherThan60 / stat.donenum)):0).toFixed(2);
+                    stat.proportionD = (stat.donenum?Math.round(100 * (stat.scoreBandCount.failed / stat.donenum)):0).toFixed(2);
                     config.generalInfo.statistics.push(stat);
                     if (callback != undefined) {
                         config.generalInfo.statistics.sort(by("departmentID"));
@@ -534,7 +534,7 @@ exports.downloadExcelOfAllDepartments = function () {
 exports.sort = function () {
     $("#table-done").find("th.score").click(function () {
         if (cnt % 3 == 0) {
-            $("#sort").hide();
+            $("#Scoresort").hide();
             $("#triangle-bottom").show();
             $("#triangle-top").hide();
             if (cnt == 0) {
@@ -550,7 +550,7 @@ exports.sort = function () {
 
         }
         else if (cnt % 3 == 1) {
-            $("#sort").hide();
+            $("#Scoresort").hide();
             $("#triangle-bottom").hide();
             $("#triangle-top").show();
             temp.reverse();
@@ -559,7 +559,7 @@ exports.sort = function () {
 
         }
         else if (cnt % 3 == 2) {
-            $("#sort").show();
+            $("#Scoresort").show();
             $("#triangle-bottom").hide();
             $("#triangle-top").hide();
             cnt++;
@@ -705,6 +705,10 @@ exports.sort = function () {
     $("#search-done-text").keyup(function () {
         var $key = $('#search-done-text').val();
         $('#table-done table tbody tr').hide().filter(":contains('" + $key + "')").show();
+    });
+    $("#search-general").keyup(function () {
+        var $key = $('#search-general').val();
+        $('#table-general table tbody tr').hide().filter(":contains('" + $key + "')").show();
     });
 }
 
