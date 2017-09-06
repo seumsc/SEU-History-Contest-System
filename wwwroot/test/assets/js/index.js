@@ -253,6 +253,10 @@ function getStateNShowWebpage(){
 		success: function (req) {
 			//Show Questions	
 			console.log(req);
+			if(req.testState==0){
+				alert("登录失败");
+				window.location.href="login.html";
+			}
 			if(req.testState==1){
 				//setSeed
 				if(req.isSeedSet==false){
