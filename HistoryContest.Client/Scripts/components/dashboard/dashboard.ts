@@ -10,6 +10,7 @@ require('../../../Images/logo-including-name.png');
 // var download=require('./download.js').download;
 var initChartist = require('./statistics/statistics.ts').initChartist;
 var onload = require('./dashboard.js').onload;
+var logOut=require('./dashboard.js').logOut;
 $(function () {
 
     /* CHECKBOX PUBLIC CLASS DEFINITION
@@ -531,6 +532,7 @@ export default {
             this.$router.push({path:'/ans/sheet'})
         
         }
+        
 
 
     }
