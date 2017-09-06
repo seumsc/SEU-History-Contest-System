@@ -3723,26 +3723,36 @@
 	width:2rem;
 	height:2rem;
 	text-align: center;
-	color:#fff;
-	border:1px solid #ccc;
+	color:#A0A0A0;
+	border:2px solid #A0A0A0;
 	margin:5px;
 }
 #answerCard a:hover{
-	color:#fff;
-	background: rgb(240,130,0);
-	border:1px solid rgb(240,130,0);
+	color:#ffe4b4;
+	/* background: rgb(240,130,0); */
+	border:2px solid #ffe4b4;
 }
+.activate{
+	display:inline-block;
+	width:2rem;
+	height:2rem;
+	text-align: center;
+	color:#ffe4b4 !important;
+	border:2px solid #ffe4b4!important;
+	margin:5px;
+}
+
 .answered{
 	display:inline-block;
 	width:2rem;
 	height:2rem;
 	text-align: center;
 	
-	border:1px solid #ccc;
+	border:2px solid #ccc;
 	margin:5px;
-	color:#fff;
+	color:#fff!important;
 	background: rgb(240,130,0);
-	border:1px solid rgb(240,130,0);
+	border:2px solid rgb(240,130,0)!important;
 }
 
 td{

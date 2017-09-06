@@ -92,10 +92,11 @@ $(function () {
                 console.log(req);
                 if(req.isSuccessful){
                     $("#register-message").removeClass().addClass("text-success")
-                    $("#register-message").text("注册成功").fadeIn();          
+                    $("#register-message").text("注册成功，即将进入竞赛系统...").fadeIn(); 
+                    setTimeout(window.location.href="index.html",1000);       
                 }
                 else{
-                    $("#register-message").removeClass().addClass("text-danger")
+                    $("#register-message").removeClass().addClass("text-danger");
                     $("#register-message").text("注册失败，用户已存在").fadeIn(); 
                 }
                
@@ -103,7 +104,7 @@ $(function () {
             error: function (req) {
                 //请求出错处理
               console.log(req);  
-              $("#register-message").removeClass().addClass("text-danger")
+              $("#register-message").removeClass().addClass("text-danger");
               $("#register-message").text("注册失败，请检查网络").fadeIn(); 
             }
         });

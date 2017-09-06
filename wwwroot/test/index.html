@@ -41,20 +41,7 @@
 			 }
 			});
 
-		$("#logout").click(function(){
-        console.log("Logging out...");
-        window.location="login.html";
-       $.ajax({       
-            url: '/api/Account/Logout',
-            type: "POST",
-            async: true,
-            contentType: "application/json-patch+json",
-            dataType: "json",
-            error: function (req) {
-                console.log(req);
-            }
-        })            
-    })
+	
 	 })
 	
 	</script>
@@ -69,6 +56,7 @@
 			bottom:5rem;
 			left:5rem;
 		}
+		
 	</style>
 </head>
 
@@ -77,7 +65,7 @@
 	<div id="header">
 		<div class="header_1">校史校情知识竞赛</div>
 		<div class="header_2 time"></div>
-		<a id="logout">退出</a>
+		
 	</div>
 	<!--Footer-->
 	<div id="footer" style="display:none">

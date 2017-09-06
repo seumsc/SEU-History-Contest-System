@@ -5,7 +5,8 @@ var config={
 	timeState:false,
 	questionArray:[],
 	resultHTML:'<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
-	resultJSON:{}
+	resultJSON:{},
+	currentQuestion:0
 }
 var match=window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
 $.ajaxSetup({
@@ -181,10 +182,11 @@ function saveAns(clickID){
     for(var i=0;i<answerQues.length;i++){
     	if( answerQues[i].id==ID&&answerQues[i].answer!=ans){
 			if(answerQues[i].answer==-1){
-				$("#question"+activeNum).addClass("answered");
+				$("#question"+activeNum).removeClass("active").addClass("answered");
 				setTimeout(function(){			
-					$("#question"+(activeNum+1)).click();		
-				},300);
+					$("#question"+(activeNum+1)).click();
+				//	$("#question"+(activeNum+1)).addClass("active");		
+				},500);
 			}
 		   answerQues[i].answer = ans;
 		   testing=JSON.stringify(answerQues);
@@ -225,7 +227,19 @@ function initialize(){
 			
 		},
 		error: function (req) {
-			alert("初始化失败，请检查网络是否通畅")
+			alert("初始化失败，请检查网络是否通畅");
+			//logout
+			$.ajax({
+				
+				url: '/api/Account/Logout',
+				type: "POST",
+				async: true,
+				contentType: "application/json-patch+json",
+				dataType: "json",
+
+				success: function (req) {}
+			})
+			window.location.href="login.html";
 			console.log(req);			
 		}
 	});
@@ -363,14 +377,11 @@ function getResult(){
 					--mm;
 					ss = 59;
 				}
-				
-				
 				str += mm < 10 ? "0" + mm : mm;
 				str += ":";
 				str += ss < 10 ? "0" + ss : ss;
 				$(".time").text(str);
 			}
-		
 		} 
 		else {
 			$(".time").text(' ');
@@ -390,12 +401,67 @@ $(function(){
 		 $("#footer").show();
         config.timeState = true;
 	});
-	$(document).mousemove(function(e){ //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
+	
+	$(document).mouseover(function(e){ //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
+		var questionPos=[];
+		var currentQues=0;
+		for(var it=1;it<=30;it++){
+			
+			var fix=$("section .panel.large").width();
+			questionPos[it]=$("#q"+it).offset().left-fix/2;
+			//questionPos[it]=$("#q"+it).offset().left;
+
+		}
+		for (var it=1;it<=30;it++){
+			if((e.pageX)<questionPos[it]){
+				currentQues=it-1;
+				break;
+			}
+		}
+		if(currentQues!=config.currentQuestion){
+			
+			$("#question"+(config.currentQuestion)).removeClass("activate");
+			config.currentQuestion=currentQues;
+			
+			$("#question"+(currentQues)).addClass("activate");
+		}
+
 		if(e.pageX>window.innerWidth){
 			config.timeState=true; 
 			 $("#footer").show();
 		}
+		console.log(e.pageX);
   });
+  $(document).bind("mouseover mouseenter mousemove mouseup mousedown",function(e){ //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
+	var questionPos=[];
+	var currentQues=0;
+	for(var it=1;it<=30;it++){
+		
+		var fix=$("section .panel.large").width();
+		questionPos[it]=$("#q"+it).offset().left-fix/2;
+		//questionPos[it]=$("#q"+it).offset().left;
+
+	}
+	for (var it=1;it<=30;it++){
+		if((e.pageX)<questionPos[it]){
+			currentQues=it-1;
+			break;
+		}
+	}
+	if(currentQues!=config.currentQuestion){
+		
+		$("#question"+(config.currentQuestion)).removeClass("activate");
+		config.currentQuestion=currentQues;
+		
+		$("#question"+(currentQues)).addClass("activate");
+	}
+
+	if(e.pageX>window.innerWidth){
+		config.timeState=true; 
+		 $("#footer").show();
+	}
+	console.log(e.pageX);
+});
 
   
 
