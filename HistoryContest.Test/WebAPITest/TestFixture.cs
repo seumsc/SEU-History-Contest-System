@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 
-namespace XUnitTest.WebAPItest.IntegrationTest
+namespace HistoryContest.Test.WebAPItest.IntegrationTest
 {
     /// <summary>
     /// A test fixture which hosts the target project (project we wish to test) in an in-memory server.

@@ -303,7 +303,7 @@ namespace HistoryContest.Server
             #endregion
 
             // enable status code response page
-            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
+            //app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
             #region Javascript spa routes
             app.UseMvc(routes =>
