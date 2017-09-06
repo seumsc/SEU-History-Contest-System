@@ -310,6 +310,23 @@ var by = function(name){
     }
 }
 /********************API Interfaces********************/
+function logout(){
+    $.ajax({
+        url: '/api/Account/Logout',
+        contentType: "application/json",
+        dataType: "json",
+        async: true,
+        type: "POST",
+        success: function (req) {
+            console.log(req);
+           
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            
+        }
+    });
+}
 //Initialize the Score Tab, call this function only once.
 function setScoreData(){
     $.ajax({
@@ -733,17 +750,9 @@ $(function () {
     //Log out
     $("#logout").click(function(){
         console.log("Logging out...");
+        logout();
         window.location="login.html";
-       $.ajax({       
-            url: '/api/Account/Logout',
-            type: "POST",
-            async: true,
-            contentType: "application/json-patch+json",
-            dataType: "json",
-            error: function (req) {
-                console.log(req);
-            }
-        })            
+         
     })
      var searchVisible = 0;
      var transparent = true;

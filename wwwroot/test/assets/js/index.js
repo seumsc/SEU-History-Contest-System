@@ -169,6 +169,19 @@ function resetToShowResult(){
 	},function() {
 		$("#review-container").hide();//hover后显示题目
 	});
+	var seconds=30;
+	
+		setInterval(function(){
+			if(seconds>=0){
+				$("#seconds-left").text(seconds);
+				seconds--;
+			}
+			else{
+				logout();
+				$("#result-message").hide();
+				window.location.href="login.html";
+			}
+		},1000)
 
 
 }
@@ -184,8 +197,7 @@ function saveAns(clickID){
 			if(answerQues[i].answer==-1){
 				$("#question"+activeNum).removeClass("active").addClass("answered");
 				setTimeout(function(){			
-					$("#question"+(activeNum+1)).click();
-				//	$("#question"+(activeNum+1)).addClass("active");		
+					$("#question"+(activeNum+1)).click();	
 				},500);
 			}
 		   answerQues[i].answer = ans;
@@ -199,7 +211,7 @@ function saveAns(clickID){
 function checkCompletion(){
 	console.log(answerQues.length);
 	for(var j=0;j<answerQues.length;j++){
-		if(answerQues[j].answer==-1&&config.timeState){
+		if(answerQues[j].answer==-1&&config.timeState){		
 			alert("您还有未作答题目哦！");
 			return false;
 		}
@@ -207,19 +219,35 @@ function checkCompletion(){
 	return true;
 }
 function submit(){
-	//if(checkCompletion())
+	if(checkCompletion())
 		postResult();	
 }
 /********************API Interface********************/
+function logout(){
+    $.ajax({
+        url: '/api/Account/Logout',
+        contentType: "application/json",
+        dataType: "json",
+        async: true,
+        type: "POST",
+        success: function (req) {
+            console.log(req);
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            
+        }
+    });
+}
 function initialize(){
 	$.ajax({
 		url: "/api/Student/State/Initialize", 
 		async: true, 
 		type: "POST",
 		beforeSend: function (xhr) {
-			var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-			xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
-			},
+			// var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+			// xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+		},
 		success: function (req) {
 			console.log(req);
 			getStateNShowWebpage();
@@ -229,16 +257,7 @@ function initialize(){
 		error: function (req) {
 			alert("初始化失败，请检查网络是否通畅");
 			//logout
-			$.ajax({
-				
-				url: '/api/Account/Logout',
-				type: "POST",
-				async: true,
-				contentType: "application/json-patch+json",
-				dataType: "json",
-
-				success: function (req) {}
-			})
+			logout();
 			window.location.href="login.html";
 			console.log(req);			
 		}
