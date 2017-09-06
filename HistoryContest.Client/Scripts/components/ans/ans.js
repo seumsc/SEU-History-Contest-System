@@ -1,9 +1,41 @@
 var $ = require("../../../node_modules/jquery/dist/jquery.min.js");
 var jQuery = require("../../../node_modules/jquery/dist/jquery.min.js");
 var inTime = require('./ans.ts').inTime;
-var answerQues = new Array(30);
+var answerQues = [{ "id": 1, "answer": null },
+{ "id": 2, "answer": null },
+{ "id": 3, "answer": null },
+{ "id": 4, "answer": null },
+{ "id": 5, "answer": null },
+{ "id": 6, "answer": null },
+{ "id": 7, "answer": null },
+{ "id": 8, "answer": null },
+{ "id": 9, "answer": null },
+{ "id": 10, "answer": null },
+{ "id": 11, "answer": null },
+{ "id": 12, "answer": null },
+{ "id": 13, "answer": null },
+{ "id": 14, "answer": null },
+{ "id": 15, "answer": null },
+{ "id": 16, "answer": null },
+{ "id": 17, "answer": null },
+{ "id": 18, "answer": null },
+{ "id": 19, "answer": null },
+{ "id": 20, "answer": null },
+{ "id": 21, "answer": null },
+{ "id": 22, "answer": null },
+{ "id": 23, "answer": null },
+{ "id": 24, "answer": null },
+{ "id": 25, "answer": null },
+{ "id": 26, "answer": null },
+{ "id": 27, "answer": null },
+{ "id": 28, "answer": null },
+{ "id": 29, "answer": null },
+{ "id": 30, "answer": null }
+]
 var $ = jQuery.noConflict();
 var globalQ = {};
+
+
 
 // answerQues[0] = "curAns"
 var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
@@ -25,6 +57,9 @@ var config = {
     resultHTML: '<section class="panel color4-alt" style = "width:95rem"><div class="inner columns"><div class="span-3-25"><h3 id = "head3" class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style = "visibility:hidden"></div></div></section>',
     resultJSON: {}
 }
+var currentPage = 0;
+
+
 //生成网页
 function set(init) {
     //生成多选题html
@@ -39,7 +74,7 @@ function set(init) {
                 + '<div class="intro joined"><h1 class = "major">' + (questionsIteratorIndex + 1) + '</h1></div>'//网页上显示的题目序号
                 + '<div class="span-3-25"><h3 class="major">' + init[questionsIteratorIndex].question + '</h3>';//问题内容
             for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {//四个选项
-                content += '<div class="field quarter"><input type="radio"'
+                content += '<div class="field quarter selection"><input type="radio"'
                     + ' id="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1)//选项id，该id名称应与后端协商确定，与提交表单有关
                     + '" value="' + answersIteratorIndex
                     //          +'" onclick="saveAns(this)"'
@@ -198,10 +233,7 @@ function saveAns(clickID) {
     var ID = (id.length == 8 ? parseInt(id[6]) : parseInt(id[6]) * 10 + parseInt(id[7]));
     var testing;
     var ans = parseInt(id[id.length - 1]) - 1;
-    var check = {};
-    check.id = ID;
-    check.answer = ans;
-    answerQues[ID - 1] = check;
+    answerQues[ID - 1].answer = ans;
     testing = JSON.stringify(answerQues);
     console.log(testing);
     $("#question" + ID).addClass("answered");
@@ -212,10 +244,7 @@ function saveAns(clickID) {
 }
 function saveAnsID(questions) {
     for (var i = 0; i < 30; i++) {
-        // answerQues[i]=check;
         answerQues[i].id = questions[i].id;
-        // alert(JSON.stringify(questions[i]));
-        // alert(JSON.stringify(answerQues[i]));
     }
 }
 function submit(inTime) {
@@ -224,12 +253,13 @@ function submit(inTime) {
         if (answerQues[i] == null) tot++;
     /////////////////////////////////
     if (tot == 0 && inTime == false) {
-        alert("请认真完成答题哦~")
+        alert("请认真作答哦~");
     }
     else if (tot != 0 || inTime == true)
         alert("您还有" + tot + "题未作答题目哦!");
     else {
         console.log(JSON.stringify(answerQues));
+
         // alert(JSON.stringify(answerQues));
         $.ajax({
             url: '/api/Result', //请求的url地址
@@ -567,14 +597,19 @@ exports.load = function () {
     var timeState = false;//时间状态 默认为true 开启时间
 
     var inTime = false;
-    var currentPage = 0;
+    
     $(document).on("click", "#wrapper input", function (id) {
         var ID = $(id.target).attr('id');
         if (ID != "submit") {
+            alert("this");
             saveAns(ID);
+            $('#wrapper').animate({
+                left: "-=120rem"
+            }, 300,"swing");
+            currentPage++;
+
         } else {
             console.log(JSON.stringify(globalQ));
-            saveAnsID(globalQ);
             submit(inTime);
         }
     });
@@ -582,6 +617,7 @@ exports.load = function () {
     $(document).on("click", "#wrapper a.fa-angle-right", function (e) {
         var v_id = $(e.target).attr('id');
         if (v_id == "start") {
+            saveAnsID(globalQ);
             var clientWidth = document.body.clientWidth;
             var fixWidth = (clientWidth - 16 * 55) / (2 * 16);
             var distance = "-=" + (129 - fixWidth) + "rem";
@@ -596,13 +632,7 @@ exports.load = function () {
             currentPage++;
         }
     });
-    //page-scroll for field quarter
-    // $(document).on("click", "label", function () {
-    //     $('#wrapper').animate({
-    //         left: "-=120rem"
-    //     }, 300);
-    //     currentPage++;
-    // });
+
     //page-scroll for footer
     $(document).on("click", "#answerCard a.questionId", function (c) {
         var tgt = $(c.target).attr('id');
@@ -643,10 +673,13 @@ exports.load = function () {
                 submit(inTime);
                 $(".time").hide();
             }
-            else if (mm <= 25) {
-                inTime = true;
-            }
+            // else if (mm <= 25) {
+            //     inTime = true;
+            // }
             else {
+                if (mm < 25) {
+                    inTime = true;
+                }
                 var str = "";
                 if (ss-- == 0) {
                     --mm;
@@ -662,7 +695,7 @@ exports.load = function () {
             $(".time").text(' ');
         }
     }, 1000);
-    var answerQues = [];//name,answer(id)
+    // var answerQues = [];//name,answer(id)
     // $(document).ready(function () {
     $("#start").click(function () {
         $("#footer").show();
