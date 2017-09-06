@@ -225,7 +225,7 @@ function setGENERAL() {
         var proportionB = STAT[statIteratorIndex].proportionB;
         var proportionC = STAT[statIteratorIndex].proportionC;
         var proportionD = STAT[statIteratorIndex].proportionD;
-        generalContent += '<tr><td>' + STAT[statIteratorIndex].departmentID
+        generalContent += '<tr><td class = "departmentID">' + STAT[statIteratorIndex].departmentID
             + '</td><td>' + average
             + '</td><td>' + completion
             + '</td><td>' + proportionA
@@ -705,6 +705,10 @@ exports.sort = function () {
     $("#search-done-text").keyup(function () {
         var $key = $('#search-done-text').val();
         $('#table-done table tbody tr').hide().filter(":contains('" + $key + "')").show();
+    });
+    $("#search-general").keyup(function () {
+        var $key = $('#search-general').val();
+        $('#table-general table tbody tr').hide().filter(":contains('" + $key + "')").show();
     });
 }
 
