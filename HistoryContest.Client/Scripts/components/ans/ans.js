@@ -91,7 +91,7 @@ function set(init) {
                 + '<div class="intro joined"><h1 class = "major">' + (questionsIteratorIndex + 1) + '</h1></div>'
                 + '<div class="span-3-25"><h3 class="major">' + init[questionsIteratorIndex].question + '</h3>';
             for (answersIteratorIndex = 0; answersIteratorIndex < 2; answersIteratorIndex++) {//两个选项
-                content += '<div class="field quarter"><input type="radio" id="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1)
+                content += '<div class="field quarter"><input type="radio"  id="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1)
                     + '" value="' + answersIteratorIndex
                     //           +'" onclick="saveAns(this)"'
                     + '" name="question' + (questionsIteratorIndex + 1) + '" class="color2" />'
@@ -237,9 +237,9 @@ function saveAns(clickID) {
     testing = JSON.stringify(answerQues);
     console.log(testing);
     $("#question" + ID).addClass("answered");
-    setTimeout(function () {
-        $("#question" + ID).click();
-    }, 300);
+    // setTimeout(function () {
+    //     $("#question" + ID).click();
+    // }, 300);
 
 }
 function saveAnsID(questions) {
@@ -255,11 +255,10 @@ function submit(inTime) {
     if (tot == 0 && inTime == false) {
         alert("请认真作答哦~");
     }
-    else if (tot != 0 || inTime == true)
+    else if (tot != 0 && inTime == true)
         alert("您还有" + tot + "题未作答题目哦!");
     else {
         console.log(JSON.stringify(answerQues));
-
         // alert(JSON.stringify(answerQues));
         $.ajax({
             url: '/api/Result', //请求的url地址
@@ -590,29 +589,49 @@ function initialize() {
         }
     });
 }
+// exports.goToNextPage=function(){
+//     $('#wrapper').animate({
+//         left: "-=120rem"
+//     }, 300,"swing");
+//     currentPage++;
+// }
+
+// $(document).on("click", "#wrapper .selection", function (id) {
+//     var ID = $(id.target).attr('id');
+//     if (ID != "submit") {
+//         alert("this");
+//         saveAns(ID);
+//         $('#wrapper').animate({
+//             left: "-=120rem"
+//         }, 300, "swing");
+//         currentPage++;
+//     } else {
+//         console.log(JSON.stringify(globalQ));
+//         submit(inTime);
+//     }
+// });
+
 exports.load = function () {
-
-    var mm = 30;//分
-    var ss = 0;//秒
-    var timeState = false;//时间状态 默认为true 开启时间
-
-    var inTime = false;
-    
     $(document).on("click", "#wrapper input", function (id) {
         var ID = $(id.target).attr('id');
+        console.log(ID);
         if (ID != "submit") {
-            alert("this");
             saveAns(ID);
             $('#wrapper').animate({
                 left: "-=120rem"
-            }, 300,"swing");
+            }, 300, "swing");
             currentPage++;
 
         } else {
             console.log(JSON.stringify(globalQ));
             submit(inTime);
         }
+        console.log("over");
     });
+    var mm = 30;//分
+    var ss = 0;//秒
+    var timeState = false;//时间状态 默认为true 开启时间
+    var inTime = false;
     //page-scroll for icon fa-angle-right
     $(document).on("click", "#wrapper a.fa-angle-right", function (e) {
         var v_id = $(e.target).attr('id');
@@ -630,6 +649,7 @@ exports.load = function () {
                 left: "-=120rem"
             }, 300, "swing");
             currentPage++;
+            // goToNextPage();
         }
     });
 

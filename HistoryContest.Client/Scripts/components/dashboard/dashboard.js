@@ -534,7 +534,7 @@ exports.downloadExcelOfAllDepartments = function () {
 exports.sort = function () {
     $("#table-done").find("th.score").click(function () {
         if (cnt % 3 == 0) {
-            $("#sort").hide();
+            $("#Scoresort").hide();
             $("#triangle-bottom").show();
             $("#triangle-top").hide();
             if (cnt == 0) {
@@ -550,7 +550,7 @@ exports.sort = function () {
 
         }
         else if (cnt % 3 == 1) {
-            $("#sort").hide();
+            $("#Scoresort").hide();
             $("#triangle-bottom").hide();
             $("#triangle-top").show();
             temp.reverse();
@@ -559,7 +559,7 @@ exports.sort = function () {
 
         }
         else if (cnt % 3 == 2) {
-            $("#sort").show();
+            $("#Scoresort").show();
             $("#triangle-bottom").hide();
             $("#triangle-top").hide();
             cnt++;

@@ -110,21 +110,21 @@
                                         <input type="text" class="form-control" id="search-undo-text" placeholder="在此输入学号、一卡通号或姓名...">
                                     </div>
                                 </div>
+                                <div class="row" style="margin-bottom:0">
+                                    <table style="margin-bottom:0" class="table table-hover table-striped table-responsive">
+                                        <thead>
+                                            <th>学号</th>
+                                            <th>姓名</th>
+                                            <th>一卡通</th>
+                                        </thead>
+
+                                    </table>
+                                </div>
                             </div>
-                            <div class="content table-responsive table-full-width restricted" id="table-undo">
+                            <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-undo">
                                 <table class="table table-hover table-striped">
-                                    <thead>
-                                        <th>学号</th>
-                                        <th>姓名</th>
-                                        <th>一卡通</th>
-                                    </thead>
-                                    <tbody>
-
-
-
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
-
                             </div>
                         </div>
                         <div class="card">
@@ -138,25 +138,28 @@
                                         <input type="text" class="form-control" id="search-done-text" placeholder="在此输入学号、一卡通号或姓名...">
                                     </div>
                                 </div>
+                                <div class="row" style="margin-bottom:0">
+                                    <table class="table table-hover table-striped" style="margin-bottom:0">
+                                        <thead>
+                                            <th>学号</th>
+                                            <th>姓名</th>
+                                            <th class="score">
+                                                <span>成绩</span>
+                                                <span class="glyphicon glyphicon-sort" id="Scoresort"></span>
+                                                <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span>
+                                                <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
+                                            </th>
+                                            <th>一卡通</th>
+
+                                        </thead>
+
+                                    </table>
+                                </div>
                             </div>
 
-                            <div class="content table-responsive table-full-width restricted" id="table-done">
+                            <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-done">
                                 <table class="table table-hover table-striped">
-                                    <thead>
-                                        <th>学号</th>
-                                        <th>姓名</th>
-                                        <th class="score">
-                                            <span>成绩</span>
-                                            <span class="glyphicon glyphicon-sort" id="sort"></span>
-                                            <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span>
-                                            <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
-                                        </th>
-                                        <th>一卡通</th>
-
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
+                                    <tbody> </tbody>
                                 </table>
 
                             </div>
@@ -169,20 +172,19 @@
 </template>
 <script src="./statistics.ts"></script>
 <style scoped>
-        img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-    
-        .restricted {
-            max-height: 100%;
-            overflow-y: auto;
-        }
-    
-       .score:hover {
-    
-            color: #1DC7EA;
-            cursor: pointer;
-        }
-    </style>
-    
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .restricted {
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    .score:hover {
+
+        color: #1DC7EA;
+        cursor: pointer;
+    }
+</style>

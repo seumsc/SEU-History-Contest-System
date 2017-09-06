@@ -12,6 +12,7 @@ var $ = jQuery.noConflict();
 // var ajaxSetupFunction=require('./ans.js').ajaxSetupFunction;
 var getState=require('./ans.js').getState;
 var load=require('./ans.js').load;
+// var goToNextPage=require('./ans.js').goToNextPage;
 // var ajaxSetup = require('./ans.js').ajaxSetup;
 // var ajaxMatchSetup = require('./ans.js').ajaxMatchSetup;
 // var cookieBeforeSend = require('./ans.js').cookieBeforeSend;
@@ -19,6 +20,8 @@ require('../../../Images/banner.jpg');
 require('../../../Images/bg.jpg');
 require('../../../Images/overlay.png');
 require('../../../Images/pic01.jpg');
+
+
 
 
 
@@ -36,29 +39,13 @@ export default {
 		this.loadcss()
 	},
 	methods: {
-		// ajaxSetup: function () {
-		// 	$.ajaxSetup({
-		// 		beforeSend: function (xhr) {
-		// 			var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-		// 			xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
-		// 		}
-		// 	});
-		// },
-		// ajaxMatchSetup: function () {
-		// 	var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
-		// 	$.ajaxSetup({
-		// 		headers: {
-		// 			"X-XSRF-TOKEN": match
-		// 		}
-		// 	})
-		// },
-		// getState: function () {
-		// 	getState();
-		// },
+		// goToNextPage:function(){
+		// 	alert("this");
+		// 	goToNextPage();
+		// 	},
 		loadcss: function () {
 			$("body").css("display", "flex");
 			$("body").css("background-image", "url(/dist/Images/overlay.png), url(/dist/Images/bg.jpg)");
-
 		}
 	}
 }
