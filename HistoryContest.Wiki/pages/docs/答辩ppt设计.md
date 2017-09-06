@@ -17,17 +17,17 @@
    * ↓ Request [ViewModel] ↑ Response
    * <===========**后端介绍**============
    * <--------[Controllers]-------/>（点击矩形框后进入Controller介绍）
-   * 　　　　　　↑↓      ↑   ↓         
-   * 　　　　　　↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
-   * 　　　　　　↑↓      ↑   ↓         
+   * ↑↓      ↑   ↓         
+   * ↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
+   * ↑↓      ↑   ↓         
    * <--------[Unit Of Work]--------
    * .[RepositoryA]...[RepositoryN].
-   * 　　　　　　↑↓      ↑   ↓         
-   * 　　　　　　↑↓     [Redis]        （缓存层，缓存设计放这里）
-   * 　　　　　　↑↓      ↑   ↓        
-   * 　　　[Entity Framework Core]
+   * ↑↓      ↑   ↓         
+   * ↑↓     [Redis]        （缓存层，缓存设计放这里）
+   * ↑↓      ↑   ↓        
+   * [Entity Framework Core]
    * ---------[Unit Of Work]------/>
-   * 　　　［Data Entity Model] ↓
+   * ［Data Entity Model] ↓
    * <---------[SQL Server]-------/> （数据库层，数据库设计，SQL脚本相关都放在这里）
    * ============**后端介绍**==========/>
 
@@ -62,8 +62,8 @@
 
 1. 传统模式：HTML5+CSS3+JavaScript
 2. 加点“库”吧：jQuery+BootStrap
-3. 模块化：CommonJS+Typescript
+3. 模块化：NPM+CommonJS+Typescript
 4. 打包上线：Vue+Webpack
 5. 与后端通信：JSON+AJAX+CSRF-TOKEN
-6. 一些PS和网页设计规范的知识
+6. 其他：版本控制；一些PS和网页设计规范的知识
 
