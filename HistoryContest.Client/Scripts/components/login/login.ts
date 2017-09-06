@@ -101,26 +101,29 @@ export default {
           data: JSON.stringify(info),
           contentType: "application/json;charset=utf-8",
           beforeSend: function () {
-            alert(this.data)
+            // alert(this.data)
           },
           success: function (req,status,xhr) {
             // alert(JSON.stringify(req))
-            console.log(req);
+            // console.log(req);
             // console.log(xhr.getResponseHeader("Set-Cookie"));
             if(req.isSuccessful==true){
-              _this.isStu();         
-              // alert("successful!");                 
+              alert("注册成功！");                 
+              _this.$router.push({path:'/login'});    
             }
-            else alert("unsuccessful!");
-              // _this.$router.replace({path:'/login'})
+            else {
+              alert("注册失败！请联系计软科协赛事部，谢谢")
+              _this.$router.replace({path:'/login'})
+            }
           },
           complete: function () {
-            alert("complete");
+            // alert("complete");
           },
           error: function (request) {
             alert("sign up error:" + JSON.stringify(request));
-            $("#register-message").removeClass().addClass("text-danger");
-            $("#register-message").text("注册失败，请检查网络").fadeIn(); 
+            // $("#register-message").removeClass().addClass("text-danger");
+            // $("#register-message").text("注册失败，请检查网络").fadeIn(); 
+            alert("注册失败，请检查网络"); 
           }
         });
     },
@@ -165,28 +168,42 @@ export default {
             // else alert("登录失败,请检查用户名或密码是否正确")
             else {
               if (req.message == "User already logged in") {
-                  $("#common-error").text("当前用户已登录")
-                      .fadeIn(setTimeout(function () {
-                          $("#common-error").fadeOut();
-                      }, 2000));
+                  alert("当前用户已登录");
+                  // $("#common-error").text("当前用户已登录")
+                  //     .fadeIn(setTimeout(function () {
+                  //         $("#common-error").fadeOut();
+                  //     }, 50000));
               } 
               else {
-                  $("#common-error").text("用户名或密码错误，或尚未注册账号")
-                      .fadeIn(setTimeout(function () {
-                          $("#common-error").fadeOut();
-                      }, 2000));
+                  alert("用户名或密码错误，或尚未注册账号");
+                  // $("#common-error").text("用户名或密码错误，或尚未注册账号");
+                  // alert('login');
+                      // .fadeIn(setTimeout(function () {
+                      //     $("#common-error").fadeOut();
+                      // }, 5000));
+                      // var i = 0;
+                      // while(i < 10){
+                      //   console.log("time");
+                      //   setTimeout(i++,10000);
+                      // }
+
+
               }
+              // setTimeout(function(){
+              //   alert("yes");
+              //   _this.$router.replace({path:'/login'});                
+              // },50000);
           }
           },
           complete: function () {
           },
           error: function (request) {
-            alert("error:" + JSON.stringify(request));
-            // alert("登录失败,请检查网络是否通畅");
-            $("#common-error").text("登录失败,请检查网络是否通畅")
-            .fadeIn(setTimeout(function () {
-                $("#common-error").fadeOut();
-            }, 2000));
+            // alert("error:" + JSON.stringify(request));
+            alert("登录失败,请检查网络是否通畅");
+            // $("#common-error").text("登录失败,请检查网络是否通畅")
+            // .fadeIn(setTimeout(function () {
+            //     $("#common-error").fadeOut();
+            // }, 5000));
           }
         });
 
