@@ -3729,25 +3729,19 @@
 }
 #answerCard a:hover{
 	color:#ffe4b4;
-	/* background: rgb(240,130,0); */
 	border:2px solid #ffe4b4;
 }
+#answerCard a.answered.activate{
+	color:#fff !important;
+	background:none !important;
+	border:2px solid rgb(240,130,0)!important;
+}
 .activate{
-	display:inline-block;
-	width:2rem;
-	height:2rem;
-	text-align: center;
 	color:#ffe4b4 !important;
 	border:2px solid #ffe4b4!important;
-	margin:5px;
 }
 
-.answered{
-	display:inline-block;
-	width:2rem;
-	height:2rem;
-	text-align: center;
-	
+.answered{	
 	border:2px solid #ccc;
 	margin:5px;
 	color:#fff!important;
