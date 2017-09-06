@@ -10,6 +10,16 @@
    * 前端设计：
    * 后端设计：概况更新机制
 
+   前端：
+
+   1. 学生答题流程介绍
+   2. 辅导员操作流程介绍
+
+   后端：
+
+   1. 学生答题后台设计介绍
+   2. 辅导员概况获取更新机制介绍
+
 3. 项目架构介绍，层级大概如下，用几张带有动画与超链接的PPT展示：
    * <===========**前端介绍**============
    * -------------BlaBla------------
@@ -17,17 +27,17 @@
    * ↓ Request [ViewModel] ↑ Response
    * <===========**后端介绍**============
    * <--------[Controllers]-------/>（点击矩形框后进入Controller介绍）
-   * 　　　　　　↑↓      ↑   ↓         
-   * 　　　　　　↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
-   * 　　　　　　↑↓      ↑   ↓         
+   * ↑↓      ↑   ↓         
+   * ↑↓    [Services]     （Repository/UnitOfWork可直接提供服务，也可通过Service）
+   * ↑↓      ↑   ↓         
    * <--------[Unit Of Work]--------
    * .[RepositoryA]...[RepositoryN].
-   * 　　　　　　↑↓      ↑   ↓         
-   * 　　　　　　↑↓     [Redis]        （缓存层，缓存设计放这里）
-   * 　　　　　　↑↓      ↑   ↓        
-   * 　　　[Entity Framework Core]
+   * ↑↓      ↑   ↓         
+   * ↑↓     [Redis]        （缓存层，缓存设计放这里）
+   * ↑↓      ↑   ↓        
+   * [Entity Framework Core]
    * ---------[Unit Of Work]------/>
-   * 　　　［Data Entity Model] ↓
+   * ［Data Entity Model] ↓
    * <---------[SQL Server]-------/> （数据库层，数据库设计，SQL脚本相关都放在这里）
    * ============**后端介绍**==========/>
 
