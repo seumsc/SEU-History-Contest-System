@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
@@ -99,7 +99,7 @@ namespace HistoryContest.Server.Controllers.APIs
                     return Forbid();
                 }
 
-                model = new ResultViewModel { Score = student.Score ?? 0 };
+                model = new ResultViewModel { Score = student.Score ?? 0, TimeConsumed = student.TimeConsumed, TimeFinished = student.DateTimeFinished };
                 if (student.IsTested)
                 {
                     var seed = (await unitOfWork.Cache.QuestionSeeds().GetAsync((int)student.QuestionSeedID));

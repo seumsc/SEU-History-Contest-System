@@ -219,7 +219,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
