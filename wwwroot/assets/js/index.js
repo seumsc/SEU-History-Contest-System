@@ -422,6 +422,8 @@ $(function(){
 
     $("#start").click(function () {
 		 $("#footer").show();
+		 $("#quiz-container").show();
+		 $("#submit-container").show();
         config.timeState = true;
 	});
 	
@@ -456,7 +458,6 @@ $(function(){
 			config.timeState=true; 
 			 $("#footer").show();
 		}
-		console.log(e.pageX);
   });
   $(document).bind("mouseover mouseenter mousemove mouseup mousedown",function(e){ //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
 	var questionPos=[];
@@ -486,7 +487,6 @@ $(function(){
 		config.timeState=true; 
 		 $("#footer").show();
 	}
-	console.log(e.pageX);
 });
 
   
