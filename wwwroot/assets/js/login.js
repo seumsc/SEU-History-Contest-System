@@ -230,7 +230,7 @@ $(function () {
                 }
                 else{
                     $("#register-message").removeClass().addClass("text-danger");
-                    $("#register-message").text("注册失败，用户已存在").fadeIn(); 
+                    $("#register-message").text("注册失败").fadeIn(); 
                 }
                
             },
