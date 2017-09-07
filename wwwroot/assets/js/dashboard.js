@@ -249,7 +249,7 @@ function setGENERAL(){
       console.log(STAT);
     for(var statIteratorIndex=0;statIteratorIndex<STAT.length;statIteratorIndex++){
         var donenum = STAT[statIteratorIndex].donenum;
-        var average = STAT[statIteratorIndex].average;
+        var average = STAT[statIteratorIndex].average.toFixed(2);
         var completion = STAT[statIteratorIndex].completion;
         var proportionA = STAT[statIteratorIndex].proportionA;
         var proportionB = STAT[statIteratorIndex].proportionB;
@@ -375,7 +375,7 @@ function fetchSummary(department,callback){
                     console.log(config.departmentInfo.departmentID);
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
-                    stat.average = stat.averageScore.toFixed(2);
+                    stat.average = stat.averageScore;
                     stat.completion = Math.round (100 * (stat.studentCount==0?0:(1 - stat.scoreBandCount.notTested/stat.studentCount)));
                     stat.proportionA = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan90/stat.donenum)));
                     stat.proportionB = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan75/stat.donenum)));
@@ -392,7 +392,7 @@ function fetchSummary(department,callback){
                     console.log(req);
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
-                    stat.average = stat.averageScore.toFixed(2);
+                    stat.average = stat.averageScore;
                     stat.completion = Math.round (100 * (stat.studentCount==0?0:(1 - stat.scoreBandCount.notTested/stat.studentCount)));
                     stat.proportionA = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan90/stat.donenum)));
                     stat.proportionB = Math.round (100 * (stat.donenum==0?0:(stat.scoreBandCount.higherThan75/stat.donenum)));
