@@ -341,7 +341,10 @@ namespace HistoryContest.Server
             unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
             unitOfWork.QuestionRepository.LoadQuestionsToCache();
             unitOfWork.StudentRepository.LoadStudentsToCache();
-            new TestDataService(unitOfWork).SeedTestedStudents();
+            if (Environment.IsDevelopment())
+            {
+                new TestDataService(unitOfWork).SeedTestedStudents();
+            }
 
             syncWithDatabaseTimer = new Timer(async o =>
             {
