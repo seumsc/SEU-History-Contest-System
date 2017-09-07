@@ -218,7 +218,10 @@ namespace HistoryContest.Server
 
             #region Static file routes
             // use wwwroot static files
-            app.UseDefaultFiles();
+            DefaultFilesOptions options = new DefaultFilesOptions();
+            options.DefaultFileNames.Clear();
+            options.DefaultFileNames.Add("login.html");
+            app.UseDefaultFiles(options);
             app.UseStaticFiles();
 
             // enable default url rewrite for wiki
@@ -303,7 +306,7 @@ namespace HistoryContest.Server
             #endregion
 
             // enable status code response page
-            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
+            //app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
             #region Javascript spa routes
             app.UseMvc(routes =>

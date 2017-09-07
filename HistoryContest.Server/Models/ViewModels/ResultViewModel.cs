@@ -21,9 +21,9 @@ namespace HistoryContest.Server.Models.ViewModels
         [DefaultValue(60)]
         public double Score { get; set; }
         [DefaultValue(typeof(DateTime), "2017-08-21T16:31:44.218Z")]
-        public DateTime TimeFinished { get; set; }
+        public DateTime? TimeFinished { get; set; }
         [DefaultValue(typeof(TimeSpan), "00:20:34.2049107")]
-        public TimeSpan TimeConsumed { get; set; }
+        public TimeSpan? TimeConsumed { get; set; }
         public List<ResultDetailViewModel> Details { get; set; }
     }
 }

@@ -15,6 +15,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\$(TargetFramework)\HistoryContest.Server.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
+    <FileAlignment>1024</FileAlignment>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(TargetFramework)' == 'netcoreapp1.1'">

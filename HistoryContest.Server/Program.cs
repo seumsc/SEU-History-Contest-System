@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Dynamic;
 using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
+using System.Threading;
 
 namespace HistoryContest.Server
 {
@@ -73,7 +74,7 @@ namespace HistoryContest.Server
                             "-rb|--runbrowser               程序启动后运行默认浏览器打开网站。",
                             "-env|--environment <env>       设置程序运行环境。默认为\"Production\"。",
                             "--parse-question-sql <path>    解析一个sql格式问题集到json数据文件。",
-                            "--parse-question-text <path>   解析一个文本格式学生信息集到json数据文件。"
+                            "--parse-student-text <path>    解析一个文本格式学生信息集到json数据文件。"
                         };
                         foreach (var message in messages)
                         {
@@ -141,9 +142,12 @@ namespace HistoryContest.Server
 
             if (runBrowser)
             {
-                string url = @"https://localhost:5000";
-                Console.WriteLine(@"Starting " + url + " with default browser...");
-                System.Diagnostics.Process.Start("explorer", url);
+                new Timer(async o =>
+                {
+                    string url = @"https://localhost:5000";
+                    Console.WriteLine(@"Starting " + url + " with default browser...");
+                    System.Diagnostics.Process.Start("explorer", url);
+                }, null, (int)TimeSpan.FromSeconds(10).TotalMilliseconds, Timeout.Infinite);
             }
         }
     }
