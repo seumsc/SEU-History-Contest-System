@@ -3,7 +3,7 @@ function logout(){
         url: '/api/Account/Logout',
         contentType: "application/json",
         dataType: "json",
-        async: true,
+        async: false,
         type: "POST",
         success: function (req) {
             console.log(req);
@@ -103,8 +103,7 @@ $(function () {
         $.ajax({
             url: '/api/Account/Login', //请求的url地址
             type: "POST", //请求方式
-            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-            crossDomain: true,
+            async: false, 
             contentType: "application/json-patch+json",
             //data
             data: JSON.stringify(dt), //参数值
@@ -164,7 +163,7 @@ $(function () {
         $.ajax({
             url: "/api/Account/Register",
             type: "POST", 
-            async: true, 
+            async: false, 
             contentType: "application/json-patch+json",
             //data
             data: JSON.stringify(rdt), 
@@ -185,8 +184,7 @@ $(function () {
                         $.ajax({
                             url: '/api/Account/Login', //请求的url地址
                             type: "POST", //请求方式
-                            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-                            crossDomain: true,
+                            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
                             contentType: "application/json-patch+json",
                             //data
                             data: JSON.stringify(dt), //参数值
