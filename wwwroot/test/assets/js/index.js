@@ -219,7 +219,7 @@ function checkCompletion(){
 	return true;
 }
 function submit(){
-	if(checkCompletion())
+//	if(checkCompletion())
 		postResult();	
 }
 /********************API Interface********************/
@@ -439,6 +439,9 @@ $(function(){
 			if((e.pageX)<questionPos[it]){
 				currentQues=it-1;
 				break;
+			}
+			else if(e.pageX>=questionPos[30]){
+				currentQues=30;
 			}
 		}
 		if(currentQues!=config.currentQuestion){
