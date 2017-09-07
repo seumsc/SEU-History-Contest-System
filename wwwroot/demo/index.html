@@ -1,0 +1,843 @@
+<!doctype html>
+<!--[if lt IE 7]><html lang="en" class="no-js ie6"><![endif]-->
+<!--[if IE 7]><html lang="en" class="no-js ie7"><![endif]-->
+<!--[if IE 8]><html lang="en" class="no-js ie8"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>校史系统答辩演示</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/jquery.easy-pie-chart.css">
+    <link rel="stylesheet" href="css/styles.css" title="mainStyle">
+
+    <!-- REVOLUTION BANNER CSS SETTINGS -->
+    <link rel="stylesheet" type="text/css" href="rs-plugin/css/settings.css" media="screen" />
+
+    <script src="js/modernizr.custom.32033.js"></script>
+
+    <!--[if IE]><script type="text/javascript" src="js/excanvas.compiled.js"></script><![endif]-->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+
+
+
+
+.form-horizontal{
+	background:rgba(255,255,255,0.6);
+	max-width: 540px;
+	margin:auto;
+	padding-bottom: 25px;
+	border-radius: 15px;
+	text-align: center;
+	
+}
+.form-horizontal .heading{
+	display: block;
+	font-family:FZYaoti;
+	background:rgba(255,255,255,0.6);
+	border-radius:15px 15px 0 0px;
+	font-size: 35px;
+	font-weight: 700;
+	padding: 35px 0;
+	margin-bottom: 30px;
+}
+.form-horizontal .form-group{
+	padding: 0;
+	font-family: Microsoft Yahei;
+	margin: 15px 60px;
+	position:relative;
+}
+.form-horizontal .form-control{
+	background: #f0f0f0;
+	opacity: 0.8;
+	border: none;
+	border-radius: 20px;
+	box-shadow: none;
+	padding: 0 50px 0 80px;
+	height: 40px;
+	transition: all 0.3s ease 0s;
+}
+.form-horizontal .form-control:focus{
+	background: #e0e0e0;
+	opacity: 0.8;
+	box-shadow: none;
+	outline: 0 none;
+}
+.form-horizontal .form-group span{
+	position: absolute;
+	top: 12px;
+
+	left: 45px;
+	font-size: 16px;
+	color: #c8c8c8;
+	animation: loaded 0.8s ease 0s 1 normal;
+	transition: all 0.5s ease 0s;
+}
+.form-horizontal .form-control:focus + span{
+	color: #00b4ef;
+}
+
+
+.form-horizontal .btn{
+	float: right;
+	font-size: 14px;
+	color: #fff;
+	background: #00b4ef;
+	border-radius: 30px;
+	padding: 10px 25px;
+	border: none;
+	transition: all 0.5s ease 0s;
+}
+
+.form-horizontal a{
+	display:block;
+	float:left;
+	font-size:14px;
+	padding: 10px 25px;
+}
+/* @media only screen and (max-width: 479px){
+	.header{
+		text-align: center;
+	}
+	.form-horizontal .form-group{
+		margin: 15px 25px;
+	}
+	.form-horizontal .form-group span{
+		left: 45px;
+	}
+	.form-horizontal .btn{
+		padding: 10px 20px;
+	}
+
+} */
+
+@keyframes loaded{
+	from{
+		left:0px;
+	}
+	to{
+		left:45px;
+	}
+}
+
+
+	
+</style>
+</head>
+
+<body>
+
+    <div class="pre-loader">
+        <div class="load-con">
+            <img src="img/logo-blue.png" class="animated fadeInDown" alt="">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="go-down">
+        <a href="#whoWeAre">
+            <i class="fa fa-angle-down fa-3x"></i>
+        </a>
+    </div>
+    <!-- Wrap all page content here -->
+    <div id="wrap" class="home">
+
+        <header class="masthead">
+            <div class="slider-container" id="slider">
+                <div class="tp-banner-container">
+                    <div class="tp-banner">
+                        <ul>
+                            <li data-transition="slotfade-horizontal" data-slotamount="4" data-masterspeed="300">
+                                <!-- MAIN IMAGE -->
+                                <img src="img/dummy.png" data-lazyload="img/background1.jpg" alt="slidebg1" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
+                                <!-- LAYERS -->
+
+
+
+                                <div style="font-size:64px" class="tp-caption large_white_light sft hidden-xs" data-x="left" data-y="center" data-hoffset="0" data-voffset="-100" data-speed="700" data-start="1300" data-easing="Power4.easeOut">
+                                    设计理念
+                                </div><br>
+                                <div style="font-size:64px" class="tp-caption large_white_light sfl hidden-xs" data-x="left" data-y="center" data-hoffset="0" data-voffset="0" data-speed="700" data-start="1500" data-easing="Power4.easeOut">
+                                    美观
+                                </div>
+                                <div style="font-size:64px" class="tp-caption large_white_light sfb hidden-xs" data-x="left" data-y="center" data-hoffset="147" data-voffset="0" data-speed="700" data-start="1700" data-easing="Power4.easeOut">
+                                    易用
+                                </div>
+                                <div style="font-size:64px" class="tp-caption large_white_light sfr hidden-xs" data-x="left" data-y="center" data-hoffset="335" data-voffset="0" data-speed="700" data-start="1900" data-easing="Power4.easeOut">
+                                    注重细节
+                                </div>
+                               
+
+                            </li>
+                            <li data-transition="slotfade-horizontal" data-slotamount="4" data-masterspeed="300">
+                                <!-- MAIN IMAGE -->
+                                <img src="img/dummy.png" data-lazyload="img/background0.jpg" alt="slidebg1" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
+                                <!-- LAYERS -->
+
+                                <!-- LAYER NR. 1 -->
+                                <div class="tp-caption sft fadeout" data-x="center" data-y="center" data-hoffset="0" data-voffset="0" data-speed="500" data-start="700" data-easing="Power4.easeOut">
+                                   
+                                          <form class="form-horizontal" data-toggle="validator" id="login-form">
+                                            <span class="heading">校史校情知识竞赛</span>
+                                            <div class="form-group">
+                                              <input type="text" class="form-control" id="username"
+                                                  pattern="^[0-9]{8}$" 
+                                                  required autofocus autocomplete="off"
+                                                  placeholder="账号为学号" 
+                                                  name="userName" 
+                                                  title="账号为学号"
+                                                  data-toggle="validator" 
+                                                  data-error="账号为八位学号！">
+                                              <span class="glyphicon glyphicon-user"></span>
+                                              <div class="help-block with-errors"></div>
+                                            </div>
+                                
+                                            <div class="form-group">
+                                              <input type="password" class="form-control" id="password"
+                                                  pattern="^[0-9A-Z]{9}$" 
+                                                  required autocomplete="off"
+                                                  placeholder="密码为一卡通号" 
+                                                  data-toggle="validator" 
+                                                  name="password"
+                                                  title="密码为一卡通号"  
+                                                  data-error="密码为九位一卡通号！" >
+                                              <span class="glyphicon glyphicon-lock"></span>
+                                              <div class="help-block with-errors"></div>
+                                            </div>
+                                            <div class="form-group">
+                                              <div id="common-error" style="display:none;color:red"></div>
+                                              <a href="#" data-toggle="modal" data-target="#register">还未注册？</a>
+                                              <button type="submit" class="btn btn-default" id="submit">登录</button>
+                                            </div>
+                                          </form>
+                                      
+                                </div>
+
+                                <div class="tp-caption large_white_light  sfb hidden-xs" data-x="left" data-y="center" data-hoffset="0" data-voffset="0" data-speed="1000" data-start="1300" data-easing="Power4.easeOut">
+                                    <a href="#portfolio" class="btn btn-naked">动感</a>
+                                </div>
+                                <div class="tp-caption  large_white_light sft hidden-xs" data-x="right" data-y="center" data-hoffset="0" data-voffset="0" data-speed="1000" data-start="1300" data-easing="Power4.easeOut">
+                                    <a href="#team" class="btn btn-naked">活力</a>
+                                </div>
+                            </li>
+                            <li data-transition="slotfade-horizontal" data-slotamount="4" data-masterspeed="300">
+                                <!-- MAIN IMAGE -->
+                                <img src="img/dummy.png" data-lazyload="img/background7.jpg" alt="slidebg1" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
+                                <!-- LAYERS -->
+
+                                <!-- LAYER NR. 1 -->
+                                <div class="tp-caption lfl fadeout" data-x="left" data-y="center" data-hoffset="0" data-voffset="0" data-speed="500" data-start="700" data-easing="Power4.easeOut">
+                                    <img src="img/logo.png" alt="">
+                                </div>
+                                <div class="tp-caption large_white_bold sft" data-x="520" data-y="center" data-hoffset="0" data-voffset="-120" data-speed="500" data-start="1200" data-easing="Power4.easeOut">
+                                    <h1>一致性</h1>
+                                </div>
+                                <div class="tp-caption large_white_light sfb" data-x="520" data-y="center" data-hoffset="0" data-voffset="-40" data-speed="1000" data-start="1300" data-easing="Power4.easeOut">
+                                    遵循用户习惯
+                                </div>
+                                <div class="tp-caption large_white_light sfb" data-x="520" data-y="center" data-hoffset="0" data-voffset="10" data-speed="1000" data-start="1300" data-easing="Power4.easeOut">
+                                    操作流畅自然
+                                </div>
+                                <div class="tp-caption large_white_light sfb" data-x="520" data-y="center" data-hoffset="0" data-voffset="60" data-speed="1000" data-start="1300" data-easing="Power4.easeOut">
+                                    用户体验至上
+                                </div>
+                                <!-- <div class="tp-caption sfb hidden-xs" data-x="520" data-y="center" data-hoffset="0" data-voffset="150" data-speed="1000" data-start="1700" data-easing="Power4.easeOut">
+                                    <a href="#about" class="btn btn-primary btn-lg">LEARN MORE</a>
+                                </div> -->
+                            </li>
+
+                        </ul>
+                        <div class="tp-bannertimer"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Fixed navbar -->
+            <div class="navbar navbar-static-top" id="nav" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-align-justify"></i>
+                        </button>
+                        <a class="navbar-brand" href="#">
+                            <img src="img/logo-blue.png" alt="">
+                        </a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="active"><a href="#general-design-head">前端设计</a>
+                            </li>
+                            <li><a href="#login-head">登录页</a>
+                            </li>
+                            <li><a href="#sheet-head">答题页</a>
+                            </li>
+                            <li><a href="#dashboard-head">后台页</a>
+                            </li>
+                            <li><a href="#tech-head">技术细节</a>
+                            </li>
+                            <li class="social-nav visible-lg">
+                                <a href="https://github.com/Vigilans-Yea/SEU-History-Contest-System"><i class="fa fa-github"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!--/.container -->
+            </div>
+            <!--/.navbar -->
+
+        </header>
+        <section  id="general-design-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">前端<span>设计</span>
+                            </h1>
+                            
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+        <section id="general-design">
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-md-6">
+                        <div class="media scrollpoint sp-effect2">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-star fa-4x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">迎合“校史”主题，展现东大文化</h1>
+                                
+                            </div>
+                        </div>
+                        <div class="media scrollpoint sp-effect2">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-support fa-4x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">活力，多彩，就像东大学子</h1>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media right scrollpoint sp-effect1">
+                            <a class="pull-right" href="#">
+                                <i class="media-object fa fa-user-plus fa-4x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">直观，易用，用户体验至上</h1>
+                                
+                            </div>
+                        </div>
+                        <div class="media right scrollpoint sp-effect1">
+                            <a class="pull-right" href="#">
+                                <i class="media-object fa fa-internet-explorer fa-4x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">响应式布局，支持IE</h1>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section  id="login-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">登陆<span>页</span>
+                            </h1>
+                            
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+        <section id="login">
+            <div class="container">
+                <div class="row">
+                    <!-- <div class="col-md-5 scrollpoint sp-effect1" id="test">
+                        <img src="img/background3.jpg" class="img-responsive ipad-image img-center" alt="">
+                    </div> -->
+                    <div class="col-md-7 scrollpoint sp-effect2">
+                       
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            
+                            <div class="media-body">
+                                <h1 class="media-heading">动态 & 交互</h1>
+                                <h2 style="color:#fff">刚进入登录页，你就会发现我们在用户体验和交互细节上的用心。登录页的背景图片是最具特点的东大校园景观，利用动态背景，给新生们带来一场视觉之旅。操作交互平滑自然，符合用户习惯与心理预期。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">清空cookie</h1>
+                                <h2 style="color:#fff">进入登录页时，我们会自动清空cookie，以免受到上一个用户的影响。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">提示信息</h1>
+                                <h2 style="color:#fff">从登录页起，我们就考虑到做题中可能发生的情况，在网页的设计中预留了足够的提示信息，引导用户排查和解决可能遇到的问题。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">用户识别</h1>
+                                <h2 style="color:#fff">通过判断身份和答题状态，将用户引导至答题页/结果页或后台页</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">登录页的引导细<span>节</span>
+                            </h1>
+                            
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                                <h1>（1）提示用户账号密码应该输入什么。</h1>
+                                <h1>（2）登录失败则提示是网络异常或是用户尚未注册。</h1>  
+                                <h1>（3）对用户输入的帐号密码进行有效性检验。</h1>
+                                <h1>（4）利用动态出现的提示信息和模态框，而不是“十分恼人”的浏览器弹窗。</h1>
+                            
+                        </div>
+                       
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section  id="sheet-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">答题<span>页</span>
+                            </h1>
+                            
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+        <section id="sheet">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7 scrollpoint sp-effect2">
+                        
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">来自“明信片”的启发</h1>
+                                <h2 style="color:#fff">为了避免千篇一律的答题界面，我们从“明信片”中找到灵感，题目如同一张张“明信片”，逐道展现在学生眼前，辅以精心调教过的背景，赏心悦目。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">人性化的设计</h1>
+                                <h2 style="color:#fff">我们设置了欢迎页，对用户进行了对于竞赛而言必要的提示和引导。答题中，我们考虑到“明信片”设计可能给用户带来换题的不便，我们加入了自动切题功能。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">流畅的答题体验</h1>
+                                <h2 style="color:#fff">我们设置了“答题卡”，借助不同的样式，用户可以轻而易举地从中知晓哪些题已答，哪些题未答，以及当前题是什么。</h2>
+                            </div>
+                        </div>
+                        <div class="media media-circle">
+                            <a class="pull-left" href="#">
+                                <i class="media-object fa fa-angle-right fa-2x"></i>
+                            </a>
+                            <div class="media-body">
+                                <h1 class="media-heading">知道哪儿做错了</h1>
+                                <h2 style="color:#fff">提交答案之后，用户可以直观地看到答题情况和题目分析。为了防止用户提交后忘记关闭网页，我们设置了30秒的时限，30秒后会自动注销并跳转至登录页。</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+        <section  id="dashboard-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">后台<span>页</span>
+                            </h1>
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+
+        <section id="dashboard">
+            <div class="container">
+                <div class="col-md-7 scrollpoint sp-effect2">
+                    <div class="media media-circle">
+                        <a class="pull-left" href="#">
+                            <i class="media-object fa fa-pie-chart fa-2x"></i>
+                        </a>
+                        <div class="media-body">
+                            <h1 class="media-heading">信息可视化</h1>
+                           <h2 style="color:#fff">我们很注重信息的展现，四张饼图各司其职，可以让辅导员迅速获取主要的信息。</h2>
+                        </div>
+                    </div>
+                    <div class="media media-circle">
+                        <a class="pull-left" href="#">
+                            <i class="media-object fa fa-sort-amount-desc fa-2x"></i>
+                        </a>
+                        <div class="media-body">
+                            <h1 class="media-heading">可搜索和排序的表格</h1>
+                           <h2 style="color:#fff">表格可展现具体信息，精确、详细，可搜索。借助表格的搜索和排序功能，可以极大程度方便辅导员对学生进行管理。</h2>
+                        </div>
+                    </div>
+                    <div class="media media-circle">
+                        <a class="pull-left" href="#">
+                            <i class="media-object fa fa-file-excel-o fa-2x"></i>
+                        </a>
+                        <div class="media-body">
+                            <h1 class="media-heading">导出EXCEL</h1>
+                           <h2 style="color:#fff">辅导员可以根据需要将答题情况信息的表格下载至本地。</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section   id="tech-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">花絮与<span>演示</span>
+                            </h1>
+                            
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 scrollpoint sp-effect4">
+                        <img src="img/layout.png" class="img-responsive img-center" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1 style="font-size:64px">技术<span>细节</span>
+                            </h1>
+                            <h3>前端开发中，我们经历了几个阶段，主要用了如下的技术。</h3>
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+        <section id="tech-details">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="media media-services right scrollpoint sp-effect1">
+                                    <a class="pull-right" href="#">
+                                        <i class="media-object fa fa-html5 fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <h1 class="media-heading">传统模式（学习阶段）</h1>
+                                        <h2>HTML5+CSS3+JavaScript</h2>
+                                    </div>
+                                </div>
+                                <div class="media media-services right scrollpoint sp-effect2">
+                                    <a class="pull-right" href="#">
+                                        <i class="media-object fa fa-link fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <h1 class="media-heading">前端开发库</h1>
+                                        <h2>jQuery+BootStrap+Chartist</h2>
+                                    </div>
+                                </div>
+                                <div class="media media-services right scrollpoint sp-effect1">
+                                    <a class="pull-right" href="#">
+                                        <i class="media-object fa fa-link fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <h1 class="media-heading">模拟后端，实现“前后分离”</h1>
+                                        <h2>Mock.js</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="media media-services scrollpoint sp-effect2">
+                                    <a class="pull-left" href="#">
+                                        <i class="media-object fa fa-slack fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                   <h1 class="media-heading">前端模块化</h1>
+                                        <h2>NPM+CommonJS+TypeScript</h2>
+                                    </div>
+                                </div>
+                                <div class="media media-services scrollpoint sp-effect1">
+                                    <a class="pull-left" href="#">
+                                        <i class="media-object fa fa-send-o fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <h1 class="media-heading">打包上线</h1>
+                                        <h2>Vue+Webpack</h2>
+                                    </div>
+                                </div>
+                                <div class="media media-services scrollpoint sp-effect2">
+                                    <a class="pull-left" href="#">
+                                        <i class="media-object fa fa-random fa-4x"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <h1 class="media-heading">接入后端</h1>
+                                        <h2>JSON+AJAX+CSRF-TOKEN</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="team">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1>关于<span>我们</span></h1>
+                            <h2>我们是一个<span>名字很长</span>的校史系统开发组</h2>
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="row">
+                            <div class="member scrollpoint sp-effect5">
+                                <div class="member-image">
+                                    <img src="img/samples/team/1.jpg" alt="" class="img-responsive img-center">
+                                </div>
+                                <div class="member-name">
+                                    <h4>胡黛琳</h4>
+                                    <p>前端</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="row">
+                            <div class="member scrollpoint sp-effect3">
+                                <div class="member-image">
+                                    <img src="img/samples/team/2.jpg" alt="" class="img-responsive img-center">
+                                </div>
+                                <div class="member-name member-odd">
+                                    <h4>罗崟洪</h4>
+                                    <p>前端</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="row">
+                            <div class="member scrollpoint sp-effect5">
+                                <div class="member-image">
+                                    <img src="img/samples/team/3.jpg" alt="" class="img-responsive img-center">
+                                   
+                                </div>
+                                <div class="member-name">
+                                    <h4>叶志浩</h4>
+                                    <p>后端</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="row">
+                            <div class="member scrollpoint sp-effect3">
+                                <div class="member-image">
+                                    <img src="img/samples/team/4.jpg" alt="" class="img-responsive img-center">
+                                    
+                                </div>
+                                <div class="member-name member-odd">
+                                    <h4>杨航源</h4>
+                                    <p>后端</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-push-2 clearfix">
+                        <div class="section-heading scrollpoint sp-effect3">
+                            <h1>前端演示结束，<span>感谢</span></h1>
+                            <span class="divider"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 scrollpoint sp-effect6 text-center">
+                        <div class="chart" data-percent="95">
+                            <span>95%</span>
+                        </div>
+                        <h4 class="skill-detail">html/css</h4>
+                    </div>
+                    <div class="col-md-3 col-sm-6 scrollpoint sp-effect6 text-center">
+                        <div class="chart" data-percent="75">
+                            <span>75%</span>
+                        </div>
+                        <h4 class="skill-detail">C#</h4>
+                    </div>
+                    <div class="col-md-3 col-sm-6 scrollpoint sp-effect6 text-center">
+                        <div class="chart" data-percent="55">
+                            <span>55%</span>
+                        </div>
+                        <h4 class="skill-detail">javascript</h4>
+                    </div>
+                    <div class="col-md-3 col-sm-6 scrollpoint sp-effect6 text-center">
+                        <div class="chart" data-percent="35">
+                            <span>35%</span>
+                        </div>
+                        <h4 class="skill-detail">photoshop</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      
+
+
+     
+
+        
+
+        <footer id="site-footer">
+            <div class="container">
+                <div class="row">
+                    <span class="divider grey"></span>
+                    <h2><span>By: </span>这是一个<span class="brandy">答案提交给隔壁选手的</span>校史系统开发组</h2>
+                    
+                    <a href="#" class="scroll-top">
+                        <img src="img/top.png" alt="" class="top">
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!--/wrap-->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/jquery.easypiechart.min.js"></script>
+    <!-- jQuery REVOLUTION Slider  -->
+    <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+
+    <script src="js/waypoints.min.js"></script>
+
+    
+    <script src="js/script.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        appMaster.preLoader();
+        appMaster.smoothScroll();
+        appMaster.animateScript();
+        appMaster.navSpy();
+        appMaster.revSlider();
+        appMaster.stellar();
+        appMaster.skillsChart();
+        
+        appMaster.isoTop();
+        appMaster.canvasHack();
+    });
+    </script>
+
+</body>
+
+</html>

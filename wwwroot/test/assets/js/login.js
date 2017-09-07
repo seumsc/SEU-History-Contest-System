@@ -1,3 +1,26 @@
+function logout(){
+    $.ajax({
+        url: '/api/Account/Logout',
+        contentType: "application/json",
+        dataType: "json",
+        async: true,
+        type: "POST",
+        success: function (req) {
+            console.log(req);
+           
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            
+        }
+    });
+}
+var match=window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+$.ajaxSetup({
+	headers:{
+		"X-XSRF-TOKEN": match
+	}
+})
 $(function () {
 
     //提交帐号密码
@@ -38,17 +61,8 @@ $(function () {
                             .fadeIn(setTimeout(function () {
                                 $("#common-error").fadeOut();
                             }, 2000));
-                        ///////logout     !!!delete before dist
-                        $.ajax({
-                            
-                            url: '/api/Account/Logout',
-                            type: "POST",
-                            async: true,
-                            contentType: "application/json-patch+json",
-                            dataType: "json",
-
-                            success: function (req) {}
-                        })
+                        ///////logout     !!!delete before dist !danger
+                       logout();
                     } 
                     else {
                         $("#common-error").text("用户名或密码错误，或尚未注册账号")

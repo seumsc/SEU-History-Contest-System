@@ -71,8 +71,8 @@
 ### 技术栈
 
 1. 传统模式：HTML5+CSS3+JavaScript
-2. 加点“库”吧：jQuery+BootStrap
-3. 模块化：NPM+CommonJS+Typescript
+2. 前端开发库：jQuery+BootStrap+Chartist
+3. 前端模块化：NPM+CommonJS+Typescript
 4. 打包上线：Vue+Webpack
 5. 与后端通信：JSON+AJAX+CSRF-TOKEN
 6. 其他：版本控制；一些PS和网页设计规范的知识

@@ -49,6 +49,18 @@
         color: #1DC7EA;
         cursor: pointer;
     }
+    #undo-head th,#table-undo td{
+        width:33.33%;
+    }
+    #done-head th,#table-done td{
+        width:25%;
+    }
+    #general-head th,#table-general td{
+        width:14%;
+    }
+    #general-head tr th:first-child,#table-general td:first-child{
+        width: 16%!important;
+    }
 </style>
 
 <body>
@@ -226,7 +238,7 @@
                                     </div>
                                     <div class="row" style="margin-bottom:0">
                                         <table style="margin-bottom:0" class="table table-hover table-striped table-responsive">
-                                            <thead>
+                                            <thead id="undo-head">
                                                 <th>学号</th>
                                                 <th>姓名</th>
                                                 <th>一卡通</th>
@@ -235,8 +247,16 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-undo">
+                                <div class="content table-full-width restricted" style="padding-top:0" id="table-undo">
                                     <table class="table table-hover table-striped">
+                                           
+                                                    <!-- <thead>
+                                                        <th>学号</th>
+                                                        <th>姓名</th>
+                                                        <th>一卡通</th>
+                                                    </thead> -->
+        
+                                                
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -254,7 +274,7 @@
                                     </div>
                                     <div class="row" style="margin-bottom:0">
                                         <table class="table table-hover table-striped" style="margin-bottom:0">
-                                            <thead>
+                                            <thead id="done-head">
                                                 <th>学号</th>
                                                 <th>姓名</th>
                                                 <th class="score">
@@ -273,6 +293,20 @@
 
                                 <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-done">
                                     <table class="table table-hover table-striped">
+                                                    <!-- <thead>
+                                                        <th>学号</th>
+                                                        <th>姓名</th>
+                                                        <th class="score">
+                                                            <span>成绩</span>
+                                                            <span class="glyphicon glyphicon-sort" id="sort"></span>
+                                                            <span class="glyphicon glyphicon-triangle-top" id="triangle-top" style="display:none"></span>
+                                                            <span class="glyphicon glyphicon-triangle-bottom" id="triangle-bottom" style="display:none"></span>
+                                                        </th>
+                                                        <th>一卡通</th>
+        
+                                                    </thead>
+         -->
+                                               
                                         <tbody> </tbody>
                                     </table>
 
@@ -357,7 +391,7 @@
                                     </div>
                                     <div class="row" style="margin-bottom:0">
                                         <table class="table table-hover table-striped" style="margin-bottom:0">
-                                            <thead>
+                                            <thead id="general-head">
                                                 <th class="score" id="dpt">
                                                     <span>院系</span>
                                                     <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -392,8 +426,39 @@
                                     </div>
                                 </div>
 
-                                <div class="content table-responsive table-full-width restricted" style="padding-top:0" id="table-general">
+                                <div class="content table-responsive table-full-width restricted" id="table-general">
                                     <table class="table table-hover table-striped">
+                                            <!-- <thead>
+                                                    <th class="score" id="dpt">
+                                                        <span>院系</span>
+                                                        <i class="glyphicon glyphicon-triangle-bottom"></i>
+                                                    </th>
+                                                    <th class="score" id="avg">
+                                                        <span>平均分</span>
+                                                        <i></i>
+                                                    </th>
+                                                    <th class="score" id="cpl">
+                                                        <span>完成率 (%)</span>
+                                                        <i></i>
+                                                    </th>
+                                                    <th class="score" id="pta">
+                                                        <span>90分以上 (%)</span>
+                                                        <i></i>
+                                                    </th>
+                                                    <th class="score" id="ptb">
+                                                        <span>75分至90分 (%)</span>
+                                                        <i></i>
+                                                    </th>
+                                                    <th class="score" id="ptc">
+                                                        <span>60分至75分 (%)</span>
+                                                        <i></i>
+                                                    </th>
+                                                    <th class="score" id="ptd">
+                                                        <span>不及格 (%)</span>
+                                                        <i></i>
+                                                    </th>
+    
+                                                </thead> -->
                                         <tbody> </tbody>
                                     </table>
                                 </div>
