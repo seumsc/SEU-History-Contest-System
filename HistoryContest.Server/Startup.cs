@@ -218,7 +218,10 @@ namespace HistoryContest.Server
 
             #region Static file routes
             // use wwwroot static files
-            app.UseDefaultFiles();
+            DefaultFilesOptions options = new DefaultFilesOptions();
+            options.DefaultFileNames.Clear();
+            options.DefaultFileNames.Add("login.html");
+            app.UseDefaultFiles(options);
             app.UseStaticFiles();
 
             // enable default url rewrite for wiki
