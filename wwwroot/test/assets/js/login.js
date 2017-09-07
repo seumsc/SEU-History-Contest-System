@@ -80,6 +80,7 @@ function clearCookie(){
         
   })
   $(window).load(function() {
+    logout();
     clearCookie();
   });
 $(function () {
