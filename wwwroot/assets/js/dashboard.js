@@ -535,7 +535,7 @@ function downloadExcelOfAllDepartments(){
 $(function () {
    
   setScoreData();
- setTimeout(setGeneralData(),1000);
+ setTimeout(setGeneralData(),2000);
     //Refresh
     $("#refresh-button").click(function(){
        setScoreData();
