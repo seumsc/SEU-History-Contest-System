@@ -59,7 +59,7 @@ function setQUESTION(QUESTIONS){
 		}
 		if(questionsIteratorIndex+1!= QUESTIONS.length){//下一页按钮及图片
 			content += '<div class="intro  joined"><ul class="actions"><li><a href="#q'+(questionsIteratorIndex + 2)+'" class="button  color1 circle icon fa-angle-right">Next</a></li></ul></div></div></section>';        
-			content+='<section class="panel spotlight large right" ><div class="image  tinted" data-position="top left"><img src="images/background'+(questionsIteratorIndex%9)+'.jpg" alt="" /></div></section>'
+			content+='<section class="panel spotlight large right" ><div class="image  tinted" data-position="top left"><img src="Images/background'+(questionsIteratorIndex%9)+'.jpg" alt="" /></div></section>'
 		}
 		else{//如果是最后一题,链接指向提交页
 			content += '<div class="intro  joined"><ul class="actions"><li><a href="#submission" class="button  color1 circle icon fa-angle-right">Next</a></li></ul></div></div></section>'; 
