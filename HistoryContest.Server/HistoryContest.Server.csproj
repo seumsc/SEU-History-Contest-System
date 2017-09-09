@@ -19,11 +19,12 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-      <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
-      </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+      <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+      <PackageReference Include="EPPlus.Core" Version="1.5.2" />
+    </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
@@ -37,8 +38,8 @@
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As the base of excel output folder -->
-    <Exec Command="if not exist excel mkdir excel" WorkingDirectory="../wwwroot/" />
-    <Exec Command="echo . &gt; .keep" WorkingDirectory="../wwwroot/excel" />
+    <Exec Command="if [ ! -d 'excel' ]; then mkdir excel; fi" WorkingDirectory="../wwwroot/" />
+    <Exec Command="touch keep" WorkingDirectory="../wwwroot/excel" />
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="..\wwwroot\**" />
@@ -59,7 +60,7 @@
     </ItemGroup>
   </Target>
   <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
-    <Exec Command="wget http://dynalon.github.io/mdwiki/index.html)" WorkingDirectory="../HistoryContest.Wiki/" />
+    <Exec Command="if [ ! -d 'excel' ]; wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
     <!-- Include the wiki files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />
