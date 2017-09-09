@@ -260,33 +260,19 @@ namespace HistoryContest.Server
 
             app.Use(async (context, next) =>
             {
+                await context.Session.LoadAsync();
                 string path = context.Request.Path.Value;
                 if (!path.ToLower().Contains("/api/account/logout"))
                 {
                     // This is needed to provide the token generator with the logged in context (if any) 
-                    //var authInfo = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    //context.User = authInfo.Principal;
+                    var authInfo = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    context.User = authInfo.Principal;
 
-                    //var tokens = antiforgery.GetAndStoreTokens(context);
-                    //context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
                 }
                 await next.Invoke();
-                //if (path.ToLower() == "/api/result/" && context.Request.Method == "POST")
-                //{
-                //    using (var _unitOfWork = context.RequestServices.GetService<UnitOfWork>())
-                //    {
-                //        var student = context.Session.Get<Student>("StudentToUpdate");
-                //        var result = context.Session.Get<ResultViewModel>("ResultToUpdate");
-                //        var ID = student.ID.ToStringID();
-                //        var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(_unitOfWork, student.Counselor);
-                //        await summary.UpdateAsync(_unitOfWork, student); // ����Ժϵ�ſ�������ǰ���ֹ�ظ�����
-                //        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // ����Student
-                //        await _unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(ID, (StudentViewModel)student);
-                //        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // ѧ��ID����������б�
-                //        await _unitOfWork.Cache.Results().SetAsync(ID, result); // result���뻺��
-                //        new ExcelExportService(_unitOfWork).UpdateExcelByStudent(student);
-                //    }
-                //}
+                await context.Session.CommitAsync();
             });
 
             #region Authentication settings

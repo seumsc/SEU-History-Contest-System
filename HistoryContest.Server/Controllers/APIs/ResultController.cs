@@ -141,9 +141,10 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
-            if (DateTime.Now - this.Session().TestBeginTime >= TimeSpan.FromMinutes(35))
+            var timeElapsed = DateTime.Now - this.Session().TestBeginTime;
+            if (timeElapsed >= TimeSpan.FromMinutes(35) || timeElapsed <= TimeSpan.FromMinutes(5))
             {
-                return BadRequest("Test time exceeded");
+                return BadRequest("Test time not in the proper range!");
             }
 
             var size = unitOfWork.Configuration.QuestionCount.Choice + unitOfWork.Configuration.QuestionCount.TrueFalse;
@@ -215,7 +216,7 @@ namespace HistoryContest.Server.Controllers.APIs
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student);
             await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            //new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
+            new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
             #endregion
 
             #region logout

@@ -113,7 +113,6 @@ namespace HistoryContest.Server.Controllers.APIs
                 HttpContext.User = principal;
 #endif
                 return RedirectToAction(nameof(GetAntiForgery));
-                //return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
             {
@@ -234,8 +233,6 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAntiForgery()
         {
-            //var authInfo = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //HttpContext.User = authInfo.Principal;
             var tokens = antiforgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Delete("XSRF-TOKEN");
             Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
@@ -253,7 +250,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [NonAction]
         private UserViewModel GetUserViewModel()
         {
-            var id = HttpContext.Session.GetString("id");
+            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName").Value;
             if (id == null)
             {
                 return null;
