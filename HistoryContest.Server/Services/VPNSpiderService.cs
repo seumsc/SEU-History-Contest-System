@@ -26,31 +26,31 @@ namespace HistoryContest.Server.Services
 
         public async Task<bool> ValidateStudentRegistration(RegisterViewModel model)
         {
-            if (await ConnectToVPN(unitOfWork.Configuration.VPNConnection[0], unitOfWork.Configuration.VPNConnection[1]))
+            //if (await ConnectToVPN(unitOfWork.Configuration.VPNConnection[0], unitOfWork.Configuration.VPNConnection[1]))
+            //{
+            var rawData = await GetStudentData(model.UserName);
+            await LogOut();
+            if (!rawData.Any())
             {
-                var rawData = await GetStudentData(model.UserName);
-                await LogOut();
-                if (!rawData.Any())
-                {
-                    throw new WebException("Problem in connecting validation network");
-                }
-                if (rawData.Contains("没有找到该学生信息"))
-                {
-                    return false;
-                }
-                var matches = Regex.Matches(rawData, "<td width=\"20%\" align=\"left\">(.*?):(.*?)</td>");
-                var information = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
-                if (!information.ContainsKey("学号") || !information.ContainsKey("一卡通号") || !information.ContainsKey("姓名"))
-                {
-                    throw new KeyNotFoundException(rawData);
-                }
-                return model.UserName == information["学号"] && model.Password == information["一卡通号"] && model.RealName == information["姓名"];
-            }
-            else
-            {
-                await LogOut();
                 throw new WebException("Problem in connecting validation network");
             }
+            if (rawData.Contains("没有找到该学生信息"))
+            {
+                return false;
+            }
+            var matches = Regex.Matches(rawData, "<td width=\"20%\" align=\"left\">(.*?):(.*?)</td>");
+            var information = matches.ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
+            if (!information.ContainsKey("学号") || !information.ContainsKey("一卡通号") || !information.ContainsKey("姓名"))
+            {
+                throw new KeyNotFoundException(rawData);
+            }
+            return model.UserName == information["学号"] && model.Password == information["一卡通号"] && model.RealName == information["姓名"];
+            //}
+            //else
+            //{
+            //    await LogOut();
+            //    throw new WebException("Problem in connecting validation network");
+            //}
         }
 
         public async Task<bool> ConnectToVPN(string userName, string password)
@@ -98,7 +98,9 @@ namespace HistoryContest.Server.Services
 
         private async Task<string> GetStudentData(string ID)
         {
-            string getUrl = string.Format(@"https://vpn3.seu.edu.cn/jw_service/service/,DanaInfo=xk.urp.seu.edu.cn+stuCurriculum.action?queryStudentId={0}&queryAcademicYear=17-18-1", ID);
+            //var pattern = @"https://vpn3.seu.edu.cn/jw_service/service/,DanaInfo=xk.urp.seu.edu.cn+stuCurriculum.action?queryStudentId={0}&queryAcademicYear=17-18-1";
+            var pattern = @"http://xk.urp.seu.edu.cn/jw_service/service/stuCurriculum.action?queryStudentId={0}&queryAcademicYear=17-18-1";
+            string getUrl = string.Format(pattern, ID);
             var response = await GetRequest(getUrl);
             return await response.Content.ReadAsStringAsync();
         }

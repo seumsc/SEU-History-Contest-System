@@ -142,12 +142,12 @@ namespace HistoryContest.Server
 
             if (runBrowser)
             {
-                new Timer(async o =>
-                {
-                    string url = @"https://localhost:5000";
-                    Console.WriteLine(@"Starting " + url + " with default browser...");
-                    System.Diagnostics.Process.Start("explorer", url);
-                }, null, (int)TimeSpan.FromSeconds(10).TotalMilliseconds, Timeout.Infinite);
+                //new Timer(async o =>
+                //{
+                //    string url = @"https://localhost:5000";
+                //    Console.WriteLine(@"Starting " + url + " with default browser...");
+                //    System.Diagnostics.Process.Start("explorer", url);
+                //}, null, (int)TimeSpan.FromSeconds(10).TotalMilliseconds, Timeout.Infinite);
             }
         }
     }

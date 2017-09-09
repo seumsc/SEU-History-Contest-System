@@ -74,10 +74,10 @@ namespace HistoryContest.Server
             }
             else
             {
-                mvcBuilder.AddMvcOptions(options =>
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                });
+                // mvcBuilder.AddMvcOptions(options =>
+                // {
+                //     options.Filters.Add(new RequireHttpsAttribute());
+                // });
             }
 
             // Bind Contest Setting with Configuration
@@ -195,8 +195,8 @@ namespace HistoryContest.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, UnitOfWork unitOfWork, IAntiforgery antiforgery)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
 
             if (Environment.IsDevelopment())
             {
@@ -211,7 +211,7 @@ namespace HistoryContest.Server
             {
                 app.UseExceptionHandler("/Home/Error");
                 // Redirect all http requests to https
-                app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
+                // app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
             }
 
             //app.UseCors("OpenPolicy");
@@ -264,11 +264,11 @@ namespace HistoryContest.Server
                 if (!path.ToLower().Contains("/api/account/logout"))
                 {
                     // This is needed to provide the token generator with the logged in context (if any) 
-                    var authInfo = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    context.User = authInfo.Principal;
+                    //var authInfo = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    //context.User = authInfo.Principal;
 
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+                    //var tokens = antiforgery.GetAndStoreTokens(context);
+                    //context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
                 }
                 await next.Invoke();
                 //if (path.ToLower() == "/api/result/" && context.Request.Method == "POST")
@@ -279,11 +279,11 @@ namespace HistoryContest.Server
                 //        var result = context.Session.Get<ResultViewModel>("ResultToUpdate");
                 //        var ID = student.ID.ToStringID();
                 //        var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(_unitOfWork, student.Counselor);
-                //        await summary.UpdateAsync(_unitOfWork, student); // ¸üÐÂÔºÏµ¸Å¿ö£¬·ÅÔÚÇ°Ãæ·ÀÖ¹ÖØ¸´¼ÆËã
-                //        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // ¸üÐÂStudent
+                //        await summary.UpdateAsync(_unitOfWork, student); // ï¿½ï¿½ï¿½ï¿½ÔºÏµï¿½Å¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ö¹ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
+                //        await _unitOfWork.Cache.StudentEntities(student.Department).SetAsync(ID, student); // ï¿½ï¿½ï¿½ï¿½Student
                 //        await _unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(ID, (StudentViewModel)student);
-                //        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // Ñ§ÉúID·ÅÈë´ý¸üÐÂÁÐ±í
-                //        await _unitOfWork.Cache.Results().SetAsync(ID, result); // result´æÈë»º´æ
+                //        await _unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // Ñ§ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
+                //        await _unitOfWork.Cache.Results().SetAsync(ID, result); // resultï¿½ï¿½ï¿½ë»ºï¿½ï¿½
                 //        new ExcelExportService(_unitOfWork).UpdateExcelByStudent(student);
                 //    }
                 //}

@@ -113,7 +113,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 HttpContext.User = principal;
 #endif
                 //return RedirectToAction(nameof(GetAntiForgery));
-                return RedirectToAction(nameof(GetAntiForgery));
+                return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
             {
@@ -203,7 +203,7 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             if (user != null)
             {
-                return Json(new { isSuccessful = true, user });
+                return RedirectToAction(nameof(GetAntiForgery));
             }
             else
             {
@@ -219,7 +219,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
@@ -234,8 +234,8 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAntiForgery()
         {
-            var authInfo = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.User = authInfo.Principal;
+            //var authInfo = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //HttpContext.User = authInfo.Principal;
             var tokens = antiforgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Delete("XSRF-TOKEN");
             Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });

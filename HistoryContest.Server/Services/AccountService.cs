@@ -10,6 +10,7 @@ using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
 using HistoryContest.Server.Extensions;
 using System.Net;
+using System.Threading;
 
 namespace HistoryContest.Server.Services
 {
@@ -97,6 +98,16 @@ namespace HistoryContest.Server.Services
         {
             IUserBase user = null;
 
+            //if (userName.IsStudentID())
+            //{
+                //user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
+                user = await unitOfWork.Cache.StudentEntities(userName.ToDepartmentID()).GetAsync(userName);
+                if (user != null)
+                { // Check Students
+                    return user;
+                }
+            //}
+
             user = await unitOfWork.AdminRepository.FirstOrDefaultAsync(u => u.UserName == userName);
             if (user != null)
             { // Check Administrators
@@ -108,15 +119,6 @@ namespace HistoryContest.Server.Services
                 user = await unitOfWork.CounselorRepository.GetByIDAsync(userName.ToIntID());
                 if (user != null)
                 { // Check Counselors
-                    return user;
-                }
-            }
-
-            if (userName.IsStudentID())
-            {
-                user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
-                if (user != null)
-                { // Check Students
                     return user;
                 }
             }

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
@@ -215,7 +215,7 @@ namespace HistoryContest.Server.Controllers.APIs
             await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student);
             await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
             await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
+            //new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
             #endregion
 
             #region logout
@@ -225,47 +225,47 @@ namespace HistoryContest.Server.Controllers.APIs
             return Json(model);
         }
 
-        /// <summary>
-        /// 获取一套试卷的所有答案
-        /// </summary>
-        /// <remarks>
-        /// 这个API将问题种子对应的所有问题的答案及分值返回，让前端在本地计算分数。可能在分担服务器计算负担上有所帮助。  
-        /// </remarks>
-        /// <returns>当前问题种子对应的所有问题的答案</returns>
-        /// <response code="200">返回当前用户Session中存储的种子中的所有问题的答案、分值</response>
-        /// <response code="400">当前用户没有对应的问题种子</response>
-        [HttpPost("Answer")]
-        [Authorize(Roles = "Student, Administrator")]
-        [ProducesResponseType(typeof(List<CorrectAnswerViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllAnswers()
-        {
-            var seed = this.Session().SeedID;
-            if (seed == null)
-            {
-                return BadRequest("Question seed not created");
-            }
+        ///// <summary>
+        ///// 获取一套试卷的所有答案
+        ///// </summary>
+        ///// <remarks>
+        ///// 这个API将问题种子对应的所有问题的答案及分值返回，让前端在本地计算分数。可能在分担服务器计算负担上有所帮助。  
+        ///// </remarks>
+        ///// <returns>当前问题种子对应的所有问题的答案</returns>
+        ///// <response code="200">返回当前用户Session中存储的种子中的所有问题的答案、分值</response>
+        ///// <response code="400">当前用户没有对应的问题种子</response>
+        //[HttpPost("Answer")]
+        //[Authorize(Roles = "Student, Administrator")]
+        //[ProducesResponseType(typeof(List<CorrectAnswerViewModel>), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> GetAllAnswers()
+        //{
+        //    var seed = this.Session().SeedID;
+        //    if (seed == null)
+        //    {
+        //        return BadRequest("Question seed not created");
+        //    }
 
-            var answers = await questionSeedService.GetAnswersBySeedID((int)seed);
-            if (answers == null)
-            {
-                // TODO: 详细定义异常
-                throw new Exception("Improper seed created, ID: " + seed);
-            }
+        //    var answers = await questionSeedService.GetAnswersBySeedID((int)seed);
+        //    if (answers == null)
+        //    {
+        //        // TODO: 详细定义异常
+        //        throw new Exception("Improper seed created, ID: " + seed);
+        //    }
 
-            return Json(answers);
-        }
+        //    return Json(answers);
+        //}
 
-        /// <summary>
-        /// 获取一道题的答案
-        /// </summary>
-        /// <remarks>
-        /// 这个API主要是配合 `POST api/question` 使用，使前端能够通过题号分批分次地检索答案，在本地计算分数。
-        /// </remarks>
-        /// /// <param name="id">问题对应的唯一ID</param>
-        /// <returns>ID对应问题的答案</returns>
-        /// <response code="200">返回ID对应问题的答案、分值</response>
-        /// <response code="404">ID没有对应的问题</response>
+        ///// <summary>
+        ///// 获取一道题的答案
+        ///// </summary>
+        ///// <remarks>
+        ///// 这个API主要是配合 `POST api/question` 使用，使前端能够通过题号分批分次地检索答案，在本地计算分数。
+        ///// </remarks>
+        ///// /// <param name="id">问题对应的唯一ID</param>
+        ///// <returns>ID对应问题的答案</returns>
+        ///// <response code="200">返回ID对应问题的答案、分值</response>
+        ///// <response code="404">ID没有对应的问题</response>
         //[HttpGet("Answer/{id}")]
         //[Authorize(Roles = "Student, Administrator")]
         //[ProducesResponseType(typeof(CorrectAnswerViewModel), StatusCodes.Status200OK)]

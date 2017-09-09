@@ -19,33 +19,11 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <Choose>
-    <When Condition="'$(TargetFramework)' == 'netcoreapp1.1'">
-      <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="1.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="1.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
-      </ItemGroup>
-    </When>
-    <When Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
       <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
       </ItemGroup>
-    </When>
-  </Choose>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
@@ -57,12 +35,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Databases\" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EPPlus.Core" Version="1.5.2" />
-  </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
-    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec Command="webpack_build.bat" WorkingDirectory="../HistoryContest.Client/" />
     <!-- As the base of excel output folder -->
     <Exec Command="if not exist excel mkdir excel" WorkingDirectory="../wwwroot/" />
     <Exec Command="echo . &gt; .keep" WorkingDirectory="../wwwroot/excel" />
@@ -86,7 +59,7 @@
     </ItemGroup>
   </Target>
   <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
-    <Exec Command="if not exist ./index.html call powershell -command (new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')" WorkingDirectory="../HistoryContest.Wiki/" />
+    <Exec Command="wget http://dynalon.github.io/mdwiki/index.html)" WorkingDirectory="../HistoryContest.Wiki/" />
     <!-- Include the wiki files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />
