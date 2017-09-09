@@ -29,7 +29,7 @@ namespace HistoryContest.Server.Services
             //if (await ConnectToVPN(unitOfWork.Configuration.VPNConnection[0], unitOfWork.Configuration.VPNConnection[1]))
             //{
             var rawData = await GetStudentData(model.UserName);
-            await LogOut();
+            //await LogOut();
             if (!rawData.Any())
             {
                 throw new WebException("Problem in connecting validation network");

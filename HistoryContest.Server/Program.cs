@@ -7,6 +7,7 @@ using System.Dynamic;
 using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
 using System.Threading;
+using System.Reflection;
 
 namespace HistoryContest.Server
 {
@@ -20,6 +21,7 @@ namespace HistoryContest.Server
         public static void Main(string[] args)
         {
             FromMain = true;
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             BuildWebHost(args).Run();
         }
 

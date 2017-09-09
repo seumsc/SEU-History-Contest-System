@@ -112,8 +112,8 @@ namespace HistoryContest.Server.Controllers.APIs
                 await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 HttpContext.User = principal;
 #endif
-                //return RedirectToAction(nameof(GetAntiForgery));
-                return Json(new { isSuccessful = true, userContext.UserViewModel });
+                return RedirectToAction(nameof(GetAntiForgery));
+                //return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
             {
@@ -203,7 +203,7 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             if (user != null)
             {
-                return RedirectToAction(nameof(GetAntiForgery));
+                return Json(new { isSuccessful = true, user });
             }
             else
             {

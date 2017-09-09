@@ -243,13 +243,13 @@ $(function () {
     })
 //实现动态背景
     $.backstretch([
-        'images/background1.jpg',
-        'images/background2.jpg',
-        'images/background3.jpg',
-        'images/background4.jpg',
-        'images/background5.jpg',
-        'images/background6.jpg',
-        'images/background7.jpg',
+        'Images/background1.jpg',
+        'Images/background2.jpg',
+        'Images/background3.jpg',
+        'Images/background4.jpg',
+        'Images/background5.jpg',
+        'Images/background6.jpg',
+        'Images/background7.jpg',
 
     ], {
         fade: 1000, // 动画时长
