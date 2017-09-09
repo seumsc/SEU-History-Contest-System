@@ -259,7 +259,7 @@ function logout() {
 		url: '/api/Account/Logout',
 		contentType: "application/json",
 		dataType: "json",
-		async: true,
+		async: false,
 		type: "POST",
 		success: function (req) {
 			console.log(req);
