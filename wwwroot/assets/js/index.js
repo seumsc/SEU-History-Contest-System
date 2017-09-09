@@ -119,7 +119,7 @@ function resetToShowResult() {
 		var reviewContent = "";
 		var $tgt = $(event.target);
 		var questionNum = $tgt.find(".num").text();
-		console.log(questionNum);
+		//////console.log(questionNum);
 		var rightAns = config.resultJSON.details[questionNum - 1].correct;
 		var submittedAns = config.resultJSON.details[questionNum - 1].submit;
 		var isCorrect = (rightAns == submittedAns ? 1 : 0);
@@ -202,14 +202,14 @@ function saveAns(clickID) {
 			}
 			answerQues[i].answer = ans;
 			testing = JSON.stringify(answerQues);
-			console.log(testing);
+			//////console.log(testing);
 		}
 		else if (answerQues[i].id == ID && answerQues[i].answer == ans)
 			return;
 	}
 }
 // function checkCompletion(){
-// 	console.log(answerQues.length);
+// 	//////console.log(answerQues.length);
 // 	for(var j=0;j<answerQues.length;j++){
 // 		if(answerQues[j].answer==-1&&config.timeState){		
 // 			alert("您还有未作答题目哦！");
@@ -220,8 +220,8 @@ function saveAns(clickID) {
 // }
 
 function checkCompletion() {
-	console.log(answerQues.length);
-	console.log(config.timeState);
+	//////console.log(answerQues.length);
+	//////console.log(config.timeState);
 	if (config.timeState) {
 		//5分钟以内提交
 		if(mm>=25){
@@ -262,10 +262,10 @@ function logout() {
 		async: false,
 		type: "POST",
 		success: function (req) {
-			console.log(req);
+			//////console.log(req);
 		},
 		error: function (xhr) {
-			console.log(xhr);
+			//////console.log(xhr);
 
 		}
 	});
@@ -280,7 +280,7 @@ function initialize() {
 			// xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
 		},
 		success: function (req) {
-			console.log(req);
+			//////console.log(req);
 			getStateNShowWebpage();
 
 
@@ -290,19 +290,19 @@ function initialize() {
 			//logout
 			logout();
 			window.location.href = "login.html";
-			console.log(req);
+			//////console.log(req);
 		}
 	});
 }
 function getStateNShowWebpage() {
-	console.log("Setting Webpage...");
+	//////console.log("Setting Webpage...");
 	$.ajax({
 		url: "/api/Student/State",
 		async: true,
 		type: "GET",
 		success: function (req) {
 			//Show Questions	
-			console.log(req);
+			//////console.log(req);
 			if (req.testState == 0) {
 				alert("登录失败");
 				window.location.href = "login.html";
@@ -317,13 +317,13 @@ function getStateNShowWebpage() {
 			}
 			//Show Result
 			else if (req.testState == 2) {
-				console.log("inState2");
+				//////console.log("inState2");
 				getResult();
 				$("#wrapper").addClass("tested");
 			}
 		},
 		error: function (req) {
-			console.log(req);
+			//////console.log(req);
 			alert("请检查网络");
 		}
 	})
@@ -334,10 +334,10 @@ function setSeed() {
 		async: true,
 		type: "POST",
 		success: function (req) {
-			console.log(req);
+			//////console.log(req);
 		},
 		error: function (req) {
-			console.log(req);
+			//////console.log(req);
 			alert("请检查网络");
 		}
 	});
@@ -365,10 +365,10 @@ function fetchQuestions() {
 			config.questionArray = req;
 			config.totalAmount = config.questionArray.length;
 			setQUESTION(config.questionArray);
-			console.log(config.totalAmount);
+			//////console.log(config.totalAmount);
 		},
 		error: function (req) {
-			console.log(req);
+			//////console.log(req);
 			alert("请检查网络");
 
 		}
@@ -384,7 +384,7 @@ function postResult() {
 		type: "POST",
 		success: function (res) {
 			//RESET WEBPAGE
-			console.log(res);
+			//////console.log(res);
 			config.resultJSON = res;
 			resetToShowResult();
 		},
@@ -401,8 +401,8 @@ function getResult() {
 		async: true,
 		contentType: "application/json",
 		success: function (res) {
-			console.log("inGetResult");
-			console.log(res);
+			//////console.log("inGetResult");
+			//////console.log(res);
 			config.resultJSON = res;
 			resetToShowResult();
 		},

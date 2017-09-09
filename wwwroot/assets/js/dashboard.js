@@ -113,13 +113,13 @@ function setUndoNDo(SCORES){
     config.total=undo.length+done.length;
     config.comments.dones.common=done.length+"人已完成答题,";
     config.comments.undos.common="仍有"+config.undoNumber+"人未完成。"
-    console.log( config.undoList);
+    ////console.log( config.undoList);
     
-    console.log(config.undoNumber=undo.length);
-    console.log( config.doneList);
-    console.log(config.doneNumber);
-    console.log(config.comments.dones.common);
-    console.log(config.comments.undos.common);
+    ////console.log(config.undoNumber=undo.length);
+    ////console.log( config.doneList);
+    ////console.log(config.doneNumber);
+    ////console.log(config.comments.dones.common);
+    ////console.log(config.comments.undos.common);
 
 }
 
@@ -246,7 +246,7 @@ function setGENERAL(){
     var generalContent="";
     var STAT=config.generalInfo.statistics;
 
-      console.log(STAT);
+      ////console.log(STAT);
     for(var statIteratorIndex=0;statIteratorIndex<STAT.length;statIteratorIndex++){
         var donenum = STAT[statIteratorIndex].donenum;
         var average = STAT[statIteratorIndex].average.toFixed(2);
@@ -266,7 +266,7 @@ function setGENERAL(){
     $("#table-general").find("tbody").html(generalContent);
 }
 function commonSet(){
-    console.log(config.departmentName);
+    ////console.log(config.departmentName);
     $("#school-name").html(config.departmentName);
     if(config.undoNumber==0){
         $("#done-info").html(config.comments.dones.perfect);
@@ -318,11 +318,11 @@ function logout(){
         async: true,
         type: "POST",
         success: function (req) {
-            console.log(req);
+            ////console.log(req);
            
         },
         error: function (xhr) {
-            console.log(xhr);
+            ////console.log(xhr);
             
         }
     });
@@ -336,14 +336,14 @@ function setScoreData(){
         contentType:"application/json",
         dataType: "json", 
         success: function (req) {
-         console.log(req);
+         ////console.log(req);
          config.department=req;
-         console.log(config.department);
+         ////console.log(config.department);
          fetchSummary(config.department,fetchAllScores);
         },
         error: function (xhr) {
           alert("数据获取失败，请检查网络！");
-          console.log(xhr);
+          ////console.log(xhr);
         }
     });
 }
@@ -368,11 +368,11 @@ function fetchSummary(department,callback){
             if(req.departmentID!=undefined){
                 //counselor department
                 if(req.departmentID==config.department){
-                    console.log(req);
+                    ////console.log(req);
                     config.departmentInfo=req;
-                    console.log(config.departmentInfo);
+                    ////console.log(config.departmentInfo);
                     config.departmentName=DepartmentNameMap[config.departmentInfo.departmentID];
-                    console.log(config.departmentInfo.departmentID);
+                    ////console.log(config.departmentInfo.departmentID);
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore;
@@ -389,7 +389,7 @@ function fetchSummary(department,callback){
                 }
                 //other
                 else{
-                    console.log(req);
+                    ////console.log(req);
                     var stat=req;
                     stat.donenum = stat.studentCount - stat.scoreBandCount.notTested;
                     stat.average = stat.averageScore;
@@ -409,9 +409,9 @@ function fetchSummary(department,callback){
             }
             //General Info
             else{
-                console.log(req);
+                ////console.log(req);
                 config.generalInfo.summary=req;
-                console.log( config.generalInfo.summary);
+                ////console.log( config.generalInfo.summary);
                 //set chartist
                 if(callback!=undefined){
                     callback();
@@ -436,7 +436,7 @@ function fetchAllScores(){
         async: true, 
         type: "GET", 
         success: function (req) {
-          console.log(req);
+          ////console.log(req);
           setUndoNDo(req);
           setUndo(config.undoList);
           setDone(config.doneList);
@@ -444,7 +444,7 @@ function fetchAllScores(){
           commonSet();
         },
         error: function (xhr) {
-            console.log(xhr);
+            ////console.log(xhr);
             alert("数据获取失败，请检查网络！");
         }
       });
@@ -457,11 +457,11 @@ function fetchAllStudents(){
         async: true, 
         type: "GET", 
         success: function (req) {
-          console.log(req);
+          ////console.log(req);
           
         },
         error: function (xhr) {
-            console.log(xhr);
+            ////console.log(xhr);
             alert("数据获取失败，请检查网络！");
         }
       });
@@ -475,7 +475,7 @@ function fetchAllDepartments(){
         async: true, 
         type: "GET", 
         success: function (req) {
-          console.log(req);
+          ////console.log(req);
           config.generalInfo.allDepartments=req;
           
           for(var i=0;i<config.generalInfo.allDepartments.length;i++){
@@ -493,7 +493,7 @@ function fetchAllDepartments(){
          
         },
         error: function (xhr) {
-            console.log(xhr);
+            ////console.log(xhr);
             alert("数据获取失败，请检查网络！");
         }
       });
@@ -509,7 +509,7 @@ function downloadDepartmentExcel(){
     },
     error: function (xhr) {
       alert("数据获取失败，请检查网络！");
-      console.log(xhr);
+      ////console.log(xhr);
     }
   });
 }
@@ -521,12 +521,12 @@ function downloadExcelOfAllDepartments(){
         type: "POST", //请求方式
         contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
         success: function (req) {
-            console.log(req);
+            ////console.log(req);
             window.location = '/excel/'+req;
         },
         error: function (xhr) {
             alert("数据获取失败，请检查网络！");
-            console.log(xhr);
+            ////console.log(xhr);
         }
   });
 }
@@ -749,7 +749,7 @@ $(function () {
     })
     //Log out
     $("#logout").click(function(){
-        console.log("Logging out...");
+        ////console.log("Logging out...");
         logout();
         window.location="login.html";
          

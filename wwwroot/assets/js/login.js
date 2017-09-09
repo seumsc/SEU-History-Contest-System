@@ -10,11 +10,11 @@ function logout() {
             xhr.setRequestHeader("X-XSRF-TOKEN", match);
         },
         success: function (req) {
-            console.log(req);
+            //console.log(req);
 
         },
         error: function (xhr) {
-            console.log(xhr);
+            //console.log(xhr);
 
         }
     });
@@ -60,7 +60,7 @@ function GetCookie(name) {
 }
 
 function clearCookie() {
-    console.log("Clearing...")
+    //console.log("Clearing...")
     var date = new Date();
     date.setTime(date.getTime() - 10000);
     var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
@@ -68,12 +68,12 @@ function clearCookie() {
         for (var i = keys.length; i--;)
             document.cookie = keys[i] + "=0; expire=" + date.toGMTString() + "; path=/";
     }
-    console.log("Completed...");
-    console.log(document.cookie);
+    //console.log("Completed...");
+    //console.log(document.cookie);
 }
 $(function () {
 
-    console.log(window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/));
+    //console.log(window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/));
 
     /*$.ajaxSetup({
          beforeSend: function (xhr) {
@@ -103,7 +103,7 @@ $(function () {
             "userName": usn,
             "password": pwd
         };
-        console.log(dt);
+        //console.log(dt);
         $.ajax({
             url: '/api/Account/Login', //请求的url地址
             type: "POST", //请求方式
@@ -113,8 +113,8 @@ $(function () {
             data: JSON.stringify(dt), //参数值
             dataType: "json", //返回格式为json
             success: function (req, status, xhr) {
-                console.log(req);
-                console.log(xhr.getResponseHeader("Set-Cookie"));
+                //console.log(req);
+                //console.log(xhr.getResponseHeader("Set-Cookie"));
                 if (req.isSuccessful) {
                     if (req.userViewModel.role == "Student") {
                         window.location.href = "index.html";
@@ -122,7 +122,7 @@ $(function () {
                         req.userViewModel.role == "Counselor") {
                         window.location.href = "dashboard.html";
                     } else {
-                        console.log(req.role);
+                        //console.log(req.role);
                     }
                 } else {
                     if (req.message == "User already logged in") {
@@ -161,7 +161,7 @@ $(function () {
             "realName": rnm,
             "role": "Student"
         };
-        console.log(rdt);
+        //console.log(rdt);
         $.ajax({
             url: "/api/Account/Register",
             type: "POST",
@@ -171,7 +171,7 @@ $(function () {
             data: JSON.stringify(rdt),
             dataType: "json", //返回格式为json
             success: function (req) {
-                console.log(req);
+                //console.log(req);
                 if (req.isSuccessful) {
                     $("#register-message").removeClass().addClass("text-success")
                     $("#register-message").text("注册成功，即将进入竞赛系统...").fadeIn();
@@ -199,7 +199,7 @@ $(function () {
                                         req.userViewModel.role == "Counselor") {
                                         window.location.href = "dashboard.html";
                                     } else {
-                                        console.log(req.role);
+                                        //console.log(req.role);
                                     }
                                 } else {
                                     if (req.message == "User already logged in") {
@@ -234,7 +234,7 @@ $(function () {
             },
             error: function (req) {
                 //请求出错处理
-                console.log(req);
+                //console.log(req);
                 $("#register-message").removeClass().addClass("text-danger");
                 $("#register-message").text("注册失败，请检查网络").fadeIn();
             }
