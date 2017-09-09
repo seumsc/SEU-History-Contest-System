@@ -9,6 +9,7 @@ using HistoryContest.Server.Data;
 using Newtonsoft.Json;
 using HistoryContest.Server.Models;
 using HistoryContest.Server.Extensions;
+using OfficeOpenXml;
 
 namespace HistoryContest.Server.Services
 {
@@ -16,12 +17,19 @@ namespace HistoryContest.Server.Services
     {
         public const string QuestionSqlFilePattern = @"\('(.*?)', '(.*?)', '(.*?)', '(.*?)', '(.*?)', '(.*?)', '(.*?)'\)";
 
-        public static string[] ParseQuestions(string path, string pattern)
+        public static string[] ParseQuestionsFromSQL(string path, string pattern)
         {
+            var info = new FileInfo(path);
+            if (!info.Exists)
+            {
+                Console.WriteLine("File does not exist!");
+                return null;
+            }
+
             var choiceQuestions = new List<ChoiceQuestion>();
             var trueFalseQuestions = new List<TrueFalseQuestion>();
 
-            using (StreamReader sr = new StreamReader(path))
+            using (StreamReader sr = new StreamReader(info.FullName))
             {
                 Console.Write("Processing...Parsed ");
                 var entries = sr.ReadToEnd().Split('\n');
@@ -63,18 +71,25 @@ namespace HistoryContest.Server.Services
             return new string[] { choiceSeedPath, trueFalseSeedPath };
         }
 
-        public static string ParseStudents(string path)
+        public static string ParseStudentsFromText(string path)
         {
+            var info = new FileInfo(path);
+            if (!info.Exists)
+            {
+                Console.WriteLine("File does not exist!");
+                return null;
+            }
+
             var students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(ContestContext.GetSeedPath<Student>()));
             var studentIDs = students.Select(s => s.ID).ToHashSet();
 
-            using (StreamReader sr = new StreamReader(path))
+            using (StreamReader sr = new StreamReader(info.FullName))
             {
                 Console.Write("Processing...Read ");
                 sr.ReadLine();
                 for (int i = 0; !sr.EndOfStream; ++i)
                 {
-                    Console.Write(i);
+                    Console.Write(i + 1);
                     string entry = sr.ReadLine();
                     string[] information = entry.Split("\t");
 
@@ -87,8 +102,63 @@ namespace HistoryContest.Server.Services
                     if (!studentIDs.Contains(student.ID))
                     {
                         students.Add(student);
+                        studentIDs.Add(student.ID);
                     }
-                    Console.Write(new string('\b', i.ToString().Length));
+                    Console.Write(new string('\b', (i + 1).ToString().Length));
+                }
+            }
+            string studentSeedPath = ContestContext.GetSeedPath<Student>();
+
+            Console.WriteLine("\nSerializing to json file...");
+            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students.Select(s => new
+            {
+                ID = s.ID.ToStringID(),
+                Name = s.Name,
+                CardID = s.CardID.ToString()
+            }), Formatting.Indented));
+
+            Console.WriteLine("Finished.");
+            return studentSeedPath;
+        }
+
+        public static string ParseStudentsFromExcel(string path)
+        {
+            var info = new FileInfo(path);
+            if (!info.Exists)
+            {
+                Console.WriteLine("File does not exist!");
+                return null;
+            }
+
+            var students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(ContestContext.GetSeedPath<Student>()));
+            var studentIDs = students.Select(s => s.ID).ToHashSet();
+
+            using (var package = new ExcelPackage(info))
+            {
+                Console.Write("Processing...Read ");
+                var workSheet = package.Workbook.Worksheets.FirstOrDefault();
+                for (int i = 2; i < workSheet.Dimension.End.Row; ++i)
+                {
+                    var progress = string.Format("{0}/{1}", i, workSheet.Dimension.End.Row);
+                    Console.Write(progress);
+
+                    var cardID = workSheet.Cells[i, 1].Value as string;
+                    var studentID = workSheet.Cells[i, 2].Value as string;
+                    var name = workSheet.Cells[i, 3].Value as string;
+
+                    var student = new Student
+                    {
+                        ID = studentID.ToIntID(),
+                        Name = name,
+                        CardID = int.Parse(cardID)
+                    };
+                    if (!studentIDs.Contains(student.ID))
+                    {
+                        students.Add(student);
+                        studentIDs.Add(student.ID);
+                    }
+
+                    Console.Write(new string('\b', progress.Length));
                 }
             }
             string studentSeedPath = ContestContext.GetSeedPath<Student>();

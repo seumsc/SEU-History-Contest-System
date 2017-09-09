@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
 using System.Threading;
 using System.Reflection;
+using System.Net;
 
 namespace HistoryContest.Server
 {
     public static class Program
     {
         public static bool FromMain { get; set; } = false;
+        public static int Port { get; set; } = 5000;
         public static string EnvironmentName { get; set; } = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
         public static string ContentRootPath { get; set; } = EnvironmentName.ToLowerInvariant() == "development" ?
             Directory.GetParent(Directory.GetCurrentDirectory()).FullName : Directory.GetCurrentDirectory();
@@ -29,7 +31,7 @@ namespace HistoryContest.Server
         {
             ProcessArgs(args);
             return new WebHostBuilder()
-                .UseKestrel()
+                .UseKestrel(option => option.Listen(IPAddress.Loopback, Port))
                 .UseContentRoot(ContentRootPath)
                 .UseIISIntegration()
                 .UseApplicationInsights()
@@ -51,6 +53,11 @@ namespace HistoryContest.Server
                 var arg = args[i];
                 switch (arg)
                 {
+                    case "-p":
+                    case "--port":
+                        ++i;
+                        Port = int.Parse(args[i]);
+                        break;
                     case "-rb":
                     case "--runbrowser":
                         runBrowser = true;
@@ -68,15 +75,21 @@ namespace HistoryContest.Server
                         ++i;
                         parseSetting = new { Type = "student", Format = "text", Path = args[i] };
                         break;
+                    case "--parse-student-excel":
+                        ++i;
+                        parseSetting = new { Type = "student", Format = "excel", Path = args[i] };
+                        break;
                     case "-h":
                     case "--help":
                         string[] messages = new string[]
                         {
                             "-h|--help                      显示帮助。",
+                            "-p|--port <ID>                 在指定端口运行服务器。默认为5000",
                             "-rb|--runbrowser               程序启动后运行默认浏览器打开网站。",
                             "-env|--environment <env>       设置程序运行环境。默认为\"Production\"。",
-                            "--parse-question-sql <path>    解析一个sql格式问题集到json数据文件。",
-                            "--parse-student-text <path>    解析一个文本格式学生信息集到json数据文件。"
+                            "--parse-question-sql <path>    解析一个SQL格式问题集到json数据文件。",
+                            "--parse-student-text <path>    解析一个文本格式学生信息集到json数据文件。",
+                            "--parse-student-excel <path>   解析一个Excel格式学生信息集到json数据文件。"
                         };
                         foreach (var message in messages)
                         {
@@ -126,7 +139,7 @@ namespace HistoryContest.Server
                         switch(parseSetting.Format as string)
                         {
                             case "sql":
-                                DocParseService.ParseQuestions(parseSetting.Path as string, DocParseService.QuestionSqlFilePattern);
+                                DocParseService.ParseQuestionsFromSQL(parseSetting.Path as string, DocParseService.QuestionSqlFilePattern);
                                 break;
                         }
                         break;
@@ -134,7 +147,10 @@ namespace HistoryContest.Server
                         switch (parseSetting.Format as string)
                         {
                             case "text":
-                                DocParseService.ParseStudents(parseSetting.Path as string);
+                                DocParseService.ParseStudentsFromText(parseSetting.Path as string);
+                                break;
+                            case "excel":
+                                DocParseService.ParseStudentsFromExcel(parseSetting.Path as string);
                                 break;
                         }
                         break;
@@ -144,12 +160,12 @@ namespace HistoryContest.Server
 
             if (runBrowser)
             {
-                //new Timer(async o =>
-                //{
-                //    string url = @"https://localhost:5000";
-                //    Console.WriteLine(@"Starting " + url + " with default browser...");
-                //    System.Diagnostics.Process.Start("explorer", url);
-                //}, null, (int)TimeSpan.FromSeconds(10).TotalMilliseconds, Timeout.Infinite);
+                new Timer(o =>
+                {
+                    string url = @"http://localhost:" + Port;
+                    Console.WriteLine(@"Starting " + url + " with default browser...");
+                    System.Diagnostics.Process.Start("explorer", url);
+                }, null, (int)TimeSpan.FromSeconds(10).TotalMilliseconds, Timeout.Infinite);
             }
         }
     }
