@@ -448,9 +448,6 @@ var ss = 0;//秒
 	$(function () {
 		//Initialize State
 		initialize();
-
-
-
 		$("#start").click(function () {
 			$("#footer").show();
 			$("#quiz-container").show();
@@ -464,7 +461,7 @@ var ss = 0;//秒
 			for (var it = 1; it <= 30; it++) {
 
 				var fix = $("section .panel.large").width();
-				questionPos[it] = $("#q" + it).offset().left - fix / 2;
+				questionPos[it] = ($("#q" + it).offset()).left - fix / 2;
 				//questionPos[it]=$("#q"+it).offset().left;
 
 			}
@@ -496,7 +493,7 @@ var ss = 0;//秒
 			for (var it = 1; it <= 30; it++) {
 
 				var fix = $("section .panel.large").width();
-				questionPos[it] = $("#q" + it).offset().left - fix / 2;
+				questionPos[it] = ($("#q" + it).offset()).left - fix / 2;
 				//questionPos[it]=$("#q"+it).offset().left;
 
 			}
