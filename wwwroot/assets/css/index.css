@@ -3754,3 +3754,15 @@ td{
 td:hover{
 	cursor: pointer;
 }
+
+.is-ie #wrapper.testing{
+	min-width:3712rem;
+}
+.is-ie #result-container{
+	display:none;
+	position:fixed;
+	height:34rem;
+	top:50%;
+	margin-top: -17rem;
+	left:5rem;
+}
