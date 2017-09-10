@@ -244,20 +244,22 @@ namespace HistoryContest.Server
 
             #region Api document routes
             // Enable middleware to serve generated Swagger as a JSON endpoint.
+/*
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "api/{documentname}/swagger.json";
             });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
-/*
+
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api";
                 c.SwaggerEndpoint("/api/seu-history-contest/swagger.json", "SEU History Contest API v1");
             });
-            #endregion
 */
+            #endregion
+
 
             // use sessions
             app.UseSession();
