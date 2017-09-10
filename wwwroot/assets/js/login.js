@@ -229,7 +229,7 @@ $(function () {
                 }
                 else {
                     var msg = JSON.stringify(req.message)
-                    console.log(msg);
+                    // console.log(msg);
                     ///////////////registration failure/////////////////
                     // if (msg.indexOf("Infalid account format")) {
                     //     // onsole.log("invalid"+msg);
@@ -239,7 +239,7 @@ $(function () {
                     // else if (msg.indexOf(""))
                     // else
                     //     console.log(msg);
-                    console.log(msg.indexOf("UserName"));
+                    // console.log(msg.indexOf("UserName"));
                     if (req.message == "Invalid account format.") {
                         $("#register-message").removeClass().addClass("text-danger");
                         $("#register-message").text("注册账户应为八位学号,密码应为九位一卡通号！").fadeIn();
@@ -259,6 +259,10 @@ $(function () {
                     else if (msg.indexOf("Internal server failure.") != -1) {
                         $("#register-message").removeClass().addClass("text-danger");
                         $("#register-message").text("内部服务器错误，请检查联系计软科协赛事部！").fadeIn();
+                    }
+                    else if (msg.indexOf("Registration validation failed")!= -1){
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("注册未通过审核！请确认信息是否正确！").fadeIn();
                     }
                     else{  //if (req.message == ""){
                         $("#register-message").removeClass().addClass("text-danger");
