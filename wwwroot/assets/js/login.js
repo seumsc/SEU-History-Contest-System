@@ -171,7 +171,7 @@ $(function () {
             data: JSON.stringify(rdt),
             dataType: "json", //返回格式为json
             success: function (req) {
-                //console.log(req);
+                console.log(req);
                 if (req.isSuccessful) {
                     $("#register-message").removeClass().addClass("text-success")
                     $("#register-message").text("注册成功，即将进入竞赛系统...").fadeIn();
@@ -226,17 +226,66 @@ $(function () {
                             }
                         });
                     }, 1000);
-                } else {
-                    $("#register-message").removeClass().addClass("text-danger");
-                    $("#register-message").text("注册失败").fadeIn();
+                }
+                else {
+                    var msg = JSON.stringify(req.message)
+                    console.log(msg);
+                    ///////////////registration failure/////////////////
+                    // if (msg.indexOf("Infalid account format")) {
+                    //     // onsole.log("invalid"+msg);
+                    //     $("#register-message").removeClass().addClass("text-danger");
+                    //     $("#register-message").text("注册账户应为八位学号,密码应为九位一卡通号！").fadeIn();
+                    // }
+                    // else if (msg.indexOf(""))
+                    // else
+                    //     console.log(msg);
+                    console.log(msg.indexOf("UserName"));
+                    if (req.message == "Invalid account format.") {
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("注册账户应为八位学号,密码应为九位一卡通号！").fadeIn();
+                    }
+                    else if (msg.indexOf("UserName")!= -1 ) {
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("该账户已注册！").fadeIn();
+                    }
+                    else if (req.message == "Problem in connecting validation network. Please try again.") {
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("验证网络连接失败，请重试！").fadeIn();
+                    }
+                    else if (msg.indexOf("Student data not found.")!= -1) {
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("未查询到该学生信息！").fadeIn();
+                    }
+                    else if (msg.indexOf("Internal server failure.") != -1) {
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("内部服务器错误，请检查联系计软科协赛事部！").fadeIn();
+                    }
+                    else{  //if (req.message == ""){
+                        $("#register-message").removeClass().addClass("text-danger");
+                        $("#register-message").text("注册失败").fadeIn();
+    
+                    }
                 }
 
             },
             error: function (req) {
+                var msg = JSON.stringify(req.message);
+                if(msg.indexOf("Body JSON") != -1){
+                    $("#register-message").removeClass().addClass("text-danger");
+                    $("#register-message").text("注册信息提交格式错误！").fadeIn();                
+                }
+                else if(msg.indexOf("registration only") != -1){
+                    $("#register-message").removeClass().addClass("text-danger");
+                    $("#register-message").text("只允许学生注册！").fadeIn();                
+                }
                 //请求出错处理
                 //console.log(req);
-                $("#register-message").removeClass().addClass("text-danger");
-                $("#register-message").text("注册失败，请检查网络").fadeIn();
+                // console.log(req);
+                else{
+                    $("#register-message").removeClass().addClass("text-danger");
+                    $("#register-message").text("注册失败，请检查网络").fadeIn();
+    
+                }
             }
         });
     })
@@ -251,7 +300,7 @@ $(function () {
         'Images/background7.jpg',
 
     ], {
-        fade: 1000, // 动画时长
-        duration: 2000 // 切换延时
-    });
+            fade: 1000, // 动画时长
+            duration: 2000 // 切换延时
+        });
 })
