@@ -224,6 +224,7 @@ namespace HistoryContest.Server
             app.UseDefaultFiles(options);
             app.UseStaticFiles();
 
+/*
             // enable default url rewrite for wiki
             app.UseDefaultFiles(new DefaultFilesOptions()
             {
@@ -237,6 +238,7 @@ namespace HistoryContest.Server
                 FileProvider = new PhysicalFileProvider(Path.Combine(Environment.ContentRootPath, @"HistoryContest.Wiki")),
                 RequestPath = new PathString("/wiki")
             });
+*/
             #endregion
 
 
@@ -248,12 +250,14 @@ namespace HistoryContest.Server
             });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
+/*
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api";
                 c.SwaggerEndpoint("/api/seu-history-contest/swagger.json", "SEU History Contest API v1");
             });
             #endregion
+*/
 
             // use sessions
             app.UseSession();

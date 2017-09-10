@@ -60,7 +60,7 @@
     </ItemGroup>
   </Target>
   <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
-    <Exec Command="if [ ! -d 'index.html' ]; then wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
+    <Exec Command="if [ ! -f 'index.html' ]; then wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
     <!-- Include the wiki files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />

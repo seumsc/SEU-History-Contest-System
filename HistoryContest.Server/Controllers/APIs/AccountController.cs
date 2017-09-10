@@ -250,11 +250,13 @@ namespace HistoryContest.Server.Controllers.APIs
         [NonAction]
         private UserViewModel GetUserViewModel()
         {
-            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName").Value;
-            if (id == null)
+            var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName");
+            if (idClaim == null)
             {
                 return null;
             }
+
+            var id = idClaim.Value;
             var name = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "RealName").Value;
             var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             return new UserViewModel { UserName = id, RealName = name, Role = role };
