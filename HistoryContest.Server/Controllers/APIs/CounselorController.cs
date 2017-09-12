@@ -294,7 +294,7 @@ namespace HistoryContest.Server.Controllers.APIs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> StudentScoreById(string id)
         {
-            if (this.Session().CheckRole("Administrator") && id.ToDepartmentID() != this.Session().Department)
+            if (this.Session().CheckRole("Administrator") && id.ToDepartment() != this.Session().Department)
             { // 不允许辅导员查询不同系学生的数据
                 return Forbid();
             }
@@ -304,7 +304,7 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Argument is not a student ID");
             }
 
-            var studentVMDictionary = unitOfWork.Cache.StudentViewModels(id.ToDepartmentID());
+            var studentVMDictionary = unitOfWork.Cache.StudentViewModels(id.ToDepartment());
             var studentViewModel = await studentVMDictionary.GetAsync(id);
             if (studentViewModel == null)
             {

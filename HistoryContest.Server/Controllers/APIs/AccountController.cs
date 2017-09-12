@@ -276,7 +276,7 @@ namespace HistoryContest.Server.Controllers.APIs
                     break;
                 case nameof(Student):
                     var id = context.UserEntity.ID.ToStringID();
-                    var student = await unitOfWork.Cache.StudentEntities(id.ToDepartmentID()).GetAsync(id);
+                    var student = await unitOfWork.Cache.StudentEntities(id.ToDepartment()).GetAsync(id);
                     this.Session().TestState = student.IsTested ? TestState.Tested : TestState.NotTested;
                     break;
                 default:

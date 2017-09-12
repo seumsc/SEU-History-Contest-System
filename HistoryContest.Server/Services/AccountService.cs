@@ -70,7 +70,7 @@ namespace HistoryContest.Server.Services
                     {
                         throw ex;
                     }
-                    var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == model.UserName.ToDepartmentID());
+                    var counselor = await unitOfWork.CounselorRepository.FirstOrDefaultAsync(c => c.Department == model.UserName.ToDepartment());
                     var student = new Student
                     {
                         ID = model.UserName.ToIntID(),
@@ -101,7 +101,7 @@ namespace HistoryContest.Server.Services
             if (userName.IsStudentID())
             {
                 //user = await unitOfWork.StudentRepository.GetByIDAsync(userName.ToIntID());
-                user = await unitOfWork.Cache.StudentEntities(userName.ToDepartmentID()).GetAsync(userName);
+                user = await unitOfWork.Cache.StudentEntities(userName.ToDepartment()).GetAsync(userName);
                 if (user != null)
                 { // Check Students
                     return user;

@@ -89,7 +89,7 @@ namespace HistoryContest.Server.Controllers.APIs
             if (model == null)
             { // TODO: 改为从缓存中取出; 对所有参数进行合法性验证 FIX BUG;
                 //var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
-                var student = await unitOfWork.Cache.StudentEntities(id.ToDepartmentID()).GetAsync(id);
+                var student = await unitOfWork.Cache.StudentEntities(id.ToDepartment()).GetAsync(id);
                 if (student == null)
                 {
                     return NotFound("Student not found");
@@ -158,20 +158,26 @@ namespace HistoryContest.Server.Controllers.APIs
                 return Forbid();
             }
 
-            var seed = this.Session().SeedID;
-            if (seed == null)
-            {
-                return BadRequest("Question seed not created");
-            }
-
             string studentID = this.Session().ID;
             if (studentID == null)
             {
                 return BadRequest("Student ID not set in the session, please login again");
             }
 
+            if (await unitOfWork.Cache.Database.StringGetAsync("CountingScore:" + studentID) == "true")
+            {
+                return BadRequest("Score has already been counting");
+            }
+            await unitOfWork.Cache.Database.StringSetAsync("CountingScore:" + studentID, "true");
+
+            var seed = this.Session().SeedID;
+            if (seed == null)
+            {
+                return BadRequest("Question seed not created");
+            }
+
             #region calculate score and update student data
-            var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartmentID());
+            var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartment());
             var student = await studentDictionary.GetAsync(studentID);
             student.Score = 0;
             student.QuestionSeedID = (int)seed;
@@ -205,8 +211,6 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             model.Score = (int)student.Score;
             this.Session().TestState = TestState.Tested;
-            HttpContext.Session.Set("StudentToUpdate", student);
-            HttpContext.Session.Set("ResultToUpdate", model);
             #endregion
 
             #region save data
@@ -222,6 +226,7 @@ namespace HistoryContest.Server.Controllers.APIs
             #region logout
             HttpContext.Session.Clear(); // 注销账户
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID); // 表示没有正在计算
             #endregion
             return Json(model);
         }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using HistoryContest.Server.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace HistoryContest.Server.Data
 {
@@ -70,20 +71,34 @@ namespace HistoryContest.Server.Data
                 questionSeeds.ForEach(s => s.ID = 0);
                 await DbContext.QuestionSeeds.AddRangeAsync(questionSeeds);
             }
-            else
+            else if (await DbContext.QuestionSeeds.CountAsync() != questionSeeds.Count)
             {
                 DbContext.QuestionSeeds.UpdateRange(questionSeeds);
             }
             await DbContext.SaveChangesAsync();
-            var studentIDs = await Cache.Database.ListRangeAsync("StudentIDsToUpdate");
+
+            var redisIDList = await Cache.Database.ListRangeAsync("StudentIDsToUpdate");
             await Cache.Database.KeyDeleteAsync("StudentIDsToUpdate");
-            var studentTasks = studentIDs.Select(async ID => await Cache.StudentEntities(ID.ToString().ToDepartmentID()).GetAsync(ID));
-            foreach (var studentTask in studentTasks)
+            var IDHashSet = new HashSet<string>(redisIDList.Length);
+            foreach (string ID in redisIDList)
             {
-                var student = await studentTask;
-                StudentRepository.Update(student);
+                if (!IDHashSet.Contains(ID))
+                {
+                    IDHashSet.Add(ID);
+                    try
+                    {
+                        var student = await Cache.StudentEntities(ID.ToDepartment()).GetAsync(ID);
+                        StudentRepository.Update(student);
+                        await DbContext.SaveChangesAsync();
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Failed updating student " + ID + " to database, exception:");
+                        Console.WriteLine(ex.ToString());
+                        await Cache.Database.ListRightPushAsync("StudentIDsToUpdate", ID); // 学生ID重新放入待更新列表，供下一次使用
+                    }
+                }
             }
-            await DbContext.SaveChangesAsync();
         }
 
         #region Disposal Setting

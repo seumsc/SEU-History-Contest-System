@@ -15,14 +15,14 @@ namespace HistoryContest.Server.Extensions
         public static int ToIntID(this string hexString)
             => Convert.ToInt32(hexString, 16);
 
-        public static Department ToDepartmentID(this string studentID)
+        public static Department ToDepartment(this string studentID)
             => (Department)(int.Parse(studentID.Substring(0, 2)));
 
         public static bool IsHexNumber(this string hexString)
             => int.TryParse(hexString, System.Globalization.NumberStyles.HexNumber, null, out int result);
 
         public static bool IsDepartmentID(this string ID)
-            => Enum.IsDefined(typeof(Department), ID.ToDepartmentID());
+            => Enum.IsDefined(typeof(Department), ID.ToDepartment());
 
         public static bool IsStudentID(this string ID)
         {

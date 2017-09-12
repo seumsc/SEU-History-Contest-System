@@ -108,7 +108,6 @@ namespace HistoryContest.Server
             // Add Unit of work service
             services.AddScoped<UnitOfWork>();
 
-#if NETCOREAPP2_0
             services.AddAntiforgery(options =>
             {
                 //options.Cookie.Domain = "mydomain.com";
@@ -143,21 +142,6 @@ namespace HistoryContest.Server
                 // options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
-
-#else
-            services.AddAuthentication(options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.CookieName = "HistoryContest.Cookie.Session";
-                // options.CookieDomain = "";
-                options.CookiePath = "/";
-                options.CookieHttpOnly = true;
-                // options.CookieSameSite = SameSiteMode.Lax;
-                // options.CookieSecure = CookieSecurePolicy.Always;
-            });
-#endif
 
             // Add logging services to application
             services.AddLogging();
@@ -321,18 +305,21 @@ namespace HistoryContest.Server
                 unitOfWork.DbContext.EnsureAllSeeded();
             }
 
-            // flush cache
-            var endpoints = RedisService.Connection.GetEndPoints();
-            RedisService.Connection.GetServer(endpoints.First()).FlushAllDatabases();
+            if (Program.RefreshCache || Environment.IsDevelopment())
+            {
+                // flush cache
+                var endpoints = RedisService.Connection.GetEndPoints();
+                RedisService.Connection.GetServer(endpoints.First()).FlushAllDatabases();
 
-            // Load cache
-            var questionSeedService = new QuestionSeedService(unitOfWork);
-            int scale = unitOfWork.Configuration.QuestionSeedScale;
-            var questionSeeds = questionSeedService.CreateNewSeeds(scale);
+                // Load cache
+                var questionSeedService = new QuestionSeedService(unitOfWork);
+                int scale = unitOfWork.Configuration.QuestionSeedScale;
+                var questionSeeds = questionSeedService.CreateNewSeeds(scale);
 
-            unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
-            unitOfWork.QuestionRepository.LoadQuestionsToCache();
-            unitOfWork.StudentRepository.LoadStudentsToCache();
+                unitOfWork.Cache.QuestionSeeds().SetRange(questionSeeds, s => s.ID.ToString());
+                unitOfWork.QuestionRepository.LoadQuestionsToCache();
+                unitOfWork.StudentRepository.LoadStudentsToCache();
+            }
             if (Environment.IsDevelopment())
             {
                 new TestDataService(unitOfWork).SeedTestedStudents();
@@ -340,17 +327,31 @@ namespace HistoryContest.Server
 
             syncWithDatabaseTimer = new Timer(async o =>
             {
-                var _services = new ServiceCollection();
-                ConfigureServices(_services);
-                using (var _serviceProvider = _services.BuildServiceProvider())
-                using (UnitOfWork _unitOfWork = _serviceProvider.GetService<UnitOfWork>())
+                try
                 {
-                    await _unitOfWork.SaveCacheToDataBase();
-                    new ExcelExportService(_unitOfWork).UpdateExcelOfSchool();
+                    var _services = new ServiceCollection();
+                    ConfigureServices(_services);
+                    using (var _serviceProvider = _services.BuildServiceProvider())
+                    using (UnitOfWork _unitOfWork = _serviceProvider.GetService<UnitOfWork>())
+                    {
+                        await _unitOfWork.SaveCacheToDataBase();
+                        new ExcelExportService(_unitOfWork).UpdateExcelOfSchool();
+                    }
                 }
-                GC.Collect();
-                syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
-            }, null, (int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                try
+                {
+                    GC.Collect();
+                    syncWithDatabaseTimer.Change((int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }, null, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, Timeout.Infinite);
         }
     }
 
