@@ -38,8 +38,8 @@
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As the base of excel output folder -->
-    <Exec Command="if [ ! -d 'excel' ]; then mkdir excel; fi" WorkingDirectory="../wwwroot/" />
-    <Exec Command="touch keep" WorkingDirectory="../wwwroot/excel" />
+    <Exec Command="if not exist excel mkdir excel" WorkingDirectory="../wwwroot/" />
+    <Exec Command="echo . &gt; .keep" WorkingDirectory="../wwwroot/excel" />
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="..\wwwroot\**" />
@@ -60,7 +60,7 @@
     </ItemGroup>
   </Target>
   <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
-    <Exec Command="if [ ! -f 'index.html' ]; then wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
+    <Exec Command="if not exist ./index.html call powershell -command (new-object System.Net.WebClient).DownloadFile('http://dynalon.github.io/mdwiki/index.html', './index.html')" WorkingDirectory="../HistoryContest.Wiki/" />
     <!-- Include the wiki files in the publish output -->
     <ItemGroup>
       <WikiFiles Include="..\HistoryContest.Wiki\**" />
