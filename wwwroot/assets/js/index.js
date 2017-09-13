@@ -1,3 +1,14 @@
+profile();
+
+var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+// var match2 = window.document.cookie.match(/(?:^|\s|;).AspNetCore.Antiforgery.r4zOSoBPHfI\s*=\s*([^;]+)(?:;|$)/);
+$.ajaxSetup({
+	headers: {
+		"X-XSRF-TOKEN": match[1]
+	}
+})
+console.log(match);
+// console.log(match2);
 /********************Webpage Common Configurations********************/
 var answerQues = [];//id,answer
 var config = {
@@ -8,12 +19,6 @@ var config = {
 	resultJSON: {},
 	currentQuestion: 0
 }
-var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
-$.ajaxSetup({
-	headers: {
-		"X-XSRF-TOKEN": match
-	}
-})
 /********************Webpage Setting********************/
 var questionsIteratorIndex;
 var answersIteratorIndex;
@@ -270,14 +275,31 @@ function logout() {
 		}
 	});
 }
+function profile() {
+	$.ajax({
+		url: '/api/Account/profile',
+		contentType: "application/json",
+		dataType: "json",
+		async: false,
+		type: "GET",
+		success: function (req) {
+			console.log(JSON.stringify(req));
+		},
+		error: function (xhr) {
+			//////console.log(xhr);
+
+		}
+	});
+}
 function initialize() {
 	$.ajax({
 		url: "/api/Student/State/Initialize",
 		async: true,
 		type: "POST",
 		beforeSend: function (xhr) {
-			// var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-			// xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+			xhr.setRequestHeader("X-XSRF-TOKEN", match);
+			alert("match"+match);
 		},
 		success: function (req) {
 			//////console.log(req);
@@ -289,8 +311,9 @@ function initialize() {
 			alert("初始化失败，请检查网络是否通畅");
 			//logout
 			logout();
+			alert(JSON.stringify(req));
 			window.location.href = "login.html";
-			//////console.log(req);
+			// alert(req);
 		}
 	});
 }
