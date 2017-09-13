@@ -5,6 +5,8 @@ using System.Dynamic;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace HistoryContest.Server
 {
@@ -25,7 +27,10 @@ namespace HistoryContest.Server
 
         public static IWebHost BuildWebHost(string[] args)
         {
-            //Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            }
             ProcessArgs(args);
             return new WebHostBuilder()
                 .UseKestrel(option => option.Listen(IPAddress.Loopback, Port))

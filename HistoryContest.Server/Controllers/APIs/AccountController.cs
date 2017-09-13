@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Antiforgery;
 using HistoryContest.Server.Data;
-using HistoryContest.Server.Services;
 using HistoryContest.Server.Extensions;
 using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server.Models.ViewModels;
-using System.Security.Claims;
-using System.Net;
+using HistoryContest.Server.Services;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace HistoryContest.Server.Controllers.APIs
 {
@@ -105,14 +105,8 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 await InitializeSession(userContext);
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(userContext.Claims, accountService.GetType().Name));
-#if NETCOREAPP2_0
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                //HttpContext.User = principal;
-#else
-                await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                HttpContext.User = principal;
-#endif
-                return RedirectToAction(nameof(GetAntiForgery));
+                return Json(new { isSuccessful = true, userContext.UserViewModel });
             }
             else
             {
@@ -226,7 +220,26 @@ namespace HistoryContest.Server.Controllers.APIs
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             Response.Cookies.Delete("HistoryContest.Cookie.Session");
             Response.Cookies.Delete(".AspNetCore.Session");
-            return RedirectToAction(nameof(GetAntiForgery));
+            return NoContent();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Profile()
+        {
+            //var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            //Response.Cookies.Delete("XSRF-TOKEN");
+            //Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+            var isLoggedIn = false;
+            var id = "";
+            var role = "";
+            if (HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName") != null)
+            {
+                isLoggedIn = true;
+                role = HttpContext.User.FindFirst(c => c.Type == ClaimTypes.Role).Value;
+                id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName").Value;
+            }
+            return Json(new { isLoggedIn, id, role });
         }
 
         [AllowAnonymous]
