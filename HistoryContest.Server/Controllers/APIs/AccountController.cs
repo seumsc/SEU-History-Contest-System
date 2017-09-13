@@ -233,9 +233,9 @@ namespace HistoryContest.Server.Controllers.APIs
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAntiForgery()
         {
-            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            Response.Cookies.Delete("XSRF-TOKEN");
-            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
+            //var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            //Response.Cookies.Delete("XSRF-TOKEN");
+            //Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
             var userViewModel = GetUserViewModel();
             if (userViewModel == null)
             {
