@@ -25,7 +25,7 @@ namespace HistoryContest.Server.Models.Entities
 
         public bool CheckPassword(string password)
         {
-            return PhoneNumber == int.Parse(password);
+            return PhoneNumber == long.Parse(password);
         }
     }
 }

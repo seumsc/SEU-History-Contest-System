@@ -170,65 +170,77 @@ namespace HistoryContest.Server.Controllers.APIs
             }
             await unitOfWork.Cache.Database.StringSetAsync("CountingScore:" + studentID, "true");
 
-            var seed = this.Session().SeedID;
-            if (seed == null)
+            try
             {
-                return BadRequest("Question seed not created");
-            }
-
-            #region calculate score and update student data
-            var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartment());
-            var student = await studentDictionary.GetAsync(studentID);
-            student.Score = 0;
-            student.QuestionSeedID = (int)seed;
-            student.DateTimeFinished = DateTime.Now;
-            student.Choices = submittedAnswers.Select(a => (byte)a.Answer).ToArray();
-
-            if (this.Session().TestBeginTime == null)
-            {
-                return BadRequest("Test begin time not set in the session");
-            }
-            student.TimeConsumed = student.DateTimeFinished - this.Session().TestBeginTime;
-
-            var correctAnswers = await questionSeedService.GetAnswersBySeedID((int)seed);
-
-            var model = new ResultViewModel
-            {
-                Details = new List<ResultDetailViewModel>(capacity: size),
-                TimeFinished = (DateTime)student.DateTimeFinished,
-                TimeConsumed = (TimeSpan)student.TimeConsumed
-            };
-            for (int i = 0; i < submittedAnswers.Count; ++i)
-            {
-                var submit = submittedAnswers[i];
-                var correct = correctAnswers[i];
-                if (submit.ID != correct.ID)
+                var seed = this.Session().SeedID;
+                if (seed == null)
                 {
-                    return BadRequest("Encounter improper ID in your answer set: " + submit.ID + " at " + i);
+                    await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID);
+                    return BadRequest("Question seed not created");
                 }
-                student.Score += submit.Answer == correct.Answer ? correct.Points : 0;
-                model.Details.Add(new ResultDetailViewModel { ID = correct.ID, Correct = correct.Answer, Submit = submit.Answer });
+
+                #region calculate score and update student data
+                var studentDictionary = unitOfWork.Cache.StudentEntities(studentID.ToDepartment());
+                var student = await studentDictionary.GetAsync(studentID);
+                student.Score = 0;
+                student.QuestionSeedID = (int)seed;
+                student.DateTimeFinished = DateTime.Now;
+                student.Choices = submittedAnswers.Select(a => (byte)a.Answer).ToArray();
+
+                if (this.Session().TestBeginTime == null)
+                {
+                    await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID);
+                    return BadRequest("Test begin time not set in the session");
+                }
+                student.TimeConsumed = student.DateTimeFinished - this.Session().TestBeginTime;
+
+                var correctAnswers = await questionSeedService.GetAnswersBySeedID((int)seed);
+
+                var model = new ResultViewModel
+                {
+                    Details = new List<ResultDetailViewModel>(capacity: size),
+                    TimeFinished = (DateTime)student.DateTimeFinished,
+                    TimeConsumed = (TimeSpan)student.TimeConsumed
+                };
+                for (int i = 0; i < submittedAnswers.Count; ++i)
+                {
+                    var submit = submittedAnswers[i];
+                    var correct = correctAnswers[i];
+                    if (submit.ID != correct.ID)
+                    {
+                        await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID);
+                        return BadRequest("Encounter improper ID in your answer set: " + submit.ID + " at " + i);
+                    }
+                    student.Score += submit.Answer == correct.Answer ? correct.Points : 0;
+                    model.Details.Add(new ResultDetailViewModel { ID = correct.ID, Correct = correct.Answer, Submit = submit.Answer });
+                }
+                model.Score = (int)student.Score;
+                #endregion
+
+                #region save data
+                var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor);
+                await summary.UpdateAsync(unitOfWork, student); // 更新院系概况，放在前面防止重复计算
+                await unitOfWork.Cache.StudentEntities(student.Department).SetAsync(studentID, student); // 更新Student
+                await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student);
+                await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
+                await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
+                new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
+                #endregion
+                this.Session().TestState = TestState.Tested;
+
+                #region logout
+                HttpContext.Session.Clear(); // 注销账户
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID); // 表示没有正在计算
+                #endregion
+                return Json(model);
             }
-            model.Score = (int)student.Score;
-            this.Session().TestState = TestState.Tested;
-            #endregion
-
-            #region save data
-            var summary = await ScoreSummaryByDepartmentViewModel.GetAsync(unitOfWork, student.Counselor);
-            await summary.UpdateAsync(unitOfWork, student); // 更新院系概况，放在前面防止重复计算
-            await unitOfWork.Cache.StudentEntities(student.Department).SetAsync(studentID, student); // 更新Student
-            await unitOfWork.Cache.StudentViewModels(student.Department).SetAsync(studentID, (StudentViewModel)student);
-            await unitOfWork.Cache.Database.ListRightPushAsync("StudentIDsToUpdate", studentID); // 学生ID放入待更新列表
-            await unitOfWork.Cache.Results().SetAsync(studentID, model); // result存入缓存
-            new ExcelExportService(unitOfWork).UpdateExcelByStudent(student);
-            #endregion
-
-            #region logout
-            HttpContext.Session.Clear(); // 注销账户
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID); // 表示没有正在计算
-            #endregion
-            return Json(model);
+            catch(Exception ex)
+            {
+                this.Session().TestState = TestState.Testing;
+                await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID);
+                return BadRequest(ex.ToString());
+            }
         }
 
         ///// <summary>

@@ -82,6 +82,7 @@ namespace HistoryContest.Server.Data
         public void EnsureAllSeeded()
         {
             EnsureSeeded<Counselor>(); // Counselor要先初始化，因为有外键约束
+            EnsureSeeded<DeptWuID>(); // 第二个初始化，为了能判定学生是否是吴健雄院的
             EnsureSeeded<Student>();
             EnsureSeeded<Administrator>();
             EnsureSeeded<ChoiceQuestion>();

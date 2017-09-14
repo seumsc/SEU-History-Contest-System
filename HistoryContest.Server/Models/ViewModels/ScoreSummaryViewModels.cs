@@ -32,29 +32,37 @@ namespace HistoryContest.Server.Models.ViewModels
         public async Task UpdateAsync(UnitOfWork unitOfWork, Student student)
         { // 当有学生出成绩时，对院系概况进行更新
             handleLock.Reset();
-            if (student.Department != DepartmentID)
+            try
             {
-                throw new ArgumentException("Student's department not consistent");
+                if (student.Department != DepartmentID)
+                {
+                    throw new ArgumentException("Student's department not consistent");
+                }
+                if (!student.IsTested)
+                {
+                    throw new ArgumentException("Student hasn't been tested");
+                }
+                MaxScore = Math.Max((int)student.Score, MaxScore);
+                AverageScore *= StudentCount - ScoreBandCount.NotTested;
+                AverageScore += (double)student.Score;
+                ScoreBandCount.NotTested -= 1;
+                AverageScore /= StudentCount - ScoreBandCount.NotTested;
+                if (student.Score >= 90)
+                    ++ScoreBandCount.HigherThan90;
+                if (student.Score >= 75)
+                    ++ScoreBandCount.HigherThan75;
+                if (student.Score >= 60)
+                    ++ScoreBandCount.HigherThan60;
+                else
+                    ++ScoreBandCount.Failed;
+                await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, this);
+                handleLock.Set();
             }
-            if (!student.IsTested)
+            catch (Exception ex)
             {
-                throw new ArgumentException("Student hasn't been tested");
+                handleLock.Set();
+                throw ex;
             }
-            MaxScore = Math.Max((int)student.Score, MaxScore);
-            AverageScore *= StudentCount - ScoreBandCount.NotTested;
-            AverageScore += (double)student.Score;
-            ScoreBandCount.NotTested -= 1;
-            AverageScore /= StudentCount - ScoreBandCount.NotTested;
-            if (student.Score >= 90)
-                ++ScoreBandCount.HigherThan90;
-            if (student.Score >= 75)
-                ++ScoreBandCount.HigherThan75;
-            if (student.Score >= 60)
-                ++ScoreBandCount.HigherThan60;
-            else
-                ++ScoreBandCount.Failed;
-            await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(student.Department, this);
-            handleLock.Set();
         }
 
         public static async Task<ScoreSummaryByDepartmentViewModel> GetAsync(UnitOfWork unitOfWork, Counselor counselor)

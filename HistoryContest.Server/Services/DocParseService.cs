@@ -122,7 +122,7 @@ namespace HistoryContest.Server.Services
                 Name = s.Name,
                 CardID = s.CardID.ToString()
             }), Formatting.Indented));
-            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
+            File.WriteAllText(deptWuIDSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
 
 
             Console.WriteLine("Finished.");
@@ -185,7 +185,7 @@ namespace HistoryContest.Server.Services
                 Name = s.Name,
                 CardID = s.CardID.ToString()
             }), Formatting.Indented));
-            File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
+            File.WriteAllText(deptWuIDSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
 
             Console.WriteLine("Finished.");
             return studentSeedPath;

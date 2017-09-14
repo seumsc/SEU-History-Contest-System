@@ -10,6 +10,7 @@ namespace HistoryContest.Server.Models.Entities
     {
         [JsonIgnore]
         public int ID { get; set; }
+        [JsonConverter(typeof(HexIDConverter))]
         public int StudentID { get; set; }
 
         [JsonIgnore]

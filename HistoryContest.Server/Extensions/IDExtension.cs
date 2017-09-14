@@ -21,7 +21,7 @@ namespace HistoryContest.Server.Extensions
 
         public static Department ToDepartment(this string studentID, UnitOfWork unitOfWork)
         {
-            return Department.临床医学院;
+            throw new NotImplementedException();
         }
 
         public static bool IsHexNumber(this string hexString)
