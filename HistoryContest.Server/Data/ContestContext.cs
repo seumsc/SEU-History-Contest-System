@@ -11,6 +11,7 @@ using HistoryContest.Server.Models.Entities;
 using HistoryContest.Server;
 using Microsoft.AspNetCore.Hosting;
 using HistoryContest.Server.Services;
+using HistoryContest.Server.Extensions;
 
 namespace HistoryContest.Server.Data
 {
@@ -34,6 +35,7 @@ namespace HistoryContest.Server.Data
         public DbSet<TrueFalseQuestion> TrueFalseQuestions { get; set; }
         public DbSet<AQuestionBase> Questions { get; set; }
         public DbSet<QuestionSeed> QuestionSeeds { get; set; }
+        public DbSet<DeptWuID> DepartmentWuIDs { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,8 +70,8 @@ namespace HistoryContest.Server.Data
                 {
                     var counselors = Counselors.ToList();
                     foreach (var student in seeds as List<Student>)
-                    {
-                        student.CounselorID = counselors.FirstOrDefault(c => c.Department == student.Department).ID;
+                    { // TODO: 更新吴健雄院逻辑
+                        student.CounselorID = counselors.FirstOrDefault(c => c.Department == student.ID.ToStringID().ToDepartment()).ID;
                     }
                 }
                 AddRange(seeds);

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class ResultController : Controller
@@ -142,7 +142,7 @@ namespace HistoryContest.Server.Controllers.APIs
         public async Task<IActionResult> CountScore([FromBody]List<SubmittedAnswerViewModel> submittedAnswers)
         {
             var timeElapsed = DateTime.Now - this.Session().TestBeginTime;
-            if (timeElapsed >= TimeSpan.FromMinutes(35) || timeElapsed <= TimeSpan.FromMinutes(5))
+            if (timeElapsed >= unitOfWork.Configuration.TestTime + TimeSpan.FromMinutes(3) || timeElapsed <= TimeSpan.FromMinutes(3))
             {
                 return BadRequest("Test time not in the proper range!");
             }

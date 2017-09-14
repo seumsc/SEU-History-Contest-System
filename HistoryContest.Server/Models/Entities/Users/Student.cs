@@ -32,7 +32,7 @@ namespace HistoryContest.Server.Models.Entities
         public QuestionSeed QuestionSeed { get; set; }
 
         [JsonIgnore]
-        public Department Department => ID.ToStringID().ToDepartment();
+        public Department Department => CounselorID.ToStringID().ToDepartment();
 
         [JsonIgnore]
         public bool IsTested => Score != null;

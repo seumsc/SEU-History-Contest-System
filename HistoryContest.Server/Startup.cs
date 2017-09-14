@@ -297,7 +297,7 @@ namespace HistoryContest.Server
             });
             #endregion
 
-            
+
             // Seed database
             if (!unitOfWork.DbContext.AllMigrationsApplied())
             {

@@ -1,4 +1,5 @@
-﻿using HistoryContest.Server.Models;
+﻿using HistoryContest.Server.Data;
+using HistoryContest.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,11 @@ namespace HistoryContest.Server.Extensions
 
         public static Department ToDepartment(this string studentID)
             => (Department)(int.Parse(studentID.Substring(0, 2)));
+
+        public static Department ToDepartment(this string studentID, UnitOfWork unitOfWork)
+        {
+            return Department.临床医学院;
+        }
 
         public static bool IsHexNumber(this string hexString)
             => int.TryParse(hexString, System.Globalization.NumberStyles.HexNumber, null, out int result);

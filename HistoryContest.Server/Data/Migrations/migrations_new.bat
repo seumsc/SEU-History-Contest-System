@@ -2,7 +2,7 @@
 if "%1"=="" goto ArgumentNull
 cd ../../
 call dotnet ef migrations add %1 --output-dir ./Data/Migrations
-call dotnet ef database update
+::call dotnet ef database update
 pause
 exit
 
