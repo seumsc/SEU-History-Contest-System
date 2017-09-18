@@ -1,33 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
+using HistoryContest.Server.Data;
+using HistoryContest.Server.Extensions;
+using HistoryContest.Server.Services;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.AspNetCore.Session;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.Swagger;
-using HistoryContest.Server.Data;
-using HistoryContest.Server.Services;
-using HistoryContest.Server.Extensions;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Antiforgery;
-using HistoryContest.Server.Models.ViewModels;
-using HistoryContest.Server.Models.Entities;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace HistoryContest.Server
 {
@@ -125,10 +118,8 @@ namespace HistoryContest.Server
                 options.LogoutPath = new PathString("/Account/Logout");
                 options.AccessDeniedPath = new PathString("/");
                 options.Cookie.Name = "HistoryContest.Cookie.Auth";
-                // options.Cookie.Domain = "";
                 options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
-                // options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
@@ -136,10 +127,8 @@ namespace HistoryContest.Server
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.Name = "HistoryContest.Cookie.Session";
-                // options.Cookie.Domain = "";
                 options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
-                // options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
@@ -198,6 +187,9 @@ namespace HistoryContest.Server
                 // app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
             }
 
+            // Use Cookie Authentication
+            app.UseAuthentication();
+
             //app.UseCors("OpenPolicy");
 
             #region Static file routes
@@ -205,6 +197,7 @@ namespace HistoryContest.Server
             DefaultFilesOptions options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("login.html");
+            options.DefaultFileNames.Add("index.html");
             app.UseDefaultFiles(options);
             app.UseStaticFiles();
 
@@ -264,25 +257,6 @@ namespace HistoryContest.Server
                 await next.Invoke();
                 await context.Session.CommitAsync();
             });
-
-            #region Authentication settings
-            // Use Cookie Authentication
-#if NETCOREAPP2_0
-            app.UseAuthentication();
-#else
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-                LoginPath = new PathString("/Account/Login/"),
-                AccessDeniedPath = new PathString("/"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });
-#endif
-            #endregion
-
-            // enable status code response page
-            //app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
             #region Javascript spa routes
             app.UseMvc(routes =>
@@ -351,7 +325,7 @@ namespace HistoryContest.Server
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            }, null, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, Timeout.Infinite);
+            }, null, (int)TimeSpan.FromMinutes(10).TotalMilliseconds, Timeout.Infinite);
         }
     }
 

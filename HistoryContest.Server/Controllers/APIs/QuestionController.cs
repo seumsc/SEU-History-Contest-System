@@ -133,7 +133,6 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Question seed not created");
             }
 
-            // TODO: seed加载到内存
             return Json((await unitOfWork.QuestionSeedRepository.GetByIDAsync(seed)).QuestionIDs);
         }
     }

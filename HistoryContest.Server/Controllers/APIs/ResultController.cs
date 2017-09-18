@@ -87,8 +87,7 @@ namespace HistoryContest.Server.Controllers.APIs
 
             ResultViewModel model = await unitOfWork.Cache.Results().GetAsync(id);
             if (model == null)
-            { // TODO: 改为从缓存中取出; 对所有参数进行合法性验证 FIX BUG;
-                //var student = await unitOfWork.StudentRepository.GetByIDAsync(id.ToIntID());
+            {
                 var student = await unitOfWork.Cache.StudentEntities(id.ToDepartment()).GetAsync(id);
                 if (student == null)
                 {
@@ -239,6 +238,7 @@ namespace HistoryContest.Server.Controllers.APIs
             {
                 this.Session().TestState = TestState.Testing;
                 await unitOfWork.Cache.Database.KeyDeleteAsync("CountingScore:" + studentID);
+                Console.WriteLine(ex.ToString());
                 return BadRequest(ex.ToString());
             }
         }
@@ -263,14 +263,13 @@ namespace HistoryContest.Server.Controllers.APIs
         //    {
         //        return BadRequest("Question seed not created");
         //    }
-
+        //
         //    var answers = await questionSeedService.GetAnswersBySeedID((int)seed);
         //    if (answers == null)
         //    {
-        //        // TODO: 详细定义异常
         //        throw new Exception("Improper seed created, ID: " + seed);
         //    }
-
+        //
         //    return Json(answers);
         //}
 

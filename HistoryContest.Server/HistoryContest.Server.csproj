@@ -4,75 +4,49 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <IsPackable>false</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <ApplicationIcon />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\$(TargetFramework)\HistoryContest.Server.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\HistoryContest.Server.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\$(TargetFramework)\HistoryContest.Server.xml</DocumentationFile>
-    <NoWarn>1701;1702;1705;1591</NoWarn>
     <FileAlignment>1024</FileAlignment>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-      <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
-      <PackageReference Include="EPPlus.Core" Version="1.5.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.2" />
+  </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <!-- Files not to show in IDE -->
-    <None Remove="yarn.lock" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\Databases\" />
-  </ItemGroup>
-  <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
-    <!-- As the base of excel output folder -->
-    <Exec Command="if [ ! -d 'excel' ]; then mkdir excel; fi" WorkingDirectory="../wwwroot/" />
-    <Exec Command="touch keep" WorkingDirectory="../wwwroot/excel" />
+  <Target Name="RunCommands:Windows_NT" AfterTargets="ComputeFilesToPublish" Condition="'$(OS)'=='Windows_NT'">
+    <Exec Command="if not exist excel mkdir excel &amp; echo . &gt; excel/keep" WorkingDirectory="../wwwroot/" />
+    <Exec Command="powershell if(!(Test-Path ./index.html)) { cURL -Uri 'http://dynalon.github.io/mdwiki/index.html' -OutFile './index.html'; Unblock-File './index.html' }" WorkingDirectory="../HistoryContest.Wiki/" />
+  </Target>
+  <Target Name="RunCommands:Unix" AfterTargets="ComputeFilesToPublish" Condition="'$(OS)'=='Unix'">
+    <Exec Command="if [ ! -d 'excel' ]; then mkdir excel; fi; cd excel; touch keep" WorkingDirectory="../wwwroot/" />
+    <Exec Command="if [ ! -f 'index.html' ]; then wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
+  </Target>
+  <Target Name="PublishAssetFiles" AfterTargets="$([System.String]::Concat(&quot;RunCommands:&quot;, $(OS)))">
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="..\wwwroot\**" />
+      <DistFiles Include="../wwwroot/**" />
+      <WikiFiles Include="../HistoryContest.Wiki/**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
-    </ItemGroup>
-  </Target>
-    <Target Name="PublishDataSource" AfterTargets="RunWebpack">
-    <!-- Include the data source files in the publish output -->
-    <ItemGroup>
-      <DataSourceFiles Include=".\Data\Source\**" />
-      <ResolvedFileToPublish Include="@(DataSourceFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-        <RelativePath>Source/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </ResolvedFileToPublish>
-    </ItemGroup>
-  </Target>
-  <Target Name="PublishingWiki" AfterTargets="PublishDataSource">
-    <Exec Command="if [ ! -f 'index.html' ]; then wget http://dynalon.github.io/mdwiki/index.html; fi" WorkingDirectory="../HistoryContest.Wiki/" />
-    <!-- Include the wiki files in the publish output -->
-    <ItemGroup>
-      <WikiFiles Include="..\HistoryContest.Wiki\**" />
+
       <ResolvedFileToPublish Include="@(WikiFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>HistoryContest.Wiki/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
-      <ResolvedFileToPublish Include=".\bin\Release\$(TargetFramework)\HistoryContest.Server.xml">
-        <RelativePath>HistoryContest.Server.xml</RelativePath>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-  <ProjectExtensions><VisualStudio><UserProperties global_1json__JSONSchema="" appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

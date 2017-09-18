@@ -225,11 +225,8 @@ namespace HistoryContest.Server.Controllers.APIs
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<IActionResult> Profile()
+        public IActionResult Profile()
         {
-            //var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            //Response.Cookies.Delete("XSRF-TOKEN");
-            //Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
             var isLoggedIn = false;
             var id = "";
             var role = "";
@@ -276,7 +273,6 @@ namespace HistoryContest.Server.Controllers.APIs
                     break;
                 default:
                     throw new TypeLoadException("User role invalid");
-
             }
         }
     }
