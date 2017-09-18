@@ -6,8 +6,8 @@ function logout() {
         async: false,
         type: "POST",
         beforeSend: function (xhr) {
-            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
-            xhr.setRequestHeader("X-XSRF-TOKEN", match);
+            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+            xhr.setRequestHeader("X-XSRF-TOKEN", match == null ? "" : match[1]);
         },
         success: function (req) {
             ////console..log(req);

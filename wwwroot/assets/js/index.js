@@ -4,7 +4,7 @@ var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;
 // var match2 = window.document.cookie.match(/(?:^|\s|;).AspNetCore.Antiforgery.r4zOSoBPHfI\s*=\s*([^;]+)(?:;|$)/);
 $.ajaxSetup({
 	headers: {
-		"X-XSRF-TOKEN": match[1]
+		"X-XSRF-TOKEN": match == null ? "" : match[1]
 	}
 })
 //console.log(match);
@@ -284,8 +284,8 @@ function initialize() {
 		async: true,
 		type: "POST",
 		beforeSend: function (xhr) {
-            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
-			xhr.setRequestHeader("X-XSRF-TOKEN", match);
+            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+			xhr.setRequestHeader("X-XSRF-TOKEN", match == null ? "" : match[1]);
 			//alert("match"+match);
 		},
 		success: function (req) {
