@@ -90,8 +90,7 @@ namespace HistoryContest.Server.Services
                     await unitOfWork.Cache.StudentEntities(counselor.Department).SetAsync(model.UserName, student);
                     await unitOfWork.Cache.StudentViewModels(counselor.Department).SetAsync(model.UserName, (StudentViewModel)student);
                     await unitOfWork.StudentRepository.InsertAsync(student);
-await unitOfWork.SaveAsync();
-                    
+                    await unitOfWork.SaveAsync()
                     return new UserViewModel { UserName = model.UserName, RealName = model.RealName, Role = model.Role };
                 case nameof(Counselor):
                     return null;
