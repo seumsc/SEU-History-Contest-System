@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HistoryContest.Server.Models.Entities;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using HistoryContest.Server.Models.Entities;
 
 namespace HistoryContest.Server.Models.ViewModels
 {
@@ -52,7 +49,7 @@ namespace HistoryContest.Server.Models.ViewModels
                 return QuestionType.TrueFalse;
             }
             else
-            { // TODO: 详细定义类型异常
+            {
                 throw new TypeLoadException("Question type invalid");
             }
         }

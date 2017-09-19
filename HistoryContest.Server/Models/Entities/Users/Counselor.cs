@@ -16,7 +16,7 @@ namespace HistoryContest.Server.Models.Entities
         [JsonConverter(typeof(HexIDConverter))]
         public int ID { get; set; }
         public string Name { get; set; }
-        public int PhoneNumber { get; set; }
+        public long PhoneNumber { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public Department Department { get; set; }
 
@@ -25,7 +25,7 @@ namespace HistoryContest.Server.Models.Entities
 
         public bool CheckPassword(string password)
         {
-            return PhoneNumber == int.Parse(password);
+            return PhoneNumber == long.Parse(password);
         }
     }
 }

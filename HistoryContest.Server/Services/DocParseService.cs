@@ -82,6 +82,7 @@ namespace HistoryContest.Server.Services
 
             var students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(ContestContext.GetSeedPath<Student>()));
             var studentIDs = students.Select(s => s.ID).ToHashSet();
+            var deptWuIDs = new List<DeptWuID>();
 
             using (StreamReader sr = new StreamReader(info.FullName))
             {
@@ -103,11 +104,16 @@ namespace HistoryContest.Server.Services
                     {
                         students.Add(student);
                         studentIDs.Add(student.ID);
+                        if (information[3] == "吴健雄学院" && information[1].ToDepartment() != Department.吴健雄学院)
+                        {
+                            deptWuIDs.Add(new DeptWuID { StudentID = student.ID });
+                        }
                     }
                     Console.Write(new string('\b', (i + 1).ToString().Length));
                 }
             }
             string studentSeedPath = ContestContext.GetSeedPath<Student>();
+            string deptWuIDSeedPath = ContestContext.GetSeedPath<DeptWuID>();
 
             Console.WriteLine("\nSerializing to json file...");
             File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students.Select(s => new
@@ -116,6 +122,8 @@ namespace HistoryContest.Server.Services
                 Name = s.Name,
                 CardID = s.CardID.ToString()
             }), Formatting.Indented));
+            File.WriteAllText(deptWuIDSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
+
 
             Console.WriteLine("Finished.");
             return studentSeedPath;
@@ -132,6 +140,7 @@ namespace HistoryContest.Server.Services
 
             var students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(ContestContext.GetSeedPath<Student>()));
             var studentIDs = students.Select(s => s.ID).ToHashSet();
+            var deptWuIDs = new List<DeptWuID>();
 
             using (var package = new ExcelPackage(info))
             {
@@ -145,6 +154,7 @@ namespace HistoryContest.Server.Services
                     var cardID = workSheet.Cells[i, 1].Value as string;
                     var studentID = workSheet.Cells[i, 2].Value as string;
                     var name = workSheet.Cells[i, 3].Value as string;
+                    var department = workSheet.Cells[i, 5].Value as string;
 
                     var student = new Student
                     {
@@ -156,12 +166,17 @@ namespace HistoryContest.Server.Services
                     {
                         students.Add(student);
                         studentIDs.Add(student.ID);
+                        if (department == "吴健雄学院" && studentID.ToDepartment() != Department.吴健雄学院)
+                        {
+                            deptWuIDs.Add(new DeptWuID { StudentID = studentID.ToIntID() });
+                        }
                     }
 
                     Console.Write(new string('\b', progress.Length));
                 }
             }
             string studentSeedPath = ContestContext.GetSeedPath<Student>();
+            string deptWuIDSeedPath = ContestContext.GetSeedPath<DeptWuID>();
 
             Console.WriteLine("\nSerializing to json file...");
             File.WriteAllText(studentSeedPath, JsonConvert.SerializeObject(students.Select(s => new
@@ -170,6 +185,7 @@ namespace HistoryContest.Server.Services
                 Name = s.Name,
                 CardID = s.CardID.ToString()
             }), Formatting.Indented));
+            File.WriteAllText(deptWuIDSeedPath, JsonConvert.SerializeObject(deptWuIDs, Formatting.Indented));
 
             Console.WriteLine("Finished.");
             return studentSeedPath;

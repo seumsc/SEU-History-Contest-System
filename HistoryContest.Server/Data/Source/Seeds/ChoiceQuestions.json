@@ -121,7 +121,7 @@
     "Answer": 2,
     "Points": 4,
     "ChoiceA": "1919",
-    "ChoiceB": " 1920",
+    "ChoiceB": "1920",
     "ChoiceC": "1921",
     "ChoiceD": "1922"
   },
@@ -158,7 +158,7 @@
     "Points": 4,
     "ChoiceA": "1917",
     "ChoiceB": "1918",
-    "ChoiceC": " 1919",
+    "ChoiceC": "1919",
     "ChoiceD": "1920"
   },
   {
@@ -352,12 +352,12 @@
   },
   {
     "Question": "至今东南大学已经成立多少年？",
-    "Answer": 2,
+    "Answer": 3,
     "Points": 4,
-    "ChoiceA": "110",
-    "ChoiceB": "111",
-    "ChoiceC": "112",
-    "ChoiceD": "113"
+    "ChoiceA": "112",
+    "ChoiceB": "113",
+    "ChoiceC": "114",
+    "ChoiceD": "115"
   },
   {
     "Question": "20年代的东南大学是我国第几所国立大学？",
@@ -419,7 +419,7 @@
     "Points": 4,
     "ChoiceA": "君子不党",
     "ChoiceB": "学者治校",
-    "ChoiceC": " 学术自由",
+    "ChoiceC": "学术自由",
     "ChoiceD": "学生自治"
   },
   {
@@ -558,15 +558,6 @@
     "ChoiceD": "30年代初期"
   },
   {
-    "Question": "东南大学从创办至今共有多少任校长？",
-    "Answer": 0,
-    "Points": 4,
-    "ChoiceA": "26",
-    "ChoiceB": "27",
-    "ChoiceC": "28",
-    "ChoiceD": "29"
-  },
-  {
     "Question": "东大在五卅运动于_____全体学生游行，并赴宣抚使署、省长公署，要求对英、日帝国主义提出严重抗议？",
     "Answer": 1,
     "Points": 4,
@@ -607,7 +598,7 @@
     "Answer": 1,
     "Points": 4,
     "ChoiceA": "1927年4月28日",
-    "ChoiceB": "1928 年4月28日",
+    "ChoiceB": "1928年4月28日",
     "ChoiceC": "1937年4月28日",
     "ChoiceD": "1932年4月28日 "
   },
@@ -856,7 +847,7 @@
   },
   {
     "Question": "我校现有两院院士几人？",
-    "Answer": 2,
+    "Answer": 3,
     "Points": 4,
     "ChoiceA": "9",
     "ChoiceB": "10",
@@ -1017,15 +1008,6 @@
     "ChoiceD": "西安事变"
   },
   {
-    "Question": "在2003年国家大学科技园的评估中，东南大学国家大学科技园名列全国第几？",
-    "Answer": 2,
-    "Points": 4,
-    "ChoiceA": "6",
-    "ChoiceB": "7",
-    "ChoiceC": "8",
-    "ChoiceD": "9"
-  },
-  {
     "Question": "自1949年8月至1951年7月，学校实行校务委员会制，自1951-1952学年第一学期改行_____制。",
     "Answer": 1,
     "Points": 4,
@@ -1042,15 +1024,6 @@
     "ChoiceB": "水利工程",
     "ChoiceC": "土木工程",
     "ChoiceD": "机械工程"
-  },
-  {
-    "Question": "南京工学院于_____年改名为东南大学。",
-    "Answer": 2,
-    "Points": 4,
-    "ChoiceA": "1986",
-    "ChoiceB": "1987",
-    "ChoiceC": "1988",
-    "ChoiceD": "1989"
   },
   {
     "Question": "1980年11月，南工组团访问日本，与_____结为友好学校。",
@@ -1287,15 +1260,6 @@
     "ChoiceD": "师生交流"
   },
   {
-    "Question": "1952年7月26日，我校与_____大学合并。",
-    "Answer": 0,
-    "Points": 4,
-    "ChoiceA": "金陵大学",
-    "ChoiceB": "日本大学",
-    "ChoiceC": "江苏大学",
-    "ChoiceD": "乌鲁木齐大学"
-  },
-  {
     "Question": "1953年我校原本的_____系和_____系，并入了金陵大学。",
     "Answer": 3,
     "Points": 4,
@@ -1416,7 +1380,7 @@
     "Question": "东南大学现任校长是_____。",
     "Answer": 0,
     "Points": 4,
-    "ChoiceA": "易红",
+    "ChoiceA": "张广军",
     "ChoiceB": "韦钰",
     "ChoiceC": "顾冠群",
     "ChoiceD": "胡凌云"
@@ -1692,12 +1656,210 @@
     "ChoiceD": "师生交流"
   },
   {
-    "Question": "在东南大学即将迎来建校110周年之际，党和国家领导人_____为我校题词\\\"以科学名世，以人才报国\\\"。",
+    "Question": "在东南大学即将迎来建校110周年之际，党和国家领导人_____为我校题词\"以科学名世，以人才报国\"。",
     "Answer": 2,
     "Points": 4,
     "ChoiceA": "贾庆林",
     "ChoiceB": "回良玉",
     "ChoiceC": "温家宝",
     "ChoiceD": "刘延东"
+  },
+  {
+    "Question": "我校现有国务院学位委员第七届学科评议组成员__人。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "11",
+    "ChoiceB": "12",
+    "ChoiceC": "13",
+    "ChoiceD": "14"
+  },
+  {
+    "Question": "我校现国家“十二五”863计划主题专家__人。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "5",
+    "ChoiceB": "3",
+    "ChoiceC": "2",
+    "ChoiceD": "1"
+  },
+  {
+    "Question": "我校有__个实验中心入选国家级实验教学示范中心及建设点。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "8",
+    "ChoiceB": "7",
+    "ChoiceC": "6",
+    "ChoiceD": "5"
+  },
+  {
+    "Question": "我校有几位教授担任国家“十一五”863各领域专家组专家？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "1",
+    "ChoiceB": "2",
+    "ChoiceC": "3",
+    "ChoiceD": "4"
+  },  
+  {
+    "Question": "我校现有多少院系？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "30",
+    "ChoiceB": "29",
+    "ChoiceC": "28",
+    "ChoiceD": "27"
+  },  
+  {
+    "Question": "东南大学以__为己任，从国民经济和社会发展的需要出发，积极开展应用基础研究和重大战略高技术研究。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "科教兴国",
+    "ChoiceB": "唯才是举",
+    "ChoiceC": "革故鼎新",
+    "ChoiceD": "知人善任"
+  },  
+  {
+    "Question": "2016年我校举办校庆的学院是？",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "生物科学与医学工程学院",
+    "ChoiceB": "经济管理学院",
+    "ChoiceC": "机械工程学院",
+    "ChoiceD": "法学院"
+  },  
+  {
+    "Question": "东南大学网络空间安全一级博士学位授权点是__年获批的。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "2015",
+    "ChoiceB": "2016",
+    "ChoiceC": "2017",
+    "ChoiceD": "2014"
+  },
+  {
+    "Question": "吴健雄纪念馆于__年建成。",
+    "Answer": 0,
+    "Points": 4,
+    "ChoiceA": "2002",
+    "ChoiceB": "2003",
+    "ChoiceC": "2004",
+    "ChoiceD": "2005"
+  },
+  {
+    "Question": "南京工学院重新更名东南大学后的首任校长是？",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "易红",
+    "ChoiceB": "陈万年",
+    "ChoiceC": "钱钟韩",
+    "ChoiceD": "韦钰"
+  },
+  {
+    "Question": "第四中山大学设有几个学院？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "8",
+    "ChoiceB": "7",
+    "ChoiceC": "9",
+    "ChoiceD": "10"
+  },
+  {
+    "Question": "下列哪位是中央大学时期的名师？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "易红",
+    "ChoiceB": "黎锦熙",
+    "ChoiceC": "徐志摩",
+    "ChoiceD": "陶行知"
+  },
+  {
+    "Question": "下面____不是东南大学的一个校区。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "四牌楼校区",
+    "ChoiceB": "丁家桥校区",
+    "ChoiceC": "九龙湖校区",
+    "ChoiceD": "常州分校"
+  },
+  {
+    "Question": "2017年，东南大学进入ESI排名学科数增至___个",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "7",
+    "ChoiceB": "9",
+    "ChoiceC": "10",
+    "ChoiceD": "12"
+  },
+  {
+    "Question": "2016年12月，我校入选教育部“长江学者奖励计划”青年学者的有下列哪位？",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "韦钰",
+    "ChoiceB": "刘攀",
+    "ChoiceC": "倪富建",
+    "ChoiceD": "刘波"
+  },
+  {
+    "Question": "5G实验室隶属于东南大学____学院",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "计算机",
+    "ChoiceB": "电子",
+    "ChoiceC": "信息",
+    "ChoiceD": "自动化"
+  },
+  {
+    "Question": "2017年东南大学新增设的“网络空间安全”专业是由我校____、信息以及计算机专业申请的。",
+    "Answer": 2,
+    "Points": 4,
+    "ChoiceA": "自动化",
+    "ChoiceB": "软件工程",
+    "ChoiceC": "数学",
+    "ChoiceD": "机械"
+  },
+  {
+    "Question": "东南大学有__个实验中心入选国家级实验教学示范中心及建设点。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "9",
+    "ChoiceB": "8",
+    "ChoiceC": "11",
+    "ChoiceD": "10"
+  },
+  {
+    "Question": "在“挑战杯”全国大学生课外学术科技作品竞赛中，东南大学曾__次夺得总分第一、捧获“挑战杯”。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "3",
+    "ChoiceB": "2",
+    "ChoiceC": "4",
+    "ChoiceD": "5"
+  },
+  {
+    "Question": "2016年我校队伍最高荣获全国大学生电子设计竞赛模拟电子系统设计专题邀请赛（TI杯）国家级__等奖。",
+    "Answer": 1,
+    "Points": 4,
+    "ChoiceA": "一",
+    "ChoiceB": "二",
+    "ChoiceC": "三",
+    "ChoiceD": "特"
+  },
+  {
+    "Question": "东南大学现任党委书记是____。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "张广军",
+    "ChoiceB": "刘波",
+    "ChoiceC": "韦钰",
+    "ChoiceD": "易红"
+  },
+  {
+    "Question": "截至2017年，东南大学共有___个国家一级重点学科。",
+    "Answer": 3,
+    "Points": 4,
+    "ChoiceA": "3",
+    "ChoiceB": "2",
+    "ChoiceC": "4",
+    "ChoiceD": "5"
   }
 ]

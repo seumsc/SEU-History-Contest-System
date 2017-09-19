@@ -1,19 +1,23 @@
+profile();
+
+var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+// var match2 = window.document.cookie.match(/(?:^|\s|;).AspNetCore.Antiforgery.r4zOSoBPHfI\s*=\s*([^;]+)(?:;|$)/);
+$.ajaxSetup({
+	headers: {
+		"X-XSRF-TOKEN": match == null ? "" : match[1]
+	}
+})
+//console.log(match);
+// //console.log(match2);
 /********************Webpage Common Configurations********************/
 var answerQues = [];//id,answer
 var config = {
 	totalAmount: 30,
 	timeState: false,
 	questionArray: [],
-	//resultHTML: '<section class="panel color4-alt"><div class="inner columns"><div class="span-3-25"><h3 class="major">您的分数是：<span id="score"></span>分</h3><div class="table-wrapper" id="result-table"><table class="alt"><tbody id="table-content"></tbody><tfoot>提示：鼠标移到题号上可以查看原题哦！</tfoot></table></div></div><div  id="review-container" class="span-4" style="display:none"></div></div></section>',
 	resultJSON: {},
 	currentQuestion: 0
 }
-var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
-$.ajaxSetup({
-	headers: {
-		"X-XSRF-TOKEN": match
-	}
-})
 /********************Webpage Setting********************/
 var questionsIteratorIndex;
 var answersIteratorIndex;
@@ -22,8 +26,8 @@ function setQUESTION(QUESTIONS) {
 	var content = '';
 	var contentFooter = '';
 	for (questionsIteratorIndex = 0; questionsIteratorIndex < QUESTIONS.length; questionsIteratorIndex++) {
-		content += '<section class="panel"><div class="inner columns" id="q' + (questionsIteratorIndex + 1) + '">'//题目id，实现按钮跳转到下一题
-			+ '<div class="intro joined"><h1>' + (questionsIteratorIndex + 1) + '</h1></div>'//网页上显示的题目序号
+		content += '<section class="panel"><div class="inner columns" id="q' + (questionsIteratorIndex + 1) + '">'//题目id
+			+ '<div class="intro joined"><h1>' + (questionsIteratorIndex + 1) + '</h1></div>'//题目序号
 			+ '<div class="span-3-25"><h3 class="major">' + QUESTIONS[questionsIteratorIndex].question + '</h3>';//问题内容
 		if (QUESTIONS[questionsIteratorIndex].type == 0) {//选择题
 			var ansInit = {};
@@ -32,10 +36,10 @@ function setQUESTION(QUESTIONS) {
 			answerQues.push(ansInit);
 			for (answersIteratorIndex = 0; answersIteratorIndex < 4; answersIteratorIndex++) {//四个选项
 				content += '<div class="field quarter"><input type="radio"'
-					+ ' id="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1)//选项id，在HTML中唯一
+					+ ' id="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1)//选项id
 					+ '" value="' + answersIteratorIndex //提交的答案值
 					+ '" onclick="saveAns(this)"'
-					+ '" name="' + QUESTIONS[questionsIteratorIndex].id + '" class="color2" />'//hash code，同样要提交
+					+ '" name="' + QUESTIONS[questionsIteratorIndex].id + '" class="color2" />'
 					+ '<label for="choice' + (questionsIteratorIndex + 1) + (answersIteratorIndex + 1) + '">'
 					+ QUESTIONS[questionsIteratorIndex].choices[answersIteratorIndex] + '</label></div><br>';
 			}//选项内容
@@ -104,7 +108,6 @@ function resetToShowResult() {
 	$("#footer").remove();
 	config.timeState = false;
 	//SHOW RESULTS
-	//$("#result-container").html(config.resultHTML);
 	$("#result-container").show();
 	setRESULT(config.resultJSON);
 	//CHECK QUESTION ARRAY
@@ -119,7 +122,6 @@ function resetToShowResult() {
 		var reviewContent = "";
 		var $tgt = $(event.target);
 		var questionNum = $tgt.find(".num").text();
-		//////console.log(questionNum);
 		var rightAns = config.resultJSON.details[questionNum - 1].correct;
 		var submittedAns = config.resultJSON.details[questionNum - 1].submit;
 		var isCorrect = (rightAns == submittedAns ? 1 : 0);
@@ -202,29 +204,19 @@ function saveAns(clickID) {
 			}
 			answerQues[i].answer = ans;
 			testing = JSON.stringify(answerQues);
-			//////console.log(testing);
+			////////console.log(testing);
 		}
 		else if (answerQues[i].id == ID && answerQues[i].answer == ans)
 			return;
 	}
 }
-// function checkCompletion(){
-// 	//////console.log(answerQues.length);
-// 	for(var j=0;j<answerQues.length;j++){
-// 		if(answerQues[j].answer==-1&&config.timeState){		
-// 			alert("您还有未作答题目哦！");
-// 		}
-// 		return false;
-// 	}
-// 	return true;
-// }
 
 function checkCompletion() {
-	//////console.log(answerQues.length);
-	//////console.log(config.timeState);
+	////////console.log(answerQues.length);
+	////////console.log(config.timeState);
 	if (config.timeState) {
 		//5分钟以内提交
-		if(mm>=25){
+		if(mm>=22){
 			alert("答题时间过短，请认真作答哦！");
 			return false;			
 		}
@@ -262,10 +254,26 @@ function logout() {
 		async: false,
 		type: "POST",
 		success: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 		},
 		error: function (xhr) {
-			//////console.log(xhr);
+			////////console.log(xhr);
+
+		}
+	});
+}
+function profile() {
+	$.ajax({
+		url: '/api/Account/profile',
+		contentType: "application/json",
+		dataType: "json",
+		async: false,
+		type: "GET",
+		success: function (req) {
+			//console.log(JSON.stringify(req));
+		},
+		error: function (xhr) {
+			////////console.log(xhr);
 
 		}
 	});
@@ -276,11 +284,12 @@ function initialize() {
 		async: true,
 		type: "POST",
 		beforeSend: function (xhr) {
-			// var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-			// xhr.setRequestHeader("X-XSRF-TOKEN", match && match[1]);
+            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
+			xhr.setRequestHeader("X-XSRF-TOKEN", match == null ? "" : match[1]);
+			//alert("match"+match);
 		},
 		success: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 			getStateNShowWebpage();
 
 
@@ -289,20 +298,21 @@ function initialize() {
 			alert("初始化失败，请检查网络是否通畅");
 			//logout
 			logout();
+			//alert(JSON.stringify(req));
 			window.location.href = "login.html";
-			//////console.log(req);
+			// alert(req);
 		}
 	});
 }
 function getStateNShowWebpage() {
-	//////console.log("Setting Webpage...");
+	////////console.log("Setting Webpage...");
 	$.ajax({
 		url: "/api/Student/State",
 		async: true,
 		type: "GET",
 		success: function (req) {
 			//Show Questions	
-			//////console.log(req);
+			////////console.log(req);
 			if (req.testState == 0) {
 				alert("登录失败");
 				window.location.href = "login.html";
@@ -317,13 +327,13 @@ function getStateNShowWebpage() {
 			}
 			//Show Result
 			else if (req.testState == 2) {
-				//////console.log("inState2");
+				////////console.log("inState2");
 				getResult();
 				$("#wrapper").addClass("tested");
 			}
 		},
 		error: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 			alert("请检查网络");
 		}
 	})
@@ -334,19 +344,19 @@ function setSeed() {
 		async: true,
 		type: "POST",
 		success: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 		},
 		error: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 			alert("请检查网络");
 		}
 	});
 }
 function fetchOneQues(URLID) {
 	$.ajax({
-		url: '/api/Question/' + URLID, //请求的url地址
-		type: "GET", //请求方式
-		dataType: "json", //返回格式为json
+		url: '/api/Question/' + URLID, 
+		type: "GET", 
+		dataType: "json", 
 		async: true,
 		contentType: "application/json",
 		success: function (res) {
@@ -365,10 +375,10 @@ function fetchQuestions() {
 			config.questionArray = req;
 			config.totalAmount = config.questionArray.length;
 			setQUESTION(config.questionArray);
-			//////console.log(config.totalAmount);
+			////////console.log(config.totalAmount);
 		},
 		error: function (req) {
-			//////console.log(req);
+			////////console.log(req);
 			alert("请检查网络");
 
 		}
@@ -384,7 +394,7 @@ function postResult() {
 		type: "POST",
 		success: function (res) {
 			//RESET WEBPAGE
-			//////console.log(res);
+			////////console.log(res);
 			config.resultJSON = res;
 			resetToShowResult();
 		},
@@ -401,21 +411,20 @@ function getResult() {
 		async: true,
 		contentType: "application/json",
 		success: function (res) {
-			//////console.log("inGetResult");
-			//////console.log(res);
+			////////console.log("inGetResult");
+			////////console.log(res);
 			config.resultJSON = res;
 			resetToShowResult();
 		},
 		error: function (request) {
-			alert("error:" + JSON.stringify(request));
+			// alert("error:" + JSON.stringify(request));
 		}
 	});
 }
-var mm = 30;//分
-var ss = 0;//秒
+var mm = 25;
+var ss = 0;
 
 (function ($) {
-	/*实现计时器*/
 	var time = setInterval(function () {
 		if (config.timeState) {
 			if (mm == 0 && ss == 1) {
@@ -454,47 +463,13 @@ var ss = 0;//秒
 			$("#submit-container").show();
 			config.timeState = true;
 		});
-
-		$(document).mouseover(function (e) { //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
+		$(document).bind("mouseover mouseenter mousemove mouseup mousedown", function (e) { 
 			var questionPos = [];
 			var currentQues = 0;
 			for (var it = 1; it <= 30; it++) {
 
 				var fix = $("section .panel.large").width();
 				questionPos[it] = ($("#q" + it).offset()).left - fix / 2;
-				//questionPos[it]=$("#q"+it).offset().left;
-
-			}
-			for (var it = 1; it <= 30; it++) {
-				if ((e.pageX) < questionPos[it]) {
-					currentQues = it - 1;
-					break;
-				}
-				else if (e.pageX >= questionPos[30]) {
-					currentQues = 30;
-				}
-			}
-			if (currentQues != config.currentQuestion) {
-
-				$("#question" + (config.currentQuestion)).removeClass("activate");
-				config.currentQuestion = currentQues;
-
-				$("#question" + (currentQues)).addClass("activate");
-			}
-
-			if (e.pageX > window.innerWidth) {
-				config.timeState = true;
-				$("#footer").show();
-			}
-		});
-		$(document).bind("mouseover mouseenter mousemove mouseup mousedown", function (e) { //当用户直接拖拽而不是点击开始按钮时，到达题目位置也会开始计时
-			var questionPos = [];
-			var currentQues = 0;
-			for (var it = 1; it <= 30; it++) {
-
-				var fix = $("section .panel.large").width();
-				questionPos[it] = ($("#q" + it).offset()).left - fix / 2;
-				//questionPos[it]=$("#q"+it).offset().left;
 
 			}
 			for (var it = 1; it <= 30; it++) {
@@ -509,11 +484,6 @@ var ss = 0;//秒
 				config.currentQuestion = currentQues;
 
 				$("#question" + (currentQues)).addClass("activate");
-			}
-
-			if (e.pageX > window.innerWidth) {
-				config.timeState = true;
-				$("#footer").show();
 			}
 		});
 
@@ -544,31 +514,6 @@ var ss = 0;//秒
 
 			// Sets the scroll wheel factor. (Ideally) a value between 0 and 1 (lower = slower scroll, higher = faster scroll).
 			factor: 1
-
-		},
-
-		// Scroll zones.
-		scrollZones: {
-
-			// If true, enables scrolling via scroll zones on the left/right edges of the scren.
-			enabled: false,
-
-			// Sets the speed at which the page scrolls when a scroll zone is active (higher = faster scroll, lower = slower scroll).
-			speed: 15
-
-		},
-
-		// Dragging.
-		dragging: {
-
-			// If true, enables scrolling by dragging the main wrapper with the mouse.
-			enabled: false,
-
-			// Sets the momentum factor. Must be a value between 0 and 1 (lower = less momentum, higher = more momentum, 0 = disable momentum scrolling).
-			momentum: 0.875,
-
-			// Sets the drag threshold (in pixels).
-			threshold: 10
 
 		},
 
@@ -853,246 +798,6 @@ var ss = 0;//秒
 					$document.scrollLeft($document.scrollLeft() + (delta * direction));
 
 				});
-
-			})();
-
-		// Scroll zones.
-		if (settings.scrollZones.enabled)
-			(function () {
-
-				var $left = $('<div class="scrollZone left"></div>'),
-					$right = $('<div class="scrollZone right"></div>'),
-					$zones = $left.add($right),
-					paused = false,
-					intervalId = null,
-					direction,
-					activate = function (d) {
-
-						// Disable on <=small.
-						if (skel.breakpoint('small').active)
-							return;
-
-						// Paused? Bail.
-						if (paused)
-							return;
-
-						// Stop link scroll.
-						$bodyHtml.stop();
-
-						// Set direction.
-						direction = d;
-
-						// Initialize interval.
-						clearInterval(intervalId);
-
-						intervalId = setInterval(function () {
-							$document.scrollLeft($document.scrollLeft() + (settings.scrollZones.speed * direction));
-						}, 25);
-
-					},
-					deactivate = function () {
-
-						// Unpause.
-						paused = false;
-
-						// Clear interval.
-						clearInterval(intervalId);
-
-					};
-
-				$zones
-					.appendTo($wrapper)
-					.on('mouseleave mousedown', function (event) {
-						deactivate();
-					});
-
-				$left
-					.css('left', '0')
-					.on('mouseenter', function (event) {
-						activate(-1);
-					});
-
-				$right
-					.css('right', '0')
-					.on('mouseenter', function (event) {
-						activate(1);
-					});
-
-				$wrapper
-					.on('---pauseScrollZone', function (event) {
-
-						// Pause.
-						paused = true;
-
-						// Unpause after delay.
-						setTimeout(function () {
-							paused = false;
-						}, 500);
-
-					});
-
-			})();
-
-		// Dragging.
-		if (settings.dragging.enabled)
-			(function () {
-
-				var dragging = false,
-					dragged = false,
-					distance = 0,
-					startScroll,
-					momentumIntervalId, velocityIntervalId,
-					startX, currentX, previousX,
-					velocity, direction;
-
-				$wrapper
-
-					// Prevent image drag and drop.
-					.on('mouseup mousemove mousedown', '.image, img', function (event) {
-						event.preventDefault();
-					})
-
-					// Prevent mouse events inside excluded elements from bubbling.
-					.on('mouseup mousemove mousedown', settings.excludeSelector, function (event) {
-
-						// Prevent event from bubbling.
-						event.stopPropagation();
-
-						// End drag.
-						dragging = false;
-						$wrapper.removeClass('is-dragging');
-						clearInterval(velocityIntervalId);
-						clearInterval(momentumIntervalId);
-
-						// Pause scroll zone.
-						$wrapper.triggerHandler('---pauseScrollZone');
-
-					})
-
-					// Mousedown event.
-					.on('mousedown', function (event) {
-
-						// Disable on <=small.
-						if (skel.breakpoint('small').active)
-							return;
-
-						// Clear momentum interval.
-						clearInterval(momentumIntervalId);
-
-						// Stop link scroll.
-						$bodyHtml.stop();
-
-						// Start drag.
-						dragging = true;
-						$wrapper.addClass('is-dragging');
-
-						// Initialize and reset vars.
-						startScroll = $document.scrollLeft();
-						startX = event.clientX;
-						previousX = startX;
-						currentX = startX;
-						distance = 0;
-						direction = 0;
-
-						// Initialize velocity interval.
-						clearInterval(velocityIntervalId);
-
-						velocityIntervalId = setInterval(function () {
-
-							// Calculate velocity, direction.
-							velocity = Math.abs(currentX - previousX);
-							direction = (currentX > previousX ? -1 : 1);
-
-							// Update previous X.
-							previousX = currentX;
-
-						}, 50);
-
-					})
-
-					// Mousemove event.
-					.on('mousemove', function (event) {
-
-						// Not dragging? Bail.
-						if (!dragging)
-							return;
-
-						// Velocity.
-						currentX = event.clientX;
-
-						// Scroll page.
-						$document.scrollLeft(startScroll + (startX - currentX));
-
-						// Update distance.
-						distance = Math.abs(startScroll - $document.scrollLeft());
-
-						// Distance exceeds threshold? Disable pointer events on all descendents.
-						if (!dragged
-							&& distance > settings.dragging.threshold) {
-
-							$wrapper.addClass('is-dragged');
-
-							dragged = true;
-
-						}
-
-					})
-
-					// Mouseup/mouseleave event.
-					.on('mouseup mouseleave', function (event) {
-
-						var m;
-
-						// Not dragging? Bail.
-						if (!dragging)
-							return;
-
-						// Dragged? Re-enable pointer events on all descendents.
-						if (dragged) {
-
-							setTimeout(function () {
-								$wrapper.removeClass('is-dragged');
-							}, 100);
-
-							dragged = false;
-
-						}
-
-						// Distance exceeds threshold? Prevent default.
-						if (distance > settings.dragging.threshold)
-							event.preventDefault();
-
-						// End drag.
-						dragging = false;
-						$wrapper.removeClass('is-dragging');
-						clearInterval(velocityIntervalId);
-						clearInterval(momentumIntervalId);
-
-						// Pause scroll zone.
-						$wrapper.triggerHandler('---pauseScrollZone');
-
-						// Initialize momentum interval.
-						if (settings.dragging.momentum > 0) {
-
-							m = velocity;
-
-							momentumIntervalId = setInterval(function () {
-
-								// Scroll page.
-								$document.scrollLeft($document.scrollLeft() + (m * direction));
-
-								// Decrease momentum.
-								m = m * settings.dragging.momentum;
-
-								// Negligible momentum? Clear interval and end.
-								if (Math.abs(m) < 1)
-									clearInterval(momentumIntervalId);
-
-							}, 15);
-
-						}
-
-					});
 
 			})();
 

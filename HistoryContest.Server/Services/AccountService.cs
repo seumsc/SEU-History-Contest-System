@@ -80,10 +80,17 @@ namespace HistoryContest.Server.Services
                         Counselor = counselor
                     };
                     // Save Data
-                    await unitOfWork.StudentRepository.InsertAsync(student);
-                    await unitOfWork.SaveAsync();
+                    var summary = await unitOfWork.Cache.DepartmentScoreSummaries().GetAsync(counselor.Department);
+                    if (summary != null)
+                    {
+                        ++summary.StudentCount;
+                        ++summary.ScoreBandCount.NotTested;
+                    }
+                    await unitOfWork.Cache.DepartmentScoreSummaries().SetAsync(counselor.Department, summary);
                     await unitOfWork.Cache.StudentEntities(counselor.Department).SetAsync(model.UserName, student);
                     await unitOfWork.Cache.StudentViewModels(counselor.Department).SetAsync(model.UserName, (StudentViewModel)student);
+                    await unitOfWork.StudentRepository.InsertAsync(student);
+                    await unitOfWork.SaveAsync();
                     return new UserViewModel { UserName = model.UserName, RealName = model.RealName, Role = model.Role };
                 case nameof(Counselor):
                     return null;

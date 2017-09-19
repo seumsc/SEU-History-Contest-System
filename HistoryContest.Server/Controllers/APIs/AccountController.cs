@@ -212,7 +212,7 @@ namespace HistoryContest.Server.Controllers.APIs
         /// </remarks>
         /// <response code="200">成功注销</response>
         [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
@@ -225,11 +225,8 @@ namespace HistoryContest.Server.Controllers.APIs
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<IActionResult> Profile()
+        public IActionResult Profile()
         {
-            //var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            //Response.Cookies.Delete("XSRF-TOKEN");
-            //Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
             var isLoggedIn = false;
             var id = "";
             var role = "";
@@ -240,24 +237,6 @@ namespace HistoryContest.Server.Controllers.APIs
                 id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserName").Value;
             }
             return Json(new { isLoggedIn, id, role });
-        }
-
-        [AllowAnonymous]
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetAntiForgery()
-        {
-            //var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            //Response.Cookies.Delete("XSRF-TOKEN");
-            //Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
-            var userViewModel = GetUserViewModel();
-            if (userViewModel == null)
-            {
-                return Json(new { isSuccessful = false });
-            }
-            else
-            {
-                return Json(new { isSuccessful = true, userViewModel });
-            }
         }
 
         [NonAction]
@@ -294,7 +273,6 @@ namespace HistoryContest.Server.Controllers.APIs
                     break;
                 default:
                     throw new TypeLoadException("User role invalid");
-
             }
         }
     }

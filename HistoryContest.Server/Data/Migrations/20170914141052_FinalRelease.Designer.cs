@@ -13,9 +13,10 @@ using System;
 namespace HistoryContest.Server.Data.Migrations
 {
     [DbContext(typeof(ContestContext))]
-    partial class ContestContextModelSnapshot : ModelSnapshot
+    [Migration("20170914141052_FinalRelease")]
+    partial class FinalRelease
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

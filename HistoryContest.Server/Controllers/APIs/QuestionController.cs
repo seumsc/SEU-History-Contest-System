@@ -14,7 +14,7 @@ using HistoryContest.Server.Extensions;
 namespace HistoryContest.Server.Controllers.APIs
 {
     [Authorize(Roles = "Student, Administrator")]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class QuestionController : Controller
@@ -133,7 +133,6 @@ namespace HistoryContest.Server.Controllers.APIs
                 return BadRequest("Question seed not created");
             }
 
-            // TODO: seed加载到内存
             return Json((await unitOfWork.QuestionSeedRepository.GetByIDAsync(seed)).QuestionIDs);
         }
     }
