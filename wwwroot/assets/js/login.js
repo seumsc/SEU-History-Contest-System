@@ -6,8 +6,8 @@ function logout() {
         async: false,
         type: "POST",
         beforeSend: function (xhr) {
-            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/);
-            xhr.setRequestHeader("X-XSRF-TOKEN", match == null ? "" : match[1]);
+            var match = window.document.cookie.match(/(?:^|\s|;)XSRF-TOKEN\s*=\s*([^;]+)(?:;|$)/)[1];
+            xhr.setRequestHeader("X-XSRF-TOKEN", match);
         },
         success: function (req) {
             ////console..log(req);
@@ -222,7 +222,7 @@ $(function () {
                 }
                 else {
                     var msg = JSON.stringify(req.message)
-                    // console.log(msg);
+                    // //console..log(msg);
                     ///////////////registration failure/////////////////
                     // if (msg.indexOf("Infalid account format")) {
                     //     // onsole.log("invalid"+msg);
@@ -231,8 +231,8 @@ $(function () {
                     // }
                     // else if (msg.indexOf(""))
                     // else
-                    //     console.log(msg);
-                    // console.log(msg.indexOf("UserName"));
+                    //     //console..log(msg);
+                    // //console..log(msg.indexOf("UserName"));
                     if (req.message == "Invalid account format.") {
                         $("#register-message").removeClass().addClass("text-danger");
                         $("#register-message").text("注册账户应为八位学号,密码应为九位一卡通号！").fadeIn();
