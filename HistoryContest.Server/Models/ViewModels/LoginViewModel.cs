@@ -13,7 +13,7 @@ namespace HistoryContest.Server.Models.ViewModels
         [DefaultValue("09016319")]
         public string UserName { get; set; }
         [Required]
-        [DefaultValue("username")]
+        [DefaultValue("213162022")]
         public string Password { get; set; }
     }
 }
