@@ -23,27 +23,27 @@
 
 2. 若想配置开发环境，可运行`build`脚本, ~~安装前端（NPM）~~，后端（Nuget）的各种包依赖并生成项目。
   
-  为此，需要准备好下列环境：
-  - [.Net Core 2.0 SDK](https://www.microsoft.com/net/download/core)
-  - [Git](https://git-scm.com/downloads)
+    为此，需要准备好下列环境：
+    - [.Net Core 2.0 SDK](https://www.microsoft.com/net/download/core)
+    - [Git](https://git-scm.com/downloads)
 
-  并保证环境变量中设置了`git`,`dotnet`的相关PATH。
+    并保证环境变量中设置了`git`,`dotnet`的相关PATH。
 
 3. 若想直接构建成品，可运行`publish`脚本，发布完整程序到`HistoryContest.Site`文件夹中。
+  
+    需要注意的是，发布出来的成品将在Production环境下运行。
+  
+    而在这个环境中,你需要为`Sql Server`与`Redis`各准备一个**Connection String**来连接数据库（见[HistoryContest.Server/appsettings.json](https://github.com/SEU-BugFourchive/HistoryContest.Server/blob/master/appsettings.json)）。
+    
+    如果没有远程的数据库的话，也可将Development中的内容复制到Production中，这样需要在本地准备好：
+    - [Sql Server LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-2016-express-localdb)
+    - [Redis Server](https://redis.io/download)/[Redis on Windows](https://github.com/MicrosoftArchive/redis/releases)
 
-  需要注意的是，发布出来的成品将在Production环境下运行。
+    此后，可以运行文件夹里的`run_app`脚本来运行程序。
 
-  而在这个环境中,你需要为`Sql Server`与`Redis`各准备一个**Connection String**来连接数据库（见[HistoryContest.Server/appsettings.json](https://github.com/SEU-BugFourchive/HistoryContest.Server/blob/master/appsettings.json)）。
-
-  如果没有远程的数据库的话，也可将Development中的内容复制到Production中，这样需要在本地准备好：
-  - [Sql Server LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-2016-express-localdb)
-  - [Redis Server](https://redis.io/download)/[Redis on Windows](https://github.com/MicrosoftArchive/redis/releases)
-
-  此后，可以运行文件夹里的`run_app`脚本来运行程序。
-
-  > 更直接的方法是在命令行中使用dotnet dll:
-  > dotnet HistoryContest.Server.dll -- <参数>
-  > 如：dotnet HistoryContest.Server.dll -- --help => 查看所有可用命令
+    > 更直接的方法是在命令行中使用dotnet dll:
+    > dotnet HistoryContest.Server.dll -- <参数>
+    > 如：dotnet HistoryContest.Server.dll -- --help => 查看所有可用命令
 
 4. 对于Wiki：所有Wiki内容都通过`HistoryContest.Docs/wiki`文件夹里的.md文件，经主目录下的`index.html`渲染生成。
 
@@ -57,8 +57,8 @@
   3. [.NET Core SPA Services](https://blogs.msdn.microsoft.com/webdev/2017/02/14/building-single-page-applications-on-asp-net-core-with-javascriptservices/)
 * 前端
   - Original Version
-    1. 答题界面：[Ethereal by HTML5 UP](https://html5up.net/ethereal)
-    2. 导员界面：[light-bootstrap-dashboard-v1.1](http://demos.creative-tim.com/light-bootstrap-dashboard) 
+    1. [Ethereal by HTML5 UP](https://html5up.net/ethereal)（答题页）
+    2. [light-bootstrap-dashboard-v1.1](http://demos.creative-tim.com/light-bootstrap-dashboard)（后台页）
   - Vue Version
     1. [TypeScript](https://www.tslang.cn/docs/home.html)
     2. [Webpack](http://www.jianshu.com/p/42e11515c10f)
@@ -67,6 +67,6 @@
   1. [Swagger](https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger)
   2. [MDWiki](http://dynalon.github.io/mdwiki/#!quickstart.md)
 
-### 未来展望
+### Future Horizons
 
 [Repository Projects](https://github.com/SEU-BugFourchive/SEU-History-Contest-System/projects)
