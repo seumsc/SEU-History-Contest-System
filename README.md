@@ -1,54 +1,72 @@
 #  东南大学·校史知识竞赛答题系统
 
+### License
+
+**[No License](https://choosealicense.com/no-license/)**
+
 ### 网站目录结构
 
 | Route | Description   |
 | ----- | ------------- |
-| /     | 主页面，由前端组负责内容。 |
+| /     | 主页面，登录页入口。 |
+| /api  | 后端API文档入口。  |
 | /wiki | Wiki文档入口。     |
-| /api  | 后端API文档入口。    |
+| /defense | 前端答辩网页入口。  |
 
-网站地址：http://history-contest.chinacloudsites.cn
+网站地址：https://history-contest.chinacloudsites.cn (Unavailable now)
 
-控制台地址：http://history-contest.scm.chinacloudsites.cn
+### 配置/构建流程
 
-数据库地址：http://history-contest.database.chinacloudapi.cn/
+> **目前，项目暂时关闭了所有与NPM及Webpack有关的自动配置操作。若有需要，请运行`HistoryContest.Client`文件夹中的`webpack_build.bat`进行生成。**
 
-Azure管理中心: https://portal.azure.cn
+1. 获取项目到本地（Clone/Download）。
 
-### 配置 & 开发流程
+2. 若想配置开发环境，可运行`build`脚本, ~~安装前端（NPM）~~，后端（Nuget）的各种包依赖并生成项目。
+  
+  为此，需要准备好下列环境：
+  - [.Net Core 2.0 SDK](https://www.microsoft.com/net/download/core)
+  - [Git](https://git-scm.com/downloads)
 
-1. **项目Clone到本地后，请先运行`build.bat`, 安装前端（NPM），后端（Nuget）的各种包依赖并生成项目。**
-2. 对于后端：在Server文件夹中工作。打开`HistoryContest.sln`，用Visual Studio开发。
-3. 对于前端：在Client文件夹中工作。运行`run_server.bat`自动配置、运行服务端程序于本地。
-   Development环境下，前端文件的更改会被自动更新，无需运行`webpack_build.bat`重新打包。
-   推荐使用[Visual Studio Code](https://code.visualstudio.com/)开发。
-4. 对于wiki：所有页面都通过Wiki文件夹里的Markdown文件生成。在本地写好md后提交到github远程库上，便可在网站上看到实时更新。
-   因此，这是一个共享工作状态与文档的地方，请尽量将自己的进度、项目新增/改动的结构，自己的文档与心得放在Wiki上。
-5. 使用Github：每次开发前最好都检查一下自己与远程库是否有版本差距，但也不是一定要pull下来。可以善用github的issue。
-6. 网站服务器使用Azure。服务器使用了**自动部署功能**，与此Github仓库相关联。每当此仓库有新版本时，服务器都会自动将更新抓取过来，重新部署，反馈在网页上。
-   因此，我们在本地开发、测试好后，直接将更新push到Github即可，无需考虑其他东西。
+  并保证环境变量中设置了`git`,`dotnet`的相关PATH。
+
+3. 若想直接构建成品，可运行`publish`脚本，发布完整程序到`HistoryContest.Site`文件夹中。
+
+  需要注意的是，发布出来的成品将在Production环境下运行。
+
+  而在这个环境中,你需要为`Sql Server`与`Redis`各准备一个**Connection String**来连接数据库（见[HistoryContest.Server/appsettings.json](https://github.com/SEU-BugFourchive/HistoryContest.Server/blob/master/appsettings.json)）。
+
+  如果没有远程的数据库的话，也可将Development中的内容复制到Production中，这样需要在本地准备好：
+  - [Sql Server LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-2016-express-localdb)
+  - [Redis Server](https://redis.io/download)/[Redis on Windows](https://github.com/MicrosoftArchive/redis/releases)
+
+  此后，可以运行文件夹里的`run_app`脚本来运行程序。
+
+  > 更直接的方法是在命令行中使用dotnet dll:
+  > dotnet HistoryContest.Server.dll -- <参数>
+  > 如：dotnet HistoryContest.Server.dll -- --help => 查看所有可用命令
+
+4. 对于Wiki：所有Wiki内容都通过`HistoryContest.Docs/wiki`文件夹里的.md文件，经主目录下的`index.html`渲染生成。
+
+5. 网站服务器使用Azure。服务器使用了自动化部署，与此Github仓库相关联。每当此仓库有新版本时，服务器将自动将更新抓取重新部署。
 
 ### 使用组件
 
-**Note**:请将后续的所有新增组件添加在这里，并附上一个易于学习的网址=v=
-
 * 后端
-
   1. [ASP.NET Core 2.0](https://docs.microsoft.com/en-us/aspnet/core/tutorials/)
-     * [Web API](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api)
-     * [MVC](https://docs.microsoft.com/en-us/aspnet/core/mvc/overview)
-     * [StaticFiles Middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files)
-     * [Routing Middleware](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing)
   2. [Entity Framework Core](https://docs.microsoft.com/zh-cn/ef/core/)
   3. [.NET Core SPA Services](https://blogs.msdn.microsoft.com/webdev/2017/02/14/building-single-page-applications-on-asp-net-core-with-javascriptservices/)
-     * [Server-side Prerendering](https://github.com/aspnet/JavaScriptServices/tree/dev/src/Microsoft.AspNetCore.SpaServices#server-side-prerendering)
-     * [Webpack Middleware](https://github.com/aspnet/JavaScriptServices/tree/dev/src/Microsoft.AspNetCore.SpaServices#webpack-dev-middleware)
-     * [Hot Module Replacement](https://github.com/aspnet/JavaScriptServices/tree/dev/src/Microsoft.AspNetCore.SpaServices#webpack-hot-module-replacement)
 * 前端
-  1. [TypeScript](https://www.tslang.cn/docs/home.html)
-  2. [Webpack](http://www.jianshu.com/p/42e11515c10f)
-  3. [Vue.js](https://cn.vuejs.org/v2/guide/)
+  - Original Version
+    1. 答题界面：[Ethereal by HTML5 UP](https://html5up.net/ethereal)
+    2. 导员界面：[light-bootstrap-dashboard-v1.1](http://demos.creative-tim.com/light-bootstrap-dashboard) 
+  - Vue Version
+    1. [TypeScript](https://www.tslang.cn/docs/home.html)
+    2. [Webpack](http://www.jianshu.com/p/42e11515c10f)
+    3. [Vue.js](https://cn.vuejs.org/v2/guide/)
 * 文档
   1. [Swagger](https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger)
   2. [MDWiki](http://dynalon.github.io/mdwiki/#!quickstart.md)
+
+### 未来展望
+
+[Repository Projects](https://github.com/SEU-BugFourchive/SEU-History-Contest-System/projects)
