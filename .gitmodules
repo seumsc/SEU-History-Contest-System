@@ -1,0 +1,3 @@
+[submodule "HistoryContest.Server"]
+	path = HistoryContest.Server
+	url = https://github.com/SEU-BugFourchive/HistoryContest.Server
