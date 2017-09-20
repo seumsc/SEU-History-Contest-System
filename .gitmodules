@@ -2,9 +2,10 @@
 	path = HistoryContest.Server
 	url = git@github.com:SEU-BugFourchive/HistoryContest.Server.git
 [submodule "wwwroot"]
-	
 	path = wwwroot
-	
 	url = git@github.com:SEU-BugFourchive/HistoryContest.Client.git
-	
 	branch = master
+[submodule "HistoryContest.Client"]
+	path = HistoryContest.Client
+	url = git@github.com:SEU-BugFourchive/HistoryContest.Client.git
+	branch = vue
