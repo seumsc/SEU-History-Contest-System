@@ -42,7 +42,9 @@
     此后，可以运行文件夹里的`run_app`脚本来运行程序。
 
     > 更直接的方法是在命令行中使用dotnet dll:
+    >
     > dotnet HistoryContest.Server.dll -- <参数>
+    >
     > 如：dotnet HistoryContest.Server.dll -- --help => 查看所有可用命令
 
 4. 对于Wiki：所有Wiki内容都通过`HistoryContest.Docs/wiki`文件夹里的.md文件，经主目录下的`index.html`渲染生成。
