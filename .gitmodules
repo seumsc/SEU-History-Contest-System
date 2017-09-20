@@ -6,9 +6,11 @@
 	url = git@github.com:SEU-BugFourchive/HistoryContest.Client.git
 	branch = master
 [submodule "HistoryContest.Client"]
-	
 	path = HistoryContest.Client
-	
 	url = git@github.com:SEU-BugFourchive/HistoryContest.Client.git
-	
 	branch = vue
+[submodule "HistoryContest.Docs"]
+	
+	path = HistoryContest.Docs
+	
+	url = git@github.com:SEU-BugFourchive/HistoryContest.Docs.git
